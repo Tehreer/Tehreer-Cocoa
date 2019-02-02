@@ -27,3 +27,27 @@ class IntrinsicCollection<T> {
         fatalError()
     }
 }
+
+extension IntrinsicCollection {
+    func map<O>(_ operation: @escaping (_ : T) -> O) -> IntrinsicCollection<O> {
+        return IntrinsicMapCollection(base: self, operation: operation)
+    }
+}
+
+fileprivate class IntrinsicMapCollection<Input, Output>: IntrinsicCollection<Output> {
+    let base: IntrinsicCollection<Input>
+    let operation: (_ : Input) -> Output
+
+    init(base: IntrinsicCollection<Input>, operation: @escaping (_ : Input) -> Output) {
+        self.base = base
+        self.operation = operation
+    }
+
+    override var count: Int {
+        return base.count
+    }
+
+    override func item(at index: Int) -> Output {
+        return operation(base.item(at: index))
+    }
+}
