@@ -51,3 +51,22 @@ fileprivate class IntrinsicMapCollection<Input, Output>: IntrinsicCollection<Out
         return operation(base.item(at: index))
     }
 }
+
+class IntrinsicWrapCollection<Base, Element>: IntrinsicCollection<Element>
+    where Base: RandomAccessCollection,
+          Base.Index == Int,
+          Base.Element == Element {
+    let base: Base
+
+    init(base: Base) {
+        self.base = base
+    }
+
+    override var count: Int {
+        return base.count
+    }
+
+    override func item(at index: Int) -> Element {
+        return base[index]
+    }
+}
