@@ -18,6 +18,7 @@ import Foundation
 
 public class FontFile {
     private var arguments: FT_Open_Args
+    private let stream: FT_Stream?
     private let faceCount: Int
 
     public convenience init?(path: String) {
@@ -29,6 +30,42 @@ public class FontFile {
         arguments.memory_size = 0
         arguments.pathname = UnsafeMutablePointer<FT_String>(mutating: cpath)
         arguments.stream = nil
+
+        self.init(arguments: &arguments)
+    }
+
+    public convenience init?(stream: InputStream) {
+        let fontStream = UnsafeMutablePointer<FT_StreamRec>.allocate(capacity: 1)
+        fontStream.pointee.base = nil
+        fontStream.pointee.size = 0
+        fontStream.pointee.pos = 0
+        fontStream.pointee.descriptor.pointer = Unmanaged.passRetained(stream).toOpaque()
+        fontStream.pointee.pathname.pointer = nil
+        fontStream.pointee.read = { (stream, offset, buffer, count) in
+            let streamPointer = (stream!.pointee.descriptor.pointer)!
+            let unmanagedStream = Unmanaged<InputStream>.fromOpaque(streamPointer)
+            let platformStream = unmanagedStream.takeUnretainedValue()
+            let bytesRead = platformStream.read(buffer!, maxLength: Int(count))
+
+            return UInt(bytesRead)
+        }
+        fontStream.pointee.close = { (stream) in
+            if let streamPointer = stream!.pointee.descriptor.pointer {
+                let unmanagedStream = Unmanaged<InputStream>.fromOpaque(streamPointer)
+                unmanagedStream.release()
+
+                stream!.pointee.base = nil
+                stream!.pointee.size = 0
+                stream!.pointee.descriptor.pointer = nil
+            }
+        }
+
+        var arguments = FT_Open_Args()
+        arguments.flags = FT_UInt(FT_OPEN_STREAM)
+        arguments.memory_base = nil
+        arguments.memory_size = 0
+        arguments.pathname = nil
+        arguments.stream = fontStream
 
         self.init(arguments: &arguments)
     }
@@ -53,12 +90,21 @@ public class FontFile {
         }
 
         self.init(arguments: arguments,
+                  stream: arguments.pointee.stream,
                   numFaces: numFaces)
     }
 
-    private init(arguments: UnsafePointer<FT_Open_Args>, numFaces: Int) {
+    private init(arguments: UnsafePointer<FT_Open_Args>, stream: FT_Stream?, numFaces: Int) {
         self.arguments = arguments.pointee
+        self.stream = stream
         self.faceCount = numFaces
+    }
+
+    deinit {
+        if let stream = stream {
+            stream.pointee.close(stream)
+            stream.deallocate()
+        }
     }
 
     func createFTFace(faceIndex: Int, instanceIndex: Int) -> FT_Face? {
