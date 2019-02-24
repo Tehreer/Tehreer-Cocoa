@@ -51,3 +51,84 @@ public struct NameTable {
                       bytes: Array(buffer))
     }
 }
+
+extension NameTable {
+    enum NameID: UInt16 {
+        case fontFamily = 1
+        case fontSubfamily = 2
+        case full = 3
+        case typographicFamily = 16
+        case typographicSubfamily = 17
+        case wwsFamily = 21
+        case wwsSubfamily = 22
+    }
+
+    enum PlatformID: UInt16 {
+        case macintosh = 1
+        case windows = 3
+    }
+
+    func englishName(for nameID: UInt16) -> String? {
+        var candidate: Record? = nil
+
+        for i in 0 ..< recordCount {
+            let current = record(at: i)
+            if current.nameID != nameID {
+                continue
+            }
+
+            let locale = current.locale
+            if locale?.languageCode == "en" {
+                if current.platformID == PlatformID.windows.rawValue && locale?.regionCode == "US" {
+                    return current.string
+                }
+
+                if candidate == nil || current.platformID == PlatformID.macintosh.rawValue {
+                    candidate = current
+                }
+            }
+        }
+
+        if let candidate = candidate {
+            return candidate.string
+        }
+
+        return nil
+    }
+
+    func suitableFamilyName(considering os2Table: OS2Table?) -> String? {
+        var familyName: String? = nil
+
+        if let os2Table = os2Table {
+            if (os2Table.fsSelection & OS2Table.FSSelection.wws.rawValue) != 0 {
+                familyName = englishName(for: NameID.wwsFamily.rawValue)
+            }
+        }
+        if familyName == nil {
+            familyName = englishName(for: NameID.typographicFamily.rawValue)
+        }
+        if familyName == nil {
+            familyName = englishName(for: NameID.fontFamily.rawValue)
+        }
+
+        return familyName
+    }
+
+    func suitableStyleName(considering os2Table: OS2Table?) -> String? {
+        var styleName: String? = nil
+
+        if let os2Table = os2Table {
+            if (os2Table.fsSelection & OS2Table.FSSelection.wws.rawValue) != 0 {
+                styleName = englishName(for: NameID.wwsSubfamily.rawValue)
+            }
+        }
+        if styleName == nil {
+            styleName = englishName(for: NameID.typographicSubfamily.rawValue)
+        }
+        if styleName == nil {
+            styleName = englishName(for: NameID.fontSubfamily.rawValue)
+        }
+
+        return styleName
+    }
+}
