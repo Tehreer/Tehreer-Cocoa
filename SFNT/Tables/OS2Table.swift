@@ -193,3 +193,18 @@ public struct OS2Table {
         return table.pointee.usUpperOpticalPointSize
     }
 }
+
+extension OS2Table {
+    enum MacStyle: UInt16 {
+        case bold = 0x01
+        case italic = 0x02
+        case condensed = 0x20
+        case extended = 0x40
+    }
+
+    enum FSSelection: UInt16 {
+        case italic = 0x001
+        case wws = 0x100
+        case oblique = 0x200
+    }
+}
