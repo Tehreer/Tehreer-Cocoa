@@ -110,6 +110,57 @@ public class Typeface {
         self.ftFace = ftFace
         self.ftSize = size
         self.sfFont = SFFontCreateWithProtocol(&fontProtocol, Unmanaged.passUnretained(self).toOpaque())
+
+        setupDescription()
+    }
+
+    private func setupDescription() {
+        let headTable = HeadTable(typeface: self)
+        let os2Table = OS2Table(typeface: self)
+        let nameTable = NameTable(typeface: self)
+
+        if let nameTable = nameTable {
+            if let familyName = nameTable.suitableFamilyName(considering: os2Table) {
+                self.familyName = familyName
+            }
+            if let styleName = nameTable.suitableStyleName(considering: os2Table) {
+                self.styleName = styleName
+            }
+            if let fullName = nameTable.englishName(for: NameTable.NameID.full.rawValue) {
+                self.fullName = fullName
+            }
+        }
+
+        if let os2Table = os2Table {
+            if let weight = TypeWeight(rawValue: Int(os2Table.usWeightClass)) {
+                self.weight = weight
+            }
+            if let width = TypeWidth(rawValue: Int(os2Table.usWidthClass)) {
+                self.width = width
+            }
+
+            if (os2Table.fsSelection & OS2Table.FSSelection.oblique.rawValue) != 0 {
+                self.slope = .oblique
+            } else if (os2Table.fsSelection & OS2Table.FSSelection.italic.rawValue) != 0 {
+                self.slope = .italic
+            }
+        } else if let headTable = headTable {
+            let macStyle = headTable.macStyle
+
+            if (macStyle & OS2Table.MacStyle.bold.rawValue) != 0 {
+                self.weight = .bold
+            }
+
+            if (macStyle & OS2Table.MacStyle.condensed.rawValue) != 0 {
+                self.width = .condensed
+            } else if (macStyle & OS2Table.MacStyle.extended.rawValue) != 0 {
+                self.width = .expanded
+            }
+
+            if (macStyle & OS2Table.MacStyle.italic.rawValue) != 0 {
+                self.slope = .italic
+            }
+        }
     }
 
     deinit {
