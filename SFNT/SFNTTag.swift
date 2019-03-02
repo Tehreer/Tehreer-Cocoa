@@ -25,3 +25,15 @@ public struct SFNTTag: RawRepresentable {
         self.rawValue = rawValue
     }
 }
+
+extension SFNTTag: CustomStringConvertible {
+    public var description: String {
+        let codeUnits: [UInt8] = [
+            UInt8(rawValue >> 24),
+            UInt8((rawValue >> 16) & 0xFF),
+            UInt8((rawValue >> 8) & 0xFF),
+            UInt8(rawValue & 0xFF), 0]
+
+        return codeUnits.withUnsafeBufferPointer { String(cString: $0.baseAddress!) }
+    }
+}
