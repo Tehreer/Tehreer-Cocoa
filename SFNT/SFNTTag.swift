@@ -26,6 +26,44 @@ public struct SFNTTag: RawRepresentable {
     }
 }
 
+extension SFNTTag: ExpressibleByStringLiteral {
+    public typealias StringLiteralType = String
+
+    static func isValidByte(_ byte: UInt8) -> Bool {
+        return byte >= 0x32 && byte <= 0x7E
+    }
+
+    public init(stringLiteral: String) {
+        var counter: Int = 0
+        var codeUnits: [UInt8] = [0, 0, 0, 0]
+
+        for c in stringLiteral.utf8 {
+            defer {
+                counter += 1
+            }
+
+            if counter >= 4 {
+                break
+            }
+
+            codeUnits[counter] = c
+        }
+
+        guard counter == 4
+            && SFNTTag.isValidByte(codeUnits[0])
+            && SFNTTag.isValidByte(codeUnits[1])
+            && SFNTTag.isValidByte(codeUnits[2])
+            && SFNTTag.isValidByte(codeUnits[3]) else {
+                fatalError("Invalid tag string")
+        }
+
+        rawValue = UInt32(codeUnits[0] << 24)
+                 | UInt32(codeUnits[1] << 16)
+                 | UInt32(codeUnits[2] << 8)
+                 | UInt32(codeUnits[3])
+    }
+}
+
 extension SFNTTag: CustomStringConvertible {
     public var description: String {
         let codeUnits: [UInt8] = [
