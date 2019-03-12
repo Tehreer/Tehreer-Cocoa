@@ -253,6 +253,32 @@ public class Typeface {
         FT_Load_Sfnt_Table(ftFace, tag, 0, buffer, length)
     }
 
+    /// Returns the data of the table specified by the tag.
+    ///
+    /// - Parameter tag: The tag of the table.
+    /// - Returns: The data of the intended table, or `nil` if no such table exists.
+    public func tableData(for tag: SFNTTag) -> Data? {
+        let inputTag = FT_ULong(tag.rawValue)
+        var length: FT_ULong = 0
+        var data: Data? = nil
+
+        semaphore.wait()
+
+        FT_Load_Sfnt_Table(ftFace, inputTag, 0, nil, &length)
+
+        if length > 0 {
+            let count = Int(length)
+            let bytes = UnsafeMutablePointer<FT_Byte>.allocate(capacity: count)
+            FT_Load_Sfnt_Table(ftFace, inputTag, 0, bytes, nil)
+
+            data = Data(bytesNoCopy: bytes, count: count, deallocator: .free)
+        }
+
+        semaphore.signal()
+
+        return data
+    }
+
     /// Returns the glyph id for the specified code point.
     ///
     /// - Parameter codePoint: The code point for which the glyph id is obtained.
