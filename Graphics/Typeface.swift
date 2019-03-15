@@ -329,4 +329,19 @@ public class Typeface {
 
         return advance
     }
+
+    /// Retrieves the advance for the specified glyph.
+    ///
+    /// - Parameters:
+    ///   - glyphID: The glyph id for which to retrieve the advance.
+    ///   - typeSize: The size for which the advance is retrieved.
+    ///   - vertical: The flag which indicates the type of advance, either horizontal or vertical.
+    /// - Returns: The advance for the specified glyph.
+    public func advance(for glyphID: UInt16, typeSize: CGFloat, vertical: Bool) -> CGFloat {
+        let advance = fixedAdvance(for: FT_UInt(glyphID),
+                                   typeSize: toF26Dot6(typeSize),
+                                   vertical: vertical)
+
+        return f16Dot16toFloat(advance)
+    }
 }
