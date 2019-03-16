@@ -344,4 +344,68 @@ public class Typeface {
 
         return f16Dot16toFloat(advance)
     }
+
+    func unsafeMakePath(glyphID: FT_UInt) -> CGPath? {
+        var glyphPath: CGPath? = nil
+
+        if FT_Load_Glyph(ftFace, glyphID, FT_Int32(FT_LOAD_NO_BITMAP)) == FT_Err_Ok {
+            var funcs = FT_Outline_Funcs(
+                move_to: { (to, user) -> Int32 in
+                    let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
+                    let path = unmanaged.takeUnretainedValue()
+                    let point = CGPoint(x: f26Dot6PosToFloat(to!.pointee.x),
+                                        y: f26Dot6PosToFloat(to!.pointee.y))
+                    path.move(to: point)
+
+                    return 0
+                },
+                line_to: { (to, user) -> Int32 in
+                    let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
+                    let path = unmanaged.takeUnretainedValue()
+                    let point = CGPoint(x: f26Dot6PosToFloat(to!.pointee.x),
+                                        y: f26Dot6PosToFloat(to!.pointee.y))
+                    path.addLine(to: point)
+
+                    return 0
+                },
+                conic_to: { (control1, to, user) -> Int32 in
+                    let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
+                    let path = unmanaged.takeUnretainedValue()
+                    let point = CGPoint(x: f26Dot6PosToFloat(to!.pointee.x),
+                                        y: f26Dot6PosToFloat(to!.pointee.y))
+                    let first = CGPoint(x: f26Dot6PosToFloat(control1!.pointee.x),
+                                        y: f26Dot6PosToFloat(control1!.pointee.y))
+                    path.addQuadCurve(to: point, control: first)
+
+                    return 0
+                },
+                cubic_to: { (control1, control2, to, user) -> Int32 in
+                    let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
+                    let path = unmanaged.takeUnretainedValue()
+                    let point = CGPoint(x: f26Dot6PosToFloat(to!.pointee.x),
+                                        y: f26Dot6PosToFloat(to!.pointee.y))
+                    let first = CGPoint(x: f26Dot6PosToFloat(control1!.pointee.x),
+                                        y: f26Dot6PosToFloat(control1!.pointee.y))
+                    let second = CGPoint(x: f26Dot6PosToFloat(control2!.pointee.x),
+                                         y: f26Dot6PosToFloat(control2!.pointee.y))
+                    path.addCurve(to: point, control1: first, control2: second)
+
+                    return 0
+                },
+                shift: 0,
+                delta: 0
+            )
+
+            var outline = ftFace.pointee.glyph.pointee.outline
+
+            let output = CGMutablePath()
+            let user = Unmanaged.passUnretained(output).toOpaque()
+
+            if FT_Outline_Decompose(&outline, &funcs, user) == FT_Err_Ok {
+                glyphPath = output
+            }
+        }
+
+        return glyphPath
+    }
 }
