@@ -408,4 +408,35 @@ public class Typeface {
 
         return glyphPath
     }
+
+    /// Generates the path for the specified glyph.
+    ///
+    /// - Parameters:
+    ///   - glyphID: The glyph id for which the path is generated.
+    ///   - typeSize: The size for which the glyph path is required.
+    ///   - transform: The transform applied to the path. Can be `nil` if no transformation is
+    ///                required.
+    /// - Returns: The path for the specified glyph.
+    public func glyphPath(for glyphID: UInt16, typeSize: CGFloat, transform: CGAffineTransform?) -> CGPath? {
+        let fixedSize = toF26Dot6(typeSize)
+        var matrix = FT_Matrix(xx: 0x10000, xy: 0, yx: 0, yy: -0x10000)
+        var delta = FT_Vector(x: 0, y: 0)
+
+        if let transform = transform {
+            let flip = transform.concatenating(CGAffineTransform(scaleX: 1.0, y: -1.0))
+
+            matrix = FT_Matrix(xx: toF16Dot16(flip.a), xy: toF16Dot16(flip.b),
+                               yx: toF16Dot16(flip.c), yy: toF16Dot16(flip.d))
+            delta = FT_Vector(x: toF16Dot16(transform.tx), y: toF16Dot16(transform.ty))
+        }
+
+        semaphore.wait()
+        defer { semaphore.signal() }
+
+        FT_Activate_Size(ftSize)
+        FT_Set_Char_Size(ftFace, 0, fixedSize, 0, 0)
+        FT_Set_Transform(ftFace, &matrix, &delta)
+
+        return unsafeMakePath(glyphID: FT_UInt(glyphID))
+    }
 }
