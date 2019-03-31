@@ -70,3 +70,23 @@ class IntrinsicWrapCollection<Base, Element>: IntrinsicCollection<Element>
         return base[index]
     }
 }
+
+class OwnedCollection<Element>: IntrinsicCollection<Element> {
+    let owner: AnyObject
+    let pointer: UnsafePointer<Element>!
+    let size: Int
+
+    init(owner: AnyObject, pointer: UnsafePointer<Element>!, size: Int) {
+        self.owner = owner
+        self.pointer = pointer
+        self.size = size
+    }
+
+    override var count: Int {
+        return size
+    }
+
+    override func item(at index: Int) -> Element {
+        return pointer[index]
+    }
+}
