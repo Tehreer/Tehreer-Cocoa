@@ -29,3 +29,22 @@ struct GlyphStrike {
         skewX = 0
     }
 }
+
+extension GlyphStrike: Hashable {
+    static func ==(lhs: GlyphStrike, rhs: GlyphStrike) -> Bool {
+        return lhs.typeface === rhs.typeface
+            && lhs.pixelWidth == rhs.pixelWidth
+            && lhs.pixelHeight == rhs.pixelHeight
+            && lhs.skewX == rhs.skewX
+    }
+
+    func hash(into hasher: inout Hasher) {
+        if typeface != nil {
+            hasher.combine(ObjectIdentifier(typeface))
+        }
+
+        hasher.combine(pixelWidth)
+        hasher.combine(pixelHeight)
+        hasher.combine(skewX)
+    }
+}
