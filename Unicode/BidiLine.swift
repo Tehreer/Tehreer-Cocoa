@@ -48,4 +48,36 @@ public class BidiLine {
     public var endIndex: String.Index {
         return stringRange.upperBound
     }
+
+    /// The collection of visually ordered runs in this line.
+    public var visualRuns: PrimitiveCollection<BidiRun> {
+        return PrimitiveCollection(RunCollection(self))
+    }
+}
+
+fileprivate class RunCollection: IntrinsicCollection<BidiRun> {
+    private let container: BidiLine
+    private let length: Int
+
+    init(_ container: BidiLine) {
+        self.container = container
+
+        let runCount = SBLineGetRunCount(container.line)
+        length = Int(runCount)
+    }
+
+    override var count: Int {
+        return length
+    }
+
+    override func item(at index: Int) -> BidiRun {
+        let runPtr = SBLineGetRunsPtr(container.line)[index]
+        let string = container.buffer.string
+        let utf16Range = NSRange(location: Int(runPtr.offset), length: Int(runPtr.length))
+        let runRange = string.characterRange(forUTF16Range: utf16Range)
+
+        return BidiRun(startIndex: runRange.lowerBound,
+                       endIndex: runRange.upperBound,
+                       embeddingLevel: UInt8(runPtr.level))
+    }
 }
