@@ -53,6 +53,12 @@ public class BidiLine {
     public var visualRuns: PrimitiveCollection<BidiRun> {
         return PrimitiveCollection(RunCollection(self))
     }
+
+    /// The sequence of mirroring pairs in this line. You can use the iterable to  implement Rule L4
+    /// of Unicode Bidirectional Algorithm.
+    public var mirroringPairs: BidiPairSequence {
+        return BidiPairSequence(self)
+    }
 }
 
 fileprivate class RunCollection: IntrinsicCollection<BidiRun> {
@@ -79,5 +85,67 @@ fileprivate class RunCollection: IntrinsicCollection<BidiRun> {
         return BidiRun(startIndex: runRange.lowerBound,
                        endIndex: runRange.upperBound,
                        embeddingLevel: UInt8(runPtr.level))
+    }
+}
+
+public class BidiPairIterator: IteratorProtocol {
+    public typealias Element = BidiPair
+
+    private let container: BidiLine
+    private let locator: SBMirrorLocatorRef
+    private let agent: UnsafePointer<SBMirrorAgent>
+
+    init(_ container: BidiLine) {
+        self.container = container
+        self.locator = SBMirrorLocatorCreate()
+        self.agent = SBMirrorLocatorGetAgent(locator)
+
+        let stringBuffer = UnsafeMutableRawPointer(mutating: container.buffer.data)
+        SBMirrorLocatorLoadLine(locator, container.line, stringBuffer)
+    }
+
+    deinit {
+        SBMirrorLocatorRelease(locator)
+    }
+
+    public func next() -> BidiPair? {
+        if SBMirrorLocatorMoveNext(locator) != 0 {
+            let bidiBuffer = container.buffer
+            let stringBuffer = UnsafeMutableRawPointer(mutating: bidiBuffer.data)
+            let stringLength = SBUInteger(bidiBuffer.length)
+
+            var codepointSequence = SBCodepointSequence(
+                stringEncoding: SBStringEncoding(SBStringEncodingUTF16),
+                stringBuffer: stringBuffer,
+                stringLength: stringLength)
+
+            var index = agent.pointee.index
+            let source = SBCodepointSequenceGetCodepointAt(&codepointSequence, &index)
+            let mirror = agent.pointee.mirror
+
+            let string = bidiBuffer.string
+            let utf16Index = Int(agent.pointee.index)
+
+            return BidiPair(codeUnitIndex: string.characterIndex(forUTF16Index: utf16Index),
+                            actualCodePoint: UnicodeScalar(source)!,
+                            pairingCodePoint: UnicodeScalar(mirror)!)
+        }
+
+        return nil
+    }
+}
+
+public struct BidiPairSequence: Sequence {
+    public typealias Element = BidiPair
+    public typealias Iterator = BidiPairIterator
+
+    let container: BidiLine
+
+    init(_ container: BidiLine) {
+        self.container = container
+    }
+
+    public func makeIterator() -> Iterator {
+        return BidiPairIterator(container)
     }
 }
