@@ -40,6 +40,21 @@ public class Typeface {
     private let ftSize: FT_Size
 
     let ftFace: FT_Face
+    var _ftStroker: FT_Stroker!
+
+    var ftStroker: FT_Stroker! {
+        // NOTE:
+        //      The caller is responsible to wait on semaphore.
+
+        if _ftStroker == nil {
+            // There is no need to lock 'library' as it is only taken to have access to FreeType's
+            // memory handling functions.
+            FT_Stroker_New(FreeType.library, &_ftStroker)
+        }
+
+        return _ftStroker
+    }
+
     var sfFont: SFFontRef! = nil
 
     /// Creates a typeface from the specified file. The data for the font is directly read from the
@@ -165,6 +180,10 @@ public class Typeface {
 
     deinit {
         SFFontRelease(sfFont)
+
+        if let ftStroker = _ftStroker {
+            FT_Stroker_Done(ftStroker)
+        }
 
         semaphore.wait()
         FT_Done_Size(ftSize)
