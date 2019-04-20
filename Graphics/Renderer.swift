@@ -160,4 +160,177 @@ public class Renderer {
     private func updateTransform() {
         glyphStrike.skewX = Int((slantAngle * 0x10000) + 0.5)
     }
+
+    private func cachedGlyphPath(for glyphID: UInt16) -> CGPath? {
+        return GlyphCache.instance.glyphPath(with: glyphStrike, for: glyphID)
+    }
+
+    /// Generates the path of specified glyph.
+    ///
+    /// - Parameter glyphID: The ID of glyph whose path is generated.
+    /// - Returns: The path of the glyph specified by `glyphID`.
+    public func makePath(glyphID: UInt16) -> UIBezierPath? {
+        if let glyphPath = cachedGlyphPath(for: glyphID) {
+            return UIBezierPath(cgPath: glyphPath)
+        }
+
+        return nil
+    }
+
+    /// Generates a cumulative path of specified glyphs.
+    ///
+    /// - Parameters:
+    ///   - glyphIds: A sequence of glyph IDs.
+    ///   - offsets: A sequence of glyph offsets.
+    ///   - advances: A sequence of glyph advances.
+    /// - Returns: The cumulative path of specified glyphs.
+    public func makePath<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS) -> UIBezierPath
+        where GS : Sequence, GS.Element == UInt16,
+              OS : Sequence, OS.Element == CGPoint,
+              AS : Sequence, AS.Element == CGFloat {
+        let comulativePath = CGMutablePath()
+        var penX: CGFloat = 0.0
+
+        var offsetIter = offsets.makeIterator()
+        var advanceIter = advances.makeIterator()
+
+        for glyphID in glyphIDs {
+            let offset = offsetIter.next()!
+            let advance = advanceIter.next()!
+
+            if let path = cachedGlyphPath(for: glyphID) {
+                let position = CGAffineTransform(scaleX: penX + offset.x, y: offset.y)
+                comulativePath.addPath(path, transform: position)
+            }
+
+            penX += advance
+        }
+
+        return UIBezierPath(cgPath: comulativePath)
+    }
+
+    private func cachedBoundingBox(for glyphID: UInt16) -> CGRect {
+        let glyph = GlyphCache.instance.maskGlyph(with: glyphStrike, for: glyphID)
+        return CGRect(x: glyph.lsb,
+                      y: glyph.tsb,
+                      width: glyph.image?.width ?? 0,
+                      height: glyph.image?.height ?? 0)
+    }
+
+    /// Calculates the bounding box of specified glyph.
+    ///
+    /// - Parameter glyphID: The ID of glyph whose bounding box is calculated.
+    /// - Returns: A rectangle that tightly encloses the path of the specified glyph.
+    public func computeBoundingBox(for glyphID: UInt16) -> CGRect {
+        return cachedBoundingBox(for: glyphID)
+    }
+
+    /// Calculates the bounding box of specified glyphs.
+    ///
+    /// - Parameters:
+    ///   - glyphIDs: A sequence of glyph IDs.
+    ///   - offsets: A sequence of glyph offsets.
+    ///   - advances: A sequence of glyph advances.
+    /// - Returns: A rectangle that tightly encloses the paths of specified glyphs.
+    public func computeBoundingBox<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS) -> CGRect
+        where GS: Sequence, GS.Element == UInt16,
+              OS: Sequence, OS.Element == CGPoint,
+              AS: Sequence, AS.Element == CGFloat {
+        var comulativeBox = CGRect()
+        var penX: CGFloat = 0.0
+
+        var offsetIter = offsets.makeIterator()
+        var advanceIter = advances.makeIterator()
+
+        for glyphID in glyphIDs {
+            let offset = offsetIter.next()!
+            let advance = advanceIter.next()!
+
+            var glyphBox = cachedBoundingBox(for: glyphID)
+            glyphBox = glyphBox.offsetBy(dx: penX + offset.x, dy: offset.y)
+
+            comulativeBox = comulativeBox.union(glyphBox)
+
+            penX += advance
+        }
+
+        return comulativeBox
+    }
+
+    private func drawGlyphs<GS, OS, AS>(on context: CGContext, glyphIDs: GS, offsets: OS, advances: AS, strokeMode: Bool)
+        where GS: Sequence, GS.Element == UInt16,
+              OS: Sequence, OS.Element == CGPoint,
+              AS: Sequence, AS.Element == CGFloat {
+        let cache = GlyphCache.instance
+        let reverseMode = (writingDirection == .rightToLeft)
+        var penX: CGFloat = 0.0
+
+        var offsetIter = offsets.makeIterator()
+        var advanceIter = advances.makeIterator()
+
+        for glyphID in glyphIDs {
+            let offset = offsetIter.next()!
+            let advance = advanceIter.next()!
+
+            if reverseMode {
+                penX -= advance
+            }
+
+            let maskGlyph: Glyph
+
+            if !strokeMode {
+                maskGlyph = cache.maskGlyph(with: glyphStrike, for: glyphID)
+            } else {
+                maskGlyph = cache.maskGlyph(
+                    with: glyphStrike,
+                    for: glyphID,
+                    lineRadius: glyphLineRadius,
+                    lineCap: FT_Stroker_LineCap(UInt32(strokeCap.rawValue)),
+                    lineJoin: FT_Stroker_LineJoin(UInt32(strokeJoin.rawValue)),
+                    miterLimit: glyphMiterLimit)
+            }
+
+            if let maskImage = maskGlyph.image {
+                let rect = CGRect(
+                    x: Int(penX + offset.x + CGFloat(maskGlyph.lsb) + 0.5),
+                    y: Int(-offset.y - CGFloat(maskGlyph.tsb) + 0.5),
+                    width: maskImage.width,
+                    height: maskImage.height)
+
+                context.draw(maskImage, in: rect)
+            }
+
+            if !reverseMode {
+                penX += advance
+            }
+        }
+    }
+
+    /// Draws specified glyphs onto the given context.
+    ///
+    /// - Parameters:
+    ///   - context: The context onto which to draw the glyphs.
+    ///   - glyphIDs: A sequence of glyph IDs.
+    ///   - offsets: A sequence of glyph offsets.
+    ///   - advances: A sequence of glyph advances.
+    public func drawGlyphs<GS, OS, AS>(on context: CGContext, glyphIDs: GS, offsets: OS, advances: AS)
+        where GS: Sequence, GS.Element == UInt16,
+              OS: Sequence, OS.Element == CGPoint,
+              AS: Sequence, AS.Element == CGFloat {
+        if shouldRender {
+            context.setShadow(offset: CGSize(width: shadowDx, height: shadowDy),
+                              blur: shadowRadius,
+                              color: shadowColor.cgColor)
+        }
+
+        if renderingStyle == .fill || renderingStyle == .fillStroke {
+            context.setFillColor(fillColor.cgColor)
+            drawGlyphs(on: context, glyphIDs: glyphIDs, offsets: offsets, advances: advances, strokeMode: false)
+        }
+
+        if renderingStyle == .stroke || renderingStyle == .fillStroke {
+            context.setFillColor(strokeColor.cgColor)
+            drawGlyphs(on: context, glyphIDs: glyphIDs, offsets: offsets, advances: advances, strokeMode: true)
+        }
+    }
 }
