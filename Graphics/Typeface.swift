@@ -56,6 +56,7 @@ public class Typeface {
     }
 
     var sfFont: SFFontRef! = nil
+    let patternCache = PatternCache()
 
     /// Creates a typeface from the specified file. The data for the font is directly read from the
     /// file when needed.
