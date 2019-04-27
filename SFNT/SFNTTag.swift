@@ -75,3 +75,6 @@ extension SFNTTag: CustomStringConvertible {
         return codeUnits.withUnsafeBufferPointer { String(cString: $0.baseAddress!) }
     }
 }
+
+extension SFNTTag: Hashable {
+}
