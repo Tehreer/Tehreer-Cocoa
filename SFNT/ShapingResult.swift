@@ -98,6 +98,31 @@ public class ShapingResult {
         return PrimitiveCollection(collection.map({ Int($0) }))
     }
 
+    private func caretEdges(with caretStopsPointer: UnsafeMutablePointer<SFBoolean>?) -> UnsafeMutablePointer<SFFloat> {
+        let caretEdgesPointer = UnsafeMutablePointer<SFFloat>.allocate(capacity: codeUnitCount)
+        SFAlbumGetCaretEdges(sfAlbum, caretStopsPointer, SFFloat(sizeByEm), caretEdgesPointer)
+
+        return caretEdgesPointer
+    }
+
+    public func caretEdges(with caretStops: [Bool]?) -> PrimitiveCollection<CGFloat> {
+        var allEdges = caretStops?.withUnsafeBufferPointer { (buffer) -> UnsafeMutablePointer<SFFloat>? in
+            guard let baseAddress = buffer.baseAddress else {
+                return nil
+            }
+
+            return self.caretEdges(with: UnsafeMutablePointer<SFBoolean>(OpaquePointer(baseAddress)))
+        }
+
+        if allEdges == nil {
+            allEdges = caretEdges(with: nil)
+        }
+
+        let edgesArray = UnsafeBufferPointer(start: allEdges, count: codeUnitCount).map { CGFloat($0) }
+
+        return PrimitiveCollection(edgesArray, range: 0 ..< codeUnitCount)
+    }
+
     func setAdditionalInfo(sizeByEm: CGFloat, isBackward: Bool, stringRange: Range<String.Index>, codeUnitCount: Int) {
         self.sizeByEm = sizeByEm
         self.isBackward = isBackward
