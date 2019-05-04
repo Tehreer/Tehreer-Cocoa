@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 class IntrinsicCollection<T> {
     var count: Int {
@@ -88,5 +89,29 @@ class OwnedCollection<Element>: IntrinsicCollection<Element> {
 
     override func item(at index: Int) -> Element {
         return pointer[index]
+    }
+}
+
+class OwnedScaleCollection<Input, Output>: IntrinsicCollection<Output>
+    where Input: Scalable,
+          Output == Input.Output {
+    let owner: AnyObject
+    let pointer: UnsafePointer<Input>!
+    let size: Int
+    let scale: CGFloat
+
+    init(owner: AnyObject, pointer: UnsafePointer<Input>!, size: Int, scale: CGFloat) {
+        self.owner = owner
+        self.pointer = pointer
+        self.size = size
+        self.scale = scale
+    }
+
+    override var count: Int {
+        return size
+    }
+
+    override func item(at index: Int) -> Output {
+        return pointer[index] * scale
     }
 }
