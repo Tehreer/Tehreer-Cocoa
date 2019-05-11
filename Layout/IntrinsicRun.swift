@@ -57,4 +57,33 @@ class IntrinsicRun {
         self.clusterMap = clusterMap
         self.caretEdges = caretEdges
     }
+
+    var isRTL: Bool {
+        return (bidiLevel & 1) == 1
+    }
+
+    var glyphCount: Int {
+        return glyphIDs.count
+    }
+
+    func glyphRange(forUTF16Range range: Range<Int>) -> Range<Int> {
+        return Clusters.glyphRange(in: clusterMap,
+                                   for: range,
+                                   isBackward: isBackward,
+                                   glyphCount: glyphCount)
+    }
+
+    func clusterRange(forUTF16Range range: Range<Int>) -> Range<Int> {
+        let clusterStart = Clusters.actualClusterStart(in: clusterMap, for: range.lowerBound)
+        let clusterEnd = Clusters.actualClusterEnd(in: clusterMap, for: range.upperBound - 1)
+
+        return clusterStart ..< clusterEnd
+    }
+
+    func measureCharacters(in range: Range<String.Index>) -> CGFloat {
+        let collection = CaretEdgeCollection(allEdges: caretEdges)
+        let utf16Range: Range<Int> = string.utf16Range(forCharacterRange: range)
+
+        return collection.distance(of: utf16Range, isRTL: isRTL)
+    }
 }
