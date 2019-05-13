@@ -18,6 +18,7 @@ import CoreGraphics
 import Foundation
 
 public class GlyphRun {
+    private let utf16: String.UTF16View
     public let startIndex: String.Index
     public let endIndex: String.Index
     public let startExtraLength: Int
@@ -45,6 +46,7 @@ public class GlyphRun {
          glyphIDs: PrimitiveCollection<UInt16>, glyphOffsets: PrimitiveCollection<CGPoint>,
          glyphAdvances: PrimitiveCollection<CGFloat>,
          clusterMap: PrimitiveCollection<Int>, caretEdges: PrimitiveCollection<CGFloat>) {
+        self.utf16 = string.utf16
         self.startIndex = startIndex
         self.endIndex = endIndex
         self.startExtraLength = startExtraLength
@@ -76,5 +78,50 @@ public class GlyphRun {
 
     public var height: CGFloat {
         return ascent + descent + leading
+    }
+
+    private func checkCharacterIndex(_ characterIndex: String.Index) {
+        precondition(characterIndex >= startIndex && characterIndex < endIndex,
+                     "Index is out of range")
+    }
+
+    public func actualClusterStart(forCharacterAt index: String.Index) -> String.Index {
+        checkCharacterIndex(index)
+
+        let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
+        let arrayIndex = utf16.distance(from: extraStart, to: index)
+
+        let clusterStart = Clusters.actualClusterStart(in: clusterMap, for: arrayIndex)
+
+        return utf16.index(extraStart, offsetBy: clusterStart)
+    }
+
+    public func actualClusterEnd(forCharacterAt index: String.Index) -> String.Index {
+        checkCharacterIndex(index)
+
+        let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
+        let arrayIndex = utf16.distance(from: extraStart, to: index)
+
+        let clusterEnd = Clusters.actualClusterEnd(in: clusterMap, for: arrayIndex)
+
+        return utf16.index(extraStart, offsetBy: clusterEnd)
+    }
+
+    public func leadingGlyphIndex(forCharacterAt index: String.Index) -> Int {
+        checkCharacterIndex(index)
+
+        let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
+        let arrayIndex = utf16.distance(from: extraStart, to: index)
+
+        return Clusters.leadingGlyphIndex(in: clusterMap, for: arrayIndex, isBackward: isBackward, glyphCount: glyphCount)
+    }
+
+    public func trailingGlyphIndex(forCharacterAt index: String.Index) -> Int {
+        checkCharacterIndex(index)
+
+        let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
+        let arrayIndex = utf16.distance(from: extraStart, to: index)
+
+        return Clusters.trailingGlyphIndex(in: clusterMap, for: arrayIndex, isBackward: isBackward, glyphCount: glyphCount)
     }
 }
