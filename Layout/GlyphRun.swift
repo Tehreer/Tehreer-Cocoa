@@ -17,6 +17,13 @@
 import CoreGraphics
 import Foundation
 
+fileprivate struct ClusterRange {
+    var actualStart: String.Index
+    var actualEnd: String.Index
+    var glyphStart: Int
+    var glyphEnd: Int
+}
+
 public class GlyphRun {
     private let utf16: String.UTF16View
     public let startIndex: String.Index
@@ -229,4 +236,113 @@ public class GlyphRun {
         return extent
     }
 
+    private func clusterRange(forCharacterAt index: String.Index, exclusion: ClusterRange?) -> ClusterRange? {
+        let actualStart = actualClusterStart(forCharacterAt: index)
+        let actualEnd = actualClusterEnd(forCharacterAt: index)
+
+        let leadingIndex = leadingGlyphIndex(forCharacterAt: index)
+        let trailingIndex = trailingGlyphIndex(forCharacterAt: index)
+
+        var cluster = ClusterRange(
+            actualStart: actualStart,
+            actualEnd: actualEnd,
+            glyphStart: min(leadingIndex, trailingIndex),
+            glyphEnd: max(leadingIndex, trailingIndex) + 1)
+
+        if let exclusion = exclusion {
+            let minStart = min(exclusion.glyphStart, cluster.glyphEnd)
+            let maxEnd = max(cluster.glyphStart, exclusion.glyphEnd)
+
+            cluster.glyphStart = (!isBackward ? maxEnd : cluster.glyphStart)
+            cluster.glyphEnd = (isBackward ? minStart : cluster.glyphEnd)
+        }
+
+        if cluster.glyphStart < cluster.glyphEnd {
+            return cluster
+        }
+
+        return nil
+    }
+
+    private func drawEdgeCluster(using renderer: Renderer, in context: CGContext, cluster: ClusterRange) {
+        let startClipped = (cluster.actualStart < startIndex)
+        let endClipped = (cluster.actualEnd > endIndex)
+
+        let clipLeft: CGFloat
+        let clipRight: CGFloat
+
+        if !isRTL {
+            clipLeft = (startClipped ? caretEdge(forCharacterAt: startIndex) : -.infinity)
+            clipRight = (endClipped ? caretEdge(forCharacterAt: endIndex) : .infinity)
+        } else {
+            clipRight = (startClipped ? caretEdge(forCharacterAt: startIndex) : .infinity)
+            clipLeft = (endClipped ? caretEdge(forCharacterAt: endIndex) : -.infinity)
+        }
+
+        context.saveGState()
+        context.clip(to: CGRect(x: clipLeft, y: -.infinity, width: clipRight - clipLeft, height: .infinity))
+        context.translateBy(x: leadingEdge(forCharacterRange: cluster.actualStart ..< cluster.actualEnd), y: 0.0)
+
+        renderer.drawGlyphs(on: context,
+                            glyphIDs: glyphIDs[cluster.glyphStart ..< cluster.glyphEnd],
+                            offsets: glyphOffsets[cluster.glyphStart ..< cluster.glyphEnd],
+                            advances: glyphAdvances[cluster.glyphStart ..< cluster.glyphEnd])
+
+        context.restoreGState()
+    }
+
+    public func draw(using renderer: Renderer, in context: CGContext) {
+        renderer.typeface = typeface
+        renderer.typeSize = typeSize
+        renderer.scaleX = 1.0
+        renderer.writingDirection = writingDirection
+
+        var firstCluster: ClusterRange? = nil
+        var lastCluster: ClusterRange? = nil
+
+        if startExtraLength > 0 {
+            firstCluster = clusterRange(forCharacterAt: startIndex, exclusion: nil)
+        }
+        if endExtraLength > 0 {
+            lastCluster = clusterRange(forCharacterAt: utf16.index(before: endIndex), exclusion: firstCluster)
+        }
+
+        var glyphStart: Int = 0
+        var glyphEnd = glyphCount
+
+        var chunkStart = startIndex
+        var chunkEnd = endIndex
+
+        if let firstCluster = firstCluster {
+            drawEdgeCluster(using: renderer, in: context, cluster: firstCluster)
+
+            // Exclude first cluster characters.
+            chunkStart = firstCluster.actualEnd
+            // Exclude first cluster glyphs.
+            glyphStart = (!isBackward ? firstCluster.glyphEnd : glyphStart)
+            glyphEnd = (isBackward ? firstCluster.glyphStart : glyphEnd)
+        }
+
+        if let lastCluster = lastCluster {
+            // Exclude last cluster characters.
+            chunkEnd = lastCluster.actualStart
+            // Exclude last cluster glyphs.
+            glyphEnd = (!isBackward ? lastCluster.glyphStart : glyphEnd)
+            glyphStart = (isBackward ? lastCluster.glyphEnd : glyphStart)
+        }
+
+        context.saveGState()
+        context.translateBy(x: leadingEdge(forCharacterRange: chunkStart ..< chunkEnd), y: 0.0)
+
+        renderer.drawGlyphs(on: context,
+                            glyphIDs: glyphIDs[glyphStart ..< glyphEnd],
+                            offsets: glyphOffsets[glyphStart ..< glyphEnd],
+                            advances: glyphAdvances[glyphStart ..< glyphEnd])
+
+        context.restoreGState()
+
+        if let lastCluster = lastCluster {
+            drawEdgeCluster(using: renderer, in: context, cluster: lastCluster)
+        }
+    }
 }
