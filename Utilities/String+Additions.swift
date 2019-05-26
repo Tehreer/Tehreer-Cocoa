@@ -17,6 +17,34 @@
 import Foundation
 
 extension String {
+    func leadingWhitespaceEnd(in range: Range<String.Index>) -> String.Index {
+        var index = range.lowerBound
+
+        while index < range.upperBound {
+            if !self[index].isWhitespace {
+                return index
+            }
+
+            index = self.index(after: index)
+        }
+
+        return range.upperBound
+    }
+
+    func trailingWhitespaceStart(in range: Range<String.Index>) -> String.Index {
+        var index = self.index(before: range.upperBound)
+
+        while index >= range.lowerBound {
+            if !self[index].isWhitespace {
+                return index
+            }
+
+            index = self.index(before: index)
+        }
+
+        return range.lowerBound
+    }
+
     @inlinable
     func utf16Index(forCharacterAt index: String.Index) -> Int {
         return utf16.codeUnitIndex(forCharacterAt: index)
