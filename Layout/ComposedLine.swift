@@ -45,13 +45,13 @@ public class ComposedLine {
     public internal(set) var origin: CGPoint = .zero
 
     /// The ascent of this line which is the maximum ascent from the baseline of all runs.
-    public let ascent: CGFloat
+    public internal(set) var ascent: CGFloat
 
     /// The descent of this line which is the maximum descent from the baseline of all runs.
-    public let descent: CGFloat
+    public internal(set) var descent: CGFloat
 
     /// The leading of this line which is the maximum leading of all runs.
-    public let leading: CGFloat
+    public internal(set) var leading: CGFloat
 
     /// The typographic width of this line.
     public var width: CGFloat {
@@ -62,6 +62,8 @@ public class ComposedLine {
     public var height: CGFloat {
         return (ascent + descent + leading)
     }
+
+    var flushFactor: CGFloat = .zero
 
     var top: CGFloat {
         return origin.y - ascent
