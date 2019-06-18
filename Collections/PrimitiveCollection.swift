@@ -22,10 +22,10 @@ public struct PrimitiveIterator<Element>: IteratorProtocol {
     private var currentIndex: Int
     private let endIndex: Int
 
-    init(_ base: IntrinsicCollection<Element>, startIndex: Int, endIndex: Int) {
+    init(_ base: IntrinsicCollection<Element>, offset: Int, count: Int) {
         self.base = base
-        self.currentIndex = startIndex
-        self.endIndex = endIndex
+        self.currentIndex = offset
+        self.endIndex = offset + count
     }
 
     public mutating func next() -> Element? {
@@ -48,13 +48,14 @@ public struct PrimitiveCollection<Element>: RandomAccessCollection {
 
     let base: IntrinsicCollection<Element>
 
+    private let offset: Int
+    public let count: Int
+
     init<Base>(_ base: Base, range: Range<Int>)
         where Base: RandomAccessCollection,
               Base.Index == Int,
               Base.Element == Element {
-        self.base = IntrinsicWrapCollection(base: base)
-        self.startIndex = range.lowerBound
-        self.endIndex = range.upperBound
+        self.init(IntrinsicWrapCollection(base: base), range: range)
     }
 
     init<Base>(_ base: Base)
@@ -66,16 +67,21 @@ public struct PrimitiveCollection<Element>: RandomAccessCollection {
 
     init(_ base: IntrinsicCollection<Element>, range: Range<Int>) {
         self.base = base
-        self.startIndex = range.lowerBound
-        self.endIndex = range.upperBound
+        self.offset = range.lowerBound
+        self.count = range.count
     }
 
     init(_ base: IntrinsicCollection<Element>) {
         self.init(base, range: 0 ..< base.count)
     }
 
-    public let startIndex: Int
-    public let endIndex: Int
+    public var startIndex: Int {
+        return 0
+    }
+
+    public var endIndex: Int {
+        return count
+    }
 
     public func index(after i: Int) -> Int {
         return i + 1
@@ -110,39 +116,35 @@ public struct PrimitiveCollection<Element>: RandomAccessCollection {
         return end - start
     }
 
-    public var count: Int {
-        return endIndex - startIndex
-    }
-
     public var isEmpty: Bool {
-        return startIndex == endIndex
+        return count == 0
     }
 
     public var first: Element? {
-        return !isEmpty ? base.item(at: startIndex) : nil
+        return !isEmpty ? base.item(at: offset) : nil
     }
 
     public var last: Element? {
-        return !isEmpty ? base.item(at: endIndex - 1) : nil
+        return !isEmpty ? base.item(at: offset + count - 1) : nil
     }
 
     public subscript(position: Int) -> Element {
         precondition(
-            position >= startIndex && position < endIndex,
+            position >= 0 && position < count,
             "Index is out of range")
 
-        return base.item(at: position)
+        return base.item(at: position + offset)
     }
 
     public subscript(bounds: Range<Int>) -> PrimitiveCollection<Element> {
         precondition(
-            bounds.lowerBound >= startIndex && bounds.upperBound < endIndex,
+            bounds.lowerBound >= 0 && bounds.upperBound <= count,
             "Index is out of range")
 
-        return PrimitiveCollection(base, range: bounds)
+        return PrimitiveCollection(base, range: bounds.lowerBound + offset ..< bounds.upperBound + offset)
     }
 
     public func makeIterator() -> PrimitiveIterator<Element> {
-        return PrimitiveIterator(base, startIndex: startIndex, endIndex: endIndex)
+        return PrimitiveIterator(base, offset: offset, count: count)
     }
 }
