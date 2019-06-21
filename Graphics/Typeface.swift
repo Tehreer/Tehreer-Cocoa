@@ -317,7 +317,7 @@ public class Typeface {
     }
 
     private func fixedAdvance(for glyphID: FT_UInt, vertical: Bool) -> FT_Fixed {
-        var loadFlags: FT_Int32 = FT_LOAD_DEFAULT
+        var loadFlags: FT_Int32 = FT_Int32(FT_LOAD_NO_SCALE)
         if (vertical) {
             loadFlags |= FT_Int32(FT_LOAD_VERTICAL_LAYOUT)
         }
