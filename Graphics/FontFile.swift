@@ -18,17 +18,24 @@ import Foundation
 
 public class FontFile {
     private var arguments: FT_Open_Args
-    private let stream: FT_Stream?
     private let faceCount: Int
 
     public convenience init?(path: String) {
-        let cpath = path.cString(using: .utf8)
+        let utf8Path = path.utf8CString.withUnsafeBufferPointer { (pointer) -> UnsafeMutablePointer<FT_String>? in
+            guard let baseAddress = pointer.baseAddress else {
+                return nil
+            }
+
+            let newPath = UnsafeMutablePointer<FT_String>.allocate(capacity: pointer.count)
+            newPath.assign(from: baseAddress, count: pointer.count)
+            return newPath
+        }
 
         var arguments = FT_Open_Args()
         arguments.flags = FT_UInt(FT_OPEN_PATHNAME)
         arguments.memory_base = nil
         arguments.memory_size = 0
-        arguments.pathname = UnsafeMutablePointer<FT_String>(mutating: cpath)
+        arguments.pathname = utf8Path
         arguments.stream = nil
 
         self.init(arguments: &arguments)
@@ -70,38 +77,37 @@ public class FontFile {
         self.init(arguments: &arguments)
     }
 
-    private convenience init?(arguments: UnsafePointer<FT_Open_Args>) {
+    private convenience init?(arguments: inout FT_Open_Args) {
         FreeType.semaphore.wait()
 
         var ftFace: FT_Face! = nil
         var numFaces: FT_Long = 0
-        let error = FT_Open_Face(FreeType.library, arguments, 0, &ftFace)
 
-        if error == FT_Err_Ok {
+        if FT_Open_Face(FreeType.library, &arguments, 0, &ftFace) == FT_Err_Ok {
             numFaces = ftFace.pointee.num_faces
             FT_Done_Face(ftFace)
-            ftFace = nil
         }
 
         FreeType.semaphore.signal()
 
-        guard ftFace != nil else {
+        guard let _ = ftFace else {
             return nil
         }
 
-        self.init(arguments: arguments,
-                  stream: arguments.pointee.stream,
-                  numFaces: numFaces)
+        self.init(arguments: &arguments, numFaces: numFaces)
     }
 
-    private init(arguments: UnsafePointer<FT_Open_Args>, stream: FT_Stream?, numFaces: Int) {
-        self.arguments = arguments.pointee
-        self.stream = stream
+    private init(arguments: inout FT_Open_Args, numFaces: Int) {
+        self.arguments = arguments
         self.faceCount = numFaces
     }
 
     deinit {
-        if let stream = stream {
+        if let utf8Path = arguments.pathname {
+            utf8Path.deallocate()
+        }
+
+        if let stream = arguments.stream {
             stream.pointee.close(stream)
             stream.deallocate()
         }
