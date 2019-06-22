@@ -162,7 +162,9 @@ public class ComposedFrame {
         for line in lines {
             // TODO: Handle Attributes.
 
+            context.translateBy(x: line.origin.x, y: line.origin.y)
             line.draw(using: renderer, in: context)
+            context.translateBy(x: -line.origin.x, y: -line.origin.y)
         }
 
         context.translateBy(x: -point.x, y: -point.y)
