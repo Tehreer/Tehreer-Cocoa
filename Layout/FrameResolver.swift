@@ -111,7 +111,7 @@ public class FrameResolver {
                                       lines: context.textLines)
         textFrame.size = CGSize(width: context.layoutWidth, height: context.layoutHeight)
 
-        return nil
+        return textFrame
     }
 
     private func addParagraphLines(context: inout FrameContext) {
