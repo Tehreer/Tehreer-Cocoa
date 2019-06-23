@@ -91,6 +91,12 @@ public class Renderer {
         }
     }
 
+    public var renderScale: CGFloat = 1.0 {
+        didSet {
+            updatePixelSizes()
+        }
+    }
+
     /// The horizontal scale factor for drawing/measuring glyphs. Its default value is 1.0. Values
     /// greater than 1.0 will stretch the glyphs wider. Values less than 1.0 will stretch the glyphs
     /// narrower.
@@ -148,8 +154,8 @@ public class Renderer {
     public var shadowColor: UIColor = .black
 
     private func updatePixelSizes() {
-        let pixelWidth = Int((typeSize * scaleX * 64.0) + 0.5)
-        let pixelHeight = Int((typeSize * scaleY * 64.0) + 0.5)
+        let pixelWidth = Int((typeSize * scaleX * renderScale * 64.0) + 0.5)
+        let pixelHeight = Int((typeSize * scaleY * renderScale * 64.0) + 0.5)
 
         // Minimum size supported by Freetype is 64x64.
         shouldRender = (pixelWidth >= 64 && pixelHeight >= 64)
@@ -292,12 +298,18 @@ public class Renderer {
 
             if let maskImage = maskGlyph.image {
                 let rect = CGRect(
-                    x: Int(penX + offset.x + CGFloat(maskGlyph.lsb) + 0.5),
-                    y: Int(-offset.y - CGFloat(maskGlyph.tsb) + 0.5),
-                    width: maskImage.width,
-                    height: maskImage.height)
+                    x: round(penX + offset.x + (CGFloat(maskGlyph.lsb) / renderScale)),
+                    y: round(-offset.y - (CGFloat(maskGlyph.tsb) / renderScale)),
+                    width: CGFloat(maskImage.width) / renderScale,
+                    height: CGFloat(maskImage.height) / renderScale)
 
-                context.draw(maskImage, in: rect)
+                context.translateBy(x: rect.minX, y: rect.maxY)
+                context.scaleBy(x: 1.0, y: -1.0)
+
+                context.draw(maskImage, in: CGRect(origin: .zero, size: rect.size))
+
+                context.scaleBy(x: 1.0, y: -1.0)
+                context.translateBy(x: -rect.minX, y: -rect.maxY)
             }
 
             if !reverseMode {
