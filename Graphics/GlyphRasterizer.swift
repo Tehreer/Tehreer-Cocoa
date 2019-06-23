@@ -18,6 +18,8 @@ import CoreGraphics
 import Foundation
 
 class GlyphRasterizer {
+    private static var decode: [CGFloat] = [1.0, 1.0]
+
     let typeface: Typeface
 
     private var size: FT_Size!
@@ -25,7 +27,7 @@ class GlyphRasterizer {
 
     init(_ strike: GlyphStrike) {
         self.typeface = strike.typeface
-        self.transform = FT_Matrix(xx:0x10000, xy:-strike.skewX, yx:0, yy:0x10000)
+        self.transform = FT_Matrix(xx: 0x10000, xy: -strike.skewX, yx: 0, yy: 0x10000)
 
         typeface.semaphore.wait()
 
@@ -76,7 +78,7 @@ class GlyphRasterizer {
                     bitsPerPixel: 8,
                     bytesPerRow: Int(bitmap.pointee.width),
                     provider: provider,
-                    decode: nil,
+                    decode: &GlyphRasterizer.decode,
                     shouldInterpolate: false)
             }
 
