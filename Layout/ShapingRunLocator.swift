@@ -69,6 +69,7 @@ struct ShapingRunLocator {
             return shapingRun
         }
 
+        newRun = nil
         return nil
     }
 
