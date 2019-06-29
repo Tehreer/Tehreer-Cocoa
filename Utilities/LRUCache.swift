@@ -48,43 +48,37 @@ class LRUSegment<Key, Value> where Key: Hashable {
         return 1
     }
 
-    subscript(key: Key) -> Value? {
-        get {
-            cache.semaphore.wait()
-            defer { cache.semaphore.signal() }
-
-            if let node = data[key] {
-                cache.makeFirst(node: node)
-                return node.value
-            }
-
-            return nil
+    func unsafeValue(forKey key: Key) -> Value? {
+        if let node = data[key] {
+            cache.makeFirst(node: node)
+            return node.value
         }
-        set(value) {
-            if let value = value {
-                cache.semaphore.wait()
 
-                let newNode = Node(segment: self, key: key, value: value)
-                let oldNode = data.updateValue(newNode, forKey: key)
-                guard oldNode == nil else {
-                    fatalError("An entry with same key has already been added")
-                }
+        return nil
+    }
 
-                cache._size += sizeOf(key: key, value: value)
-                cache.addFirst(node: newNode)
+    func unsafeSetValue(_ value: Value?, forKey key: Key) {
+        guard let value = value else {
+            unsafeRemoveValue(forKey: key)
+            return
+        }
 
-                cache.semaphore.signal()
+        let newNode = Node(segment: self, key: key, value: value)
+        let oldNode = data.updateValue(newNode, forKey: key)
+        guard oldNode == nil else {
+            fatalError("An entry with same key has already been added")
+        }
 
-                cache.trim(toSize: cache.capacity)
-            } else {
-                cache.semaphore.wait()
-                defer { cache.semaphore.signal() }
+        cache._size += sizeOf(key: key, value: value)
+        cache.addFirst(node: newNode)
 
-                if let node = data.removeValue(forKey: key) {
-                    cache._size -= sizeOf(key: key, value: node.value)
-                    cache.remove(node: node)
-                }
-            }
+        cache.unsafeTrim(toSize: cache.capacity)
+    }
+
+    func unsafeRemoveValue(forKey key: Key) {
+        if let node = data.removeValue(forKey: key) {
+            cache._size -= sizeOf(key: key, value: node.value)
+            cache.remove(node: node)
         }
     }
 }
@@ -147,15 +141,8 @@ class LRUCache<Key, Value> where Key: Hashable {
         _header.next = _header
     }
 
-    func trim(toSize maxSize: Int) {
-        while true {
-            semaphore.wait()
-            defer { semaphore.signal() }
-
-            if _size <= maxSize {
-                break
-            }
-
+    func unsafeTrim(toSize maxSize: Int) {
+        while _size > maxSize {
             let toEvict = lastNode
             if toEvict === _header {
                 break
@@ -163,7 +150,8 @@ class LRUCache<Key, Value> where Key: Hashable {
 
             let segment = toEvict.segment!
             let key = toEvict.key
-            segment[key] = nil
+
+            segment.unsafeRemoveValue(forKey: key)
         }
     }
 }

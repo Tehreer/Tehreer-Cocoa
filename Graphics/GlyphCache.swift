@@ -62,7 +62,7 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
     }
 
     private func unsafeGlyph(in fontCache: FontCache, for glyphID: UInt16) -> Glyph {
-        if let glyph = fontCache[glyphID] {
+        if let glyph = fontCache.unsafeValue(forKey: glyphID) {
             return glyph
         }
 
@@ -82,10 +82,10 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
             defer { fontCache.semaphore.signal() }
 
             if glyph.image == nil {
-                fontCache[glyphID] = nil
+                fontCache.unsafeRemoveValue(forKey: glyphID)
 
                 fontCache.rasterizer.loadImage(in: glyph)
-                fontCache[glyphID] = glyph
+                fontCache.unsafeSetValue(glyph, forKey: glyphID)
             }
         }
 
@@ -105,10 +105,10 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
             defer { fontCache.semaphore.signal() }
 
             if glyph.outline == nil {
-                fontCache[glyphID] = nil
+                fontCache.unsafeRemoveValue(forKey: glyphID)
 
                 fontCache.rasterizer.loadOutline(in: glyph)
-                fontCache[glyphID] = glyph
+                fontCache.unsafeSetValue(glyph, forKey: glyphID)
             }
         }
 
@@ -132,10 +132,10 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
             defer { fontCache.semaphore.signal() }
 
             if glyph.path == nil {
-                fontCache[glyphID] = nil
+                fontCache.unsafeRemoveValue(forKey: glyphID)
 
                 fontCache.rasterizer.loadPath(in: glyph)
-                fontCache[glyphID] = glyph
+                fontCache.unsafeSetValue(glyph, forKey: glyphID)
             }
         }
 
