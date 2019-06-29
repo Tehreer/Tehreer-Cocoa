@@ -25,6 +25,8 @@ struct ShapingRun {
     var typeSize: CGFloat = 16
     var baselineOffset: CGFloat = .zero
     var obliqueness: CGFloat = .zero
+    var scaleX: CGFloat = 1.0
+    var scaleY: CGFloat = 1.0
 
     init(startIndex: String.Index, endIndex: String.Index) {
         self.startIndex = startIndex
@@ -85,6 +87,14 @@ struct ShapingRunLocator {
                 if let typeSize = value as? CGFloat {
                     shapingRun.typeSize = typeSize
                 }
+            case .scaleX:
+                if let scaleX = value as? CGFloat {
+                    shapingRun.scaleX = scaleX
+                }
+            case .scaleY:
+                if let scaleY = value as? CGFloat {
+                    shapingRun.scaleY = scaleY
+                }
             case .baselineOffset:
                 if let baselineOffset = value as? CGFloat {
                     shapingRun.baselineOffset = baselineOffset
@@ -117,7 +127,9 @@ struct ShapingRunLocator {
                 if currentRun.typeface === nextRun.typeface
                     && currentRun.typeSize == nextRun.typeSize
                     && currentRun.baselineOffset == nextRun.baselineOffset
-                    && currentRun.obliqueness == nextRun.obliqueness {
+                    && currentRun.obliqueness == nextRun.obliqueness
+                    && currentRun.scaleX == nextRun.scaleX
+                    && currentRun.scaleY == nextRun.scaleY {
                     currentRun.endIndex = nextRun.endIndex
                 } else {
                     break

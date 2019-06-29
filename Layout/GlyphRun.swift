@@ -25,7 +25,9 @@ fileprivate struct ClusterRange {
 }
 
 public class GlyphRun {
+    private let attributes: [NSAttributedString.Key: Any]
     private let utf16: String.UTF16View
+
     public let startIndex: String.Index
     public let endIndex: String.Index
     public let startExtraLength: Int
@@ -47,8 +49,8 @@ public class GlyphRun {
     private(set) var extent: CGFloat = -.infinity
 
     init(string: String, startIndex: String.Index, endIndex: String.Index,
-         startExtraLength: Int, endExtraLength: Int, isBackward: Bool,
-         bidiLevel: UInt8, writingDirection: WritingDirection, typeface: Typeface,
+         startExtraLength: Int, endExtraLength: Int, attributes: [NSAttributedString.Key: Any],
+         isBackward: Bool, bidiLevel: UInt8, writingDirection: WritingDirection, typeface: Typeface,
          typeSize: CGFloat, ascent: CGFloat, descent: CGFloat, leading: CGFloat,
          glyphIDs: PrimitiveCollection<UInt16>, glyphOffsets: PrimitiveCollection<CGPoint>,
          glyphAdvances: PrimitiveCollection<CGFloat>,
@@ -58,6 +60,7 @@ public class GlyphRun {
         self.endIndex = endIndex
         self.startExtraLength = startExtraLength
         self.endExtraLength = endExtraLength
+        self.attributes = attributes
         self.isBackward = isBackward
         self.bidiLevel = bidiLevel
         self.writingDirection = writingDirection
@@ -295,7 +298,23 @@ public class GlyphRun {
         renderer.typeface = typeface
         renderer.typeSize = typeSize
         renderer.scaleX = 1.0
+        renderer.scaleY = 1.0
         renderer.writingDirection = writingDirection
+
+        for (key, value) in attributes {
+            switch key {
+            case .scaleX:
+                if let scaleX = value as? CGFloat {
+                    renderer.scaleX = scaleX
+                }
+            case .scaleY:
+                if let scaleY = value as? CGFloat {
+                    renderer.scaleY = scaleY
+                }
+            default:
+                break
+            }
+        }
 
         var firstCluster: ClusterRange? = nil
         var lastCluster: ClusterRange? = nil

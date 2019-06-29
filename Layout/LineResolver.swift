@@ -51,6 +51,7 @@ func makeGlyphRun(intrinsicRun: IntrinsicRun,
         endIndex: range.upperBound,
         startExtraLength: startExtraLength,
         endExtraLength: endExtraLength,
+        attributes: attributes,
         isBackward: intrinsicRun.isBackward,
         bidiLevel: intrinsicRun.bidiLevel,
         writingDirection: intrinsicRun.writingDirection,
@@ -107,13 +108,16 @@ func makeComposedLine(text: String, range: Range<String.Index>,
 
 struct LineResolver {
     private var text: NSAttributedString
+    private var defaultAttributes: [NSAttributedString.Key: Any]
     private var paragraphs: [BidiParagraph]
     private var runs: [IntrinsicRun]
 
     init(text: NSAttributedString,
+         defaultAttributes: [NSAttributedString.Key: Any],
          paragraphs: [BidiParagraph],
          runs: [IntrinsicRun]) {
         self.text = text
+        self.defaultAttributes = defaultAttributes
         self.paragraphs = paragraphs
         self.runs = runs
     }
@@ -162,9 +166,12 @@ struct LineResolver {
             let chunkRange: NSRange = string.utf16Range(forCharacterRange: feasibleStart ..< feasibleEnd)
 
             text.enumerateAttributes(in: chunkRange, options: []) { (attributes, spanRange, stop) in
+                var allAttributes = defaultAttributes
+                attributes.forEach({ allAttributes[$0] = $1 })
+
                 let glyphRun = makeGlyphRun(intrinsicRun: intrinsicRun,
                                             range: string.characterRange(forUTF16Range: spanRange),
-                                            attributes: attributes)
+                                            attributes: allAttributes)
                 visualRuns.insert(glyphRun, at: insertIndex)
 
                 if isForwardRun {

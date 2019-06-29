@@ -18,7 +18,9 @@ import CoreGraphics
 import Foundation
 
 public class Typesetter {
-    let text: NSAttributedString
+    public let text: NSAttributedString
+
+    let defaultAttributes: [NSAttributedString.Key: Any]
     let breaks: BreakClassifier
     let paragraphs: [BidiParagraph]
     let runs: [IntrinsicRun]
@@ -28,6 +30,7 @@ public class Typesetter {
         let shapeResult = shapeResolver.makeParagraphsAndRuns()
 
         self.text = text
+        self.defaultAttributes = defaultAttributes
         self.breaks = BreakClassifier(string: text.string)
         self.paragraphs = shapeResult.paragraphs
         self.runs = shapeResult.runs
@@ -44,7 +47,7 @@ public class Typesetter {
     }
 
     public func makeSimpleLine(range: Range<String.Index>) -> ComposedLine {
-        let lineResolver = LineResolver(text: text, paragraphs: paragraphs, runs: runs)
+        let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes, paragraphs: paragraphs, runs: runs)
         return lineResolver.makeSimpleLine(range: range)
     }
 }

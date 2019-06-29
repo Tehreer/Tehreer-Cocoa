@@ -88,15 +88,27 @@ struct ShapeResolver {
 
             let typeSize = shapingRun.typeSize
             let sizeByEm = typeSize / CGFloat(typeface.unitsPerEm)
-            let ascent = CGFloat(typeface.ascent) * sizeByEm
-            let descent = CGFloat(typeface.descent) * sizeByEm
-            let leading = CGFloat(typeface.leading) * sizeByEm
+            let sizeScale = sizeByEm * shapingRun.scaleY
+            let ascent = CGFloat(typeface.ascent) * sizeScale
+            let descent = CGFloat(typeface.descent) * sizeScale
+            let leading = CGFloat(typeface.leading) * sizeScale
 
             let glyphIDs = Array(shapingResult.glyphIDs)
             var glyphOffsets = Array(shapingResult.glyphOffsets)
-            let glyphAdvances = Array(shapingResult.glyphAdvances)
+            var glyphAdvances = Array(shapingResult.glyphAdvances)
             let clusterMap = Array(shapingResult.clusterMap)
             let caretEdges = shapingResult.caretEdges(with: nil)
+
+            if shapingRun.scaleX != 1.0 || shapingRun.scaleY != 1.0 {
+                for i in 0 ..< glyphOffsets.count {
+                    glyphOffsets[i].x *= shapingRun.scaleX
+                    glyphOffsets[i].y *= shapingRun.scaleY
+                }
+
+                for i in 0 ..< glyphAdvances.count {
+                    glyphAdvances[i] *= shapingRun.scaleX
+                }
+            }
 
             let baselineOffset = shapingRun.baselineOffset
             if baselineOffset != .zero {

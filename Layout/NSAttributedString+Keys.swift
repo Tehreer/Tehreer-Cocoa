@@ -19,4 +19,6 @@ import Foundation
 extension NSAttributedString.Key {
     public static let typeface = NSAttributedString.Key("TTypeface")
     public static let typeSize = NSAttributedString.Key("TSize")
+    public static let scaleX = NSAttributedString.Key("TScaleX")
+    public static let scaleY = NSAttributedString.Key("TScaleY")
 }
