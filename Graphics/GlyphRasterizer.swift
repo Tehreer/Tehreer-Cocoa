@@ -30,14 +30,13 @@ class GlyphRasterizer {
         self.transform = FT_Matrix(xx: 0x10000, xy: -strike.skewX, yx: 0, yy: 0x10000)
 
         typeface.semaphore.wait()
+        defer { typeface.semaphore.signal() }
 
         let ftFace = typeface.ftFace
 
         FT_New_Size(ftFace, &size)
         FT_Activate_Size(size)
         FT_Set_Char_Size(ftFace, strike.pixelWidth, strike.pixelHeight, 0, 0)
-
-        typeface.semaphore.signal()
     }
 
     deinit {
@@ -52,7 +51,7 @@ class GlyphRasterizer {
         FT_Set_Transform(typeface.ftFace, &transform, nil)
     }
 
-    private func unsafeCreateImage(bitmap: UnsafePointer<FT_Bitmap>) -> CGImage? {
+    private func unsafeMakeImage(bitmap: UnsafePointer<FT_Bitmap>) -> CGImage? {
         let pixelMode = bitmap.pointee.pixel_mode
         var glyphImage: CGImage? = nil
 
@@ -89,21 +88,20 @@ class GlyphRasterizer {
         return glyphImage
     }
 
-    func loadImage(in glyph: Glyph) {
-        let glyphID = FT_UInt(glyph.glyphID)
+    func makeImage(glyphID: UInt16) -> (image: CGImage?, left: Int, top: Int) {
+        typeface.semaphore.wait()
+        defer { typeface.semaphore.signal() }
+
+        unsafeActivate()
+
+        let ftFace = typeface.ftFace
         var glyphImage: CGImage? = nil
         var left = 0
         var top = 0
 
-        typeface.semaphore.wait()
-        unsafeActivate()
-
-        let ftFace = typeface.ftFace
-        let error = FT_Load_Glyph(ftFace, glyphID, FT_Int32(FT_LOAD_RENDER))
-
-        if error == FT_Err_Ok {
+        if FT_Load_Glyph(ftFace, FT_UInt(glyphID), FT_Int32(FT_LOAD_RENDER)) == FT_Err_Ok {
             let glyphSlot = ftFace.pointee.glyph
-            glyphImage = unsafeCreateImage(bitmap: &glyphSlot!.pointee.bitmap)
+            glyphImage = unsafeMakeImage(bitmap: &glyphSlot!.pointee.bitmap)
 
             if glyphImage != nil {
                 left = Int(glyphSlot!.pointee.bitmap_left)
@@ -111,45 +109,36 @@ class GlyphRasterizer {
             }
         }
 
-        typeface.semaphore.signal()
-
-        glyph.own(image: glyphImage, left: left, top: top)
+        return (glyphImage, left, top)
     }
 
-    func loadOutline(in glyph: Glyph) {
-        let glyphID = FT_UInt(glyph.glyphID)
-        var outline: FT_Glyph? = nil
-
+    func makeOutline(glyphID: UInt16) -> FT_Glyph? {
         typeface.semaphore.wait()
+        defer { typeface.semaphore.signal() }
+
         unsafeActivate()
 
         let ftFace = typeface.ftFace
-        let error = FT_Load_Glyph(ftFace, glyphID, FT_Int32(FT_LOAD_NO_BITMAP))
+        var outline: FT_Glyph? = nil
 
-        if error == FT_Err_Ok {
+        if FT_Load_Glyph(ftFace, FT_UInt(glyphID), FT_Int32(FT_LOAD_NO_BITMAP)) == FT_Err_Ok {
             FT_Get_Glyph(ftFace.pointee.glyph, &outline)
         }
 
-        typeface.semaphore.signal()
-
-        glyph.own(outline: outline)
+        return outline
     }
 
-    func loadPath(in glyph: Glyph) {
-        let glyphID = FT_UInt(glyph.glyphID)
-
+    func makePath(glyphID: UInt16) -> CGPath? {
         typeface.semaphore.wait()
+        defer { typeface.semaphore.signal() }
+
         unsafeActivate()
 
-        let glyphPath = typeface.unsafeMakePath(glyphID: glyphID)
-
-        typeface.semaphore.signal()
-
-        glyph.own(path: glyphPath)
+        return typeface.unsafeMakePath(glyphID: FT_UInt(glyphID))
     }
 
-    func stroked(glyph: Glyph, lineRadius: FT_Fixed,
-                 lineCap: FT_Stroker_LineCap, lineJoin: FT_Stroker_LineJoin, miterLimit: FT_Fixed) -> Glyph {
+    func makeStrokedGlyph(of glyph: Glyph, lineRadius: FT_Fixed, lineCap: FT_Stroker_LineCap,
+                          lineJoin: FT_Stroker_LineJoin, miterLimit: FT_Fixed) -> Glyph {
         let result = Glyph(glyphID: glyph.glyphID)
         var baseGlyph = glyph.outline
 
@@ -167,16 +156,16 @@ class GlyphRasterizer {
 
                 let bitmapGlyph = UnsafeMutablePointer<FT_BitmapGlyphRec_>(OpaquePointer(baseGlyph))!
                 var strokeImage: CGImage? = nil
-                var leftSideBearing = 0
-                var topSideBearing = 0
+                var left = 0
+                var top = 0
 
-                strokeImage = unsafeCreateImage(bitmap: &bitmapGlyph.pointee.bitmap)
+                strokeImage = unsafeMakeImage(bitmap: &bitmapGlyph.pointee.bitmap)
                 if strokeImage != nil {
-                    leftSideBearing = Int(bitmapGlyph.pointee.left)
-                    topSideBearing = Int(bitmapGlyph.pointee.top)
+                    left = Int(bitmapGlyph.pointee.left)
+                    top = Int(bitmapGlyph.pointee.top)
                 }
 
-                result.own(image: strokeImage, left: leftSideBearing, top: topSideBearing)
+                result.own(image: strokeImage, left: left, top: top)
 
                 // Dispose the stroked / bitmap glyph.
                 FT_Done_Glyph(baseGlyph)

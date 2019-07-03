@@ -18,7 +18,6 @@ import Foundation
 import CoreGraphics
 
 fileprivate class FontCache: LRUSegment<UInt16, Glyph> {
-    let semaphore = DispatchSemaphore(value: 1)
     let rasterizer: GlyphRasterizer
 
     init(cache: LRUCache<UInt16, Glyph>, rasterizer: GlyphRasterizer) {
@@ -78,13 +77,15 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
         semaphore.signal()
 
         if glyph.image == nil {
-            fontCache.semaphore.wait()
-            defer { fontCache.semaphore.signal() }
+            let result = fontCache.rasterizer.makeImage(glyphID: glyph.glyphID)
+
+            semaphore.wait()
+            defer { semaphore.signal() }
 
             if glyph.image == nil {
                 fontCache.unsafeRemoveValue(forKey: glyphID)
 
-                fontCache.rasterizer.loadImage(in: glyph)
+                glyph.own(image: result.image, left: result.left, top: result.top)
                 fontCache.unsafeSetValue(glyph, forKey: glyphID)
             }
         }
@@ -101,22 +102,26 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
         semaphore.signal()
 
         if glyph.outline == nil {
-            fontCache.semaphore.wait()
-            defer { fontCache.semaphore.signal() }
+            let outline = fontCache.rasterizer.makeOutline(glyphID: glyph.glyphID)
+
+            semaphore.wait()
+            defer { semaphore.signal() }
 
             if glyph.outline == nil {
                 fontCache.unsafeRemoveValue(forKey: glyphID)
 
-                fontCache.rasterizer.loadOutline(in: glyph)
+                glyph.own(outline: outline)
                 fontCache.unsafeSetValue(glyph, forKey: glyphID)
+            } else {
+                FT_Done_Glyph(outline)
             }
         }
 
-        return fontCache.rasterizer.stroked(glyph: glyph,
-                                            lineRadius: lineRadius,
-                                            lineCap: lineCap,
-                                            lineJoin: lineJoin,
-                                            miterLimit: miterLimit)
+        return fontCache.rasterizer.makeStrokedGlyph(of: glyph,
+                                                     lineRadius: lineRadius,
+                                                     lineCap: lineCap,
+                                                     lineJoin: lineJoin,
+                                                     miterLimit: miterLimit)
     }
 
     func glyphPath(with strike: GlyphStrike, for glyphID: UInt16) -> CGPath? {
@@ -128,13 +133,15 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
         semaphore.signal()
 
         if glyph.path == nil {
-            fontCache.semaphore.wait()
-            defer { fontCache.semaphore.signal() }
+            let path = fontCache.rasterizer.makePath(glyphID: glyphID)
+
+            semaphore.wait()
+            defer { semaphore.signal() }
 
             if glyph.path == nil {
                 fontCache.unsafeRemoveValue(forKey: glyphID)
 
-                fontCache.rasterizer.loadPath(in: glyph)
+                glyph.own(path: path)
                 fontCache.unsafeSetValue(glyph, forKey: glyphID)
             }
         }
