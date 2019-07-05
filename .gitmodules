@@ -1,0 +1,19 @@
+[submodule "Libraries/FreeType"]
+	path = Libraries/FreeType
+	url = git://git.sv.nongnu.org/freetype/freetype2.git
+	branch = master
+
+[submodule "Libraries/SheenBidi"]
+	path = Libraries/SheenBidi
+	url = git://github.com/Tehreer/SheenBidi.git
+	branch = master
+
+[submodule "Libraries/SheenFigure"]
+	path = Libraries/SheenFigure
+	url = git://github.com/Tehreer/SheenFigure.git
+	branch = master
+
+[submodule "Libraries/UniBreak"]
+	path = Libraries/UniBreak
+	url = git://github.com/adah1972/libunibreak.git
+	branch = master
