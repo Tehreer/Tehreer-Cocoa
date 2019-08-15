@@ -33,13 +33,13 @@ class IntrinsicRun {
     let glyphOffsets: [CGPoint]
     let glyphAdvances: [CGFloat]
     let clusterMap: [Int]
-    let caretEdges: PrimitiveCollection<CGFloat>
+    let caretEdges: [CGFloat]
 
     init(string: String, startIndex: String.Index, endIndex: String.Index, isBackward: Bool,
          bidiLevel: UInt8, writingDirection: WritingDirection, typeface: Typeface,
          typeSize: CGFloat, ascent: CGFloat, descent: CGFloat, leading: CGFloat,
          glyphIDs: [UInt16], glyphOffsets: [CGPoint], glyphAdvances: [CGFloat],
-         clusterMap: [Int], caretEdges: PrimitiveCollection<CGFloat>) {
+         clusterMap: [Int], caretEdges: [CGFloat]) {
         self.string = string
         self.startIndex = startIndex
         self.endIndex = endIndex

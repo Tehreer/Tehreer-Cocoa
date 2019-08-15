@@ -98,7 +98,7 @@ public class ShapingResult {
         return PrimitiveCollection(collection.map({ Int($0) }))
     }
 
-    public func caretEdges(with caretStops: [Bool]?) -> PrimitiveCollection<CGFloat> {
+    public func caretEdges(with caretStops: [Bool]?) -> [CGFloat] {
         if let caretStops = caretStops {
             precondition(caretStops.count >= codeUnitCount)
         }
@@ -125,7 +125,7 @@ public class ShapingResult {
         let edgesBuffer = UnsafeBufferPointer(start: unsafeEdges, count: edgeCount)
         let edgesArray = edgesBuffer.map { CGFloat($0) }
 
-        return PrimitiveCollection(edgesArray, range: 0 ..< edgeCount)
+        return edgesArray
     }
 
     func setAdditionalInfo(sizeByEm: CGFloat, isBackward: Bool, stringRange: Range<String.Index>, codeUnitCount: Int) {
