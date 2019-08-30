@@ -22,7 +22,7 @@ public class ComposedLine {
 
     init(startIndex: String.Index, endIndex: String.Index, paragraphLevel: UInt8,
          ascent: CGFloat, descent: CGFloat, leading: CGFloat, extent: CGFloat,
-         trailingWhitespaceExtent: CGFloat, visualRuns: PrimitiveCollection<GlyphRun>) {
+         trailingWhitespaceExtent: CGFloat, visualRuns: [GlyphRun]) {
         self.startIndex = startIndex
         self.endIndex = endIndex
         self.paragraphLevel = paragraphLevel
@@ -84,7 +84,7 @@ public class ComposedLine {
     /// The typographic extent corresponding to the trailing whitespace characters in this line.
     public let trailingWhitespaceExtent: CGFloat
 
-    public let visualRuns: PrimitiveCollection<GlyphRun>
+    public let visualRuns: [GlyphRun]
 
     private func checkCharacterIndex(_ characterIndex: String.Index) {
         precondition(characterIndex >= startIndex && characterIndex < endIndex,

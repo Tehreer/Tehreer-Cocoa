@@ -68,7 +68,7 @@ func makeGlyphRun(intrinsicRun: IntrinsicRun,
 }
 
 func makeComposedLine(text: String, range: Range<String.Index>,
-                      visualRuns: PrimitiveCollection<GlyphRun>,
+                      visualRuns: [GlyphRun],
                       paragraphLevel: UInt8) -> ComposedLine {
     var lineAscent: CGFloat = 0.0
     var lineDescent: CGFloat = 0.0
@@ -131,7 +131,7 @@ struct LineResolver {
 
         return makeComposedLine(text: text.string,
                                 range: range,
-                                visualRuns: PrimitiveCollection(lineRuns),
+                                visualRuns: lineRuns,
                                 paragraphLevel: paragraphs.paragraph(forCharacterAt: range.lowerBound).baseLevel)
     }
 
