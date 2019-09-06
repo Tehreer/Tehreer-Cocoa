@@ -19,6 +19,8 @@ import Foundation
 struct PatternKey: Hashable {
     let scriptTag: SFNTTag
     let languageTag: SFNTTag
+    let featureTags: [UInt32]
+    let featureValues: [UInt16]
 }
 
 fileprivate class PatternValue {

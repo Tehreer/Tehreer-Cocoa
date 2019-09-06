@@ -22,6 +22,9 @@ public class ShapingEngine {
     let sfArtist: SFArtistRef
     let sfScheme: SFSchemeRef
 
+    private var featureTags: [SFUInt32] = []
+    private var featureValues: [SFUInt16] = []
+
     public init() {
         sfArtist = SFArtistCreate()
         sfScheme = SFSchemeCreate()
@@ -48,6 +51,13 @@ public class ShapingEngine {
 
     public var languageTag: SFNTTag = "dflt"
 
+    public var openTypeFeatures: [SFNTTag: Int] = [:] {
+        didSet(newValue) {
+            featureTags = newValue.keys.map { SFUInt32($0.rawValue) }
+            featureValues = newValue.values.map { SFUInt16($0) }
+        }
+    }
+
     public var writingDirection = WritingDirection.leftToRight {
         didSet(newValue) {
             SFArtistSetTextDirection(sfArtist, SFTextDirection(newValue.rawValue))
@@ -68,13 +78,15 @@ public class ShapingEngine {
         let shapingResult = ShapingResult()
 
         let cache = typeface.patternCache
-        let key = PatternKey(scriptTag: scriptTag, languageTag: languageTag)
+        let key = PatternKey(scriptTag: scriptTag, languageTag: languageTag,
+                             featureTags: featureTags, featureValues: featureValues)
         var pattern = cache[key]
 
         if pattern == nil {
             SFSchemeSetFont(sfScheme, typeface.sfFont)
             SFSchemeSetScriptTag(sfScheme, scriptTag.rawValue)
             SFSchemeSetLanguageTag(sfScheme, languageTag.rawValue)
+            SFSchemeSetFeatureValues(sfScheme, &featureTags, &featureValues, SFUInteger(featureTags.count))
 
             pattern = SFSchemeBuildPattern(sfScheme)
             cache[key] = pattern
