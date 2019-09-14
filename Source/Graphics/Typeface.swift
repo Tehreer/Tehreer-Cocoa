@@ -33,11 +33,15 @@ fileprivate func f26Dot6PosToFloat(_ value: FT_Pos) -> CGFloat {
     return CGFloat(value) / 64.0
 }
 
+public typealias TypefaceTag = AnyHashable
+
 public class Typeface {
     let semaphore = DispatchSemaphore(value: 1)
 
     private let fontFile: FontFile
     private let ftSize: FT_Size
+
+    var tag: TypefaceTag?
 
     let ftFace: FT_Face
     var _ftStroker: FT_Stroker!

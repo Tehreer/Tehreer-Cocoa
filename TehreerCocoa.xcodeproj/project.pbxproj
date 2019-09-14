@@ -68,6 +68,7 @@
 		6E97352622D4F0AA008863D0 /* IntrinsicCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734ED22D4F0AA008863D0 /* IntrinsicCollection.swift */; };
 		6E97352722D4F0AA008863D0 /* PrimitiveCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734EE22D4F0AA008863D0 /* PrimitiveCollection.swift */; };
 		6E97352822D4F0AA008863D0 /* Scalable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734EF22D4F0AA008863D0 /* Scalable.swift */; };
+		6EE0A44A2305C6D20061D4EB /* TypefaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,6 +192,7 @@
 		6E9734EF22D4F0AA008863D0 /* Scalable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scalable.swift; sourceTree = "<group>"; };
 		6E97352922D4F0C1008863D0 /* Libraries.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Libraries.xcodeproj; path = Libraries/Libraries.xcodeproj; sourceTree = "<group>"; };
 		6E97353F22D4F36B008863D0 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
+		6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypefaceManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,6 +255,7 @@
 				6E9734B522D4F0A9008863D0 /* GlyphStrike.swift */,
 				6E9734B622D4F0A9008863D0 /* Renderer.swift */,
 				6E9734B722D4F0A9008863D0 /* Typeface.swift */,
+				6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */,
 				6E9734B822D4F0A9008863D0 /* TypeSlope.swift */,
 				6E9734B922D4F0A9008863D0 /* TypeWeight.swift */,
 				6E9734BA22D4F0A9008863D0 /* TypeWidth.swift */,
@@ -510,6 +513,7 @@
 				6E9734F622D4F0AA008863D0 /* Renderer.swift in Sources */,
 				6E97352822D4F0AA008863D0 /* Scalable.swift in Sources */,
 				6E97350822D4F0AA008863D0 /* ShapeResolver.swift in Sources */,
+				6EE0A44A2305C6D20061D4EB /* TypefaceManager.swift in Sources */,
 				6E97351522D4F0AA008863D0 /* ShapingOrder.swift in Sources */,
 				6E9734F522D4F0AA008863D0 /* GlyphStrike.swift in Sources */,
 				6E97351622D4F0AA008863D0 /* ShapingResult.swift in Sources */,
