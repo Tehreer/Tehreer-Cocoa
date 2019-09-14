@@ -14,12 +14,30 @@
 // limitations under the License.
 //
 
+import TehreerCocoa
 import UIKit
+
+enum TypefaceTag {
+    static let mehrNastaliq = "MehrNastaliq"
+    static let nafeesWeb = "NafeesWeb"
+    static let tajNastaleeq = "TajNstaleeq"
+}
 
 @UIApplicationMain class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
+    func register(_ file: (name: String, type: String), for tag: String) {
+        if let fullPath = Bundle.main.path(forResource: file.name, ofType: file.type),
+           let typeface = Typeface(path: fullPath) {
+            TypefaceManager.shared.register(typeface, for: tag)
+        }
+    }
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        register(("MehrNastaliq", "ttf"), for: TypefaceTag.mehrNastaliq)
+        register(("NafeesWeb", "ttf"), for: TypefaceTag.nafeesWeb)
+        register(("TajNastaleeq", "ttf"), for: TypefaceTag.tajNastaleeq)
+
         return true
     }
 

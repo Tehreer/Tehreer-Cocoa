@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6EA98E6A232D368400E582E8 /* MehrNastaliq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EA98E67232D368400E582E8 /* MehrNastaliq.ttf */; };
+		6EA98E6B232D368400E582E8 /* NafeesWeb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EA98E68232D368400E582E8 /* NafeesWeb.ttf */; };
+		6EA98E6C232D368400E582E8 /* TajNastaleeq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EA98E69232D368400E582E8 /* TajNastaleeq.ttf */; };
 		6EE0A4342305C56C0061D4EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE0A4332305C56C0061D4EB /* AppDelegate.swift */; };
 		6EE0A4392305C56C0061D4EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EE0A4372305C56C0061D4EB /* Main.storyboard */; };
 		6EE0A43B2305C5760061D4EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EE0A43A2305C5760061D4EB /* Assets.xcassets */; };
@@ -15,6 +18,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6EA98E67232D368400E582E8 /* MehrNastaliq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MehrNastaliq.ttf; sourceTree = "<group>"; };
+		6EA98E68232D368400E582E8 /* NafeesWeb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NafeesWeb.ttf; sourceTree = "<group>"; };
+		6EA98E69232D368400E582E8 /* TajNastaleeq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = TajNastaleeq.ttf; sourceTree = "<group>"; };
 		6EE0A4302305C56C0061D4EB /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EE0A4332305C56C0061D4EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6EE0A4382305C56C0061D4EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -36,10 +42,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6EA98E66232D368400E582E8 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				6EA98E67232D368400E582E8 /* MehrNastaliq.ttf */,
+				6EA98E68232D368400E582E8 /* NafeesWeb.ttf */,
+				6EA98E69232D368400E582E8 /* TajNastaleeq.ttf */,
+			);
+			name = Fonts;
+			path = Demo/Fonts;
+			sourceTree = "<group>";
+		};
 		6EE0A4272305C56C0061D4EB = {
 			isa = PBXGroup;
 			children = (
 				6EE0A4322305C56C0061D4EB /* Demo */,
+				6EA98E66232D368400E582E8 /* Fonts */,
 				6EE0A4312305C56C0061D4EB /* Products */,
 				6EE0A4462305C6080061D4EB /* Frameworks */,
 			);
@@ -134,6 +152,9 @@
 				6EE0A43E2305C5760061D4EB /* LaunchScreen.storyboard in Resources */,
 				6EE0A43B2305C5760061D4EB /* Assets.xcassets in Resources */,
 				6EE0A4392305C56C0061D4EB /* Main.storyboard in Resources */,
+				6EA98E6A232D368400E582E8 /* MehrNastaliq.ttf in Resources */,
+				6EA98E6B232D368400E582E8 /* NafeesWeb.ttf in Resources */,
+				6EA98E6C232D368400E582E8 /* TajNastaleeq.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +242,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"${PROJECT_DIR}/Libraries/FreeType/include\"",
+					"\"${PROJECT_DIR}/Libraries/SheenBidi/Headers\"",
+					"\"${PROJECT_DIR}/Libraries/SheenFigure/Headers\"",
+					"\"${PROJECT_DIR}/Libraries/UniBreak/src\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -276,6 +303,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"${PROJECT_DIR}/Libraries/FreeType/include\"",
+					"\"${PROJECT_DIR}/Libraries/SheenBidi/Headers\"",
+					"\"${PROJECT_DIR}/Libraries/SheenFigure/Headers\"",
+					"\"${PROJECT_DIR}/Libraries/UniBreak/src\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
