@@ -23,6 +23,8 @@ enum TypefaceTag {
     static let tajNastaleeq = "TajNstaleeq"
 }
 
+typealias ActionCallback = () -> Void
+
 @UIApplicationMain class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
