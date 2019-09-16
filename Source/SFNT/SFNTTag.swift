@@ -16,6 +16,10 @@
 
 import Foundation
 
+private func isValidByte(_ byte: UInt8) -> Bool {
+    return byte >= 0x32 && byte <= 0x7E
+}
+
 public struct SFNTTag: RawRepresentable {
     public typealias RawValue = UInt32
 
@@ -24,55 +28,57 @@ public struct SFNTTag: RawRepresentable {
     public init?(rawValue: UInt32) {
         self.rawValue = rawValue
     }
+
+    public init?(string: String) {
+        var counter: Int = 0
+        var bytes: [UInt8] = [0, 0, 0, 0]
+
+        for codeUnit in string.utf8 {
+            defer { counter += 1 }
+
+            guard counter < 4 else {
+                break
+            }
+
+            bytes[counter] = codeUnit
+        }
+
+        guard counter == 4
+           && isValidByte(bytes[0])
+           && isValidByte(bytes[1])
+           && isValidByte(bytes[2])
+           && isValidByte(bytes[3]) else {
+            return nil
+        }
+
+        rawValue = (UInt32(bytes[0]) << 24)
+                 | (UInt32(bytes[1]) << 16)
+                 | (UInt32(bytes[2]) << 8)
+                 | UInt32(bytes[3])
+    }
 }
 
 extension SFNTTag: ExpressibleByStringLiteral {
     public typealias StringLiteralType = String
 
-    static func isValidByte(_ byte: UInt8) -> Bool {
-        return byte >= 0x32 && byte <= 0x7E
-    }
-
-    public init(stringLiteral: String) {
-        var counter: Int = 0
-        var codeUnits: [UInt8] = [0, 0, 0, 0]
-
-        for c in stringLiteral.utf8 {
-            defer {
-                counter += 1
-            }
-
-            if counter >= 4 {
-                break
-            }
-
-            codeUnits[counter] = c
+    public init(stringLiteral value: String) {
+        guard let tag = SFNTTag(string: value) else {
+            fatalError("Invalid tag string")
         }
 
-        guard counter == 4
-            && SFNTTag.isValidByte(codeUnits[0])
-            && SFNTTag.isValidByte(codeUnits[1])
-            && SFNTTag.isValidByte(codeUnits[2])
-            && SFNTTag.isValidByte(codeUnits[3]) else {
-                fatalError("Invalid tag string")
-        }
-
-        rawValue = UInt32(codeUnits[0] << 24)
-                 | UInt32(codeUnits[1] << 16)
-                 | UInt32(codeUnits[2] << 8)
-                 | UInt32(codeUnits[3])
+        self = tag
     }
 }
 
 extension SFNTTag: CustomStringConvertible {
     public var description: String {
-        let codeUnits: [UInt8] = [
+        let bytes = [
             UInt8(rawValue >> 24),
             UInt8((rawValue >> 16) & 0xFF),
             UInt8((rawValue >> 8) & 0xFF),
             UInt8(rawValue & 0xFF), 0]
 
-        return codeUnits.withUnsafeBufferPointer { String(cString: $0.baseAddress!) }
+        return String(cString: bytes)
     }
 }
 
