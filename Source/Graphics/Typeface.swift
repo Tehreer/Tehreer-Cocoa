@@ -98,14 +98,9 @@ public class Typeface {
                 let unmanaged = Unmanaged<Typeface>.fromOpaque(object!)
                 let typeface = unmanaged.takeUnretainedValue()
 
-                var tableSize = FT_ULong(0)
                 typeface.loadSFNTTable(tag: FT_ULong(tag),
                                        buffer: buffer,
-                                       length: &tableSize)
-
-                if let length = length {
-                    length[0] = tableSize
-                }
+                                       length: length)
             },
             getGlyphIDForCodepoint: { (object, codepoint) in
                 let unmanaged = Unmanaged<Typeface>.fromOpaque(object!)
