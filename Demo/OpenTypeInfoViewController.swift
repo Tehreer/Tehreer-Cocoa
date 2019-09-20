@@ -136,6 +136,8 @@ class ClusterDetailCell: UITableViewCell, UITableViewDataSource {
 }
 
 class OpenTypeInfoViewController: UITableViewController {
+    @IBOutlet private weak var headerView: UIView!
+
     private var textDetail: TextDetail!
 
     func setup(typeface: Typeface, typeSize: Int,
@@ -174,10 +176,17 @@ class OpenTypeInfoViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        tableView.contentInset.bottom += 8
+        headerView.backgroundColor = tableView.backgroundColor
     }
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return headerView
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60.0
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
