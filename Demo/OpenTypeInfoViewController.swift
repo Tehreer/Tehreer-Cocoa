@@ -113,7 +113,7 @@ class ClusterDetailCell: UITableViewCell, UITableViewDataSource {
             let codePoint = clusterDetail.codePoints[indexPath.row]
 
             let cell = tableView.dequeueReusableCell(withIdentifier: "\(CharacterDetailCell.self)", for: indexPath) as! CharacterDetailCell
-            cell.characterLabel.text = String(format: "\u{2066}%04X (\(Character(codePoint)))", codePoint.value)
+            cell.characterLabel.text = String(format: "\u{202A}%04X (\(Character(codePoint)))", codePoint.value)
 
             return cell
 
