@@ -153,7 +153,7 @@ class OpenTypeInfoViewController: UITableViewController {
         let clusterMap = shapingResult.clusterMap
         let length = clusterMap.count
 
-        var initials: [Int] = [0]
+        var initials: [Int] = []
         var previous = -1
 
         for i in 0 ..< length {
