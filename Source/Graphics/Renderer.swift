@@ -55,7 +55,7 @@ public class Renderer {
     private var glyphMiterLimit: Int = 0x10000
     private var shouldRender: Bool = false
 
-    init() {
+    public init() {
         updatePixelSizes()
     }
 
