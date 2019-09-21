@@ -37,8 +37,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ykF-rp-9rH">
+                                <rect key="frame" x="130" y="100" width="115" height="30"/>
+                                <state key="normal" title="Typeface Glyphs"/>
+                                <connections>
+                                    <segue destination="WhN-u7-urO" kind="push" id="96C-dD-pvo"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LPQ-rJ-idi">
-                                <rect key="frame" x="122.5" y="100" width="130" height="30"/>
+                                <rect key="frame" x="122.5" y="138" width="130" height="30"/>
                                 <state key="normal" title="OpenType Shaping"/>
                                 <connections>
                                     <segue destination="Blu-wr-hHt" kind="push" id="rUX-GU-Exk"/>
@@ -47,7 +54,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="LPQ-rJ-idi" firstAttribute="top" secondItem="qHe-lx-HPQ" secondAttribute="bottom" constant="36" id="TSN-Dm-WuO"/>
+                            <constraint firstItem="ykF-rp-9rH" firstAttribute="top" secondItem="qHe-lx-HPQ" secondAttribute="bottom" constant="36" id="2c4-0p-yV8"/>
+                            <constraint firstItem="LPQ-rJ-idi" firstAttribute="top" secondItem="ykF-rp-9rH" secondAttribute="bottom" constant="8" id="3q1-nw-eAK"/>
+                            <constraint firstItem="ykF-rp-9rH" firstAttribute="centerX" secondItem="nkc-Mr-hB1" secondAttribute="centerX" id="Sj3-OI-mir"/>
                             <constraint firstItem="LPQ-rJ-idi" firstAttribute="centerX" secondItem="nkc-Mr-hB1" secondAttribute="centerX" id="beQ-Iq-Eil"/>
                         </constraints>
                     </view>
@@ -300,6 +309,81 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DRe-MP-Xlm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1756" y="140"/>
+        </scene>
+        <!--Typeface Glyphs-->
+        <scene sceneID="UlK-8c-ww7">
+            <objects>
+                <viewController id="WhN-u7-urO" customClass="TypefaceGlyphsViewController" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="rlY-XZ-WoE"/>
+                        <viewControllerLayoutGuide type="bottom" id="i2g-lU-HQR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1h5-PA-UZK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="RVH-Vo-Fay">
+                                <rect key="frame" x="0.0" y="143" width="375" height="504"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="HO4-tV-WiS">
+                                    <size key="itemSize" width="64" height="84"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="8" minY="8" maxX="8" maxY="8"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GlyphPreviewCell" id="OaO-65-BLE" customClass="GlyphPreviewCell" customModule="Demo" customModuleProvider="target">
+                                        <rect key="frame" x="8" y="8" width="64" height="84"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="64" height="84"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0001" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UVU-hj-Eao">
+                                                    <rect key="frame" x="1" y="1" width="62" height="20"/>
+                                                    <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20" id="E4g-4q-Rg3"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DTb-Ia-69B" customClass="GlyphShapeView" customModule="Demo" customModuleProvider="target">
+                                                    <rect key="frame" x="1" y="22" width="62" height="61"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </view>
+                                            </subviews>
+                                        </view>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="DTb-Ia-69B" secondAttribute="bottom" constant="1" id="3tY-6z-4ld"/>
+                                            <constraint firstItem="DTb-Ia-69B" firstAttribute="top" secondItem="UVU-hj-Eao" secondAttribute="bottom" constant="1" id="9oz-69-D5S"/>
+                                            <constraint firstAttribute="trailing" secondItem="DTb-Ia-69B" secondAttribute="trailing" constant="1" id="Dgm-X5-S4r"/>
+                                            <constraint firstItem="DTb-Ia-69B" firstAttribute="leading" secondItem="OaO-65-BLE" secondAttribute="leading" constant="1" id="JfT-li-SNY"/>
+                                            <constraint firstAttribute="trailing" secondItem="UVU-hj-Eao" secondAttribute="trailing" constant="1" id="fF1-UZ-QyH"/>
+                                            <constraint firstItem="UVU-hj-Eao" firstAttribute="top" secondItem="OaO-65-BLE" secondAttribute="top" constant="1" id="fmb-a4-Mya"/>
+                                            <constraint firstItem="UVU-hj-Eao" firstAttribute="leading" secondItem="OaO-65-BLE" secondAttribute="leading" constant="1" id="gTl-hk-bFc"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="glyphIDLabel" destination="UVU-hj-Eao" id="d9R-YS-NAJ"/>
+                                            <outlet property="glyphShapeView" destination="DTb-Ia-69B" id="zip-Cm-sMu"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="WhN-u7-urO" id="KoD-Ob-I70"/>
+                                    <outlet property="delegate" destination="WhN-u7-urO" id="m5U-K1-Nl4"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Typeface Glyphs" id="lZn-1I-4YD"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x0M-Bt-8l5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1756" y="873.91304347826099"/>
         </scene>
         <!--OpenType Info-->
         <scene sceneID="1D5-Zi-rbu">
