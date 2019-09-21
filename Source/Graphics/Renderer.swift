@@ -217,10 +217,11 @@ public class Renderer {
 
     private func cachedBoundingBox(for glyphID: UInt16) -> CGRect {
         let glyph = GlyphCache.instance.maskGlyph(with: glyphStrike, for: glyphID)
-        return CGRect(x: glyph.lsb,
-                      y: glyph.tsb,
-                      width: glyph.image?.width ?? 0,
-                      height: glyph.image?.height ?? 0)
+
+        return CGRect(x: CGFloat(glyph.lsb) / renderScale,
+                      y: CGFloat(glyph.tsb) / renderScale,
+                      width: CGFloat(glyph.image?.width ?? 0) / renderScale,
+                      height: CGFloat(glyph.image?.height ?? 0) / renderScale)
     }
 
     /// Calculates the bounding box of specified glyph.
