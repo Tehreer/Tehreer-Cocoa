@@ -17,17 +17,17 @@
 import TehreerCocoa
 import UIKit
 
+private enum SegueID {
+    static let showGlyphInfo = "ShowGlyphInfo"
+}
+
 class GlyphShapeView: UIView {
     var renderer: Renderer! {
-        didSet {
-            setNeedsDisplay()
-        }
+        didSet { setNeedsDisplay() }
     }
 
     var glyphID: UInt16 = .zero {
-        didSet {
-            setNeedsDisplay()
-        }
+        didSet { setNeedsDisplay() }
     }
 
     override func draw(_ rect: CGRect) {
@@ -63,7 +63,7 @@ class GlyphPreviewCell: UICollectionViewCell {
     }
 }
 
-class TypefaceGlyphsViewController: UIViewController, UICollectionViewDataSource {
+class TypefaceGlyphsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     private var renderer = Renderer()
     private var typeface: Typeface! = TypefaceManager.shared.availableTypefaces.first
 
@@ -86,5 +86,23 @@ class TypefaceGlyphsViewController: UIViewController, UICollectionViewDataSource
         cell.configure(with: renderer, glyphID: UInt16(indexPath.row))
 
         return cell
+    }
+
+    // MARK: UICollectionViewDelegate
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        performSegue(withIdentifier: SegueID.showGlyphInfo, sender: indexPath.row)
+    }
+
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case SegueID.showGlyphInfo:
+            let infoViewController = segue.destination as! GlyphInfoViewController
+            infoViewController.setup(typeface: typeface, glyphID: sender as! UInt16)
+
+        default: break
+        }
     }
 }

@@ -379,11 +379,64 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Typeface Glyphs" id="lZn-1I-4YD"/>
+                    <navigationItem key="navigationItem" title="Typeface Glyphs" id="lZn-1I-4YD">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="0fd-mO-Fhg"/>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="bVQ-WV-f4s" kind="push" identifier="ShowGlyphInfo" id="XVo-t1-1Uk"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x0M-Bt-8l5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1756" y="873.91304347826099"/>
+        </scene>
+        <!--Glyph Info-->
+        <scene sceneID="6Je-gi-AMa">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="bVQ-WV-f4s" customClass="GlyphInfoViewController" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="htK-oO-Qzt"/>
+                        <viewControllerLayoutGuide type="bottom" id="xdw-L1-oXP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="JHV-fQ-AMn">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DnS-eG-DEd">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="480" translatesAutoresizingMaskIntoConstraints="NO" id="gkm-cs-Vke" customClass="GlyphInfoView" customModule="Demo" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="gkm-cs-Vke" secondAttribute="trailing" id="0uJ-zb-N4S"/>
+                                    <constraint firstItem="gkm-cs-Vke" firstAttribute="leading" secondItem="DnS-eG-DEd" secondAttribute="leading" id="B7f-fS-mKW"/>
+                                    <constraint firstItem="gkm-cs-Vke" firstAttribute="height" relation="greaterThanOrEqual" secondItem="DnS-eG-DEd" secondAttribute="height" id="EUB-a4-nzX"/>
+                                    <constraint firstAttribute="bottom" secondItem="gkm-cs-Vke" secondAttribute="bottom" id="OPt-zO-63a"/>
+                                    <constraint firstItem="gkm-cs-Vke" firstAttribute="width" relation="greaterThanOrEqual" secondItem="DnS-eG-DEd" secondAttribute="width" id="SY4-Yb-ePJ"/>
+                                    <constraint firstItem="gkm-cs-Vke" firstAttribute="top" secondItem="DnS-eG-DEd" secondAttribute="top" id="oHF-f0-YbX"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="DnS-eG-DEd" secondAttribute="bottom" id="5qd-ir-Miy"/>
+                            <constraint firstItem="DnS-eG-DEd" firstAttribute="top" secondItem="htK-oO-Qzt" secondAttribute="bottom" id="AkI-ss-Oxh"/>
+                            <constraint firstAttribute="trailing" secondItem="DnS-eG-DEd" secondAttribute="trailing" id="BK8-X6-0j5"/>
+                            <constraint firstItem="DnS-eG-DEd" firstAttribute="leading" secondItem="JHV-fQ-AMn" secondAttribute="leading" id="k4W-Nu-t5e"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Glyph Info" id="p2Y-AA-aeU"/>
+                    <connections>
+                        <outlet property="glyphInfoView" destination="gkm-cs-Vke" id="Fs0-40-Kjs"/>
+                        <outlet property="scrollView" destination="DnS-eG-DEd" id="zCv-n8-jmm"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lhJ-9m-Awt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-912.79999999999995" y="873.91304347826099"/>
         </scene>
         <!--OpenType Info-->
         <scene sceneID="1D5-Zi-rbu">
