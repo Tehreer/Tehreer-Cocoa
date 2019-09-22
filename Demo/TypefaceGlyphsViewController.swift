@@ -18,6 +18,7 @@ import TehreerCocoa
 import UIKit
 
 private enum SegueID {
+    static let showTypefaces = "ShowTypefaces"
     static let showGlyphInfo = "ShowGlyphInfo"
 }
 
@@ -63,22 +64,43 @@ class GlyphPreviewCell: UICollectionViewCell {
     }
 }
 
-class TypefaceGlyphsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class TypefaceGlyphsViewController: UIViewController, UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
+    @IBOutlet private weak var collectionView: UICollectionView!
+    @IBOutlet private weak var typefaceLabel: UILabel!
+    @IBOutlet private weak var headerTopConstraint: NSLayoutConstraint!
+
     private var renderer = Renderer()
-    private var typeface: Typeface! = TypefaceManager.shared.availableTypefaces.first
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         renderer.renderScale = UIScreen.main.scale
-        renderer.typeface = typeface
         renderer.typeSize = 28.0
+
+        selectTypeface(TypefaceManager.shared.availableTypefaces.first)
+    }
+
+    private func selectTypeface(_ typeface: Typeface!) {
+        typefaceLabel.text = typeface.familyName
+        renderer.typeface = typeface
+
+        collectionView.reloadData()
+        collectionView.setContentOffset(.zero, animated: false)
+    }
+
+    // MARK: - UIScrollViewDelegate
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let contentInset = collectionView.contentInset
+        let contentOffset = collectionView.contentOffset
+
+        headerTopConstraint.constant = max(.zero, -(contentOffset.y + contentInset.top))
     }
 
     // MARK: - UICollectionViewDataSource
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return typeface.glyphCount
+        return renderer.typeface.glyphCount
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -98,9 +120,15 @@ class TypefaceGlyphsViewController: UIViewController, UICollectionViewDataSource
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
+        case SegueID.showTypefaces:
+            let typefacesViewController = segue.destination as! AvailableTypefacesViewController
+            typefacesViewController.setup(selectedTypeface: renderer.typeface, onSelectionChanged: {
+                self.selectTypeface(typefacesViewController.selectedTypeface)
+            })
+
         case SegueID.showGlyphInfo:
             let infoViewController = segue.destination as! GlyphInfoViewController
-            infoViewController.setup(typeface: typeface, glyphID: sender as! UInt16)
+            infoViewController.setup(typeface: renderer.typeface, glyphID: sender as! UInt16)
 
         default: break
         }
