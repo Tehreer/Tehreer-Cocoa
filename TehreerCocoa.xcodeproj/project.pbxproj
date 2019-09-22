@@ -68,6 +68,8 @@
 		6E97352622D4F0AA008863D0 /* IntrinsicCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734ED22D4F0AA008863D0 /* IntrinsicCollection.swift */; };
 		6E97352722D4F0AA008863D0 /* PrimitiveCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734EE22D4F0AA008863D0 /* PrimitiveCollection.swift */; };
 		6E97352822D4F0AA008863D0 /* Scalable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734EF22D4F0AA008863D0 /* Scalable.swift */; };
+		6EB1B0082337ACB200548553 /* Mutex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB1B0072337ACB200548553 /* Mutex.swift */; };
+		6EB1B00A2337BDBE00548553 /* Synchronizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB1B0092337BDBE00548553 /* Synchronizable.swift */; };
 		6EE0A44A2305C6D20061D4EB /* TypefaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -192,6 +194,8 @@
 		6E9734EF22D4F0AA008863D0 /* Scalable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scalable.swift; sourceTree = "<group>"; };
 		6E97352922D4F0C1008863D0 /* Libraries.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Libraries.xcodeproj; path = Libraries/Libraries.xcodeproj; sourceTree = "<group>"; };
 		6E97353F22D4F36B008863D0 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
+		6EB1B0072337ACB200548553 /* Mutex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mutex.swift; sourceTree = "<group>"; };
+		6EB1B0092337BDBE00548553 /* Synchronizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Synchronizable.swift; sourceTree = "<group>"; };
 		6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypefaceManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -302,7 +306,9 @@
 				6E9734D122D4F0AA008863D0 /* Clusters.swift */,
 				6E9734D222D4F0AA008863D0 /* CodeUnitView+Additions.swift */,
 				6E9734D322D4F0AA008863D0 /* LRUCache.swift */,
+				6EB1B0072337ACB200548553 /* Mutex.swift */,
 				6E9734D422D4F0AA008863D0 /* String+Additions.swift */,
+				6EB1B0092337BDBE00548553 /* Synchronizable.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -533,12 +539,14 @@
 				6E97350F22D4F0AA008863D0 /* CodeUnitView+Additions.swift in Sources */,
 				6E9734F122D4F0AA008863D0 /* FreeType.swift in Sources */,
 				6E97352422D4F0AA008863D0 /* ScriptClassifier.swift in Sources */,
+				6EB1B00A2337BDBE00548553 /* Synchronizable.swift in Sources */,
 				6E9734F322D4F0AA008863D0 /* GlyphCache.swift in Sources */,
 				6E97350122D4F0AA008863D0 /* FrameResolver.swift in Sources */,
 				6E97351822D4F0AA008863D0 /* HHEATable.swift in Sources */,
 				6E97351422D4F0AA008863D0 /* ShapingEngine.swift in Sources */,
 				6E97350422D4F0AA008863D0 /* LineResolver.swift in Sources */,
 				6E97351222D4F0AA008863D0 /* PatternCache.swift in Sources */,
+				6EB1B0082337ACB200548553 /* Mutex.swift in Sources */,
 				6E9734FA22D4F0AA008863D0 /* TypeWidth.swift in Sources */,
 				6E97352322D4F0AA008863D0 /* Script.swift in Sources */,
 				6E97352222D4F0AA008863D0 /* BreakClassifier.swift in Sources */,
