@@ -17,6 +17,8 @@
 import CoreGraphics
 import Foundation
 
+/// Represents a frame containing multiple lines of text. The frame object is the output resulting
+/// from text-framing process performed by a typesetter object.
 public class ComposedFrame {
     private let string: String
 
@@ -156,6 +158,12 @@ public class ComposedFrame {
         return selectionPath
     }
 
+    /// Draws this frame in the `context` using the specified renderer.
+    ///
+    /// - Parameters:
+    ///   - renderer: The renderer to use for drawing the frame.
+    ///   - context: The context in which to draw the frame.
+    ///   - point: The position at which to draw the frame.
     public func draw(using renderer: Renderer, in context: CGContext, at point: CGPoint) {
         context.translateBy(x: point.x, y: point.y)
 
