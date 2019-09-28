@@ -19,13 +19,19 @@ import Foundation
 struct Mutex {
     private let semaphore = DispatchSemaphore(value: 1)
 
-    @inlinable
     func lock() {
         semaphore.wait()
     }
 
-    @inlinable
     func unlock() {
         semaphore.signal()
+    }
+
+    @discardableResult
+    func synchronized<Result>(_ closure: () throws -> Result) rethrows -> Result {
+        lock()
+        defer { unlock() }
+
+        return try closure()
     }
 }
