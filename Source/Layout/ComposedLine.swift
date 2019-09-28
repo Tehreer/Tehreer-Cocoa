@@ -17,6 +17,7 @@
 import CoreGraphics
 import Foundation
 
+/// Represents a line of text consisting of an array of `GlyphRun` objects in visual order.
 public class ComposedLine {
     private var extent: CGFloat
 
@@ -34,8 +35,10 @@ public class ComposedLine {
         self.visualRuns = visualRuns
     }
 
+    /// The index to the first character of this line in source text.
     public let startIndex: String.Index
 
+    /// The index after the last character of this line in source text.
     public let endIndex: String.Index
 
     /// The paragraph level of this line.
@@ -84,6 +87,7 @@ public class ComposedLine {
     /// The typographic extent corresponding to the trailing whitespace characters in this line.
     public let trailingWhitespaceExtent: CGFloat
 
+    /// The glyph runs of this line in visual order.
     public let visualRuns: [GlyphRun]
 
     private func checkCharacterIndex(_ characterIndex: String.Index) {
@@ -91,6 +95,11 @@ public class ComposedLine {
                      "Index is out of range")
     }
 
+    /// Determines the distance of specified character from the start of the line assumed at zero.
+    ///
+    /// - Parameters:
+    ///   - index: The index of character in source text.
+    /// - Returns: The distance of specified character from the start of the line assumed at zero.
     public func distanceForCharacter(at index: String.Index) -> CGFloat {
         checkCharacterIndex(index)
 
@@ -108,6 +117,15 @@ public class ComposedLine {
         return distance
     }
 
+    /// Returns an array of visual edges corresponding to the specified character range.
+    ///
+    /// The resulting array will contain pairs of leading and trailing edges sorted from left to
+    /// right. There will be a separate pair for each glyph run occurred in the specified character
+    /// range. Each edge will be positioned relative to the start of the line assumed at zero.
+    ///
+    /// - Parameters:
+    ///   - range: The range of characters in source text.
+    /// - Returns: An array of visual edges corresponding to the specified character range.
     public func computeVisualEdges(for range: Range<String.Index>) -> [CGFloat] {
         var visualEdges: [CGFloat] = []
 
@@ -131,6 +149,12 @@ public class ComposedLine {
         return visualEdges
     }
 
+    /// Returns the index of character nearest to the specified distance.
+    ///
+    /// - Parameters:
+    ///   - distance: The distance for which to determine the character index. It should be offset
+    ///               from zero origin.
+    /// - Returns: The index of character in source string, nearest to the specified distance.
     public func nearestCharacterIndex(at distance: CGFloat) -> String.Index {
         for glyphRun in visualRuns.reversed() {
             if glyphRun.origin.x <= distance {
@@ -141,6 +165,16 @@ public class ComposedLine {
         return startIndex
     }
 
+    /// Returns the pen offset required to draw flush text.
+    ///
+    /// - Parameters:
+    ///   - flushFactor: Specifies the kind of flushness. A flush factor of 0 or less indicates left
+    ///                  flush. A flushFactor of 1.0 or more indicates right flush. Flush factors
+    ///                  between 0 and 1.0 indicate varying degrees of center flush, with a value of
+    ///                  0.5 being totally center flush.
+    ///   - flushExtent: Specifies the extent that the flushness operation should apply to.
+    /// - Returns: A value which can be used to offset the current pen position for the flush
+    ///            operation.
     public func flushPenOffset(for flushFactor: CGFloat, flushExtent: CGFloat) -> CGFloat {
         var penOffset = (flushExtent - (extent - trailingWhitespaceExtent)) * flushFactor
         if (paragraphLevel & 1) == 1 {
@@ -150,6 +184,11 @@ public class ComposedLine {
         return penOffset
     }
 
+    /// Draws this line in the `context` using the specified renderer.
+    ///
+    /// - Parameters:
+    ///   - renderer: The renderer to use for drawing the line.
+    ///   - context: The context in which to draw the line.
     public func draw(using renderer: Renderer, in context: CGContext) {
         for glyphRun in visualRuns {
             context.translateBy(x: glyphRun.origin.x, y: glyphRun.origin.y)
