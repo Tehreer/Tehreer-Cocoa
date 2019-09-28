@@ -24,29 +24,13 @@ fileprivate struct ClusterRange {
     var glyphEnd: Int
 }
 
+/// A `GlyphRun` object is a collection of consecutive glyphs sharing the same attributes and
+/// direction.
 public class GlyphRun {
     private let attributes: [NSAttributedString.Key: Any]
     private let utf16: String.UTF16View
-
-    public let startIndex: String.Index
-    public let endIndex: String.Index
-    public let startExtraLength: Int
-    public let endExtraLength: Int
-    public let isBackward: Bool
-    public let bidiLevel: UInt8
-    public let writingDirection: WritingDirection
-    public let typeface: Typeface
-    public let typeSize: CGFloat
-    public let ascent: CGFloat
-    public let descent: CGFloat
-    public let leading: CGFloat
-    public let glyphIDs: PrimitiveCollection<UInt16>
-    public let glyphOffsets: PrimitiveCollection<CGPoint>
-    public let glyphAdvances: PrimitiveCollection<CGFloat>
-    public let clusterMap: PrimitiveCollection<Int>
-    public let caretEdges: PrimitiveCollection<CGFloat>
-
-    private(set) var extent: CGFloat = -.infinity
+    private let isBackward: Bool
+    private let caretEdges: PrimitiveCollection<CGFloat>
 
     init(string: String, startIndex: String.Index, endIndex: String.Index,
          startExtraLength: Int, endExtraLength: Int, attributes: [NSAttributedString.Key: Any],
@@ -76,16 +60,69 @@ public class GlyphRun {
         self.caretEdges = caretEdges
     }
 
-    public internal(set) var origin: CGPoint = .zero
+    /// The index to the first character of this run in source string.
+    public let startIndex: String.Index
+
+    /// The index after the last character of this run in source string.
+    public let endIndex: String.Index
+
+    /// The extra excluded length at the start of the cluster map.
+    ///
+    /// If the first cluster of this run begins within the extra range, then its rendering will be
+    /// clipped from the start. The amount of clipping would be equal to the perceived trailing
+    /// caret position of last excluded character.
+    ///
+    /// For example, consider three characters `f`, `i` and another `i` form a cluster having a
+    /// single ligature, `fii` and the run starts from the second `i` with `f` and `i` being extra
+    /// characters. In this case, the ligature would be divided into three equal parts and the first
+    /// two parts would be clipped.
+    public let startExtraLength: Int
+
+    /// The extra excluded length at the end of the cluster map.
+    ///
+    /// If the last cluster of this run finishes within the excluded range, then its rendering will
+    /// be clipped from the end. The amount of clipping would be equal to the perceived leading
+    /// caret position of first excluded character.
+    ///
+    /// For example, consider three characters `f`, `i` and another `i` form a cluster having a
+    /// single ligature, `fii` and the run consists of just `f` with both `i` being extra
+    /// characters. In this case, the ligature would be divided into three equal parts and the last
+    /// two parts would be clipped.
+    public let endExtraLength: Int
+
+    /// The bidirectional level of this run.
+    public let bidiLevel: UInt8
 
     private var isRTL: Bool {
         return (bidiLevel & 1) == 1
     }
 
-    private var glyphCount: Int {
-        return glyphIDs.count
-    }
+    /// The writing direction of this run.
+    public let writingDirection: WritingDirection
 
+    /// The typeface of this run.
+    public let typeface: Typeface
+
+    /// The type size of this run.
+    public let typeSize: CGFloat
+
+    /// The ascent of this run, which is the distance from the top of the run to the baseline. It is
+    /// always either positive or zero.
+    public let ascent: CGFloat
+
+    /// The descent of this run, which is the distance from the baseline to the bottom of the run.
+    /// It is always either positive or zero.
+    public let descent: CGFloat
+
+    /// The leading of this run, which is the distance that should be placed between two lines.
+    public let leading: CGFloat
+
+    private(set) var extent: CGFloat = -.infinity
+
+    /// The origin of this run in parent line.
+    public internal(set) var origin: CGPoint = .zero
+
+    /// The typographic width of this run.
     public var width: CGFloat {
         // Locking is not required for constant width.
         if extent == -CGFloat.infinity {
@@ -95,15 +132,39 @@ public class GlyphRun {
         return extent
     }
 
+    /// The typographic height of this run.
     public var height: CGFloat {
         return ascent + descent + leading
     }
+
+    private var glyphCount: Int {
+        return glyphIDs.count
+    }
+
+    /// The glyph IDs of this run.
+    public let glyphIDs: PrimitiveCollection<UInt16>
+
+    /// The glyph offsets of this run.
+    public let glyphOffsets: PrimitiveCollection<CGPoint>
+
+    /// The glyph advances of this run.
+    public let glyphAdvances: PrimitiveCollection<CGFloat>
+
+    /// The indexes, mapping each code unit of this run to corresponding glyph.
+    public let clusterMap: PrimitiveCollection<Int>
 
     private func checkCharacterIndex(_ characterIndex: String.Index) {
         precondition(characterIndex >= startIndex && characterIndex < endIndex,
                      "Index is out of range")
     }
 
+    /// Returns the index to the first character of specified cluster in source string. In most
+    /// cases, it would be the same index as the specified one. But if the character occurs within
+    /// a cluster, then a previous index would be returned; whether the run logically flows forward
+    /// or backward.
+    ///
+    /// - Parameter index: The index of a character in source string.
+    /// - Returns: The index to the first character of specified cluster in source string.
     public func actualClusterStart(forCharacterAt index: String.Index) -> String.Index {
         checkCharacterIndex(index)
 
@@ -115,6 +176,13 @@ public class GlyphRun {
         return utf16.index(extraStart, offsetBy: clusterStart)
     }
 
+    /// Returns the index after the last character of specified cluster in source string. In most
+    /// cases, it would be an index after the specified one. But if the character occurs within a
+    /// cluster, then a farther index would be returned; whether the run logically flows forward or
+    /// backward.
+    ///
+    /// - Parameter index: The index of a character in source string.
+    /// - Returns: The index after the last character of specified cluster in source string.
     public func actualClusterEnd(forCharacterAt index: String.Index) -> String.Index {
         checkCharacterIndex(index)
 
@@ -126,6 +194,12 @@ public class GlyphRun {
         return utf16.index(extraStart, offsetBy: clusterEnd)
     }
 
+
+    /// Returns the index of leading glyph related to the specified cluster. It will come after the
+    /// trailing glyph, if the characters of this run logically flow backward.
+    ///
+    /// - Parameter index: The index of a character in source string.
+    /// - Returns: The index of leading glyph related to the specified cluster.
     public func leadingGlyphIndex(forCharacterAt index: String.Index) -> Int {
         checkCharacterIndex(index)
 
@@ -135,6 +209,11 @@ public class GlyphRun {
         return Clusters.leadingGlyphIndex(in: clusterMap, for: arrayIndex, isBackward: isBackward, glyphCount: glyphCount)
     }
 
+    /// Returns the index of trailing glyph related to the specified cluster. It will come before
+    /// the leading glyph, if the characters of this run logically flow backward.
+    ///
+    /// - Parameter index: The index of a character in source string.
+    /// - Returns: The index of trailing glyph related to the specified cluster.
     public func trailingGlyphIndex(forCharacterAt index: String.Index) -> Int {
         checkCharacterIndex(index)
 
@@ -155,6 +234,10 @@ public class GlyphRun {
         return caretEdge(forCharacterAt: !isBackward ? range.lowerBound : range.upperBound)
     }
 
+    /// Returns the distance of specified character from the start of the run assumed at zero.
+    ///
+    /// - Parameter index: The index of a character in source string.
+    /// - Returns: The distance of specified character from the start of the run assumed at zero.
     public func distanceForCharacter(at index: String.Index) -> CGFloat {
         checkCharacterIndex(index)
 
@@ -173,6 +256,22 @@ public class GlyphRun {
         return isRTL ? lowerEdge - upperEdge : upperEdge - lowerEdge
     }
 
+    /// Determines the index of a character nearest to the specified distance.
+    ///
+    /// The process involves iterating over the clusters of the glyph run. If a cluster consists of
+    /// multiple characters, its total advance is evenly distributed among the number of characters
+    /// it contains. The advance of each character is added to track the covered distance. This way
+    /// leading and trailing characters are determined close to the specified distance. Afterwards,
+    /// the index of nearer character is returned.
+    ///
+    /// If `distance` is negative, then run's starting index is returned. If it is beyond run's
+    /// extent, then ending index is returned. The indices will be reversed in case of right-to-left
+    /// run.
+    ///
+    /// - Parameters:
+    ///   - distance: The distance for which to determine the character index. It should be offset
+    ///               from zero origin.
+    /// - Returns: The index of character in source string, nearest to the specified distance.
     public func nearestCharacterIndex(at distance: CGFloat) -> String.Index {
         let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
 
@@ -219,6 +318,12 @@ public class GlyphRun {
         return trailingCharIndex!
     }
 
+    /// Calculates the bounding box for the specified glyph range in this run. The bounding box is a
+    /// rectangle that encloses the paths of glyphs, as tightly as possible.
+    ///
+    /// - Parameters:
+    ///   - range: The range of glyphs to be measured.
+    /// - Returns: A rectangle that tightly encloses the paths of glyphs in the specified range.
     public func computeBoundingBox(forGlyphRange range: Range<Int>, using renderer: Renderer) -> CGRect {
         renderer.typeface = typeface
         renderer.typeSize = typeSize
@@ -229,6 +334,12 @@ public class GlyphRun {
                                            advances: glyphAdvances[range])
     }
 
+    /// Calculates the typographic extent for the given glyph range in this run. The typographic
+    /// extent is equal to the sum of advances of glyphs.
+    ///
+    /// - Parameters:
+    ///   - range: The range of glyphs to be measured.
+    /// - Returns: The typographic extent for the specified glyph range in the run.
     public func computeTypographicExtent(forGlyphRange range: Range<Int>) -> CGFloat {
         var extent: CGFloat = 0.0
 
@@ -294,6 +405,11 @@ public class GlyphRun {
         context.restoreGState()
     }
 
+    /// Draws this run in the `context` using the specified `renderer`.
+    ///
+    /// - Parameters:
+    ///   - renderer: The renderer to use for drawing this run.
+    ///   - context: The context in which to draw this run.
     public func draw(using renderer: Renderer, in context: CGContext) {
         renderer.typeface = typeface
         renderer.typeSize = typeSize
