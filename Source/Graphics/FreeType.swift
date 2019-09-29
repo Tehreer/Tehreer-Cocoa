@@ -19,16 +19,14 @@ import Foundation
 class FreeType {
     private static let instance = FreeType()
 
-    static var semaphore: DispatchSemaphore {
-        return instance.semaphore
-    }
-
-    static var library: FT_Library {
-        return instance.library
-    }
-
-    private let semaphore = DispatchSemaphore(value: 1)
+    private let mutex = Mutex()
     private var library: FT_Library!
+
+    static func withLibrary<Result>(_ body: (FT_Library) throws -> Result) rethrows -> Result {
+        return try instance.mutex.synchronized {
+            try body(instance.library)
+        }
+    }
 
     private init() {
         FT_Init_FreeType(&library)

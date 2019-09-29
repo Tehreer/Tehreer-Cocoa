@@ -78,19 +78,20 @@ public class FontFile {
     }
 
     private convenience init?(arguments: inout FT_Open_Args) {
-        FreeType.semaphore.wait()
+        let numFaces = FreeType.withLibrary { (library) -> FT_Long in
+            var face: FT_Face!
 
-        var ftFace: FT_Face! = nil
-        var numFaces: FT_Long = 0
+            if FT_Open_Face(library, &arguments, 0, &face) == FT_Err_Ok {
+                let numFaces = face.pointee.num_faces
+                FT_Done_Face(face)
 
-        if FT_Open_Face(FreeType.library, &arguments, 0, &ftFace) == FT_Err_Ok {
-            numFaces = ftFace.pointee.num_faces
-            FT_Done_Face(ftFace)
+                return numFaces
+            }
+
+            return 0
         }
 
-        FreeType.semaphore.signal()
-
-        guard let _ = ftFace else {
+        guard numFaces > 0 else {
             return nil
         }
 
@@ -114,20 +115,18 @@ public class FontFile {
     }
 
     func createFTFace(faceIndex: Int, instanceIndex: Int) -> FT_Face? {
-        FreeType.semaphore.wait()
-        defer { FreeType.semaphore.signal() }
+        return FreeType.withLibrary { (library) in
+            let id: FT_Long = (instanceIndex << 16) + faceIndex
+            var face: FT_Face!
 
-        var ftFace: FT_Face! = nil
-        let id: FT_Long = (instanceIndex << 16) + faceIndex
-        let error = FT_Open_Face(FreeType.library, &arguments, id, &ftFace)
-
-        if error == FT_Err_Ok {
-            if (ftFace.pointee.face_flags & FT_FACE_FLAG_SCALABLE) == 0 {
-                FT_Done_Face(ftFace)
-                ftFace = nil
+            if FT_Open_Face(library, &arguments, id, &face) == FT_Err_Ok {
+                if (face.pointee.face_flags & FT_FACE_FLAG_SCALABLE) == 0 {
+                    FT_Done_Face(face)
+                    face = nil
+                }
             }
-        }
 
-        return ftFace
+            return face
+        }
     }
 }

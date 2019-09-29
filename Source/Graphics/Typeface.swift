@@ -167,17 +167,17 @@ public class Typeface {
     deinit {
         SFFontRelease(sfFont)
 
-        if let stroker = ftStroker {
-            FT_Stroker_Done(stroker)
-        }
-
         mutex.synchronized {
             FT_Done_Size(ftSize)
         }
 
-        FreeType.semaphore.wait()
-        FT_Done_Face(ftFace)
-        FreeType.semaphore.signal()
+        FreeType.withLibrary { _ -> Void in
+            if ftStroker != nil {
+                FT_Stroker_Done(ftStroker)
+            }
+
+            FT_Done_Face(ftFace)
+        }
     }
 
     func withFreeTypeFace<Result>(_ body: (FT_Face) throws -> Result) rethrows -> Result {
@@ -188,13 +188,15 @@ public class Typeface {
     }
 
     func withFreeTypeStroker<Result>(_ body: (FT_Stroker) throws -> Result) rethrows -> Result {
-        mutex.lock()
-        defer { mutex.unlock() }
-
         if ftStroker == nil {
-            // There is no need to lock 'library' as it is only taken to have access to FreeType's
-            // memory handling functions.
-            FT_Stroker_New(FreeType.library, &ftStroker)
+            mutex.lock()
+            defer { mutex.unlock() }
+
+            if ftStroker == nil {
+                FreeType.withLibrary { (library) -> Void in
+                    FT_Stroker_New(library, &ftStroker)
+                }
+            }
         }
 
         return try body(ftStroker)
