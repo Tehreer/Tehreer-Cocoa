@@ -19,7 +19,7 @@ import Foundation
 public class TypefaceManager {
     public static let shared = TypefaceManager()
 
-    private let semaphore = DispatchSemaphore(value: 1)
+    private let mutex = Mutex()
 
     private var tags: [TypefaceTag: Typeface] = [:]
     private var typefaces: [Typeface] = []
@@ -28,54 +28,49 @@ public class TypefaceManager {
     private init() { }
 
     public func register(_ typeface: Typeface, for tag: TypefaceTag) {
-        semaphore.wait()
-        defer { semaphore.signal() }
+        mutex.synchronized {
+            precondition(!typefaces.contains(where: { $0 === typeface }), "This typeface is already registered")
+            precondition(tags.index(forKey: tag) == nil, "This tag is already taken")
 
-        precondition(!typefaces.contains(where: { $0 === typeface }), "This typeface is already registered")
-        precondition(tags.index(forKey: tag) == nil, "This tag is already taken")
+            tags[tag] = typeface
+            typeface.tag = tag
 
-        tags[tag] = typeface
-        typeface.tag = tag
-
-        isSorted = false
-        typefaces.append(typeface)
+            isSorted = false
+            typefaces.append(typeface)
+        }
     }
 
     public func unregister(_ typeface: Typeface) {
-        semaphore.wait()
-        defer { semaphore.signal() }
+        mutex.synchronized {
+            if let index = typefaces.firstIndex(where: { $0 === typeface }) {
+                typefaces.remove(at: index)
+            }
 
-        if let index = typefaces.firstIndex(where: { $0 === typeface }) {
-            typefaces.remove(at: index)
-        }
-
-        if let tag = typeface.tag {
-            tags.removeValue(forKey: tag)
-            typeface.tag = nil
+            if let tag = typeface.tag {
+                tags.removeValue(forKey: tag)
+                typeface.tag = nil
+            }
         }
     }
 
     public func typeface(for tag: TypefaceTag) -> Typeface? {
-        semaphore.wait()
-        defer { semaphore.signal() }
-
-        return tags[tag]
+        return mutex.synchronized {
+            tags[tag]
+        }
     }
 
     public func tag(of typeface: Typeface) -> TypefaceTag? {
-        semaphore.wait()
-        defer { semaphore.signal() }
-
-        return typeface.tag
+        return mutex.synchronized {
+            typeface.tag
+        }
     }
 
     public var availableTypefaces: [Typeface] {
-        semaphore.wait()
-        defer { semaphore.signal() }
+        return mutex.synchronized {
+            sortTypefacesIfNeeded()
 
-        sortTypefacesIfNeeded()
-
-        return typefaces
+            return typefaces
+        }
     }
 
     private func sortTypefacesIfNeeded() {
