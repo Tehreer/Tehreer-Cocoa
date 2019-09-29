@@ -29,31 +29,27 @@ class GlyphRasterizer {
         self.typeface = strike.typeface
         self.transform = FT_Matrix(xx: 0x10000, xy: -strike.skewX, yx: 0, yy: 0x10000)
 
-        typeface.semaphore.wait()
-        defer { typeface.semaphore.signal() }
-
-        let ftFace = typeface.ftFace
-
-        FT_New_Size(ftFace, &size)
-        FT_Activate_Size(size)
-        FT_Set_Char_Size(ftFace, strike.pixelWidth, strike.pixelHeight, 0, 0)
+        typeface.withFreeTypeFace { (face) in
+            FT_New_Size(face, &size)
+            FT_Activate_Size(size)
+            FT_Set_Char_Size(face, strike.pixelWidth, strike.pixelHeight, 0, 0)
+        }
     }
 
     deinit {
-        typeface.semaphore.wait()
-        defer { typeface.semaphore.signal() }
-
-        FT_Done_Size(size)
+        typeface.withFreeTypeFace { _ -> Void in
+            FT_Done_Size(size)
+        }
     }
 
-    private func unsafeActivate() {
+    private func activate(for face: FT_Face) {
         FT_Activate_Size(size)
-        FT_Set_Transform(typeface.ftFace, &transform, nil)
+        FT_Set_Transform(face, &transform, nil)
     }
 
-    private func unsafeMakeImage(bitmap: UnsafePointer<FT_Bitmap>) -> CGImage? {
+    private func makeImage(bitmap: UnsafePointer<FT_Bitmap>) -> CGImage? {
         let pixelMode = bitmap.pointee.pixel_mode
-        var glyphImage: CGImage? = nil
+        var glyphImage: CGImage?
 
         switch (pixelMode) {
         case UInt8(FT_PIXEL_MODE_GRAY.rawValue):
@@ -89,23 +85,21 @@ class GlyphRasterizer {
     }
 
     func makeImage(glyphID: UInt16) -> (image: CGImage?, left: Int, top: Int) {
-        typeface.semaphore.wait()
-        defer { typeface.semaphore.signal() }
-
-        unsafeActivate()
-
-        let ftFace = typeface.ftFace
-        var glyphImage: CGImage? = nil
+        var glyphImage: CGImage?
         var left = 0
         var top = 0
 
-        if FT_Load_Glyph(ftFace, FT_UInt(glyphID), FT_Int32(FT_LOAD_RENDER)) == FT_Err_Ok {
-            let glyphSlot = ftFace.pointee.glyph
-            glyphImage = unsafeMakeImage(bitmap: &glyphSlot!.pointee.bitmap)
+        typeface.withFreeTypeFace { (face) in
+            activate(for: face)
 
-            if glyphImage != nil {
-                left = Int(glyphSlot!.pointee.bitmap_left)
-                top = Int(glyphSlot!.pointee.bitmap_top)
+            if FT_Load_Glyph(face, FT_UInt(glyphID), FT_Int32(FT_LOAD_RENDER)) == FT_Err_Ok {
+                let glyphSlot = face.pointee.glyph
+                glyphImage = makeImage(bitmap: &glyphSlot!.pointee.bitmap)
+
+                if glyphImage != nil {
+                    left = Int(glyphSlot!.pointee.bitmap_left)
+                    top = Int(glyphSlot!.pointee.bitmap_top)
+                }
             }
         }
 
@@ -113,28 +107,26 @@ class GlyphRasterizer {
     }
 
     func makeOutline(glyphID: UInt16) -> FT_Glyph? {
-        typeface.semaphore.wait()
-        defer { typeface.semaphore.signal() }
+        return typeface.withFreeTypeFace { (face) in
+            activate(for: face)
 
-        unsafeActivate()
+            if FT_Load_Glyph(face, FT_UInt(glyphID), FT_Int32(FT_LOAD_NO_BITMAP)) == FT_Err_Ok {
+                var outline: FT_Glyph?
+                FT_Get_Glyph(face.pointee.glyph, &outline)
 
-        let ftFace = typeface.ftFace
-        var outline: FT_Glyph? = nil
+                return outline
+            }
 
-        if FT_Load_Glyph(ftFace, FT_UInt(glyphID), FT_Int32(FT_LOAD_NO_BITMAP)) == FT_Err_Ok {
-            FT_Get_Glyph(ftFace.pointee.glyph, &outline)
+            return nil
         }
-
-        return outline
     }
 
     func makePath(glyphID: UInt16) -> CGPath? {
-        typeface.semaphore.wait()
-        defer { typeface.semaphore.signal() }
+        return typeface.withFreeTypeFace { (face) in
+            activate(for: face)
 
-        unsafeActivate()
-
-        return typeface.unsafeMakePath(glyphID: FT_UInt(glyphID))
+            return typeface.unsafeMakePath(glyphID: FT_UInt(glyphID))
+        }
     }
 
     func makeStrokedGlyph(of glyph: Glyph, lineRadius: FT_Fixed, lineCap: FT_Stroker_LineCap,
@@ -143,15 +135,13 @@ class GlyphRasterizer {
         var baseGlyph = glyph.outline
 
         if baseGlyph != nil {
-            typeface.semaphore.wait()
+            let error = typeface.withFreeTypeStroker { (stroker) -> FT_Error in
+                FT_Stroker_Set(stroker, lineRadius, lineCap, lineJoin, miterLimit)
 
-            let stroker = typeface.ftStroker
-            FT_Stroker_Set(stroker, lineRadius, lineCap, lineJoin, miterLimit);
-            let error = FT_Glyph_Stroke(&baseGlyph, stroker, 0)
+                return FT_Glyph_Stroke(&baseGlyph, stroker, 0)
+            }
 
-            typeface.semaphore.signal()
-
-            if (error == FT_Err_Ok) {
+            if error == FT_Err_Ok {
                 FT_Glyph_To_Bitmap(&baseGlyph, FT_RENDER_MODE_NORMAL, nil, 1)
 
                 let bitmapGlyph = UnsafeMutablePointer<FT_BitmapGlyphRec_>(OpaquePointer(baseGlyph))!
@@ -159,7 +149,7 @@ class GlyphRasterizer {
                 var left = 0
                 var top = 0
 
-                strokeImage = unsafeMakeImage(bitmap: &bitmapGlyph.pointee.bitmap)
+                strokeImage = makeImage(bitmap: &bitmapGlyph.pointee.bitmap)
                 if strokeImage != nil {
                     left = Int(bitmapGlyph.pointee.left)
                     top = Int(bitmapGlyph.pointee.top)

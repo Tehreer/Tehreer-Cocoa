@@ -36,28 +36,14 @@ fileprivate func f26Dot6PosToFloat(_ value: FT_Pos) -> CGFloat {
 public typealias TypefaceTag = AnyHashable
 
 public class Typeface {
-    let semaphore = DispatchSemaphore(value: 1)
-
+    private let mutex = Mutex()
     private let fontFile: FontFile
-    private let ftSize: FT_Size
 
     var tag: TypefaceTag?
 
     let ftFace: FT_Face
-    var _ftStroker: FT_Stroker!
-
-    var ftStroker: FT_Stroker! {
-        // NOTE:
-        //      The caller is responsible to wait on semaphore.
-
-        if _ftStroker == nil {
-            // There is no need to lock 'library' as it is only taken to have access to FreeType's
-            // memory handling functions.
-            FT_Stroker_New(FreeType.library, &_ftStroker)
-        }
-
-        return _ftStroker
-    }
+    private let ftSize: FT_Size
+    private var ftStroker: FT_Stroker!
 
     var sfFont: SFFontRef! = nil
     let patternCache = PatternCache()
@@ -181,17 +167,37 @@ public class Typeface {
     deinit {
         SFFontRelease(sfFont)
 
-        if let ftStroker = _ftStroker {
-            FT_Stroker_Done(ftStroker)
+        if let stroker = ftStroker {
+            FT_Stroker_Done(stroker)
         }
 
-        semaphore.wait()
-        FT_Done_Size(ftSize)
-        semaphore.signal()
+        mutex.synchronized {
+            FT_Done_Size(ftSize)
+        }
 
         FreeType.semaphore.wait()
         FT_Done_Face(ftFace)
         FreeType.semaphore.signal()
+    }
+
+    func withFreeTypeFace<Result>(_ body: (FT_Face) throws -> Result) rethrows -> Result {
+        mutex.lock()
+        defer { mutex.unlock() }
+
+        return try body(ftFace)
+    }
+
+    func withFreeTypeStroker<Result>(_ body: (FT_Stroker) throws -> Result) rethrows -> Result {
+        mutex.lock()
+        defer { mutex.unlock() }
+
+        if ftStroker == nil {
+            // There is no need to lock 'library' as it is only taken to have access to FreeType's
+            // memory handling functions.
+            FT_Stroker_New(FreeType.library, &ftStroker)
+        }
+
+        return try body(ftStroker)
     }
 
     /// The family name of this typeface.
@@ -266,10 +272,9 @@ public class Typeface {
     }
 
     private func loadSFNTTable(tag: FT_ULong, buffer: UnsafeMutablePointer<FT_Byte>?, length: UnsafeMutablePointer<FT_ULong>?) {
-        semaphore.wait()
-        defer { semaphore.signal() }
-
-        FT_Load_Sfnt_Table(ftFace, tag, 0, buffer, length)
+        withFreeTypeFace { (face) -> Void in
+            FT_Load_Sfnt_Table(face, tag, 0, buffer, length)
+        }
     }
 
     /// Returns the data of the table specified by the tag.
@@ -278,24 +283,21 @@ public class Typeface {
     /// - Returns: The data of the intended table, or `nil` if no such table exists.
     public func tableData(for tag: SFNTTag) -> Data? {
         let inputTag = FT_ULong(tag.rawValue)
-        var length: FT_ULong = 0
-        var data: Data? = nil
 
-        semaphore.wait()
+        return withFreeTypeFace { (face) in
+            var length: FT_ULong = 0
+            FT_Load_Sfnt_Table(face, inputTag, 0, nil, &length)
 
-        FT_Load_Sfnt_Table(ftFace, inputTag, 0, nil, &length)
+            guard length > 0 else {
+                return nil
+            }
 
-        if length > 0 {
             let count = Int(length)
             let bytes = UnsafeMutablePointer<FT_Byte>.allocate(capacity: count)
-            FT_Load_Sfnt_Table(ftFace, inputTag, 0, bytes, nil)
+            FT_Load_Sfnt_Table(face, inputTag, 0, bytes, nil)
 
-            data = Data(bytesNoCopy: bytes, count: count, deallocator: .free)
+            return Data(bytesNoCopy: bytes, count: count, deallocator: .free)
         }
-
-        semaphore.signal()
-
-        return data
     }
 
     /// Returns the glyph id for the specified code point.
@@ -303,9 +305,9 @@ public class Typeface {
     /// - Parameter codePoint: The code point for which the glyph id is obtained.
     /// - Returns: The glyph id for the specified code point.
     public func glyphID(for codePoint: UTF32Char) -> UInt16 {
-        semaphore.wait()
-        let glyphID = FT_Get_Char_Index(ftFace, FT_ULong(codePoint))
-        semaphore.signal()
+        let glyphID = withFreeTypeFace { (face) in
+            FT_Get_Char_Index(face, FT_ULong(codePoint))
+        }
 
         guard glyphID <= 0xFFFF else {
             print("Received invalid glyph id for code point: \(codePoint)")
@@ -321,13 +323,12 @@ public class Typeface {
             loadFlags |= FT_Int32(FT_LOAD_VERTICAL_LAYOUT)
         }
 
-        semaphore.wait()
-        defer { semaphore.signal() }
+        return withFreeTypeFace { (face) in
+            var advance: FT_Fixed = 0
+            FT_Get_Advance(face, glyphID, loadFlags, &advance)
 
-        var advance: FT_Fixed = 0
-        FT_Get_Advance(ftFace, glyphID, loadFlags, &advance)
-
-        return advance
+            return advance
+        }
     }
 
     private func fixedAdvance(for glyphID: FT_UInt, typeSize: FT_F26Dot6, vertical: Bool) -> FT_Fixed {
@@ -336,17 +337,16 @@ public class Typeface {
             loadFlags |= FT_Int32(FT_LOAD_VERTICAL_LAYOUT)
         }
 
-        semaphore.wait()
-        defer { semaphore.signal() }
+        return withFreeTypeFace { (face) in
+            FT_Activate_Size(ftSize);
+            FT_Set_Char_Size(face, 0, typeSize, 0, 0);
+            FT_Set_Transform(face, nil, nil);
 
-        FT_Activate_Size(ftSize);
-        FT_Set_Char_Size(ftFace, 0, typeSize, 0, 0);
-        FT_Set_Transform(ftFace, nil, nil);
+            var advance: FT_Fixed = 0
+            FT_Get_Advance(face, glyphID, loadFlags, &advance)
 
-        var advance: FT_Fixed = 0
-        FT_Get_Advance(ftFace, glyphID, loadFlags, &advance)
-
-        return advance
+            return advance
+        }
     }
 
     /// Retrieves the advance for the specified glyph.
@@ -448,13 +448,12 @@ public class Typeface {
             delta = FT_Vector(x: toF16Dot16(transform.tx), y: toF16Dot16(transform.ty))
         }
 
-        semaphore.wait()
-        defer { semaphore.signal() }
+        return withFreeTypeFace { (face) -> CGPath? in
+            FT_Activate_Size(ftSize)
+            FT_Set_Char_Size(face, 0, fixedSize, 0, 0)
+            FT_Set_Transform(face, &matrix, &delta)
 
-        FT_Activate_Size(ftSize)
-        FT_Set_Char_Size(ftFace, 0, fixedSize, 0, 0)
-        FT_Set_Transform(ftFace, &matrix, &delta)
-
-        return unsafeMakePath(glyphID: FT_UInt(glyphID))
+            return unsafeMakePath(glyphID: FT_UInt(glyphID))
+        }
     }
 }
