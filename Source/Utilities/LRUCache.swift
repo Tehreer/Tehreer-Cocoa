@@ -84,7 +84,7 @@ class LRUSegment<Key, Value> where Key: Hashable {
 }
 
 class LRUCache<Key, Value> where Key: Hashable {
-    private(set) var semaphore = DispatchSemaphore(value: 1)
+    private let mutex = Mutex()
 
     fileprivate var _capacity: Int
     fileprivate var _size: Int
@@ -127,16 +127,10 @@ class LRUCache<Key, Value> where Key: Hashable {
     }
 
     var size: Int {
-        semaphore.wait()
-        defer { semaphore.signal() }
-
         return _size
     }
 
     func clear() {
-        semaphore.wait()
-        defer { semaphore.signal() }
-
         _header.previous = _header
         _header.next = _header
     }

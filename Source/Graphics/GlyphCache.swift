@@ -37,6 +37,7 @@ fileprivate class FontCache: LRUSegment<UInt16, Glyph> {
 class GlyphCache: LRUCache<UInt16, Glyph> {
     static let instance = GlyphCache(capacity: 4096)
 
+    private let mutex = Mutex()
     private var segments: [GlyphStrike: FontCache] = [:]
 
     init(capacity: Int) {
@@ -69,24 +70,23 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
     }
 
     func maskGlyph(with strike: GlyphStrike, for glyphID: UInt16) -> Glyph {
-        semaphore.wait()
+        let (fontCache, glyph) = mutex.synchronized { () -> (FontCache, Glyph) in
+            let fontCache = unsafeFontCache(for: strike)
+            let glyph = unsafeGlyph(in: fontCache, for: glyphID)
 
-        let fontCache = unsafeFontCache(for: strike)
-        let glyph = unsafeGlyph(in: fontCache, for: glyphID)
-
-        semaphore.signal()
+            return (fontCache, glyph)
+        }
 
         if glyph.image == nil {
             let result = fontCache.rasterizer.makeImage(glyphID: glyph.glyphID)
 
-            semaphore.wait()
-            defer { semaphore.signal() }
+            mutex.synchronized {
+                if glyph.image == nil {
+                    fontCache.unsafeRemoveValue(forKey: glyphID)
 
-            if glyph.image == nil {
-                fontCache.unsafeRemoveValue(forKey: glyphID)
-
-                glyph.own(image: result.image, left: result.left, top: result.top)
-                fontCache.unsafeSetValue(glyph, forKey: glyphID)
+                    glyph.own(image: result.image, left: result.left, top: result.top)
+                    fontCache.unsafeSetValue(glyph, forKey: glyphID)
+                }
             }
         }
 
@@ -94,26 +94,25 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
     }
 
     func maskGlyph(with strike: GlyphStrike, for glyphID: UInt16, lineRadius: FT_Fixed, lineCap: FT_Stroker_LineCap, lineJoin: FT_Stroker_LineJoin, miterLimit: FT_Fixed) -> Glyph {
-        semaphore.wait()
+        let (fontCache, glyph) = mutex.synchronized { () -> (FontCache, Glyph) in
+            let fontCache = unsafeFontCache(for: strike)
+            let glyph = unsafeGlyph(in: fontCache, for: glyphID)
 
-        let fontCache = unsafeFontCache(for: strike)
-        let glyph = unsafeGlyph(in: fontCache, for: glyphID)
-
-        semaphore.signal()
+            return (fontCache, glyph)
+        }
 
         if glyph.outline == nil {
             let outline = fontCache.rasterizer.makeOutline(glyphID: glyph.glyphID)
 
-            semaphore.wait()
-            defer { semaphore.signal() }
+            mutex.synchronized {
+                if glyph.outline == nil {
+                    fontCache.unsafeRemoveValue(forKey: glyphID)
 
-            if glyph.outline == nil {
-                fontCache.unsafeRemoveValue(forKey: glyphID)
-
-                glyph.own(outline: outline)
-                fontCache.unsafeSetValue(glyph, forKey: glyphID)
-            } else {
-                FT_Done_Glyph(outline)
+                    glyph.own(outline: outline)
+                    fontCache.unsafeSetValue(glyph, forKey: glyphID)
+                } else {
+                    FT_Done_Glyph(outline)
+                }
             }
         }
 
@@ -125,24 +124,23 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
     }
 
     func glyphPath(with strike: GlyphStrike, for glyphID: UInt16) -> CGPath? {
-        semaphore.wait()
+        let (fontCache, glyph) = mutex.synchronized { () -> (FontCache, Glyph) in
+            let fontCache = unsafeFontCache(for: strike)
+            let glyph = unsafeGlyph(in: fontCache, for: glyphID)
 
-        let fontCache = unsafeFontCache(for: strike)
-        let glyph = unsafeGlyph(in: fontCache, for: glyphID)
-
-        semaphore.signal()
+            return (fontCache, glyph)
+        }
 
         if glyph.path == nil {
             let path = fontCache.rasterizer.makePath(glyphID: glyphID)
 
-            semaphore.wait()
-            defer { semaphore.signal() }
+            mutex.synchronized {
+                if glyph.path == nil {
+                    fontCache.unsafeRemoveValue(forKey: glyphID)
 
-            if glyph.path == nil {
-                fontCache.unsafeRemoveValue(forKey: glyphID)
-
-                glyph.own(path: path)
-                fontCache.unsafeSetValue(glyph, forKey: glyphID)
+                    glyph.own(path: path)
+                    fontCache.unsafeSetValue(glyph, forKey: glyphID)
+                }
             }
         }
 
