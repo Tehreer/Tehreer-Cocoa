@@ -36,25 +36,23 @@ fileprivate class PatternValue {
 }
 
 class PatternCache {
-    private let semaphore = DispatchSemaphore(value: 1)
+    private let mutex = Mutex()
     private var patterns = Dictionary<PatternKey, PatternValue>()
 
     subscript(key: PatternKey) -> SFPatternRef? {
         get {
-            semaphore.wait()
-            defer { semaphore.signal() }
+            return mutex.synchronized {
+                if let index = patterns.index(forKey: key) {
+                    return patterns[index].value.sfPattern
+                }
 
-            if let index = patterns.index(forKey: key) {
-                return patterns[index].value.sfPattern
+                return nil
             }
-
-            return nil
         }
         set {
-            semaphore.wait()
-            defer { semaphore.signal() }
-
-            patterns[key] = newValue != nil ? PatternValue(newValue!) : nil
+            mutex.synchronized {
+                patterns[key] = newValue != nil ? PatternValue(newValue!) : nil
+            }
         }
     }
 }
