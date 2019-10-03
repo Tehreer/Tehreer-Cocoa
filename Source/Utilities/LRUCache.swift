@@ -16,7 +16,7 @@
 
 import Foundation
 
-fileprivate class Node<Key, Value> where Key: Hashable {
+private class Node<Key, Value> where Key: Hashable {
     let segment: LRUSegment<Key, Value>!
     let key: Key
     var value: Value
@@ -48,7 +48,7 @@ class LRUSegment<Key, Value> where Key: Hashable {
         return 1
     }
 
-    func unsafeValue(forKey key: Key) -> Value? {
+    func value(forKey key: Key) -> Value? {
         if let node = data[key] {
             cache.makeFirst(node: node)
             return node.value
@@ -57,9 +57,9 @@ class LRUSegment<Key, Value> where Key: Hashable {
         return nil
     }
 
-    func unsafeSetValue(_ value: Value?, forKey key: Key) {
+    func setValue(_ value: Value?, forKey key: Key) {
         guard let value = value else {
-            unsafeRemoveValue(forKey: key)
+            removeValue(forKey: key)
             return
         }
 
@@ -69,38 +69,37 @@ class LRUSegment<Key, Value> where Key: Hashable {
             fatalError("An entry with same key has already been added")
         }
 
-        cache._size += sizeOf(key: key, value: value)
+        cache.size += sizeOf(key: key, value: value)
         cache.addFirst(node: newNode)
 
-        cache.unsafeTrim(toSize: cache.capacity)
+        cache.trim(toSize: cache.capacity)
     }
 
-    func unsafeRemoveValue(forKey key: Key) {
+    func removeValue(forKey key: Key) {
         if let node = data.removeValue(forKey: key) {
-            cache._size -= sizeOf(key: key, value: node.value)
+            cache.size -= sizeOf(key: key, value: node.value)
             cache.remove(node: node)
         }
     }
 }
 
 class LRUCache<Key, Value> where Key: Hashable {
-    private let mutex = Mutex()
+    fileprivate(set) var capacity: Int
+    fileprivate(set) var size: Int
 
-    fileprivate var _capacity: Int
-    fileprivate var _size: Int
-
-    private let _header: Node<Key, Value>
+    private let head: Node<Key, Value>
 
     init(capacity: Int, dummyPair: (Key, Value)) {
-        _capacity = capacity
-        _size = 0
-        _header = Node(key: dummyPair.0, value: dummyPair.1)
-        _header.previous = _header
-        _header.next = _header
+        self.capacity = capacity
+        self.size = 0
+
+        head = Node(key: dummyPair.0, value: dummyPair.1)
+        head.previous = head
+        head.next = head
     }
 
     private var lastNode: Node<Key, Value> {
-        return _header.previous!
+        return head.previous!
     }
 
     fileprivate func makeFirst(node: Node<Key, Value>) {
@@ -109,10 +108,10 @@ class LRUCache<Key, Value> where Key: Hashable {
     }
 
     fileprivate func addFirst(node: Node<Key, Value>) {
-        node.previous = _header
-        node.next = _header.next
-        _header.next!.previous = node
-        _header.next = node
+        node.previous = head
+        node.next = head.next
+        head.next!.previous = node
+        head.next = node
     }
 
     fileprivate func remove(node: Node<Key, Value>) {
@@ -122,30 +121,22 @@ class LRUCache<Key, Value> where Key: Hashable {
         node.next = nil
     }
 
-    var capacity: Int {
-        return _capacity
-    }
-
-    var size: Int {
-        return _size
-    }
-
     func clear() {
-        _header.previous = _header
-        _header.next = _header
+        head.previous = head
+        head.next = head
     }
 
-    func unsafeTrim(toSize maxSize: Int) {
-        while _size > maxSize {
+    func trim(toSize maxSize: Int) {
+        while size > maxSize {
             let toEvict = lastNode
-            if toEvict === _header {
+            if toEvict === head {
                 break
             }
 
             let segment = toEvict.segment!
             let key = toEvict.key
 
-            segment.unsafeRemoveValue(forKey: key)
+            segment.removeValue(forKey: key)
         }
     }
 }
