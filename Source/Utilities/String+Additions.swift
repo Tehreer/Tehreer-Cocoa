@@ -32,14 +32,15 @@ extension String {
     }
 
     func trailingWhitespaceStart(in range: Range<String.Index>) -> String.Index {
-        var index = self.index(before: range.upperBound)
+        var index = range.upperBound
 
-        while index >= range.lowerBound {
+        while index > range.lowerBound {
+            let next = index
+            index = self.index(before: next)
+
             if !self[index].isWhitespace {
-                return index
+                return next
             }
-
-            index = self.index(before: index)
         }
 
         return range.lowerBound
