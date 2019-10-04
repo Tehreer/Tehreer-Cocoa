@@ -205,8 +205,8 @@ public class FrameResolver {
 
             // Readjust the horizontal position of each line.
             for textLine in context.textLines {
-                textLine.origin.x += textLine.flushPenOffset(for: textLine.flushFactor,
-                                                             flushExtent: occupiedWidth)
+                textLine.origin.x = textLine.flushPenOffset(for: textLine.flushFactor,
+                                                            flushExtent: occupiedWidth)
             }
 
             // Update the layout width to occupied width.
