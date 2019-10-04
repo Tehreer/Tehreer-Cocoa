@@ -117,7 +117,7 @@ public struct BidiRunIterator: IteratorProtocol {
             }
 
             let runOffset = Int(paragraphOffset) + levelIndex
-            let runLength = nextIndex - runOffset
+            let runLength = nextIndex - levelIndex
 
             levelIndex = nextIndex
 
