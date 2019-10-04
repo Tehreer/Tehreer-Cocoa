@@ -92,7 +92,7 @@ public struct ScriptRunIterator: IteratorProtocol {
                 currentIndex += 1
             }
 
-            let range = container.string.characterRange(forUTF16Range: startIndex ..< endIndex)
+            let range = container.string.characterRange(forUTF16Range: startIndex ..< currentIndex)
 
             return ScriptRun(startIndex: range.lowerBound,
                              endIndex: range.upperBound,
