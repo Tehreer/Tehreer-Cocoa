@@ -52,21 +52,21 @@ public class ShapingEngine {
     public var languageTag: SFNTTag = "dflt"
 
     public var openTypeFeatures: [SFNTTag: Int] = [:] {
-        didSet(newValue) {
-            featureTags = newValue.keys.map { SFUInt32($0.rawValue) }
-            featureValues = newValue.values.map { SFUInt16($0) }
+        didSet {
+            featureTags = openTypeFeatures.keys.map { SFUInt32($0.rawValue) }
+            featureValues = openTypeFeatures.values.map { SFUInt16($0) }
         }
     }
 
     public var writingDirection = WritingDirection.leftToRight {
-        didSet(newValue) {
-            SFArtistSetTextDirection(sfArtist, SFTextDirection(newValue.rawValue))
+        didSet {
+            SFArtistSetTextDirection(sfArtist, SFTextDirection(writingDirection.rawValue))
         }
     }
 
     public var shapingOrder = ShapingOrder.forward {
-        didSet(newValue) {
-            SFArtistSetTextMode(sfArtist, SFTextMode(newValue.rawValue))
+        didSet {
+            SFArtistSetTextMode(sfArtist, SFTextMode(shapingOrder.rawValue))
         }
     }
 
