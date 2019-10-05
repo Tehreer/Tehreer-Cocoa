@@ -18,7 +18,7 @@ import CoreGraphics
 import Foundation
 
 class GlyphRasterizer {
-    private static var decode: [CGFloat] = [1.0, 1.0]
+    private static var decode: [CGFloat] = [1.0, 0.0]
 
     let typeface: Typeface
 
