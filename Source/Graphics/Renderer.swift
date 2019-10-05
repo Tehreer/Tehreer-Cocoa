@@ -220,8 +220,8 @@ public class Renderer {
 
         return CGRect(x: CGFloat(glyph.lsb) / renderScale,
                       y: CGFloat(glyph.tsb) / renderScale,
-                      width: CGFloat(glyph.image?.width ?? 0) / renderScale,
-                      height: CGFloat(glyph.image?.height ?? 0) / renderScale)
+                      width: CGFloat(glyph.image?.size.width ?? 0) / renderScale,
+                      height: CGFloat(glyph.image?.size.height ?? 0) / renderScale)
     }
 
     /// Calculates the bounding box of specified glyph.
@@ -298,19 +298,14 @@ public class Renderer {
             }
 
             if let maskImage = maskGlyph.image {
+                let size = maskImage.size
                 let rect = CGRect(
                     x: round(penX + offset.x + (CGFloat(maskGlyph.lsb) / renderScale)),
                     y: round(-offset.y - (CGFloat(maskGlyph.tsb) / renderScale)),
-                    width: CGFloat(maskImage.width) / renderScale,
-                    height: CGFloat(maskImage.height) / renderScale)
+                    width: size.width / renderScale,
+                    height: size.height / renderScale)
 
-                context.translateBy(x: rect.minX, y: rect.maxY)
-                context.scaleBy(x: 1.0, y: -1.0)
-
-                context.draw(maskImage, in: CGRect(origin: .zero, size: rect.size))
-
-                context.scaleBy(x: 1.0, y: -1.0)
-                context.translateBy(x: -rect.minX, y: -rect.maxY)
+                maskImage.draw(in: rect)
             }
 
             if !reverseMode {

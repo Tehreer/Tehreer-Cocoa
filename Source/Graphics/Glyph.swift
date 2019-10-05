@@ -16,16 +16,17 @@
 
 import CoreGraphics
 import Foundation
+import UIKit
 
 class Glyph {
     let glyphID: UInt16
 
-    private var _left: Int = 0
-    private var _top: Int = 0
+    private(set) var lsb: Int = .zero
+    private(set) var tsb: Int = .zero
+    private(set) var image: UIImage?
+    private(set) var outline: FT_Glyph?
 
-    private(set) var image: CGImage? = nil
-    private(set) var outline: FT_Glyph? = nil
-    private(set) var path: CGPath? = nil
+    private(set) var path: CGPath?
 
     init(glyphID: UInt16) {
         self.glyphID = glyphID
@@ -35,18 +36,15 @@ class Glyph {
         FT_Done_Glyph(outline)
     }
 
-    var lsb: Int {
-        return _left
-    }
-
-    var tsb: Int {
-        return _top
-    }
-
     func own(image: CGImage?, left: Int, top: Int) {
-        self.image = image
-        _left = left
-        _top = top
+        if let image = image {
+            self.image = UIImage(cgImage: image).withRenderingMode(.alwaysTemplate)
+        } else {
+            self.image = nil
+        }
+
+        self.lsb = left
+        self.tsb = top
     }
 
     func own(outline: FT_Glyph?) {
