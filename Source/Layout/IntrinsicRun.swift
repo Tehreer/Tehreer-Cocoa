@@ -67,23 +67,32 @@ class IntrinsicRun {
     }
 
     func glyphRange(forUTF16Range range: Range<Int>) -> Range<Int> {
+        let runStart = string.utf16Index(forCharacterAt: startIndex)
+        let lowerBound = range.lowerBound - runStart
+        let upperBound = range.upperBound - runStart
+
         return Clusters.glyphRange(in: clusterMap,
-                                   for: range,
+                                   for: lowerBound ..< upperBound,
                                    isBackward: isBackward,
                                    glyphCount: glyphCount)
     }
 
     func clusterRange(forUTF16Range range: Range<Int>) -> Range<Int> {
-        let clusterStart = Clusters.actualClusterStart(in: clusterMap, for: range.lowerBound)
-        let clusterEnd = Clusters.actualClusterEnd(in: clusterMap, for: range.upperBound - 1)
+        let runStart = string.utf16Index(forCharacterAt: startIndex)
+        let lowerBound = range.lowerBound - runStart
+        let upperBound = range.upperBound - runStart - 1
 
-        return clusterStart ..< clusterEnd
+        let clusterStart = Clusters.actualClusterStart(in: clusterMap, for: lowerBound)
+        let clusterEnd = Clusters.actualClusterEnd(in: clusterMap, for: upperBound)
+
+        return (clusterStart + runStart) ..< (clusterEnd + runStart)
     }
 
     func measureCharacters(in range: Range<String.Index>) -> CGFloat {
         let collection = CaretEdgeCollection(allEdges: caretEdges)
-        let utf16Range: Range<Int> = string.utf16Range(forCharacterRange: range)
+        let lowerBound = string.utf16.distance(from: startIndex, to: range.lowerBound)
+        let upperBound = string.utf16.distance(from: startIndex, to: range.upperBound)
 
-        return collection.distance(of: utf16Range, isRTL: isRTL)
+        return collection.distance(of: lowerBound ..< upperBound, isRTL: isRTL)
     }
 }
