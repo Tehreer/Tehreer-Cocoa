@@ -68,6 +68,8 @@ public class ComposedLine {
 
     var flushFactor: CGFloat = .zero
 
+    var intrinsicMargin: CGFloat = .zero
+
     var top: CGFloat {
         return origin.y - ascent
     }

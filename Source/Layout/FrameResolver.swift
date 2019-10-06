@@ -200,13 +200,22 @@ public class FrameResolver {
 
             // Find out the occupied width.
             for textLine in context.textLines {
-                occupiedWidth = max(occupiedWidth, textLine.width)
+                let lineWidth = textLine.intrinsicMargin + textLine.width - textLine.trailingWhitespaceExtent
+                occupiedWidth = max(occupiedWidth, lineWidth)
             }
 
             // Readjust the horizontal position of each line.
             for textLine in context.textLines {
-                textLine.origin.x = textLine.flushPenOffset(for: textLine.flushFactor,
-                                                            flushExtent: occupiedWidth)
+                let intrinsicMargin = textLine.intrinsicMargin
+                let availableWidth = occupiedWidth - intrinsicMargin
+                let alignedX = textLine.flushPenOffset(for: textLine.flushFactor, flushExtent: availableWidth)
+                var marginalX: CGFloat = .zero
+
+                if (textLine.paragraphLevel & 1) == 0 {
+                    marginalX = intrinsicMargin
+                }
+
+                textLine.origin.x = marginalX + alignedX
             }
 
             // Update the layout width to occupied width.
