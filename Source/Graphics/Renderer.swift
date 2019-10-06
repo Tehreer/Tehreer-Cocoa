@@ -276,8 +276,11 @@ public class Renderer {
         var advanceIter = advances.makeIterator()
 
         for glyphID in glyphIDs {
-            let offset = offsetIter.next()!
-            let advance = advanceIter.next()!
+            let unscaledOffset: CGPoint! = offsetIter.next()
+            let unscaledAdvance: CGFloat! = advanceIter.next()
+
+            let offset = CGPoint(x: unscaledOffset.x * renderScale, y: unscaledOffset.y * renderScale)
+            let advance = unscaledAdvance * renderScale
 
             if reverseMode {
                 penX -= advance
@@ -300,10 +303,10 @@ public class Renderer {
             if let maskImage = maskGlyph.image {
                 let size = maskImage.size
                 let rect = CGRect(
-                    x: round(penX + offset.x + (CGFloat(maskGlyph.lsb) / renderScale)),
-                    y: round(-offset.y - (CGFloat(maskGlyph.tsb) / renderScale)),
-                    width: size.width / renderScale,
-                    height: size.height / renderScale)
+                    x: round(penX + offset.x + CGFloat(maskGlyph.lsb)),
+                    y: round(-offset.y - CGFloat(maskGlyph.tsb)),
+                    width: size.width,
+                    height: size.height)
 
                 maskImage.draw(in: rect)
             }
@@ -331,6 +334,16 @@ public class Renderer {
                               color: shadowColor.cgColor)
         }
 
+        // Extract the pixel level translation.
+        let transform = context.userSpaceToDeviceSpaceTransform
+        let pixelPosition = CGPoint(x: round(transform.tx), y: round(transform.ty))
+        let difference = CGSize(width: pixelPosition.x - transform.tx, height: pixelPosition.y - transform.ty)
+        let translation = context.convertToUserSpace(difference)
+
+        // Work on pixel level.
+        context.translateBy(x: translation.width, y: translation.height)
+        context.scaleBy(x: 1.0 / renderScale, y: 1.0 / renderScale)
+
         if renderingStyle == .fill || renderingStyle == .fillStroke {
             context.setFillColor(fillColor.cgColor)
             drawGlyphs(on: context, glyphIDs: glyphIDs, offsets: offsets, advances: advances, strokeMode: false)
@@ -340,5 +353,9 @@ public class Renderer {
             context.setFillColor(strokeColor.cgColor)
             drawGlyphs(on: context, glyphIDs: glyphIDs, offsets: offsets, advances: advances, strokeMode: true)
         }
+
+        // Reset the scale and the translation.
+        context.scaleBy(x: renderScale, y: renderScale)
+        context.translateBy(x: -translation.width, y: -translation.height)
     }
 }
