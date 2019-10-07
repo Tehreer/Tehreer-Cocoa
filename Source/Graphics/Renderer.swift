@@ -264,7 +264,7 @@ public class Renderer {
         return comulativeBox
     }
 
-    private func drawGlyphs<GS, OS, AS>(on context: CGContext, glyphIDs: GS, offsets: OS, advances: AS, strokeMode: Bool)
+    private func drawGlyphs<GS, OS, AS>(in context: CGContext, glyphIDs: GS, offsets: OS, advances: AS, strokeMode: Bool)
         where GS: Sequence, GS.Element == UInt16,
               OS: Sequence, OS.Element == CGPoint,
               AS: Sequence, AS.Element == CGFloat {
@@ -324,7 +324,7 @@ public class Renderer {
     ///   - glyphIDs: A sequence of glyph IDs.
     ///   - offsets: A sequence of glyph offsets.
     ///   - advances: A sequence of glyph advances.
-    public func drawGlyphs<GS, OS, AS>(on context: CGContext, glyphIDs: GS, offsets: OS, advances: AS)
+    public func drawGlyphs<GS, OS, AS>(in context: CGContext, glyphIDs: GS, offsets: OS, advances: AS)
         where GS: Sequence, GS.Element == UInt16,
               OS: Sequence, OS.Element == CGPoint,
               AS: Sequence, AS.Element == CGFloat {
@@ -352,12 +352,12 @@ public class Renderer {
 
         if renderingStyle == .fill || renderingStyle == .fillStroke {
             context.setFillColor(fillColor.cgColor)
-            drawGlyphs(on: context, glyphIDs: glyphIDs, offsets: offsets, advances: advances, strokeMode: false)
+            drawGlyphs(in: context, glyphIDs: glyphIDs, offsets: offsets, advances: advances, strokeMode: false)
         }
 
         if renderingStyle == .stroke || renderingStyle == .fillStroke {
             context.setFillColor(strokeColor.cgColor)
-            drawGlyphs(on: context, glyphIDs: glyphIDs, offsets: offsets, advances: advances, strokeMode: true)
+            drawGlyphs(in: context, glyphIDs: glyphIDs, offsets: offsets, advances: advances, strokeMode: true)
         }
 
         // Reset the scale and the translation.

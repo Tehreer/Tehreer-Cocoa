@@ -397,7 +397,7 @@ public class GlyphRun {
         context.clip(to: CGRect(x: clipLeft, y: -.infinity, width: clipRight - clipLeft, height: .infinity))
         context.translateBy(x: leadingEdge(forCharacterRange: cluster.actualStart ..< cluster.actualEnd), y: 0.0)
 
-        renderer.drawGlyphs(on: context,
+        renderer.drawGlyphs(in: context,
                             glyphIDs: glyphIDs[cluster.glyphStart ..< cluster.glyphEnd],
                             offsets: glyphOffsets[cluster.glyphStart ..< cluster.glyphEnd],
                             advances: glyphAdvances[cluster.glyphStart ..< cluster.glyphEnd])
@@ -469,7 +469,7 @@ public class GlyphRun {
         context.saveGState()
         context.translateBy(x: leadingEdge(forCharacterRange: chunkStart ..< chunkEnd), y: 0.0)
 
-        renderer.drawGlyphs(on: context,
+        renderer.drawGlyphs(in: context,
                             glyphIDs: glyphIDs[glyphStart ..< glyphEnd],
                             offsets: glyphOffsets[glyphStart ..< glyphEnd],
                             advances: glyphAdvances[glyphStart ..< glyphEnd])
