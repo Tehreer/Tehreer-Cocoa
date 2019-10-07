@@ -344,6 +344,12 @@ public class Renderer {
         context.translateBy(x: translation.width, y: translation.height)
         context.scaleBy(x: 1.0 / renderScale, y: 1.0 / renderScale)
 
+        // Push the context, if needed.
+        let current = UIGraphicsGetCurrentContext()
+        if context !== current {
+            UIGraphicsPushContext(context)
+        }
+
         if renderingStyle == .fill || renderingStyle == .fillStroke {
             context.setFillColor(fillColor.cgColor)
             drawGlyphs(on: context, glyphIDs: glyphIDs, offsets: offsets, advances: advances, strokeMode: false)
@@ -357,5 +363,10 @@ public class Renderer {
         // Reset the scale and the translation.
         context.scaleBy(x: renderScale, y: renderScale)
         context.translateBy(x: -translation.width, y: -translation.height)
+
+        // Pop the context, if needed.
+        if context !== current {
+            UIGraphicsPopContext()
+        }
     }
 }
