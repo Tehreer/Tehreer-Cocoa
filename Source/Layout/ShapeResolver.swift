@@ -97,7 +97,7 @@ struct ShapeResolver {
             var glyphOffsets = Array(shapingResult.glyphOffsets)
             var glyphAdvances = Array(shapingResult.glyphAdvances)
             let clusterMap = Array(shapingResult.clusterMap)
-            let caretEdges = shapingResult.caretEdges(with: nil)
+            let caretEdges = shapingResult.makeCaretEdges(caretStops: nil)
 
             if shapingRun.scaleX != 1.0 || shapingRun.scaleY != 1.0 {
                 for i in 0 ..< glyphOffsets.count {

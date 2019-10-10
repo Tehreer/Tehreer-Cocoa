@@ -98,7 +98,7 @@ public class ShapingResult {
         return PrimitiveCollection(collection.map({ Int($0) }))
     }
 
-    public func caretEdges(with caretStops: [Bool]?) -> [CGFloat] {
+    public func makeCaretEdges(caretStops: [Bool]?) -> [CGFloat] {
         if let caretStops = caretStops {
             precondition(caretStops.count >= codeUnitCount)
         }
@@ -135,4 +135,3 @@ public class ShapingResult {
         self.codeUnitCount = codeUnitCount
     }
 }
-
