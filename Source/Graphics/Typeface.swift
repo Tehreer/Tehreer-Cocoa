@@ -145,6 +145,9 @@ public class Typeface {
             } else if (os2Table.fsSelection & OS2Table.FSSelection.italic.rawValue) != 0 {
                 self.slope = .italic
             }
+
+            self.strikeoutPosition = Int(os2Table.yStrikeoutPosition)
+            self.strikeoutThickness = Int(os2Table.yStrikeoutSize)
         } else if let headTable = headTable {
             let macStyle = headTable.macStyle
 
@@ -272,6 +275,12 @@ public class Typeface {
     public var underlineThicknes: Int {
         return Int(ftFace.pointee.underline_thickness)
     }
+
+    /// The position, in font units, of the strikeout for this typeface.
+    public private(set) var strikeoutPosition: Int = 0
+
+    /// The thickness, in font units, of the strikeout for this typeface.
+    public private(set) var strikeoutThickness: Int = 0
 
     private func loadSFNTTable(tag: FT_ULong, buffer: UnsafeMutablePointer<FT_Byte>?, length: UnsafeMutablePointer<FT_ULong>?) {
         withFreeTypeFace { (face) -> Void in
