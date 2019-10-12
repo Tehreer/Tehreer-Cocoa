@@ -48,7 +48,7 @@ class GlyphShapeView: UIView {
         let glyphY = round((bounds.height - fontHeight) / 2.0 + fontAscent)
 
         context.translateBy(x: glyphX, y: glyphY)
-        renderer.drawGlyphs(on: context, glyphIDs: [glyphID], offsets: [.zero], advances: [.zero])
+        renderer.drawGlyphs(in: context, glyphIDs: [glyphID], offsets: [.zero], advances: [.zero])
         context.translateBy(x: -glyphX, y: -glyphY)
     }
 }
@@ -91,10 +91,15 @@ class TypefaceGlyphsViewController: UIViewController, UIScrollViewDelegate, UICo
     // MARK: - UIScrollViewDelegate
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let contentInset = collectionView.contentInset
+        var safeInsets = UIEdgeInsets.zero
+        if #available(iOS 11.0, *) {
+            safeInsets = collectionView.safeAreaInsets
+        }
+
+        let topInset = collectionView.contentInset.top + safeInsets.top
         let contentOffset = collectionView.contentOffset
 
-        headerTopConstraint.constant = max(.zero, -(contentOffset.y + contentInset.top))
+        headerTopConstraint.constant = max(.zero, -(contentOffset.y + topInset))
     }
 
     // MARK: - UICollectionViewDataSource
