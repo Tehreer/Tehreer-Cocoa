@@ -36,7 +36,7 @@ public class GlyphRun {
          startExtraLength: Int, endExtraLength: Int, attributes: [NSAttributedString.Key: Any],
          isBackward: Bool, bidiLevel: UInt8, writingDirection: WritingDirection, typeface: Typeface,
          typeSize: CGFloat, ascent: CGFloat, descent: CGFloat, leading: CGFloat,
-         glyphIDs: PrimitiveCollection<UInt16>, glyphOffsets: PrimitiveCollection<CGPoint>,
+         glyphIDs: PrimitiveCollection<GlyphID>, glyphOffsets: PrimitiveCollection<CGPoint>,
          glyphAdvances: PrimitiveCollection<CGFloat>,
          clusterMap: PrimitiveCollection<Int>, caretEdges: PrimitiveCollection<CGFloat>) {
         self.utf16 = string.utf16
@@ -142,7 +142,7 @@ public class GlyphRun {
     }
 
     /// The glyph IDs of this run.
-    public let glyphIDs: PrimitiveCollection<UInt16>
+    public let glyphIDs: PrimitiveCollection<GlyphID>
 
     /// The glyph offsets of this run.
     public let glyphOffsets: PrimitiveCollection<CGPoint>

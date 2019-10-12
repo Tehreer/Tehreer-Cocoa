@@ -51,7 +51,7 @@ public class ShapingResult {
     }
 
     /// The collection of glyph IDs.
-    public var glyphIDs: PrimitiveCollection<UInt16> {
+    public var glyphIDs: PrimitiveCollection<GlyphID> {
         let pointer = SFAlbumGetGlyphIDsPtr(sfAlbum)
         let collection = OwnedCollection(owner: self, pointer: pointer, size: glyphCount)
 

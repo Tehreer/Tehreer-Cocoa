@@ -19,7 +19,7 @@ import Foundation
 import UIKit
 
 class Glyph {
-    let glyphID: UInt16
+    let glyphID: GlyphID
 
     private(set) var lsb: Int = .zero
     private(set) var tsb: Int = .zero
@@ -28,7 +28,7 @@ class Glyph {
 
     private(set) var path: CGPath?
 
-    init(glyphID: UInt16) {
+    init(glyphID: GlyphID) {
         self.glyphID = glyphID
     }
 

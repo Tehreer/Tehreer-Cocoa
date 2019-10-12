@@ -84,7 +84,7 @@ class GlyphRasterizer {
         return glyphImage
     }
 
-    func makeImage(glyphID: UInt16) -> (image: CGImage?, left: Int, top: Int) {
+    func makeImage(glyphID: GlyphID) -> (image: CGImage?, left: Int, top: Int) {
         var glyphImage: CGImage?
         var left = 0
         var top = 0
@@ -106,7 +106,7 @@ class GlyphRasterizer {
         return (glyphImage, left, top)
     }
 
-    func makeOutline(glyphID: UInt16) -> FT_Glyph? {
+    func makeOutline(glyphID: GlyphID) -> FT_Glyph? {
         return typeface.withFreeTypeFace { (face) in
             activate(for: face)
 
@@ -121,7 +121,7 @@ class GlyphRasterizer {
         }
     }
 
-    func makePath(glyphID: UInt16) -> CGPath? {
+    func makePath(glyphID: GlyphID) -> CGPath? {
         return typeface.withFreeTypeFace { (face) in
             activate(for: face)
 

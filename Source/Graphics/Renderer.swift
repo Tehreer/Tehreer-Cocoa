@@ -167,7 +167,7 @@ public class Renderer {
         glyphStrike.skewX = Int((slantAngle * 0x10000) + 0.5)
     }
 
-    private func cachedGlyphPath(for glyphID: UInt16) -> CGPath? {
+    private func cachedGlyphPath(for glyphID: GlyphID) -> CGPath? {
         return GlyphCache.instance.glyphPath(with: glyphStrike, for: glyphID)
     }
 
@@ -175,7 +175,7 @@ public class Renderer {
     ///
     /// - Parameter glyphID: The ID of glyph whose path is generated.
     /// - Returns: The path of the glyph specified by `glyphID`.
-    public func makePath(glyphID: UInt16) -> UIBezierPath? {
+    public func makePath(glyphID: GlyphID) -> UIBezierPath? {
         if let glyphPath = cachedGlyphPath(for: glyphID) {
             return UIBezierPath(cgPath: glyphPath)
         }
@@ -191,7 +191,7 @@ public class Renderer {
     ///   - advances: A sequence of glyph advances.
     /// - Returns: The cumulative path of specified glyphs.
     public func makePath<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS) -> UIBezierPath
-        where GS : Sequence, GS.Element == UInt16,
+        where GS : Sequence, GS.Element == GlyphID,
               OS : Sequence, OS.Element == CGPoint,
               AS : Sequence, AS.Element == CGFloat {
         let comulativePath = CGMutablePath()
@@ -215,7 +215,7 @@ public class Renderer {
         return UIBezierPath(cgPath: comulativePath)
     }
 
-    private func cachedBoundingBox(for glyphID: UInt16) -> CGRect {
+    private func cachedBoundingBox(for glyphID: GlyphID) -> CGRect {
         let glyph = GlyphCache.instance.maskGlyph(with: glyphStrike, for: glyphID)
 
         return CGRect(x: CGFloat(glyph.lsb) / renderScale,
@@ -228,7 +228,7 @@ public class Renderer {
     ///
     /// - Parameter glyphID: The ID of glyph whose bounding box is calculated.
     /// - Returns: A rectangle that tightly encloses the path of the specified glyph.
-    public func computeBoundingBox(for glyphID: UInt16) -> CGRect {
+    public func computeBoundingBox(for glyphID: GlyphID) -> CGRect {
         return cachedBoundingBox(for: glyphID)
     }
 
@@ -240,7 +240,7 @@ public class Renderer {
     ///   - advances: A sequence of glyph advances.
     /// - Returns: A rectangle that tightly encloses the paths of specified glyphs.
     public func computeBoundingBox<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS) -> CGRect
-        where GS: Sequence, GS.Element == UInt16,
+        where GS: Sequence, GS.Element == GlyphID,
               OS: Sequence, OS.Element == CGPoint,
               AS: Sequence, AS.Element == CGFloat {
         var comulativeBox = CGRect()
@@ -265,7 +265,7 @@ public class Renderer {
     }
 
     private func drawGlyphs<GS, OS, AS>(in context: CGContext, glyphIDs: GS, offsets: OS, advances: AS, strokeMode: Bool)
-        where GS: Sequence, GS.Element == UInt16,
+        where GS: Sequence, GS.Element == GlyphID,
               OS: Sequence, OS.Element == CGPoint,
               AS: Sequence, AS.Element == CGFloat {
         let cache = GlyphCache.instance
@@ -325,7 +325,7 @@ public class Renderer {
     ///   - offsets: A sequence of glyph offsets.
     ///   - advances: A sequence of glyph advances.
     public func drawGlyphs<GS, OS, AS>(in context: CGContext, glyphIDs: GS, offsets: OS, advances: AS)
-        where GS: Sequence, GS.Element == UInt16,
+        where GS: Sequence, GS.Element == GlyphID,
               OS: Sequence, OS.Element == CGPoint,
               AS: Sequence, AS.Element == CGFloat {
         if shouldRender {

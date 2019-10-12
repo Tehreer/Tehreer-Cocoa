@@ -49,7 +49,7 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
         segments.removeAll()
     }
 
-    private func secureGlyph(for strike: GlyphStrike, _ glyphID: UInt16) -> (FontCache, Glyph) {
+    private func secureGlyph(for strike: GlyphStrike, _ glyphID: GlyphID) -> (FontCache, Glyph) {
         return mutex.synchronized {
             let fontCache: FontCache
             let glyph: Glyph
@@ -72,7 +72,7 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
         }
     }
 
-    func maskGlyph(with strike: GlyphStrike, for glyphID: UInt16) -> Glyph {
+    func maskGlyph(with strike: GlyphStrike, for glyphID: GlyphID) -> Glyph {
         let (fontCache, glyph) = secureGlyph(for: strike, glyphID)
 
         if glyph.image == nil {
@@ -91,7 +91,7 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
         return glyph
     }
 
-    func maskGlyph(with strike: GlyphStrike, for glyphID: UInt16, lineRadius: FT_Fixed, lineCap: FT_Stroker_LineCap, lineJoin: FT_Stroker_LineJoin, miterLimit: FT_Fixed) -> Glyph {
+    func maskGlyph(with strike: GlyphStrike, for glyphID: GlyphID, lineRadius: FT_Fixed, lineCap: FT_Stroker_LineCap, lineJoin: FT_Stroker_LineJoin, miterLimit: FT_Fixed) -> Glyph {
         let (fontCache, glyph) = secureGlyph(for: strike, glyphID)
 
         if glyph.outline == nil {
@@ -116,7 +116,7 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
                                                      miterLimit: miterLimit)
     }
 
-    func glyphPath(with strike: GlyphStrike, for glyphID: UInt16) -> CGPath? {
+    func glyphPath(with strike: GlyphStrike, for glyphID: GlyphID) -> CGPath? {
         let (fontCache, glyph) = secureGlyph(for: strike, glyphID)
 
         if glyph.path == nil {

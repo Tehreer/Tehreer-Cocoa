@@ -29,7 +29,7 @@ class IntrinsicRun {
     let ascent: CGFloat
     let descent: CGFloat
     let leading: CGFloat
-    let glyphIDs: [UInt16]
+    let glyphIDs: [GlyphID]
     let glyphOffsets: [CGPoint]
     let glyphAdvances: [CGFloat]
     let clusterMap: [Int]
@@ -38,7 +38,7 @@ class IntrinsicRun {
     init(string: String, startIndex: String.Index, endIndex: String.Index, isBackward: Bool,
          bidiLevel: UInt8, writingDirection: WritingDirection, typeface: Typeface,
          typeSize: CGFloat, ascent: CGFloat, descent: CGFloat, leading: CGFloat,
-         glyphIDs: [UInt16], glyphOffsets: [CGPoint], glyphAdvances: [CGFloat],
+         glyphIDs: [GlyphID], glyphOffsets: [CGPoint], glyphAdvances: [CGFloat],
          clusterMap: [Int], caretEdges: [CGFloat]) {
         self.string = string
         self.startIndex = startIndex

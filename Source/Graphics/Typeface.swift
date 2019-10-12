@@ -33,6 +33,8 @@ fileprivate func f26Dot6PosToFloat(_ value: FT_Pos) -> CGFloat {
     return CGFloat(value) / 64.0
 }
 
+public typealias GlyphID = UInt16
+
 public typealias TypefaceTag = AnyHashable
 
 public class Typeface {
@@ -325,7 +327,7 @@ public class Typeface {
             return 0
         }
 
-        return UInt16(glyphID)
+        return GlyphID(glyphID)
     }
 
     private func fixedAdvance(for glyphID: FT_UInt, vertical: Bool) -> FT_Fixed {
@@ -367,7 +369,7 @@ public class Typeface {
     ///   - typeSize: The size for which the advance is retrieved.
     ///   - vertical: The flag which indicates the type of advance, either horizontal or vertical.
     /// - Returns: The advance for the specified glyph.
-    public func advance(for glyphID: UInt16, typeSize: CGFloat, vertical: Bool) -> CGFloat {
+    public func advance(for glyphID: GlyphID, typeSize: CGFloat, vertical: Bool) -> CGFloat {
         let advance = fixedAdvance(for: FT_UInt(glyphID),
                                    typeSize: toF26Dot6(typeSize),
                                    vertical: vertical)
@@ -446,7 +448,7 @@ public class Typeface {
     ///   - transform: The transform applied to the path. Can be `nil` if no transformation is
     ///                required.
     /// - Returns: The path for the specified glyph.
-    public func glyphPath(for glyphID: UInt16, typeSize: CGFloat, transform: CGAffineTransform?) -> CGPath? {
+    public func glyphPath(for glyphID: GlyphID, typeSize: CGFloat, transform: CGAffineTransform?) -> CGPath? {
         let fixedSize = toF26Dot6(typeSize)
         var matrix = FT_Matrix(xx: 0x10000, xy: 0, yx: 0, yy: -0x10000)
         var delta = FT_Vector(x: 0, y: 0)
