@@ -37,22 +37,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WOT-o8-HtM">
+                                <rect key="frame" x="109.5" y="100" width="156" height="30"/>
+                                <state key="normal" title="Bidirectional Algorithm"/>
+                                <connections>
+                                    <segue destination="ora-NY-4RL" kind="push" id="V5O-Ma-6AZ"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ykF-rp-9rH">
-                                <rect key="frame" x="130" y="100" width="115" height="30"/>
+                                <rect key="frame" x="130" y="138" width="115" height="30"/>
                                 <state key="normal" title="Typeface Glyphs"/>
                                 <connections>
                                     <segue destination="WhN-u7-urO" kind="push" id="96C-dD-pvo"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LPQ-rJ-idi">
-                                <rect key="frame" x="122.5" y="138" width="130" height="30"/>
+                                <rect key="frame" x="122.5" y="176" width="130" height="30"/>
                                 <state key="normal" title="OpenType Shaping"/>
                                 <connections>
                                     <segue destination="Blu-wr-hHt" kind="push" id="rUX-GU-Exk"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BOW-Hv-3zM">
-                                <rect key="frame" x="140" y="176" width="95" height="30"/>
+                                <rect key="frame" x="140" y="214" width="95" height="30"/>
                                 <state key="normal" title="Custom Label"/>
                                 <connections>
                                     <segue destination="yIG-pg-f7D" kind="push" id="n1h-uG-ftz"/>
@@ -61,12 +68,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="ykF-rp-9rH" firstAttribute="top" secondItem="qHe-lx-HPQ" secondAttribute="bottom" constant="36" id="2c4-0p-yV8"/>
                             <constraint firstItem="LPQ-rJ-idi" firstAttribute="top" secondItem="ykF-rp-9rH" secondAttribute="bottom" constant="8" id="3q1-nw-eAK"/>
                             <constraint firstItem="BOW-Hv-3zM" firstAttribute="centerX" secondItem="nkc-Mr-hB1" secondAttribute="centerX" id="EVP-ca-hmC"/>
                             <constraint firstItem="BOW-Hv-3zM" firstAttribute="top" secondItem="LPQ-rJ-idi" secondAttribute="bottom" constant="8" id="FC3-Te-8Xg"/>
                             <constraint firstItem="ykF-rp-9rH" firstAttribute="centerX" secondItem="nkc-Mr-hB1" secondAttribute="centerX" id="Sj3-OI-mir"/>
+                            <constraint firstItem="ykF-rp-9rH" firstAttribute="top" secondItem="WOT-o8-HtM" secondAttribute="bottom" constant="8" id="VgY-H5-ftb"/>
+                            <constraint firstItem="WOT-o8-HtM" firstAttribute="centerX" secondItem="nkc-Mr-hB1" secondAttribute="centerX" id="bRi-xB-56b"/>
                             <constraint firstItem="LPQ-rJ-idi" firstAttribute="centerX" secondItem="nkc-Mr-hB1" secondAttribute="centerX" id="beQ-Iq-Eil"/>
+                            <constraint firstItem="WOT-o8-HtM" firstAttribute="top" secondItem="qHe-lx-HPQ" secondAttribute="bottom" constant="36" id="wLJ-be-7Np"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Tehreer Demo" id="9Bu-c0-8gR">
@@ -76,6 +85,99 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kOT-V6-ptk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2615" y="140"/>
+        </scene>
+        <!--Bidirectional Algorithm-->
+        <scene sceneID="Y4f-2b-3eG">
+            <objects>
+                <tableViewController id="ora-NY-4RL" customClass="BidiAlgorithmViewController" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="z6h-NC-dkM">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection headerTitle="Bidirectional Text" id="ycK-Tq-qM5">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="252" id="aeu-NA-ef6">
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="252"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="aeu-NA-ef6" id="F0b-3Q-AYE">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="251.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="یہ ایک (car) ہے۔" textAlignment="right" translatesAutoresizingMaskIntoConstraints="NO" id="7g7-4G-JoU">
+                                                    <rect key="frame" x="11" y="0.0" width="352" height="251.5"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                </textView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="7g7-4G-JoU" firstAttribute="top" secondItem="F0b-3Q-AYE" secondAttribute="top" id="Vaq-AP-ftF"/>
+                                                <constraint firstItem="7g7-4G-JoU" firstAttribute="trailing" secondItem="F0b-3Q-AYE" secondAttribute="trailingMargin" constant="4" id="eMf-PH-Q8j"/>
+                                                <constraint firstAttribute="bottom" secondItem="7g7-4G-JoU" secondAttribute="bottom" id="ra3-r4-u9p"/>
+                                                <constraint firstItem="7g7-4G-JoU" firstAttribute="leading" secondItem="F0b-3Q-AYE" secondAttribute="leadingMargin" constant="-5" id="yW5-Q6-g8r"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="ora-NY-4RL" id="nqL-ei-pCC"/>
+                            <outlet property="delegate" destination="ora-NY-4RL" id="T3h-P5-ZlQ"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Bidirectional Algorithm" id="Bnc-jk-UfC">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="Glp-GM-e3X"/>
+                        <barButtonItem key="rightBarButtonItem" title="Apply" id="WWW-aI-qnZ">
+                            <connections>
+                                <segue destination="lzJ-Z4-Svv" kind="push" identifier="ShowInfo" id="F91-fQ-Suq"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="inputTextView" destination="7g7-4G-JoU" id="yhJ-Cr-b0g"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RFs-35-mex" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2707" y="-585"/>
+        </scene>
+        <!--Bidirectional Algorithm-->
+        <scene sceneID="AAE-8s-Xy5">
+            <objects>
+                <viewController id="lzJ-Z4-Svv" customClass="BidiInfoViewController" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="kQ8-0W-dLU"/>
+                        <viewControllerLayoutGuide type="bottom" id="p8M-Wa-4Ta"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2gh-02-GNs">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="right" translatesAutoresizingMaskIntoConstraints="NO" id="ZTy-ux-Hro">
+                                <rect key="frame" x="12" y="76" width="351" height="579"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="ZTy-ux-Hro" secondAttribute="trailing" constant="12" id="166-X9-EjL"/>
+                            <constraint firstItem="ZTy-ux-Hro" firstAttribute="top" secondItem="kQ8-0W-dLU" secondAttribute="bottom" constant="12" id="1Lr-9a-gWp"/>
+                            <constraint firstItem="p8M-Wa-4Ta" firstAttribute="top" secondItem="ZTy-ux-Hro" secondAttribute="bottom" constant="12" id="8eu-fu-tYe"/>
+                            <constraint firstItem="ZTy-ux-Hro" firstAttribute="leading" secondItem="2gh-02-GNs" secondAttribute="leading" constant="12" id="s9T-kn-qMi"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Bidirectional Algorithm" id="v6m-ao-vzJ"/>
+                    <connections>
+                        <outlet property="bidiTextView" destination="ZTy-ux-Hro" id="aPR-Q9-fyE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7lq-z0-xjb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1921" y="-586"/>
         </scene>
         <!--Typeface-->
         <scene sceneID="mjM-Wz-HXt">
@@ -113,7 +215,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jdw-nq-VH6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1791" y="-582"/>
+            <point key="canvasLocation" x="-924" y="-585"/>
         </scene>
         <!--Custom Label-->
         <scene sceneID="Qku-25-4sq">
@@ -123,7 +225,7 @@
                         <viewControllerLayoutGuide type="top" id="uHK-u6-cx1"/>
                         <viewControllerLayoutGuide type="bottom" id="FZt-77-SyQ"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="yxm-6t-yeO">
+                    <view key="view" contentMode="scaleToFill" id="yxm-6t-yeO" customClass="IMView" customModule="Demo" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -486,8 +588,8 @@
                             <constraint firstItem="YvI-Eg-ezC" firstAttribute="top" secondItem="rlY-XZ-WoE" secondAttribute="bottom" id="H7R-V4-ezQ"/>
                             <constraint firstAttribute="trailing" secondItem="YvI-Eg-ezC" secondAttribute="trailing" id="Hh3-i7-HXm"/>
                             <constraint firstItem="RVH-Vo-Fay" firstAttribute="top" secondItem="1h5-PA-UZK" secondAttribute="top" id="KlI-nb-61K"/>
-                            <constraint firstItem="i2g-lU-HQR" firstAttribute="top" secondItem="RVH-Vo-Fay" secondAttribute="bottom" id="VRm-nA-aYJ"/>
                             <constraint firstItem="RVH-Vo-Fay" firstAttribute="leading" secondItem="1h5-PA-UZK" secondAttribute="leading" id="WkB-bS-LRn"/>
+                            <constraint firstAttribute="bottom" secondItem="RVH-Vo-Fay" secondAttribute="bottom" id="bn7-Gb-rm6"/>
                             <constraint firstItem="YvI-Eg-ezC" firstAttribute="leading" secondItem="1h5-PA-UZK" secondAttribute="leading" id="xMw-Rv-3IN"/>
                         </constraints>
                     </view>
@@ -508,7 +610,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-1714" y="140"/>
+            <point key="canvasLocation" x="-1714.4000000000001" y="139.880059970015"/>
         </scene>
         <!--Glyph Info-->
         <scene sceneID="6Je-gi-AMa">
@@ -969,6 +1071,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="DUI-eb-5UX"/>
+        <segue reference="NI8-ae-mCv"/>
     </inferredMetricsTieBreakers>
 </document>
