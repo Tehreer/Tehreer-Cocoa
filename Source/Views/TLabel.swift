@@ -30,15 +30,18 @@ import UIKit
     private var layoutRect: CGRect = .zero
     private var textFrame: ComposedFrame? = nil
 
+    private func sceil(_ x: CGFloat) -> CGFloat {
+        let scale = layer.contentsScale
+        return ceil(x * scale) / scale
+    }
+
     private var fittingSize: CGSize {
         get {
             return _fittingSize
         }
         set {
-            let contentsScale = layer.contentsScale
-
-            _fittingSize.width = ceil(newValue.width * contentsScale) / contentsScale
-            _fittingSize.height = ceil(newValue.height * contentsScale) / contentsScale
+            _fittingSize.width = sceil(newValue.width)
+            _fittingSize.height = sceil(newValue.height)
         }
     }
 
@@ -50,9 +53,9 @@ import UIKit
             let oldSize = bounds.size
             super.frame = newValue
 
-            let newSize = bounds.size
-            if newSize != oldSize {
+            if bounds.size != oldSize {
                 setNeedsLayout()
+                setNeedsDisplay()
             }
         }
     }
@@ -65,9 +68,9 @@ import UIKit
             let oldSize = bounds.size
             super.bounds = newValue
 
-            let newSize = bounds.size
-            if newSize != oldSize {
+            if bounds.size != oldSize {
                 setNeedsLayout()
+                setNeedsDisplay()
             }
         }
     }
@@ -104,7 +107,8 @@ import UIKit
 
             invalidateIntrinsicContentSize()
             setNeedsLayout()
-        } else if preferredWidth == nil || viewSize.height != fittingSize.height {
+            setNeedsDisplay()
+        } else if preferredWidth == nil || viewSize.height != sceil(textFrame?.size.height ?? .zero) {
             resolver.fitsHorizontally = false
             resolver.fitsVertically = false
 
@@ -115,6 +119,10 @@ import UIKit
 
     public override func draw(_ rect: CGRect) {
         super.draw(rect)
+
+        if contentMode != .center {
+            print("Use center content mode in label for appropriate frame changes animation.")
+        }
 
         if let context = UIGraphicsGetCurrentContext() {
             let t1 = CFAbsoluteTimeGetCurrent()
@@ -188,6 +196,7 @@ import UIKit
         print("Time taken to create typesetter: \((t2 - t1) * 1E3)")
 
         setNeedsLayoutAndSize()
+        setNeedsDisplay()
     }
 
     public var textAlignment: TextAlignment {
@@ -196,7 +205,9 @@ import UIKit
         }
         set {
             resolver.textAlignment = newValue
+
             setNeedsLayout()
+            setNeedsDisplay()
         }
     }
 
@@ -206,7 +217,9 @@ import UIKit
         }
         set {
             resolver.verticalAlignment = newValue
+
             setNeedsLayout()
+            setNeedsDisplay()
         }
     }
 
@@ -221,6 +234,7 @@ import UIKit
             needsTypesetter = true
 
             setNeedsLayoutAndSize()
+            setNeedsDisplay()
         }
     }
 
@@ -286,7 +300,9 @@ import UIKit
         }
         set {
             resolver.maxLines = newValue
+
             setNeedsLayoutAndSize()
+            setNeedsDisplay()
         }
     }
 
@@ -296,7 +312,9 @@ import UIKit
         }
         set {
             resolver.extraLineSpacing = newValue
+
             setNeedsLayoutAndSize()
+            setNeedsDisplay()
         }
     }
 
@@ -306,7 +324,9 @@ import UIKit
         }
         set {
             resolver.lineHeightMultiplier = newValue
+
             setNeedsLayoutAndSize()
+            setNeedsDisplay()
         }
     }
 }
