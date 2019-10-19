@@ -63,8 +63,8 @@ public class BidiParagraph {
     }
 
     /// The sequence of logically ordered runs in this paragraph.
-    public var logicalRuns: BidiRunSequence {
-        return BidiRunSequence(self)
+    public var logicalRuns: RunSequence {
+        return RunSequence(self)
     }
 
     /// Creates a line object of specified range by applying Rules L1-L2 of Unicode Bidirectional
@@ -87,64 +87,66 @@ public class BidiParagraph {
     }
 }
 
-public struct BidiRunIterator: IteratorProtocol {
-    public typealias Element = BidiRun
+extension BidiParagraph {
+    public struct RunSequence: Sequence {
+        public typealias Element = BidiRun
+        public typealias Iterator = RunIterator
 
-    let container: BidiParagraph
-    var levelIndex: Int
+        private let owner: BidiParagraph
 
-    init(_ container: BidiParagraph) {
-        self.container = container
-        self.levelIndex = 0
-    }
-
-    public mutating func next() -> BidiRun? {
-        let bidiParagraph = container.paragraph
-        let paragraphOffset = SBParagraphGetOffset(bidiParagraph)
-        let paragraphLength = SBParagraphGetLength(bidiParagraph)
-
-        if levelIndex < paragraphLength {
-            let levelsPtr = SBParagraphGetLevelsPtr(bidiParagraph)!
-            let currentLevel = levelsPtr[levelIndex]
-            var nextIndex = levelIndex + 1
-
-            while (nextIndex < paragraphLength) {
-                if levelsPtr[nextIndex] != currentLevel {
-                    break;
-                }
-
-                nextIndex += 1
-            }
-
-            let runOffset = Int(paragraphOffset) + levelIndex
-            let runLength = nextIndex - levelIndex
-
-            levelIndex = nextIndex
-
-            let string = container.buffer.string
-            let utf16Range = NSRange(location: runOffset, length: runLength)
-            let runRange = string.characterRange(forUTF16Range: utf16Range)
-
-            return BidiRun(startIndex: runRange.lowerBound,
-                           endIndex: runRange.upperBound,
-                           embeddingLevel: currentLevel)
+        init(_ owner: BidiParagraph) {
+            self.owner = owner
         }
 
-        return nil
-    }
-}
-
-public struct BidiRunSequence: Sequence {
-    public typealias Element = BidiRun
-    public typealias Iterator = BidiRunIterator
-
-    let container: BidiParagraph
-
-    init(_ container: BidiParagraph) {
-        self.container = container
+        public func makeIterator() -> RunIterator {
+            return RunIterator(owner)
+        }
     }
 
-    public func makeIterator() -> BidiRunIterator {
-        return BidiRunIterator(container)
+    public struct RunIterator: IteratorProtocol {
+        public typealias Element = BidiRun
+
+        private let owner: BidiParagraph
+        private var levelIndex: Int
+
+        init(_ owner: BidiParagraph) {
+            self.owner = owner
+            self.levelIndex = 0
+        }
+
+        public mutating func next() -> BidiRun? {
+            let bidiParagraph = owner.paragraph
+            let paragraphOffset = SBParagraphGetOffset(bidiParagraph)
+            let paragraphLength = SBParagraphGetLength(bidiParagraph)
+
+            if levelIndex < paragraphLength {
+                let levelsPtr = SBParagraphGetLevelsPtr(bidiParagraph)!
+                let currentLevel = levelsPtr[levelIndex]
+                var nextIndex = levelIndex + 1
+
+                while nextIndex < paragraphLength {
+                    if levelsPtr[nextIndex] != currentLevel {
+                        break
+                    }
+
+                    nextIndex += 1
+                }
+
+                let runOffset = Int(paragraphOffset) + levelIndex
+                let runLength = nextIndex - levelIndex
+
+                levelIndex = nextIndex
+
+                let string = owner.buffer.string
+                let utf16Range = NSRange(location: runOffset, length: runLength)
+                let runRange = string.characterRange(forUTF16Range: utf16Range)
+
+                return BidiRun(startIndex: runRange.lowerBound,
+                               endIndex: runRange.upperBound,
+                               embeddingLevel: currentLevel)
+            }
+
+            return nil
+        }
     }
 }
