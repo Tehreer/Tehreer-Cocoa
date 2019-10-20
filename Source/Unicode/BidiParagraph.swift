@@ -54,12 +54,8 @@ public class BidiParagraph {
     }
 
     /// The collection containing the levels of all characters in this paragraph.
-    public var embeddingLevels: PrimitiveCollection<UInt8> {
-        let count = SBParagraphGetLength(paragraph)
-        let pointer = SBParagraphGetLevelsPtr(paragraph)
-        let collection = OwnedCollection(owner: self, pointer: pointer, size: Int(count))
-
-        return PrimitiveCollection(collection)
+    public var embeddingLevels: EmbeddingLevels {
+        return EmbeddingLevels(self)
     }
 
     /// The sequence of logically ordered runs in this paragraph.
@@ -84,6 +80,34 @@ public class BidiParagraph {
         let bidiLine = SBParagraphCreateLine(paragraph, lineOffset, lineLength)
 
         return BidiLine(buffer: buffer, line: bidiLine!)
+    }
+}
+
+extension BidiParagraph {
+    public struct EmbeddingLevels: RandomAccessCollection {
+        private let owner: BidiParagraph
+        private let pointer: UnsafePointer<SBLevel>!
+        public let count: Int
+
+        init(_ owner: BidiParagraph) {
+            self.owner = owner
+            self.pointer = SBParagraphGetLevelsPtr(owner.paragraph)
+            self.count = Int(SBParagraphGetLength(owner.paragraph))
+        }
+
+        public var startIndex: Int {
+            return 0
+        }
+
+        public var endIndex: Int {
+            return count
+        }
+
+        public subscript(position: Int) -> UInt8 {
+            precondition(position >= 0 && position < count, String.indexOutOfRange)
+
+            return pointer[position]
+        }
     }
 }
 
