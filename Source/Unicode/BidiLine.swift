@@ -50,8 +50,8 @@ public class BidiLine {
     }
 
     /// The collection of visually ordered runs in this line.
-    public var visualRuns: PrimitiveCollection<BidiRun> {
-        return PrimitiveCollection(RunCollection(self))
+    public var visualRuns: VisualRuns {
+        return VisualRuns(self)
     }
 
     /// The sequence of mirroring pairs in this line. You can use the iterable to  implement Rule L4
@@ -61,30 +61,38 @@ public class BidiLine {
     }
 }
 
-fileprivate class RunCollection: IntrinsicCollection<BidiRun> {
-    private let container: BidiLine
-    private let length: Int
+extension BidiLine {
+    public struct VisualRuns: RandomAccessCollection {
+        private let owner: BidiLine
+        private let pointer: UnsafePointer<SBRun>!
+        public let count: Int
 
-    init(_ container: BidiLine) {
-        self.container = container
+        init(_ owner: BidiLine) {
+            self.owner = owner
+            self.pointer = SBLineGetRunsPtr(owner.line)
+            self.count = Int(SBLineGetRunCount(owner.line))
+        }
 
-        let runCount = SBLineGetRunCount(container.line)
-        length = Int(runCount)
-    }
+        public var startIndex: Int {
+            return 0
+        }
 
-    override var count: Int {
-        return length
-    }
+        public var endIndex: Int {
+            return count
+        }
 
-    override func item(at index: Int) -> BidiRun {
-        let runPtr = SBLineGetRunsPtr(container.line)[index]
-        let string = container.buffer.string
-        let utf16Range = NSRange(location: Int(runPtr.offset), length: Int(runPtr.length))
-        let runRange = string.characterRange(forUTF16Range: utf16Range)
+        public subscript(position: Int) -> BidiRun {
+            precondition(position >= 0 && position < count, String.indexOutOfRange)
 
-        return BidiRun(startIndex: runRange.lowerBound,
-                       endIndex: runRange.upperBound,
-                       embeddingLevel: UInt8(runPtr.level))
+            let runPtr = pointer[position]
+            let string = owner.buffer.string
+            let utf16Range = NSRange(location: Int(runPtr.offset), length: Int(runPtr.length))
+            let runRange = string.characterRange(forUTF16Range: utf16Range)
+
+            return BidiRun(startIndex: runRange.lowerBound,
+                           endIndex: runRange.upperBound,
+                           embeddingLevel: UInt8(runPtr.level))
+        }
     }
 }
 
