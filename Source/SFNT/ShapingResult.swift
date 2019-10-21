@@ -51,33 +51,18 @@ public class ShapingResult {
     }
 
     /// The collection of glyph IDs.
-    public var glyphIDs: PrimitiveCollection<GlyphID> {
-        let pointer = SFAlbumGetGlyphIDsPtr(sfAlbum)
-        let collection = OwnedCollection(owner: self, pointer: pointer, size: glyphCount)
-
-        return PrimitiveCollection(collection)
+    public var glyphIDs: GlyphIDs {
+        return GlyphIDs(self)
     }
 
     /// The collection of glyph offsets.
-    public var glyphOffsets: PrimitiveCollection<CGPoint> {
-        let pointer = SFAlbumGetGlyphOffsetsPtr(sfAlbum)
-        let collection = OwnedScaleCollection(owner: self,
-                                              pointer: pointer,
-                                              size: glyphCount,
-                                              scale: sizeByEm)
-
-        return PrimitiveCollection(collection)
+    public var glyphOffsets: GlyphOffsets {
+        return GlyphOffsets(self)
     }
 
     /// The collection of glyph advances.
-    public var glyphAdvances: PrimitiveCollection<CGFloat> {
-        let pointer = SFAlbumGetGlyphAdvancesPtr(sfAlbum)
-        let collection = OwnedScaleCollection(owner: self,
-                                              pointer: pointer,
-                                              size: glyphCount,
-                                              scale: sizeByEm)
-
-        return PrimitiveCollection(collection)
+    public var glyphAdvances: GlyphAdvances {
+        return GlyphAdvances(self)
     }
 
     /// A collection of indexes, mapping each shaped UTF-16 code unit in source string to
@@ -91,11 +76,8 @@ public class ShapingResult {
     ///    into multiple glyphs, then each character maps to the first glyph in the sequence.
     /// 3. If nonconsecutive code units translate to a single glyph or ligature, then each
     ///    participating code unit, and all in-between characters, map to this glyph or ligature.
-    public var clusterMap: PrimitiveCollection<Int> {
-        let pointer = SFAlbumGetCodeunitToGlyphMapPtr(sfAlbum)
-        let collection = OwnedCollection(owner: self, pointer: pointer, size: codeUnitCount)
-
-        return PrimitiveCollection(collection.map({ Int($0) }))
+    public var clusterMap: ClusterMap {
+        return ClusterMap(self)
     }
 
     public func makeCaretEdges(caretStops: [Bool]?) -> [CGFloat] {
@@ -133,5 +115,115 @@ public class ShapingResult {
         self.isBackward = isBackward
         self.stringRange = stringRange
         self.codeUnitCount = codeUnitCount
+    }
+}
+
+extension ShapingResult {
+    public struct GlyphIDs: RandomAccessCollection {
+        private let owner: ShapingResult
+        private let pointer: UnsafePointer<GlyphID>!
+        public let count: Int
+
+        init(_ owner: ShapingResult) {
+            self.owner = owner
+            self.pointer = SFAlbumGetGlyphIDsPtr(owner.sfAlbum)
+            self.count = owner.glyphCount
+        }
+
+        public var startIndex: Int {
+            return 0
+        }
+
+        public var endIndex: Int {
+            return count
+        }
+
+        public subscript(position: Int) -> GlyphID {
+            precondition(position >= 0 && position < count, String.indexOutOfRange)
+
+            return pointer[position]
+        }
+    }
+
+    public struct GlyphOffsets: RandomAccessCollection {
+        private let owner: ShapingResult
+        private let pointer: UnsafePointer<SFPoint>!
+        public let count: Int
+
+        init(_ owner: ShapingResult) {
+            self.owner = owner
+            self.pointer = SFAlbumGetGlyphOffsetsPtr(owner.sfAlbum)
+            self.count = owner.glyphCount
+        }
+
+        public var startIndex: Int {
+            return 0
+        }
+
+        public var endIndex: Int {
+            return count
+        }
+
+        public subscript(position: Int) -> CGPoint {
+            precondition(position >= 0 && position < count, String.indexOutOfRange)
+
+            let element = pointer[position]
+            let point = CGPoint(x: element.x * owner.sizeByEm,
+                                y: element.y * owner.sizeByEm)
+
+            return point
+        }
+    }
+
+    public struct GlyphAdvances: RandomAccessCollection {
+        private let owner: ShapingResult
+        private let pointer: UnsafePointer<SFInt32>!
+        public let count: Int
+
+        init(_ owner: ShapingResult) {
+            self.owner = owner
+            self.pointer = SFAlbumGetGlyphAdvancesPtr(owner.sfAlbum)
+            self.count = owner.glyphCount
+        }
+
+        public var startIndex: Int {
+            return 0
+        }
+
+        public var endIndex: Int {
+            return count
+        }
+
+        public subscript(position: Int) -> CGFloat {
+            precondition(position >= 0 && position < count, String.indexOutOfRange)
+
+            return pointer[position] * owner.sizeByEm
+        }
+    }
+
+    public struct ClusterMap: RandomAccessCollection {
+        private let owner: ShapingResult
+        private let pointer: UnsafePointer<SFUInteger>!
+        public let count: Int
+
+        init(_ owner: ShapingResult) {
+            self.owner = owner
+            self.pointer = SFAlbumGetCodeunitToGlyphMapPtr(owner.sfAlbum)
+            self.count = owner.codeUnitCount
+        }
+
+        public var startIndex: Int {
+            return 0
+        }
+
+        public var endIndex: Int {
+            return count
+        }
+
+        public subscript(position: Int) -> Int {
+            precondition(position >= 0 && position < count, String.indexOutOfRange)
+
+            return Int(pointer[position])
+        }
     }
 }
