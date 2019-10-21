@@ -17,6 +17,8 @@
 import Foundation
 
 extension String {
+    static let indexOutOfRange = "Index is out of range"
+
     func leadingWhitespaceEnd(in range: Range<String.Index>) -> String.Index {
         var index = range.lowerBound
 
