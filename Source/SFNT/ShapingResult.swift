@@ -86,7 +86,7 @@ public class ShapingResult {
         }
 
         let edgeCount = codeUnitCount + 1
-        let unsafeEdges = UnsafeMutablePointer<SFFloat>.allocate(capacity: edgeCount)
+        let unsafeEdges = UnsafeMutablePointer<SFInt32>.allocate(capacity: edgeCount)
         defer { unsafeEdges.deallocate() }
 
         let loaded = caretStops?.withUnsafeBufferPointer { (buffer) -> Bool? in
@@ -95,17 +95,17 @@ public class ShapingResult {
             }
 
             let unsafeStops = UnsafeMutablePointer<SFBoolean>(OpaquePointer(baseAddress))
-            SFAlbumGetCaretEdges(sfAlbum, unsafeStops, SFFloat(sizeByEm), unsafeEdges)
+            SFAlbumGetCaretEdges(sfAlbum, unsafeStops, unsafeEdges)
 
             return true
         }
 
         if loaded == nil {
-            SFAlbumGetCaretEdges(sfAlbum, nil, SFFloat(sizeByEm), unsafeEdges)
+            SFAlbumGetCaretEdges(sfAlbum, nil, unsafeEdges)
         }
 
         let edgesBuffer = UnsafeBufferPointer(start: unsafeEdges, count: edgeCount)
-        let edgesArray = edgesBuffer.map { CGFloat($0) }
+        let edgesArray = edgesBuffer.map { CGFloat($0) * sizeByEm }
 
         return edgesArray
     }
