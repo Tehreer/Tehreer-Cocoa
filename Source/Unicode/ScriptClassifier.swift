@@ -48,7 +48,7 @@ func makeScriptArray(string: String) -> [Script] {
 
 public class ScriptClassifier {
     public let string: String
-    fileprivate let scripts: [Script]
+    private let scripts: [Script]
 
     public init(string: String) {
         self.string = string
@@ -59,63 +59,65 @@ public class ScriptClassifier {
         return scripts[string.utf16Index(forCharacterAt: index)]
     }
 
-    public func scriptRuns(forCharacterRange range: Range<String.Index>) -> ScriptRunSequence {
-        return ScriptRunSequence(self, range: string.utf16Range(forCharacterRange: range))
+    public func scriptRuns(forCharacterRange range: Range<String.Index>) -> RunSequence {
+        return RunSequence(self, range: string.utf16Range(forCharacterRange: range))
     }
 }
 
-public struct ScriptRunIterator: IteratorProtocol {
-    public typealias Element = ScriptRun
+extension ScriptClassifier {
+    public struct RunSequence: Sequence {
+        public typealias Element = ScriptRun
+        public typealias Iterator = RunIterator
 
-    let container: ScriptClassifier
-    var currentIndex: Int
-    let endIndex: Int
+        private let owner: ScriptClassifier
+        private let range: Range<Int>
 
-    init(_ container: ScriptClassifier, range: Range<Int>) {
-        self.container = container
-        self.currentIndex = range.lowerBound
-        self.endIndex = range.upperBound
-    }
-
-    public mutating func next() -> ScriptRun? {
-        if currentIndex < endIndex {
-            let startIndex = currentIndex
-            let currentScript = container.scripts[startIndex]
-
-            currentIndex += 1
-
-            while currentIndex < endIndex {
-                if container.scripts[currentIndex] != currentScript {
-                    break
-                }
-
-                currentIndex += 1
-            }
-
-            let range = container.string.characterRange(forUTF16Range: startIndex ..< currentIndex)
-
-            return ScriptRun(startIndex: range.lowerBound,
-                             endIndex: range.upperBound,
-                             script: currentScript)
+        init(_ owner: ScriptClassifier, range: Range<Int>) {
+            self.owner = owner
+            self.range = range
         }
 
-        return nil
-    }
-}
-
-public struct ScriptRunSequence: Sequence {
-    public typealias Element = ScriptRun
-    public typealias Iterator = ScriptRunIterator
-
-    let container: ScriptClassifier
-    let range: Range<Int>
-
-    init(_ container: ScriptClassifier, range: Range<Int>) {
-        self.container = container
-        self.range = range
+        public func makeIterator() -> RunIterator {
+            return RunIterator(owner, range: range)
+        }
     }
 
-    public func makeIterator() -> ScriptRunIterator {
-        return ScriptRunIterator(container, range: range)
+    public struct RunIterator: IteratorProtocol {
+        public typealias Element = ScriptRun
+
+        private let owner: ScriptClassifier
+        private var currentIndex: Int
+        private let endIndex: Int
+
+        init(_ owner: ScriptClassifier, range: Range<Int>) {
+            self.owner = owner
+            self.currentIndex = range.lowerBound
+            self.endIndex = range.upperBound
+        }
+
+        public mutating func next() -> ScriptRun? {
+            if currentIndex < endIndex {
+                let startIndex = currentIndex
+                let currentScript = owner.scripts[startIndex]
+
+                currentIndex += 1
+
+                while currentIndex < endIndex {
+                    if owner.scripts[currentIndex] != currentScript {
+                        break
+                    }
+
+                    currentIndex += 1
+                }
+
+                let range = owner.string.characterRange(forUTF16Range: startIndex ..< currentIndex)
+
+                return ScriptRun(startIndex: range.lowerBound,
+                                 endIndex: range.upperBound,
+                                 script: currentScript)
+            }
+
+            return nil
+        }
     }
 }
