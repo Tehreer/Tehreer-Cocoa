@@ -17,39 +17,39 @@
 import Foundation
 import UIKit
 
-public enum RenderingStyle {
-    /// Glyphs drawn with this style will be filled, ignoring all stroke-related settings in the
-    /// renderer.
-    case fill
-    /// Glyphs drawn with this style will be both filled and stroked at the same time, respecting
-    /// the stroke-related settings in the renderer.
-    case fillStroke
-    /// Glyphs drawn with this style will be stroked, respecting the stroke-related settings in the
-    /// the renderer.
-    case stroke
-}
-
-/// Specifies the treatment for the beginning and ending of stroked lines and paths.
-public enum StrokeCap: Int {
-    /// The stroke ends with the path, and does not project beyond it.
-    case butt = 0
-    /// The stroke projects out as a semicircle, with the center at the end of the
-    case round = 1
-    /// The stroke projects out as a square, with the center at the end of the path.
-    case square = 2
-}
-
-/// Specifies the treatment where lines and curve segments join on a stroked path.
-public enum StrokeJoin : Int {
-    /// The outer edges of a join meet with a straight line.
-    case bevel = 1
-    /// The outer edges of a join meet at a sharp angle.
-    case miter = 2
-    /// The outer edges of a join meet in a circular arc.
-    case round = 0
-}
-
 public class Renderer {
+    public enum RenderingStyle {
+        /// Glyphs drawn with this style will be filled, ignoring all stroke-related settings in the
+        /// renderer.
+        case fill
+        /// Glyphs drawn with this style will be both filled and stroked at the same time, respecting
+        /// the stroke-related settings in the renderer.
+        case fillStroke
+        /// Glyphs drawn with this style will be stroked, respecting the stroke-related settings in the
+        /// the renderer.
+        case stroke
+    }
+
+    /// Specifies the treatment for the beginning and ending of stroked lines and paths.
+    public enum StrokeCap: Int {
+        /// The stroke ends with the path, and does not project beyond it.
+        case butt = 0
+        /// The stroke projects out as a semicircle, with the center at the end of the
+        case round = 1
+        /// The stroke projects out as a square, with the center at the end of the path.
+        case square = 2
+    }
+
+    /// Specifies the treatment where lines and curve segments join on a stroked path.
+    public enum StrokeJoin : Int {
+        /// The outer edges of a join meet with a straight line.
+        case bevel = 1
+        /// The outer edges of a join meet at a sharp angle.
+        case miter = 2
+        /// The outer edges of a join meet in a circular arc.
+        case round = 0
+    }
+
     private var glyphStrike: GlyphStrike = GlyphStrike()
     private var glyphLineRadius: Int = 32
     private var glyphMiterLimit: Int = 0x10000

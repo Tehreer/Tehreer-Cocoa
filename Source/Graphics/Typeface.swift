@@ -38,6 +38,36 @@ public typealias GlyphID = UInt16
 public typealias TypefaceTag = AnyHashable
 
 public class Typeface {
+    public enum Weight: Int {
+        case thin = 100
+        case extraLight = 200
+        case light = 300
+        case regular = 400
+        case medium = 500
+        case semiBold = 600
+        case bold = 700
+        case extraBold = 800
+        case heavy = 900
+    }
+
+    public enum Width: Int {
+        case ultraCondensed = 1
+        case extraCondensed = 2
+        case condensed = 3
+        case semiCondensed = 4
+        case normal = 5
+        case semiExpanded = 6
+        case expanded = 7
+        case extraExpanded = 8
+        case ultraExpanded = 9
+    }
+
+    public enum Slope: Int {
+        case plain = 0
+        case italic = 1
+        case oblique = 2
+    }
+
     private let mutex = Mutex()
     private let fontFile: FontFile
 
@@ -135,10 +165,10 @@ public class Typeface {
         }
 
         if let os2Table = os2Table {
-            if let weight = TypeWeight(rawValue: Int(os2Table.usWeightClass)) {
+            if let weight = Weight(rawValue: Int(os2Table.usWeightClass)) {
                 self.weight = weight
             }
-            if let width = TypeWidth(rawValue: Int(os2Table.usWidthClass)) {
+            if let width = Width(rawValue: Int(os2Table.usWidthClass)) {
                 self.width = width
             }
 
@@ -218,15 +248,15 @@ public class Typeface {
 
     /// The typographic weight of this typeface. The weight value determines the thickness
     /// associated with a given character in a typeface.
-    public private(set) var weight: TypeWeight = .regular
+    public private(set) var weight: Weight = .regular
 
     /// The typographic width of this typeface. The width value determines whether a typeface is
     /// expanded or condensed when it is displayed.
-    public private(set) var width: TypeWidth = .normal
+    public private(set) var width: Width = .normal
 
     /// The typographic slope of this typeface. The slope value determines whether a typeface is
     /// plain or slanted when it is displayed.
-    public private(set) var slope: TypeSlope = .plain
+    public private(set) var slope: Slope = .plain
 
     /// The number of font units per EM square for this typeface.
     public var unitsPerEm: Int {
