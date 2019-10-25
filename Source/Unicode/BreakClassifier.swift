@@ -16,7 +16,7 @@
 
 import Foundation
 
-fileprivate func makeLineBreaksBuffer(string: String) -> UnsafeBufferPointer<Int8> {
+private func makeLineBreaksBuffer(string: String) -> UnsafeBufferPointer<Int8> {
     let stringBuffer = BidiBuffer(string)
     let utf16Length = stringBuffer.length
 
@@ -27,8 +27,8 @@ fileprivate func makeLineBreaksBuffer(string: String) -> UnsafeBufferPointer<Int
 }
 
 class BreakClassifier {
-    fileprivate let string: String
-    fileprivate let lineBreaks: UnsafeBufferPointer<Int8>
+    private let string: String
+    private let lineBreaks: UnsafeBufferPointer<Int8>
 
     init(string: String) {
         self.string = string
@@ -56,218 +56,208 @@ class BreakClassifier {
     }
 }
 
-struct ForwardGraphemeBreakIterator: IteratorProtocol {
-    typealias Element = String.Index
+// MARK: - ForwardGraphemeBreakSequence
 
-    private var string: String
-    private var currentIndex: String.Index
-    private let endIndex: String.Index
+extension BreakClassifier {
+    struct ForwardGraphemeBreakSequence: Sequence {
+        private let iterator: ForwardGraphemeBreakIterator
 
-    fileprivate init(string: String, range: Range<String.Index>) {
-        self.string = string
-        self.currentIndex = range.lowerBound
-        self.endIndex = range.upperBound
-    }
-
-    mutating func next() -> Element? {
-        if currentIndex < endIndex {
-            currentIndex = string.index(after: currentIndex)
-            return min(currentIndex, endIndex)
+        fileprivate init(string: String, range: Range<String.Index>) {
+            self.iterator = ForwardGraphemeBreakIterator(string: string, range: range)
         }
 
-        return nil
-    }
-}
-
-struct ForwardGraphemeBreakSequence: Sequence {
-    typealias Element = String.Index
-    typealias Iterator = ForwardGraphemeBreakIterator
-
-    private let iterator: Iterator
-
-    fileprivate init(string: String, range: Range<String.Index>) {
-        self.iterator = ForwardGraphemeBreakIterator(string: string, range: range)
+        func makeIterator() -> ForwardGraphemeBreakIterator {
+            return iterator
+        }
     }
 
-    func makeIterator() -> Iterator {
-        return iterator
-    }
-}
+    struct ForwardGraphemeBreakIterator: IteratorProtocol {
+        private var string: String
+        private var currentIndex: String.Index
+        private let endIndex: String.Index
 
-struct BackwardGraphemeBreakIterator: IteratorProtocol {
-    typealias Element = String.Index
-
-    private var string: String
-    private let startIndex: String.Index
-    private var currentIndex: String.Index
-
-    fileprivate init(string: String, range: Range<String.Index>) {
-        self.string = string
-        self.startIndex = range.lowerBound
-        self.currentIndex = range.upperBound
-    }
-
-    mutating func next() -> Element? {
-        if currentIndex > startIndex {
-            currentIndex = string.index(before: currentIndex)
-            return max(startIndex, currentIndex)
+        fileprivate init(string: String, range: Range<String.Index>) {
+            self.string = string
+            self.currentIndex = range.lowerBound
+            self.endIndex = range.upperBound
         }
 
-        return nil
-    }
-}
-
-struct BackwardGraphemeBreakSequence: Sequence {
-    typealias Element = String.Index
-    typealias Iterator = BackwardGraphemeBreakIterator
-
-    private let iterator: Iterator
-
-    fileprivate init(string: String, range: Range<String.Index>) {
-        self.iterator = BackwardGraphemeBreakIterator(string: string, range: range)
-    }
-
-    func makeIterator() -> Iterator {
-        return iterator
-    }
-}
-
-fileprivate struct ForwardUTF16BreakIterator: IteratorProtocol {
-    typealias Element = Int
-
-    fileprivate let classifier: BreakClassifier
-    private var currentIndex: Int
-    private let endIndex: Int
-
-    init(_ classifier: BreakClassifier, range: Range<Int>) {
-        self.classifier = classifier
-        self.currentIndex = range.lowerBound
-        self.endIndex = range.upperBound
-    }
-
-    mutating func next() -> Element? {
-        if currentIndex != endIndex {
-            let lineBreaks = classifier.lineBreaks
-
-            while currentIndex < endIndex {
-                defer { currentIndex += 1 }
-
-                let breakType = lineBreaks[currentIndex]
-                if breakType == LINEBREAK_MUSTBREAK || breakType == LINEBREAK_ALLOWBREAK {
-                    break
-                }
+        mutating func next() -> String.Index? {
+            if currentIndex < endIndex {
+                currentIndex = string.index(after: currentIndex)
+                return min(currentIndex, endIndex)
             }
 
-            return currentIndex
+            return nil
         }
-
-        return nil
     }
 }
 
-fileprivate struct BackwardUTF16BreakIterator: IteratorProtocol {
-    typealias Element = Int
+// MARK: - BackwardGraphemeBreakSequence
 
-    fileprivate let classifier: BreakClassifier
-    private let startIndex: Int
-    private var currentIndex: Int
+extension BreakClassifier {
+    struct BackwardGraphemeBreakSequence: Sequence {
+        private let iterator: BackwardGraphemeBreakIterator
 
-    init(_ classifier: BreakClassifier, range: Range<Int>) {
-        self.classifier = classifier
-        self.startIndex = range.lowerBound
-        self.currentIndex = range.upperBound
+        fileprivate init(string: String, range: Range<String.Index>) {
+            self.iterator = BackwardGraphemeBreakIterator(string: string, range: range)
+        }
+
+        func makeIterator() -> BackwardGraphemeBreakIterator {
+            return iterator
+        }
     }
 
-    mutating func next() -> Element? {
-        if currentIndex != startIndex {
-            let lineBreaks = classifier.lineBreaks
+    struct BackwardGraphemeBreakIterator: IteratorProtocol {
+        private var string: String
+        private let startIndex: String.Index
+        private var currentIndex: String.Index
 
-            currentIndex -= 1
+        fileprivate init(string: String, range: Range<String.Index>) {
+            self.string = string
+            self.startIndex = range.lowerBound
+            self.currentIndex = range.upperBound
+        }
 
-            while currentIndex > startIndex {
-                let breakType = lineBreaks[currentIndex - 1]
-                if breakType == LINEBREAK_MUSTBREAK || breakType == LINEBREAK_ALLOWBREAK {
-                    break
+        mutating func next() -> String.Index? {
+            if currentIndex > startIndex {
+                currentIndex = string.index(before: currentIndex)
+                return max(startIndex, currentIndex)
+            }
+
+            return nil
+        }
+    }
+}
+
+// MARK: - ForwardLineBreakSequence
+
+extension BreakClassifier {
+    struct ForwardLineBreakSequence: Sequence {
+        private let iterator: ForwardLineBreakIterator
+
+        fileprivate init(_ classifier: BreakClassifier, range: Range<Int>) {
+            self.iterator = ForwardLineBreakIterator(ForwardUTF16BreakIterator(classifier, range: range))
+        }
+
+        func makeIterator() -> ForwardLineBreakIterator {
+            return iterator
+        }
+    }
+
+    struct ForwardLineBreakIterator: IteratorProtocol {
+        private var utf16Iter: ForwardUTF16BreakIterator
+
+        fileprivate init(_ utf16Iter: ForwardUTF16BreakIterator) {
+            self.utf16Iter = utf16Iter
+        }
+
+        mutating func next() -> String.Index? {
+            if let value = utf16Iter.next() {
+                let string = utf16Iter.classifier.string
+                let index = string.characterIndex(forUTF16Index: value)
+
+                return index
+            }
+
+            return nil
+        }
+    }
+
+    fileprivate struct ForwardUTF16BreakIterator: IteratorProtocol {
+        fileprivate let classifier: BreakClassifier
+        private var currentIndex: Int
+        private let endIndex: Int
+
+        init(_ classifier: BreakClassifier, range: Range<Int>) {
+            self.classifier = classifier
+            self.currentIndex = range.lowerBound
+            self.endIndex = range.upperBound
+        }
+
+        mutating func next() -> Int? {
+            if currentIndex != endIndex {
+                let lineBreaks = classifier.lineBreaks
+
+                while currentIndex < endIndex {
+                    defer { currentIndex += 1 }
+
+                    let breakType = lineBreaks[currentIndex]
+                    if breakType == LINEBREAK_MUSTBREAK || breakType == LINEBREAK_ALLOWBREAK {
+                        break
+                    }
                 }
+
+                return currentIndex
+            }
+
+            return nil
+        }
+    }
+}
+
+extension BreakClassifier {
+    struct BackwardLineBreakSequence: Sequence {
+        private let iterator: BackwardLineBreakIterator
+
+        fileprivate init(_ classifier: BreakClassifier, range: Range<Int>) {
+            self.iterator = BackwardLineBreakIterator(BackwardUTF16BreakIterator(classifier, range: range))
+        }
+
+        func makeIterator() -> BackwardLineBreakIterator {
+            return iterator
+        }
+    }
+
+    struct BackwardLineBreakIterator: IteratorProtocol {
+        private var utf16Iter: BackwardUTF16BreakIterator
+
+        fileprivate init(_ utf16Iter: BackwardUTF16BreakIterator) {
+            self.utf16Iter = utf16Iter
+        }
+
+        mutating func next() -> String.Index? {
+            if let value = utf16Iter.next() {
+                let string = utf16Iter.classifier.string
+                let index = string.characterIndex(forUTF16Index: value)
+
+                return index
+            }
+
+            return nil
+        }
+    }
+
+    fileprivate struct BackwardUTF16BreakIterator: IteratorProtocol {
+        fileprivate let classifier: BreakClassifier
+        private let startIndex: Int
+        private var currentIndex: Int
+
+        init(_ classifier: BreakClassifier, range: Range<Int>) {
+            self.classifier = classifier
+            self.startIndex = range.lowerBound
+            self.currentIndex = range.upperBound
+        }
+
+        mutating func next() -> Int? {
+            if currentIndex != startIndex {
+                let lineBreaks = classifier.lineBreaks
 
                 currentIndex -= 1
+
+                while currentIndex > startIndex {
+                    let breakType = lineBreaks[currentIndex - 1]
+                    if breakType == LINEBREAK_MUSTBREAK || breakType == LINEBREAK_ALLOWBREAK {
+                        break
+                    }
+
+                    currentIndex -= 1
+                }
+
+                return currentIndex
             }
 
-            return currentIndex
+            return nil
         }
-
-        return nil
-    }
-}
-
-struct ForwardLineBreakIterator: IteratorProtocol {
-    typealias Element = String.Index
-
-    private var utf16Iter: ForwardUTF16BreakIterator
-
-    fileprivate init(_ utf16Iter: ForwardUTF16BreakIterator) {
-        self.utf16Iter = utf16Iter
-    }
-
-    mutating func next() -> Element? {
-        if let value = utf16Iter.next() {
-            let string = utf16Iter.classifier.string
-            let index = string.characterIndex(forUTF16Index: value)
-
-            return index
-        }
-
-        return nil
-    }
-}
-
-struct ForwardLineBreakSequence: Sequence {
-    typealias Element = String.Index
-    typealias Iterator = ForwardLineBreakIterator
-
-    private let iterator: Iterator
-
-    fileprivate init(_ classifier: BreakClassifier, range: Range<Int>) {
-        self.iterator = ForwardLineBreakIterator(ForwardUTF16BreakIterator(classifier, range: range))
-    }
-
-    func makeIterator() -> Iterator {
-        return iterator
-    }
-}
-
-struct BackwardLineBreakIterator: IteratorProtocol {
-    typealias Element = String.Index
-
-    private var utf16Iter: BackwardUTF16BreakIterator
-
-    fileprivate init(_ utf16Iter: BackwardUTF16BreakIterator) {
-        self.utf16Iter = utf16Iter
-    }
-
-    mutating func next() -> Element? {
-        if let value = utf16Iter.next() {
-            let string = utf16Iter.classifier.string
-            let index = string.characterIndex(forUTF16Index: value)
-
-            return index
-        }
-
-        return nil
-    }
-}
-
-struct BackwardLineBreakSequence: Sequence {
-    typealias Element = String.Index
-    typealias Iterator = BackwardLineBreakIterator
-
-    private let iterator: Iterator
-
-    fileprivate init(_ classifier: BreakClassifier, range: Range<Int>) {
-        self.iterator = BackwardLineBreakIterator(BackwardUTF16BreakIterator(classifier, range: range))
-    }
-
-    func makeIterator() -> Iterator {
-        return iterator
     }
 }
