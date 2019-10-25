@@ -33,20 +33,20 @@ public class BidiLine {
         SBLineRelease(line)
     }
 
-    var stringRange: Range<String.Index> {
-        let lineOffset = SBLineGetOffset(line)
-        let lineLength = SBLineGetLength(line)
-        let utf16Range = NSRange(location: Int(lineOffset), length: Int(lineLength))
+    var utf16Offset: Int {
+        return Int(SBLineGetOffset(line))
+    }
 
-        return buffer.string.characterRange(forUTF16Range: utf16Range)
+    var utf16Length: Int {
+        return Int(SBLineGetLength(line))
     }
 
     public var startIndex: String.Index {
-        return stringRange.lowerBound
+        return buffer.string.characterIndex(forUTF16Index: utf16Offset)
     }
 
     public var endIndex: String.Index {
-        return stringRange.upperBound
+        return buffer.string.characterIndex(forUTF16Index: utf16Offset + utf16Length)
     }
 
     /// The collection of visually ordered runs in this line.

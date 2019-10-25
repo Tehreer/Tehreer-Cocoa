@@ -32,20 +32,26 @@ public class BidiParagraph {
         SBParagraphRelease(paragraph)
     }
 
+    var utf16Offset: Int {
+        return Int(SBParagraphGetOffset(paragraph))
+    }
+
+    var utf16Length: Int {
+        return Int(SBParagraphGetLength(paragraph))
+    }
+
     var stringRange: Range<String.Index> {
-        let paragraphOffset = SBParagraphGetOffset(paragraph)
-        let paragraphLength = SBParagraphGetLength(paragraph)
-        let utf16Range = NSRange(location: Int(paragraphOffset), length: Int(paragraphLength))
+        let utf16Range = NSRange(location: utf16Offset, length: utf16Length)
 
         return buffer.string.characterRange(forUTF16Range: utf16Range)
     }
 
     public var startIndex: String.Index {
-        return stringRange.lowerBound
+        return buffer.string.characterIndex(forUTF16Index: utf16Offset)
     }
 
     public var endIndex: String.Index {
-        return stringRange.upperBound
+        return buffer.string.characterIndex(forUTF16Index: utf16Offset + utf16Length)
     }
 
     /// The base level of this paragraph.
