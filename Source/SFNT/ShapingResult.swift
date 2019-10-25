@@ -167,11 +167,8 @@ extension ShapingResult {
         public subscript(position: Int) -> CGPoint {
             precondition(position >= 0 && position < count, String.indexOutOfRange)
 
-            let element = pointer[position]
-            let point = CGPoint(x: element.x * owner.sizeByEm,
-                                y: element.y * owner.sizeByEm)
-
-            return point
+            return CGPoint(x: CGFloat(pointer[position].x) * owner.sizeByEm,
+                           y: CGFloat(pointer[position].y) * owner.sizeByEm)
         }
     }
 
@@ -197,7 +194,7 @@ extension ShapingResult {
         public subscript(position: Int) -> CGFloat {
             precondition(position >= 0 && position < count, String.indexOutOfRange)
 
-            return pointer[position] * owner.sizeByEm
+            return CGFloat(pointer[position]) * owner.sizeByEm
         }
     }
 
