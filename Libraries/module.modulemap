@@ -1,0 +1,27 @@
+module FreeType [system][extern_c] {
+    header "FreeType/include/ft2build.h"
+    header "FreeType/include/freetype/ftadvanc.h"
+    header "FreeType/include/freetype/freetype.h"
+    header "FreeType/include/freetype/ftsnames.h"
+    header "FreeType/include/freetype/ftsizes.h"
+    header "FreeType/include/freetype/ftstroke.h"
+    header "FreeType/include/freetype/ftsystem.h"
+    header "FreeType/include/freetype/tttables.h"
+    header "FreeType/include/freetype/fttypes.h"
+    export *
+}
+
+module SheenBidi [system][extern_c] {
+    header "SheenBidi/Headers/SheenBidi.h"
+    export *
+}
+
+module SheenFigure [system][extern_c] {
+    header "SheenFigure/Headers/SheenFigure.h"
+    export *
+}
+
+module UniBreak [system][extern_c] {
+    header "UniBreak/src/linebreak.h"
+    export *
+}
