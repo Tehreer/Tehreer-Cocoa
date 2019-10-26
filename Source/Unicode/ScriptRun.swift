@@ -16,13 +16,14 @@
 
 import Foundation
 
+/// A script run represents a sequence of characters which have the same script.
 public struct ScriptRun {
-    /// The start index of the run.
+    /// The index to the first character of the run in source string.
     public var startIndex: String.Index
 
-    /// The end index of the run.
+    /// The index after the last character of the run in source string.
     public var endIndex: String.Index
 
-    /// The script of the run.
+    /// The resolved script of the run.
     public var script: Script
 }

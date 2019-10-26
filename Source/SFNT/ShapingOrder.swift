@@ -16,7 +16,12 @@
 
 import Foundation
 
+/// Specifies the order in which the text is shaped.
 public enum ShapingOrder: Int {
+    /// Text is shaped in forward order starting from first index (inclusive) to last index
+    /// (exclusive).
     case forward = 0
+    /// Text is shaped in backward order starting from last index (exclusive) to first index
+    /// (inclusive).
     case backward = 1
 }

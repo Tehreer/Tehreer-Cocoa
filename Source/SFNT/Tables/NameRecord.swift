@@ -457,6 +457,7 @@ extension String {
 }
 
 extension NameTable {
+    /// Represents a single record of OpenType `name` table.
     public struct Record {
         /// The name id of this record.
         public let nameID: UInt16

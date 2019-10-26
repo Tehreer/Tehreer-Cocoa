@@ -17,10 +17,14 @@
 import Foundation
 import FreeType
 
+/// Represents an OpenType `head` table.
 public struct HeadTable {
     private let typeface: Typeface
     private let table: UnsafeMutablePointer<TT_Header>
 
+    /// Creates a `head` table representation from the specified typeface.
+    ///
+    /// - Parameter typeface: The typeface for accessing the data of the table.
     init?(typeface: Typeface) {
         let pointer = FT_Get_Sfnt_Table(typeface.ftFace, FT_SFNT_HEAD)
         guard let raw = pointer else {

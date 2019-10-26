@@ -17,10 +17,14 @@
 import Foundation
 import FreeType
 
+/// Represents an OpenType `OS/2` table.
 public struct OS2Table {
     private let typeface: Typeface
     private let table: UnsafeMutablePointer<TT_OS2>
 
+    /// Creates a `OS/2` table representation from the specified typeface.
+    ///
+    /// - Parameter typeface: The typeface for accessing the data of the table.
     init?(typeface: Typeface) {
         let pointer = FT_Get_Sfnt_Table(typeface.ftFace, FT_SFNT_OS2)
         guard let raw = pointer else {

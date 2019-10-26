@@ -42,10 +42,12 @@ public class BidiLine {
         return Int(SBLineGetLength(line))
     }
 
+    /// The index to the first character of this line in source string.
     public var startIndex: String.Index {
         return buffer.string.characterIndex(forUTF16Index: utf16Offset)
     }
 
+    /// The index after the last character of this line in source string.
     public var endIndex: String.Index {
         return buffer.string.characterIndex(forUTF16Index: utf16Offset + utf16Length)
     }

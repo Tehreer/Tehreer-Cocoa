@@ -16,11 +16,13 @@
 
 import Foundation
 
+/// A bidi run represents a sequence of characters which have the same embedding level. The
+/// direction of run is considered right-to-left, if its embedding level is odd.
 public struct BidiRun {
-    /// The start index of the run.
+    /// The index to the first character of this run in source string.
     public var startIndex: String.Index
 
-    /// The end index of the run.
+    /// The index after the last character of this run in source string.
     public var endIndex: String.Index
 
     /// The embedding level of the run.
@@ -34,11 +36,12 @@ extension BidiRun {
     }
 }
 
+/// Represents a pair of a unicode code point at a specific index in source string.
 public struct BidiPair {
-    /// The index of actual code unit in source text.
+    /// The index of actual code unit in source string.
     public var codeUnitIndex: String.Index
 
-    /// The code point of actual character in source text.
+    /// The code point of actual character in source string.
     public var actualCodePoint: UnicodeScalar
 
     /// The code point of character forming a pair with actual character.

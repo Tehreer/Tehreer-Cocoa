@@ -15,7 +15,11 @@
 //
 import Foundation
 
+/// Specifies the text break mode.
 public enum BreakMode: Int {
+    /// Breaks the text at a suitable opportunity as determined by the Unicode Line Breaking
+    /// Algorithm.
     case character = 0
+    /// Breaks the text at a grapheme cluster boundary.
     case line = 1
 }

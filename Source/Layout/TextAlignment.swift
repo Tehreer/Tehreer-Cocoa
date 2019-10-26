@@ -17,11 +17,17 @@
 import CoreGraphics
 import Foundation
 
+/// Specifies the horizontal text alignment.
 public enum TextAlignment: Int {
+    /// Aligns the text to the left side of the line.
     case left = 0
+    /// Aligns the text to the right side of the line.
     case center = 1
+    /// Aligns the text to the center of the line.
     case right = 2
+    /// Aligns the text to the left side of the line if its paragraph level is even.
     case intrinsic = 3
+    /// Aligns the text to the right side of the line if its paragraph level is even.
     case extrinsic = 4
 
     func flushFactor(for paragraphLevel: UInt8) -> CGFloat {

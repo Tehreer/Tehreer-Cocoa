@@ -17,9 +17,13 @@
 import CoreGraphics
 import Foundation
 
+/// Specifies the vertical content alignment.
 public enum VerticalAlignment: Int {
+    /// Aligns the content vertically at the top of the frame.
     case top = 0
+    /// Aligns the content vertically in the center of the frame.
     case middle = 1
+    /// Aligns the content vertically at the bottom of the frame.
     case bottom = 2
 
     func multiplier() -> CGFloat {

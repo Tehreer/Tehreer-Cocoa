@@ -17,6 +17,7 @@
 import Foundation
 import SheenBidi
 
+/// Specifies the base direction of a paragraph.
 public enum BaseDirection: UInt8 {
     /// Base direction is left-to-right.
     case leftToRight = 0

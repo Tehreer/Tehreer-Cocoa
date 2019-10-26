@@ -17,12 +17,13 @@
 import Foundation
 import FreeType
 
+/// Represents an OpenType `name` table.
 public struct NameTable {
     private let typeface: Typeface
 
-    /// Creates a `NameTable` object from the specified typeface.
+    /// Creates a `name` table representation from the specified typeface.
     ///
-    /// - Parameter typeface: The typeface from which the `NameTable` object is created.
+    /// - Parameter typeface: The typeface for accessing the data of the table.
     init?(typeface: Typeface) {
         self.typeface = typeface
     }
@@ -32,10 +33,10 @@ public struct NameTable {
         return Int(FT_Get_Sfnt_Name_Count(typeface.ftFace))
     }
 
-    /// Retrieves a record of this table at a given index.
+    /// Retrieves a name record at a specified index.
     ///
     /// - Parameter index: The index of the name record.
-    /// - Returns: A record of OpenType `name' table at a given index.
+    /// - Returns: A record of OpenType `name` table at a specified index.
     /// - Precondition: `index` must be greater than or equal to zero and less than `recordCount`.
     public func record(at index: Int) -> Record {
         precondition(index >= 0 || index < recordCount, "Index is out of bounds")

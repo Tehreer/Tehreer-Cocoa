@@ -39,7 +39,11 @@ public typealias GlyphID = UInt16
 
 public typealias TypefaceTag = AnyHashable
 
+/// The `Typeface` class specifies the typeface and intrinsic style of a font. This is used in the
+/// renderer, along with optionally `Renderer` settings like `typeSize`, `slantAngle`, `scaleX`, to
+/// specify how text appears when drawn (and measured).
 public class Typeface {
+    /// Specifies the thickness of a typeface, in terms of lightness or heaviness of the strokes.
     public enum Weight: Int {
         case thin = 100
         case extraLight = 200
@@ -52,6 +56,8 @@ public class Typeface {
         case heavy = 900
     }
 
+    /// Specifies the wideness of a typeface, in terms of the width of characters in relation to
+    /// their heights.
     public enum Width: Int {
         case ultraCondensed = 1
         case extraCondensed = 2
@@ -64,9 +70,13 @@ public class Typeface {
         case ultraExpanded = 9
     }
 
+    /// Specifies the slope of a typeface.
     public enum Slope: Int {
+        /// The plain slope indicating upright characters.
         case plain = 0
+        /// The italic slope indicating truly slanted characters which appear as they were designed.
         case italic = 1
+        /// The oblique slope indicating artificially slanted characters.
         case oblique = 2
     }
 

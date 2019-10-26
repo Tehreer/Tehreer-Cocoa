@@ -47,10 +47,12 @@ public class BidiParagraph {
         return buffer.string.characterRange(forUTF16Range: utf16Range)
     }
 
+    /// The index to the first character of this paragraph in source string.
     public var startIndex: String.Index {
         return buffer.string.characterIndex(forUTF16Index: utf16Offset)
     }
 
+    /// The index after the last character of this paragraph in source string.
     public var endIndex: String.Index {
         return buffer.string.characterIndex(forUTF16Index: utf16Offset + utf16Length)
     }

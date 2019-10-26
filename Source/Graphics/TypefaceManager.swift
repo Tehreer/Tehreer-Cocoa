@@ -16,6 +16,7 @@
 
 import Foundation
 
+/// The `TypefaceManager` class provides management activities related to typefaces.
 public class TypefaceManager {
     public static let shared = TypefaceManager()
 
@@ -27,6 +28,12 @@ public class TypefaceManager {
 
     private init() { }
 
+    /// Registers a typeface agains a specified tag. The `typeface` or the `tag` mustn't be already
+    /// registered.
+    ///
+    /// - Parameters:
+    ///   - typeface: The typeface that will be registered.
+    ///   - tag: An optional tag to identify the typeface.
     public func register(_ typeface: Typeface, for tag: TypefaceTag) {
         mutex.synchronized {
             precondition(!typefaces.contains(where: { $0 === typeface }), "This typeface is already registered")
@@ -40,6 +47,9 @@ public class TypefaceManager {
         }
     }
 
+    /// Unregisters a typeface if it was previously registered.
+    ///
+    /// - Parameter typeface: The typeface to unregister.
     public func unregister(_ typeface: Typeface) {
         mutex.synchronized {
             if let index = typefaces.firstIndex(where: { $0 === typeface }) {
@@ -54,17 +64,27 @@ public class TypefaceManager {
     }
 
     public func typeface(for tag: TypefaceTag) -> Typeface? {
+    /// Returns the typeface registered against the specified tag.
+    ///
+    /// - Parameter tag: The tag that identifies the typeface.
+    /// - Returns: The registered typeface, or `nil` if no typeface is registered against the
+    ///            specified tag.
         return mutex.synchronized {
             tags[tag]
         }
     }
 
+    /// Returns the tag of a registered typeface.
+    ///
+    /// - Parameter typeface: The typeface whose tag is returned.
+    /// - Returns: The tag of the typeface, or `nil` if no tag was specified while registration.
     public func tag(of typeface: Typeface) -> TypefaceTag? {
         return mutex.synchronized {
             typeface.tag
         }
     }
 
+    /// The array of available typefaces sorted by their names in ascending order.
     public var availableTypefaces: [Typeface] {
         return mutex.synchronized {
             sortTypefacesIfNeeded()

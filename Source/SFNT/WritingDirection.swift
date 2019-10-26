@@ -16,7 +16,10 @@
 
 import Foundation
 
+/// Specifies the writing direction of the text.
 public enum WritingDirection: Int {
+    /// Text is written from left-to-right.
     case leftToRight = 0
+    /// Text is written from right-to-left.
     case rightToLeft = 1
 }
