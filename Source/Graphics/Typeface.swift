@@ -14,8 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
 import CoreGraphics
+import Foundation
+import FreeType
+import SheenFigure
 
 fileprivate func toF26Dot6(_ value: CGFloat) -> FT_F26Dot6 {
     return FT_F26Dot6((value * 64) + 0.5)

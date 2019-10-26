@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import FreeType
 
 public struct NameTable {
     private let typeface: Typeface

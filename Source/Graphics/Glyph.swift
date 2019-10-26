@@ -16,6 +16,7 @@
 
 import CoreGraphics
 import Foundation
+import FreeType
 import UIKit
 
 class Glyph {

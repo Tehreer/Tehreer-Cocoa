@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import FreeType
 
 struct GlyphStrike {
     var typeface: Typeface!

@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import SheenBidi
 
 /// A `BidiLine` object represents a single line processed with rules L1-L2 of Unicode Bidirectional
 /// Algorithm. Instead of reordering the characters as stated by rule L2, it allows to query and

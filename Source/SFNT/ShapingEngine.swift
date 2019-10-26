@@ -16,6 +16,7 @@
 
 import CoreGraphics
 import Foundation
+import SheenFigure
 
 /// The `ShapingEngine` class represents text shaping engine.
 public class ShapingEngine {

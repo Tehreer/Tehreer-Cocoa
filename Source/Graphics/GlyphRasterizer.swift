@@ -16,6 +16,7 @@
 
 import CoreGraphics
 import Foundation
+import FreeType
 
 class GlyphRasterizer {
     private static var decode: [CGFloat] = [1.0, 0.0]

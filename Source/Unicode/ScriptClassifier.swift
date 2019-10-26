@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import SheenBidi
 
 func makeScriptArray(string: String) -> [Script] {
     let buffer = BidiBuffer(string)

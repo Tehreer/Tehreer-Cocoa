@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import SheenBidi
 
 /// A `BidiParagraph` object represents a single paragraph of text processed with rules X1-I2 of
 /// Unicode Bidirectional Algorithm. It contains the resolved embedding levels of all the characters

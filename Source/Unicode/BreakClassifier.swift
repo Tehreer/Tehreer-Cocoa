@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import UniBreak
 
 private func makeLineBreaksBuffer(string: String) -> UnsafeBufferPointer<Int8> {
     let stringBuffer = BidiBuffer(string)

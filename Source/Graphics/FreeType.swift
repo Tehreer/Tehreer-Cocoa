@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import FreeType
 
 class FreeType {
     private static let instance = FreeType()

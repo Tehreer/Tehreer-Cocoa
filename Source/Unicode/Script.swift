@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import SheenBidi
 
 public enum Script: Int {
     /// Script "Inherited".

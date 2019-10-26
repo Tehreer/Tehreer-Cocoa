@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import FreeType
 
 public struct OS2Table {
     private let typeface: Typeface

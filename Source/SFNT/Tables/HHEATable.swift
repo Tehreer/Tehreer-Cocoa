@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import FreeType
 
 public struct HHEATable {
     private let typeface: Typeface

@@ -14,8 +14,9 @@
 // limitations under the License.
 //
 
-import Foundation
 import CoreGraphics
+import Foundation
+import FreeType
 
 private class FontCache: LRUSegment<UInt16, Glyph> {
     let rasterizer: GlyphRasterizer

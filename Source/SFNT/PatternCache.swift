@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import SheenFigure
 
 struct PatternKey: Hashable {
     let scriptTag: SFNTTag

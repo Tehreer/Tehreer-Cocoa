@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import FreeType
 import UIKit
 
 public class Renderer {

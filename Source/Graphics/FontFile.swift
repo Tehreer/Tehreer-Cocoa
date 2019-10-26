@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import FreeType
 
 public class FontFile {
     private var arguments: FT_Open_Args

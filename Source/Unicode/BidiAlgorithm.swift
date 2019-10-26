@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import SheenBidi
 
 public enum BaseDirection: UInt8 {
     /// Base direction is left-to-right.
