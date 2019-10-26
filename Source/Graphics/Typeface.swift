@@ -19,19 +19,19 @@ import Foundation
 import FreeType
 import SheenFigure
 
-fileprivate func toF26Dot6(_ value: CGFloat) -> FT_F26Dot6 {
+private func toF26Dot6(_ value: CGFloat) -> FT_F26Dot6 {
     return FT_F26Dot6((value * 64) + 0.5)
 }
 
-fileprivate func toF16Dot16(_ value: CGFloat) -> FT_Fixed {
+private func toF16Dot16(_ value: CGFloat) -> FT_Fixed {
     return FT_Fixed((value * 0x10000) + 0.5)
 }
 
-fileprivate func f16Dot16toFloat(_ value: FT_Fixed) -> CGFloat {
+private func f16Dot16ToFloat(_ value: FT_Fixed) -> CGFloat {
     return CGFloat(value) / CGFloat(0x10000)
 }
 
-fileprivate func f26Dot6PosToFloat(_ value: FT_Pos) -> CGFloat {
+private func f26Dot6ToFloat(_ value: FT_Pos) -> CGFloat {
     return CGFloat(value) / 64.0
 }
 
@@ -416,7 +416,7 @@ public class Typeface {
                                    typeSize: toF26Dot6(typeSize),
                                    vertical: vertical)
 
-        return f16Dot16toFloat(advance)
+        return f16Dot16ToFloat(advance)
     }
 
     func unsafeMakePath(glyphID: FT_UInt) -> CGPath? {
@@ -429,8 +429,8 @@ public class Typeface {
             move_to: { (to, user) -> Int32 in
                 let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
                 let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: f26Dot6PosToFloat(to!.pointee.x),
-                                    y: f26Dot6PosToFloat(to!.pointee.y))
+                let point = CGPoint(x: f26Dot6ToFloat(to!.pointee.x),
+                                    y: f26Dot6ToFloat(to!.pointee.y))
                 path.move(to: point)
 
                 return 0
@@ -438,8 +438,8 @@ public class Typeface {
             line_to: { (to, user) -> Int32 in
                 let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
                 let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: f26Dot6PosToFloat(to!.pointee.x),
-                                    y: f26Dot6PosToFloat(to!.pointee.y))
+                let point = CGPoint(x: f26Dot6ToFloat(to!.pointee.x),
+                                    y: f26Dot6ToFloat(to!.pointee.y))
                 path.addLine(to: point)
 
                 return 0
@@ -447,10 +447,10 @@ public class Typeface {
             conic_to: { (control1, to, user) -> Int32 in
                 let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
                 let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: f26Dot6PosToFloat(to!.pointee.x),
-                                    y: f26Dot6PosToFloat(to!.pointee.y))
-                let first = CGPoint(x: f26Dot6PosToFloat(control1!.pointee.x),
-                                    y: f26Dot6PosToFloat(control1!.pointee.y))
+                let point = CGPoint(x: f26Dot6ToFloat(to!.pointee.x),
+                                    y: f26Dot6ToFloat(to!.pointee.y))
+                let first = CGPoint(x: f26Dot6ToFloat(control1!.pointee.x),
+                                    y: f26Dot6ToFloat(control1!.pointee.y))
                 path.addQuadCurve(to: point, control: first)
 
                 return 0
@@ -458,12 +458,12 @@ public class Typeface {
             cubic_to: { (control1, control2, to, user) -> Int32 in
                 let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
                 let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: f26Dot6PosToFloat(to!.pointee.x),
-                                    y: f26Dot6PosToFloat(to!.pointee.y))
-                let first = CGPoint(x: f26Dot6PosToFloat(control1!.pointee.x),
-                                    y: f26Dot6PosToFloat(control1!.pointee.y))
-                let second = CGPoint(x: f26Dot6PosToFloat(control2!.pointee.x),
-                                     y: f26Dot6PosToFloat(control2!.pointee.y))
+                let point = CGPoint(x: f26Dot6ToFloat(to!.pointee.x),
+                                    y: f26Dot6ToFloat(to!.pointee.y))
+                let first = CGPoint(x: f26Dot6ToFloat(control1!.pointee.x),
+                                    y: f26Dot6ToFloat(control1!.pointee.y))
+                let second = CGPoint(x: f26Dot6ToFloat(control2!.pointee.x),
+                                     y: f26Dot6ToFloat(control2!.pointee.y))
                 path.addCurve(to: point, control1: first, control2: second)
 
                 return 0
