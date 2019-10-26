@@ -64,6 +64,8 @@ public class BidiLine {
     }
 }
 
+// MARK: - VisualRuns
+
 extension BidiLine {
     public struct VisualRuns: RandomAccessCollection {
         private let owner: BidiLine
@@ -99,25 +101,22 @@ extension BidiLine {
     }
 }
 
+// MARK: - MirrorSequence
+
 extension BidiLine {
     public struct MirrorSequence: Sequence {
-        public typealias Element = BidiPair
-        public typealias Iterator = MirrorIterator
-
         private let owner: BidiLine
 
         init(_ owner: BidiLine) {
             self.owner = owner
         }
 
-        public func makeIterator() -> Iterator {
+        public func makeIterator() -> MirrorIterator {
             return MirrorIterator(owner)
         }
     }
 
     public class MirrorIterator: IteratorProtocol {
-        public typealias Element = BidiPair
-
         private let owner: BidiLine
         private let locator: SBMirrorLocatorRef
         private let agent: UnsafePointer<SBMirrorAgent>

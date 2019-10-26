@@ -92,6 +92,8 @@ public class BidiParagraph {
     }
 }
 
+// MARK: - EmbeddingLevels
+
 extension BidiParagraph {
     public struct EmbeddingLevels: RandomAccessCollection {
         private let owner: BidiParagraph
@@ -120,11 +122,10 @@ extension BidiParagraph {
     }
 }
 
+// MARK: - RunSequence
+
 extension BidiParagraph {
     public struct RunSequence: Sequence {
-        public typealias Element = BidiRun
-        public typealias Iterator = RunIterator
-
         private let owner: BidiParagraph
 
         init(_ owner: BidiParagraph) {
@@ -137,8 +138,6 @@ extension BidiParagraph {
     }
 
     public struct RunIterator: IteratorProtocol {
-        public typealias Element = BidiRun
-
         private let owner: BidiParagraph
         private var levelIndex: Int
 
