@@ -17,7 +17,7 @@
 import CoreGraphics
 import Foundation
 
-fileprivate struct ClusterRange {
+private struct ClusterRange {
     var actualStart: String.Index
     var actualEnd: String.Index
     var glyphStart: Int

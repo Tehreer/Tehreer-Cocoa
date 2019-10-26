@@ -24,7 +24,7 @@ struct PatternKey: Hashable {
     let featureValues: [UInt16]
 }
 
-fileprivate class PatternValue {
+private class PatternValue {
     let sfPattern: SFPatternRef
 
     init(_ sfPattern: SFPatternRef) {

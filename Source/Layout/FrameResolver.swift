@@ -17,7 +17,7 @@
 import CoreGraphics
 import Foundation
 
-fileprivate struct FrameContext {
+private struct FrameContext {
     var layoutWidth: CGFloat = .zero
     var layoutHeight: CGFloat = .zero
 
