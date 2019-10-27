@@ -17,75 +17,99 @@
 import Foundation
 import SheenBidi
 
-func makeScriptArray(string: String) -> [Script] {
-    let buffer = BidiBuffer(string)
+private func makeScriptsBuffer(string: String) -> UnsafeBufferPointer<SBScript> {
+    let stringBuffer = BidiBuffer(string)
+    let utf16Length = stringBuffer.length
 
     var codepointSequence = SBCodepointSequence(
         stringEncoding: SBStringEncoding(SBStringEncodingUTF16),
-        stringBuffer: UnsafeMutableRawPointer(mutating: buffer.data),
-        stringLength: SBUInteger(buffer.length))
+        stringBuffer: UnsafeMutableRawPointer(mutating: stringBuffer.data),
+        stringLength: SBUInteger(utf16Length))
 
     let scriptLocator = SBScriptLocatorCreate()
-    let scriptAgent = SBScriptLocatorGetAgent(scriptLocator)
-    var scriptArray: [Script] = []
+    defer { SBScriptLocatorRelease(scriptLocator) }
+
+    let scriptAgent: UnsafePointer<SBScriptAgent>! = SBScriptLocatorGetAgent(scriptLocator)
+    let scriptsBuffer = UnsafeMutableBufferPointer<SBScript>.allocate(capacity: utf16Length)
 
     SBScriptLocatorLoadCodepoints(scriptLocator, &codepointSequence)
 
     while SBScriptLocatorMoveNext(scriptLocator) != 0 {
-        let startIndex = scriptAgent!.pointee.offset
-        let endIndex = startIndex + scriptAgent!.pointee.length
+        let startIndex = Int(scriptAgent.pointee.offset)
+        let endIndex = startIndex + Int(scriptAgent.pointee.length)
 
-        let script = Script(rawValue: Int(scriptAgent!.pointee.script))!
-
-        for _ in startIndex ..< endIndex {
-            scriptArray.append(script)
+        for index in startIndex ..< endIndex {
+            scriptsBuffer[index] = scriptAgent.pointee.script
         }
     }
 
-    SBScriptLocatorRelease(scriptLocator)
-
-    return scriptArray
+    return UnsafeBufferPointer(scriptsBuffer)
 }
 
 public class ScriptClassifier {
     public let string: String
-    private let scripts: [Script]
+    private let scriptsBuffer: UnsafeBufferPointer<SBScript>
 
     public init(string: String) {
         self.string = string
-        self.scripts = makeScriptArray(string: string)
+        self.scriptsBuffer = makeScriptsBuffer(string: string)
     }
 
-    public func script(forCharacterAt index: String.Index) -> Script {
-        return scripts[string.utf16Index(forCharacterAt: index)]
+    deinit {
+        scriptsBuffer.deallocate()
     }
 
-    public func scriptRuns(forCharacterRange range: Range<String.Index>) -> RunSequence {
+    public var characterScripts: CharacterScripts {
+        return CharacterScripts(self)
+    }
+
+    public func scriptRuns(forCharacterRange characterRange: Range<String.Index>) -> RunSequence {
         return RunSequence(self, range: string.utf16Range(forCharacterRange: range))
     }
 }
 
+// MARK: - CharacterScripts
+
+extension ScriptClassifier {
+    public struct CharacterScripts: RandomAccessCollection {
+        private let owner: ScriptClassifier
+
+        init(_ owner: ScriptClassifier) {
+            self.owner = owner
+        }
+
+        public var startIndex: Int {
+            return 0
+        }
+
+        public var endIndex: Int {
+            return owner.scriptsBuffer.count
+        }
+
+        public subscript(position: Int) -> Script {
+            precondition(position >= 0 && position < count, String.indexOutOfRange)
+
+            return Script(rawValue: Int(owner.scriptsBuffer[position]))!
+        }
+    }
+}
+
+// MARK: - RunSequence
+
 extension ScriptClassifier {
     public struct RunSequence: Sequence {
-        public typealias Element = ScriptRun
-        public typealias Iterator = RunIterator
-
-        private let owner: ScriptClassifier
-        private let range: Range<Int>
+        private let iterator: RunIterator
 
         init(_ owner: ScriptClassifier, range: Range<Int>) {
-            self.owner = owner
-            self.range = range
+            self.iterator = RunIterator(owner, range: range)
         }
 
         public func makeIterator() -> RunIterator {
-            return RunIterator(owner, range: range)
+            return iterator
         }
     }
 
     public struct RunIterator: IteratorProtocol {
-        public typealias Element = ScriptRun
-
         private let owner: ScriptClassifier
         private var currentIndex: Int
         private let endIndex: Int
@@ -99,12 +123,12 @@ extension ScriptClassifier {
         public mutating func next() -> ScriptRun? {
             if currentIndex < endIndex {
                 let startIndex = currentIndex
-                let currentScript = owner.scripts[startIndex]
+                let currentScript = owner.scriptsBuffer[startIndex]
 
                 currentIndex += 1
 
                 while currentIndex < endIndex {
-                    if owner.scripts[currentIndex] != currentScript {
+                    if owner.scriptsBuffer[currentIndex] != currentScript {
                         break
                     }
 
@@ -115,7 +139,7 @@ extension ScriptClassifier {
 
                 return ScriptRun(startIndex: range.lowerBound,
                                  endIndex: range.upperBound,
-                                 script: currentScript)
+                                 script: Script(rawValue: Int(currentScript))!)
             }
 
             return nil
