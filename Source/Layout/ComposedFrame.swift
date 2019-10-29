@@ -29,14 +29,17 @@ public class ComposedFrame {
         self.lines = lines
     }
 
-    /// The size of this frame.
-    public internal(set) var size: CGSize = .zero
-
     /// The index to the first character of this frame in source string.
     public let startIndex: String.Index
 
     /// The index after the last character of this frame in source text.
     public let endIndex: String.Index
+
+    /// The width of this frame.
+    public internal(set) var width: CGFloat = .zero
+
+    /// The height of this frame.
+    public internal(set) var height: CGFloat = .zero
 
     /// The array containing all the lines of this frame.
     public let lines: [ComposedLine]

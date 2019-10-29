@@ -83,7 +83,8 @@ import UIKit
             updateFrame(paddingLeft: .zero, paddingTop: .zero,
                         layoutWidth: .infinity, layoutHeight: .infinity)
 
-            fittingSize = textFrame?.size ?? .zero
+            fittingSize = CGSize(width: textFrame?.width ?? .zero,
+                                 height: textFrame?.height ?? .zero)
             preferredWidth = fittingSize.width
         }
 
@@ -102,13 +103,14 @@ import UIKit
             updateFrame(paddingLeft: .zero, paddingTop: .zero,
                         layoutWidth: viewSize.width, layoutHeight: .infinity)
 
-            fittingSize = textFrame?.size ?? .zero
+            fittingSize = CGSize(width: textFrame?.width ?? .zero,
+                                 height: textFrame?.height ?? .zero)
             preferredWidth = viewSize.width
 
             invalidateIntrinsicContentSize()
             setNeedsLayout()
             setNeedsDisplay()
-        } else if preferredWidth == nil || viewSize.height != sceil(textFrame?.size.height ?? .zero) {
+        } else if preferredWidth == nil || viewSize.height != sceil(textFrame?.height ?? .zero) {
             resolver.fitsHorizontally = false
             resolver.fitsVertically = false
 

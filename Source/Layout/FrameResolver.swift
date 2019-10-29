@@ -109,7 +109,8 @@ public class FrameResolver {
                                       startIndex: range.lowerBound,
                                       endIndex: context.endIndex,
                                       lines: context.textLines)
-        textFrame.size = CGSize(width: context.layoutWidth, height: context.layoutHeight)
+        textFrame.width = context.layoutWidth
+        textFrame.height = context.layoutHeight
 
         return textFrame
     }
