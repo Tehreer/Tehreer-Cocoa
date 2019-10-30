@@ -121,10 +121,10 @@ public class FrameResolver {
 
         // Iterate over each line of this paragraph.
         while lineStart != context.endIndex {
-            let lineEnd = typesetter.suggestForwardBreak(for: context.layoutWidth,
-                                                         in: lineStart ..< context.endIndex, with: .line)
+            let lineEnd = typesetter.suggestForwardBreak(inCharacterRange: lineStart ..< context.endIndex,
+                                                         extent: context.layoutWidth, breakMode: .line)
 
-            let textLine = typesetter.makeSimpleLine(range: lineStart ..< lineEnd)
+            let textLine = typesetter.makeSimpleLine(characterRange: lineStart ..< lineEnd)
             prepareLine(context: &context, textLine: textLine, flushFactor: flushFactor)
 
             let lineHeight = textLine.height
@@ -166,7 +166,7 @@ public class FrameResolver {
         }
 
         // Compute the origin of the line.
-        let originX = textLine.flushPenOffset(for: flushFactor, flushExtent: context.layoutWidth)
+        let originX = textLine.penOffset(forFlushFactor: flushFactor, flushExtent: context.layoutWidth)
         let originY = context.lineTop + textLine.ascent
 
         // Update the properties of line.
@@ -209,7 +209,7 @@ public class FrameResolver {
             for textLine in context.textLines {
                 let intrinsicMargin = textLine.intrinsicMargin
                 let availableWidth = occupiedWidth - intrinsicMargin
-                let alignedX = textLine.flushPenOffset(for: textLine.flushFactor, flushExtent: availableWidth)
+                let alignedX = textLine.penOffset(forFlushFactor: textLine.flushFactor, flushExtent: availableWidth)
                 var marginalX: CGFloat = .zero
 
                 if (textLine.paragraphLevel & 1) == 0 {

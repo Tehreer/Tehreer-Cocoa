@@ -126,7 +126,7 @@ public class GlyphRun {
     public var width: CGFloat {
         // Locking is not required for constant width.
         if extent == -CGFloat.infinity {
-            extent = computeTypographicExtent(forGlyphRange: 0 ..< glyphIDs.count)
+            extent = typographicExtent(forGlyphRange: 0 ..< glyphIDs.count)
         }
 
         return extent
@@ -165,7 +165,7 @@ public class GlyphRun {
     ///
     /// - Parameter index: The index of a character in source string.
     /// - Returns: The index to the first character of specified cluster in source string.
-    public func actualClusterStart(forCharacterAt index: String.Index) -> String.Index {
+    public func clusterStart(forCharacterAt index: String.Index) -> String.Index {
         checkCharacterIndex(index)
 
         let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
@@ -183,7 +183,7 @@ public class GlyphRun {
     ///
     /// - Parameter index: The index of a character in source string.
     /// - Returns: The index after the last character of specified cluster in source string.
-    public func actualClusterEnd(forCharacterAt index: String.Index) -> String.Index {
+    public func clusterEnd(forCharacterAt index: String.Index) -> String.Index {
         checkCharacterIndex(index)
 
         let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
@@ -238,13 +238,13 @@ public class GlyphRun {
     ///
     /// - Parameter index: The index of a character in source string.
     /// - Returns: The distance of specified character from the start of the run assumed at zero.
-    public func distanceForCharacter(at index: String.Index) -> CGFloat {
+    public func distance(forCharacterAt index: String.Index) -> CGFloat {
         checkCharacterIndex(index)
 
         return caretEdge(forCharacterAt: index)
     }
 
-    func distanceForCharacters(in range: Range<String.Index>) -> CGFloat {
+    func distance(forCharacterRange range: Range<String.Index>) -> CGFloat {
         let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
 
         let lowerBound = utf16.distance(from: extraStart, to: range.lowerBound)
@@ -272,7 +272,7 @@ public class GlyphRun {
     ///   - distance: The distance for which to determine the character index. It should be offset
     ///               from zero origin.
     /// - Returns: The index of character in source string, nearest to the specified distance.
-    public func nearestCharacterIndex(at distance: CGFloat) -> String.Index {
+    public func indexOfCharacter(at distance: CGFloat) -> String.Index {
         let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
 
         var leadingCharIndex: String.Index?
@@ -322,28 +322,28 @@ public class GlyphRun {
     /// rectangle that encloses the paths of glyphs, as tightly as possible.
     ///
     /// - Parameters:
-    ///   - range: The range of glyphs to be measured.
+    ///   - glyphRange: The range of glyphs to be measured.
     /// - Returns: A rectangle that tightly encloses the paths of glyphs in the specified range.
-    public func computeBoundingBox(forGlyphRange range: Range<Int>, using renderer: Renderer) -> CGRect {
+    public func computeBoundingBox(forGlyphRange glyphRange: Range<Int>, using renderer: Renderer) -> CGRect {
         renderer.typeface = typeface
         renderer.typeSize = typeSize
         renderer.writingDirection = writingDirection
 
-        return renderer.computeBoundingBox(glyphIDs: glyphIDs[range],
-                                           offsets: glyphOffsets[range],
-                                           advances: glyphAdvances[range])
+        return renderer.computeBoundingBox(glyphIDs: glyphIDs[glyphRange],
+                                           offsets: glyphOffsets[glyphRange],
+                                           advances: glyphAdvances[glyphRange])
     }
 
     /// Calculates the typographic extent for the given glyph range in this run. The typographic
     /// extent is equal to the sum of advances of glyphs.
     ///
     /// - Parameters:
-    ///   - range: The range of glyphs to be measured.
+    ///   - glyphRange: The range of glyphs to be measured.
     /// - Returns: The typographic extent for the specified glyph range in the run.
-    public func computeTypographicExtent(forGlyphRange range: Range<Int>) -> CGFloat {
+    public func typographicExtent(forGlyphRange glyphRange: Range<Int>) -> CGFloat {
         var extent: CGFloat = 0.0
 
-        for i in range {
+        for i in glyphRange {
             extent += glyphAdvances[i]
         }
 
@@ -351,8 +351,8 @@ public class GlyphRun {
     }
 
     private func clusterRange(forCharacterAt index: String.Index, exclusion: ClusterRange?) -> ClusterRange? {
-        let actualStart = actualClusterStart(forCharacterAt: index)
-        let actualEnd = actualClusterEnd(forCharacterAt: index)
+        let actualStart = clusterStart(forCharacterAt: index)
+        let actualEnd = clusterEnd(forCharacterAt: index)
 
         let leadingIndex = leadingGlyphIndex(forCharacterAt: index)
         let trailingIndex = trailingGlyphIndex(forCharacterAt: index)

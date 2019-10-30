@@ -74,7 +74,7 @@ public class ComposedFrame {
     ///
     /// - Parameter position: The position for which to return the line index.
     /// - Returns: The index of a suitable line representing the specified position.
-    public func indexOfLine(atPosition position: CGPoint) -> Int {
+    public func indexOfLine(at position: CGPoint) -> Int {
         let lineCount = lines.count
 
         for i in 0 ..< lineCount {
@@ -89,7 +89,7 @@ public class ComposedFrame {
     }
 
     private func addSelectionParts(of line: ComposedLine, range: Range<String.Index>, in path: CGMutablePath) {
-        let visualEdges = line.computeVisualEdges(for: range)
+        let visualEdges = line.visualEdges(forCharacterRange: range)
 
         let edgeCount = visualEdges.count
         var edgeIndex = 0
@@ -106,26 +106,27 @@ public class ComposedFrame {
 
     /// Makes a path that contains a set of rectangles covering the specified character range.
     ///
-    /// - Parameter range: The selection range in source string.
+    /// - Parameter characterRange: The selection range in source string.
     /// - Returns: A path that contains a set of rectangles covering the specified character range.
-    public func makeSelectionPath(characterRange range: Range<String.Index>) -> CGPath {
+    public func makeSelectionPath(characterRange: Range<String.Index>) -> CGPath {
         let selectionPath = CGMutablePath()
 
-        let firstIndex = indexOfLine(forCharacterAt: range.lowerBound)
-        let lastIndex = indexOfLine(forCharacterAt: range.upperBound)
+        let firstIndex = indexOfLine(forCharacterAt: characterRange.lowerBound)
+        let lastIndex = indexOfLine(forCharacterAt: characterRange.upperBound)
 
         let firstLine = lines[firstIndex]
         let lastLine = lines[lastIndex]
 
         if firstLine === lastLine {
-            addSelectionParts(of: firstLine, range: range, in: selectionPath)
+            addSelectionParts(of: firstLine, range: characterRange, in: selectionPath)
         } else {
             let frameLeft: CGFloat = 0.0
-            let frameRight = size.width
+            let frameRight = width
 
             // Select each intersecting part of first line.
             addSelectionParts(of: firstLine,
-                              range: range.lowerBound ..< firstLine.endIndex, in: selectionPath)
+                              range: characterRange.lowerBound ..< firstLine.endIndex,
+                              in: selectionPath)
 
             // Select trailing padding of first line.
             if (lastLine.paragraphLevel & 1) == 1 {
@@ -155,7 +156,8 @@ public class ComposedFrame {
 
             // Select each intersecting part of last line.
             addSelectionParts(of: lastLine,
-                              range: lastLine.startIndex ..< range.upperBound, in: selectionPath)
+                              range: lastLine.startIndex ..< characterRange.upperBound,
+                              in: selectionPath)
         }
 
         return selectionPath

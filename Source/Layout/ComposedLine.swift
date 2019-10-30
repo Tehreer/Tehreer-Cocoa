@@ -102,14 +102,14 @@ public class ComposedLine {
     /// - Parameters:
     ///   - index: The index of character in source text.
     /// - Returns: The distance of specified character from the start of the line assumed at zero.
-    public func distanceForCharacter(at index: String.Index) -> CGFloat {
+    public func distance(forCharacterAt index: String.Index) -> CGFloat {
         checkCharacterIndex(index)
 
         var distance: CGFloat = 0.0
 
         for glyphRun in visualRuns {
             if index >= glyphRun.startIndex && index < glyphRun.endIndex {
-                distance += glyphRun.distanceForCharacter(at: index)
+                distance += glyphRun.distance(forCharacterAt: index)
                 break
             }
 
@@ -126,18 +126,18 @@ public class ComposedLine {
     /// range. Each edge will be positioned relative to the start of the line assumed at zero.
     ///
     /// - Parameters:
-    ///   - range: The range of characters in source text.
+    ///   - characterRange: The range of characters in source string.
     /// - Returns: An array of visual edges corresponding to the specified character range.
-    public func computeVisualEdges(for range: Range<String.Index>) -> [CGFloat] {
+    public func visualEdges(forCharacterRange characterRange: Range<String.Index>) -> [CGFloat] {
         var visualEdges: [CGFloat] = []
 
         for glyphRun in visualRuns {
-            if glyphRun.startIndex < range.upperBound && glyphRun.endIndex > range.lowerBound {
-                let selectionStart = max(range.lowerBound, glyphRun.startIndex)
-                let selectionEnd = min(range.upperBound, glyphRun.endIndex)
+            if glyphRun.startIndex < characterRange.upperBound && glyphRun.endIndex > characterRange.lowerBound {
+                let selectionStart = max(characterRange.lowerBound, glyphRun.startIndex)
+                let selectionEnd = min(characterRange.upperBound, glyphRun.endIndex)
 
-                let leadingEdge = glyphRun.distanceForCharacter(at: selectionStart)
-                let trailingEdge = glyphRun.distanceForCharacter(at: selectionEnd)
+                let leadingEdge = glyphRun.distance(forCharacterAt: selectionStart)
+                let trailingEdge = glyphRun.distance(forCharacterAt: selectionEnd)
 
                 let relativeLeft = glyphRun.origin.x
                 let selectionLeft = min(leadingEdge, trailingEdge) + relativeLeft
@@ -157,10 +157,10 @@ public class ComposedLine {
     ///   - distance: The distance for which to determine the character index. It should be offset
     ///               from zero origin.
     /// - Returns: The index of character in source string, nearest to the specified distance.
-    public func nearestCharacterIndex(at distance: CGFloat) -> String.Index {
+    public func indexOfCharacter(at distance: CGFloat) -> String.Index {
         for glyphRun in visualRuns.reversed() {
             if glyphRun.origin.x <= distance {
-                return glyphRun.nearestCharacterIndex(at: distance - glyphRun.origin.x)
+                return glyphRun.indexOfCharacter(at: distance - glyphRun.origin.x)
             }
         }
 
@@ -170,14 +170,14 @@ public class ComposedLine {
     /// Returns the pen offset required to draw flush text.
     ///
     /// - Parameters:
-    ///   - flushFactor: Specifies the kind of flushness. A flush factor of 0 or less indicates left
-    ///                  flush. A flushFactor of 1.0 or more indicates right flush. Flush factors
-    ///                  between 0 and 1.0 indicate varying degrees of center flush, with a value of
-    ///                  0.5 being totally center flush.
-    ///   - flushExtent: Specifies the extent that the flushness operation should apply to.
+    ///   - factor: Specifies the kind of flushness. A flush factor of 0 or less indicates left
+    ///             flush. A flushFactor of 1.0 or more indicates right flush. Flush factors between
+    ///             0 and 1.0 indicate varying degrees of center flush, with a value of 0.5 being
+    ///             totally center flush.
+    ///   - extent: Specifies the extent that the flushness operation should apply to.
     /// - Returns: A value which can be used to offset the current pen position for the flush
     ///            operation.
-    public func flushPenOffset(for flushFactor: CGFloat, flushExtent: CGFloat) -> CGFloat {
+    public func penOffset(forFlushFactor flushFactor: CGFloat, flushExtent: CGFloat) -> CGFloat {
         var penOffset = (flushExtent - (extent - trailingWhitespaceExtent)) * flushFactor
         if (paragraphLevel & 1) == 1 {
             penOffset -= trailingWhitespaceExtent

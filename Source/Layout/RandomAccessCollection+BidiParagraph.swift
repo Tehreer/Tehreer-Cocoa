@@ -55,7 +55,7 @@ extension RandomAccessCollection
             feasibleStart = Swift.max(bidiParagraph.startIndex, range.lowerBound)
             feasibleEnd = Swift.min(bidiParagraph.endIndex, range.upperBound)
 
-            let bidiLine: BidiLine! = bidiParagraph.makeLine(range: feasibleStart ..< feasibleEnd)
+            let bidiLine: BidiLine! = bidiParagraph.makeLine(characterRange: feasibleStart ..< feasibleEnd)
             for bidiRun in bidiLine.visualRuns {
                 body(bidiRun)
             }

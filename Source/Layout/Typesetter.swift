@@ -48,13 +48,13 @@ public class Typesetter {
     /// characters, then last index is returned. Otherwise, break index is returned.
     ///
     /// - Parameters:
+    ///   - characterRange: The character range for break calculations.
     ///   - extent: The requested break extent.
-    ///   - range: The string range for break calculations.
     ///   - mode: The requested break mode.
     /// - Returns: The index (exclusive) that would cause the break.
-    public func suggestForwardBreak(for extent: CGFloat, in range: Range<String.Index>, with mode: BreakMode) -> String.Index {
+    public func suggestForwardBreak(inCharacterRange characterRange: Range<String.Index>, extent: CGFloat, breakMode: BreakMode) -> String.Index {
         let breakResolver = BreakResolver(string: text.string, paragraphs: paragraphs, runs: runs, breaks: breaks)
-        return breakResolver.suggestForwardBreak(for: extent, in: range, with: mode)
+        return breakResolver.suggestForwardBreak(for: extent, in: characterRange, with: breakMode)
     }
 
     /// Suggests a backward break index based on the specified range and the extent. The measurement
@@ -62,21 +62,21 @@ public class Typesetter {
     /// characters, then start index is returned. Otherwise, break index is returned.
     ///
     /// - Parameters:
+    ///   - characterRange: The string range for break calculations.
     ///   - extent: The requested break extent.
-    ///   - range: The string range for break calculations.
     ///   - mode: The requested break mode.
     /// - Returns: The index (inclusive) that would cause the break.
-    public func suggestBackwardBreak(for extent: CGFloat, in range: Range<String.Index>, with mode: BreakMode) -> String.Index {
+    public func suggestBackwardBreak(inCharacterRange characterRange: Range<String.Index>, extent: CGFloat, breakMode: BreakMode) -> String.Index {
         let breakResolver = BreakResolver(string: text.string, paragraphs: paragraphs, runs: runs, breaks: breaks)
-        return breakResolver.suggestBackwardBreak(for: extent, in: range, with: mode)
+        return breakResolver.suggestBackwardBreak(for: extent, in: characterRange, with: breakMode)
     }
 
-    /// Creates a simple line having the specified string range.
+    /// Creates a simple line having the specified character range.
     ///
-    /// - Parameter range: The range of the line in source string.
+    /// - Parameter characterRange: The range of the line in source string.
     /// - Returns: The new line.
-    public func makeSimpleLine(range: Range<String.Index>) -> ComposedLine {
+    public func makeSimpleLine(characterRange: Range<String.Index>) -> ComposedLine {
         let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes, paragraphs: paragraphs, runs: runs)
-        return lineResolver.makeSimpleLine(range: range)
+        return lineResolver.makeSimpleLine(range: characterRange)
     }
 }

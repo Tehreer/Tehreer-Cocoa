@@ -83,11 +83,11 @@ public class BidiAlgorithm {
     /// CR and LF are paragraph separators, but in that case, the boundary of the paragraph is
     /// considered after LF character.
     ///
-    /// - Parameter range: The suggested range of the paragraph in source text.
+    /// - Parameter characterRange: The suggested range of the paragraph in source string.
     /// - Returns: The boundary of the first paragraph within the specified range.
-    public func paragraphBoundary(in range: Range<String.Index>) -> String.Index {
+    public func paragraphBoundary(inCharacterRange characterRange: Range<String.Index>) -> String.Index {
         let string = buffer.string
-        let utf16Range: NSRange = string.utf16Range(forCharacterRange: range)
+        let utf16Range: NSRange = string.utf16Range(forCharacterRange: characterRange)
         let paragraphOffset = SBUInteger(utf16Range.location)
         let suggestedLength = SBUInteger(utf16Range.length)
         var actualLength: SBUInteger = 0
@@ -109,11 +109,11 @@ public class BidiAlgorithm {
     /// by applying Rules X1-I2.
     ///
     /// - Parameters:
-    ///   - range: The suggested range of the paragraph in source text.
+    ///   - characterRange: The suggested range of the paragraph in source string.
     ///   - direction: The base direction of the paragraph.
     /// - Returns: A paragraph object processed with Unicode Bidirectional Algorithm.
-    public func makeParagraph(range: Range<String.Index>, direction: BaseDirection) -> BidiParagraph? {
-        return makeParagraph(range: range, baseLevel: direction.level)
+    public func makeParagraph(characterRange: Range<String.Index>, direction: BaseDirection) -> BidiParagraph? {
+        return makeParagraph(characterRange: characterRange, baseLevel: direction.level)
     }
 
     /// Creates a paragraph object processed with Unicode Bidirectional Algorithm.
@@ -126,12 +126,12 @@ public class BidiAlgorithm {
     /// by applying Rules X1-I2.
     ///
     /// - Parameters:
-    ///   - range: The suggested range of the paragraph in source text.
+    ///   - characterRange: The suggested range of the paragraph in source string.
     ///   - baseLevel: Base level to override.
     /// - Returns: A paragraph object processed with Unicode Bidirectional Algorithm.
-    public func makeParagraph(range: Range<String.Index>, baseLevel: UInt8) -> BidiParagraph? {
+    public func makeParagraph(characterRange: Range<String.Index>, baseLevel: UInt8) -> BidiParagraph? {
         let string = buffer.string
-        let clampedRange = range.clamped(to: string.startIndex ..< string.endIndex)
+        let clampedRange = characterRange.clamped(to: string.startIndex ..< string.endIndex)
         if clampedRange.isEmpty {
             return nil
         }

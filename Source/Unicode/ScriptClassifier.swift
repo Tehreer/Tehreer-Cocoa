@@ -64,7 +64,7 @@ public class ScriptClassifier {
     }
 
     public func scriptRuns(forCharacterRange characterRange: Range<String.Index>) -> RunSequence {
-        return RunSequence(self, range: string.utf16Range(forCharacterRange: range))
+        return RunSequence(self, range: string.utf16Range(forCharacterRange: characterRange))
     }
 }
 

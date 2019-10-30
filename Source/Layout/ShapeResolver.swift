@@ -41,7 +41,7 @@ struct ShapeResolver {
         var chunkRange = string.startIndex ..< string.endIndex
 
         while !chunkRange.isEmpty {
-            guard let bidiParagraph = bidiAlgorithm?.makeParagraph(range: chunkRange, direction: .defaultLeftToRight) else {
+            guard let bidiParagraph = bidiAlgorithm?.makeParagraph(characterRange: chunkRange, direction: .defaultLeftToRight) else {
                 return ([], [])
             }
 

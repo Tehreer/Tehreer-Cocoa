@@ -85,7 +85,7 @@ func makeComposedLine(text: String, range: Range<String.Index>,
         let wsEnd = min(glyphRun.endIndex, range.upperBound)
 
         if wsStart < wsEnd {
-            trailingWhitespaceExtent = glyphRun.distanceForCharacters(in: wsStart ..< wsEnd)
+            trailingWhitespaceExtent = glyphRun.distance(forCharacterRange: wsStart ..< wsEnd)
         }
 
         lineAscent = max(lineAscent, glyphRun.ascent)

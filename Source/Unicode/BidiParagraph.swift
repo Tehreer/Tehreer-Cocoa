@@ -75,10 +75,10 @@ public class BidiParagraph {
     /// Creates a line object of specified range by applying Rules L1-L2 of Unicode Bidirectional
     /// Algorithm.
     ///
-    /// - Parameter range: The range of the line in source text.
+    /// - Parameter characterRange: The range of the line in source string.
     /// - Returns: A line object processed with Rules L1-L2 of Unicode Bidirectional Algorithm.
-    public func makeLine(range: Range<String.Index>) -> BidiLine? {
-        let clampedRange = range.clamped(to: stringRange)
+    public func makeLine(characterRange: Range<String.Index>) -> BidiLine? {
+        let clampedRange = characterRange.clamped(to: stringRange)
         if clampedRange.isEmpty {
             return nil
         }
