@@ -18,7 +18,7 @@ import Foundation
 
 /// The `TypefaceManager` class provides management activities related to typefaces.
 public class TypefaceManager {
-    public static let shared = TypefaceManager()
+    public static let `default` = TypefaceManager()
 
     private let mutex = Mutex()
 
@@ -34,13 +34,16 @@ public class TypefaceManager {
     /// - Parameters:
     ///   - typeface: The typeface that will be registered.
     ///   - tag: An optional tag to identify the typeface.
-    public func register(_ typeface: Typeface, for tag: TypefaceTag) {
+    public func register(_ typeface: Typeface, forTag tag: TypefaceTag?) {
         mutex.synchronized {
             precondition(!typefaces.contains(where: { $0 === typeface }), "This typeface is already registered")
-            precondition(tags.index(forKey: tag) == nil, "This tag is already taken")
 
-            tags[tag] = typeface
-            typeface.tag = tag
+            if let tag = tag {
+                precondition(tags.index(forKey: tag) == nil, "This tag is already taken")
+
+                tags[tag] = typeface
+                typeface.tag = tag
+            }
 
             isSorted = false
             typefaces.append(typeface)
@@ -63,12 +66,12 @@ public class TypefaceManager {
         }
     }
 
-    public func typeface(for tag: TypefaceTag) -> Typeface? {
     /// Returns the typeface registered against the specified tag.
     ///
     /// - Parameter tag: The tag that identifies the typeface.
     /// - Returns: The registered typeface, or `nil` if no typeface is registered against the
     ///            specified tag.
+    public func typeface(forTag tag: TypefaceTag) -> Typeface? {
         return mutex.synchronized {
             tags[tag]
         }
