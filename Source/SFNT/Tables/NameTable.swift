@@ -55,19 +55,19 @@ public struct NameTable {
 }
 
 extension NameTable {
-    enum NameID: UInt16 {
-        case fontFamily = 1
-        case fontSubfamily = 2
-        case full = 3
-        case typographicFamily = 16
-        case typographicSubfamily = 17
-        case wwsFamily = 21
-        case wwsSubfamily = 22
+    enum NameID {
+        static let fontFamily: UInt16 = 1
+        static let fontSubfamily: UInt16 = 2
+        static let full: UInt16 = 3
+        static let typographicFamily: UInt16 = 16
+        static let typographicSubfamily: UInt16 = 17
+        static let wwsFamily: UInt16 = 21
+        static let wwsSubfamily: UInt16 = 22
     }
 
-    enum PlatformID: UInt16 {
-        case macintosh = 1
-        case windows = 3
+    enum PlatformID {
+        static let macintosh: UInt16 = 1
+        static let windows: UInt16 = 3
     }
 
     func englishName(for nameID: UInt16) -> String? {
@@ -81,11 +81,11 @@ extension NameTable {
 
             let locale = current.locale
             if locale?.languageCode == "en" {
-                if current.platformID == PlatformID.windows.rawValue && locale?.regionCode == "US" {
+                if current.platformID == PlatformID.windows && locale?.regionCode == "US" {
                     return current.string
                 }
 
-                if candidate == nil || current.platformID == PlatformID.macintosh.rawValue {
+                if candidate == nil || current.platformID == PlatformID.macintosh {
                     candidate = current
                 }
             }
@@ -102,15 +102,15 @@ extension NameTable {
         var familyName: String? = nil
 
         if let os2Table = os2Table {
-            if (os2Table.fsSelection & OS2Table.FSSelection.wws.rawValue) != 0 {
-                familyName = englishName(for: NameID.wwsFamily.rawValue)
+            if (os2Table.fsSelection & OS2Table.FSSelection.wws) != 0 {
+                familyName = englishName(for: NameID.wwsFamily)
             }
         }
         if familyName == nil {
-            familyName = englishName(for: NameID.typographicFamily.rawValue)
+            familyName = englishName(for: NameID.typographicFamily)
         }
         if familyName == nil {
-            familyName = englishName(for: NameID.fontFamily.rawValue)
+            familyName = englishName(for: NameID.fontFamily)
         }
 
         return familyName
@@ -120,15 +120,15 @@ extension NameTable {
         var styleName: String? = nil
 
         if let os2Table = os2Table {
-            if (os2Table.fsSelection & OS2Table.FSSelection.wws.rawValue) != 0 {
-                styleName = englishName(for: NameID.wwsSubfamily.rawValue)
+            if (os2Table.fsSelection & OS2Table.FSSelection.wws) != 0 {
+                styleName = englishName(for: NameID.wwsSubfamily)
             }
         }
         if styleName == nil {
-            styleName = englishName(for: NameID.typographicSubfamily.rawValue)
+            styleName = englishName(for: NameID.typographicSubfamily)
         }
         if styleName == nil {
-            styleName = englishName(for: NameID.fontSubfamily.rawValue)
+            styleName = englishName(for: NameID.fontSubfamily)
         }
 
         return styleName

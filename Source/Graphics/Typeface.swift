@@ -165,48 +165,48 @@ public class Typeface {
         let nameTable = NameTable(typeface: self)
 
         if let nameTable = nameTable {
-            if let familyName = nameTable.suitableFamilyName(considering: os2Table) {
-                self.familyName = familyName
+            if let string = nameTable.suitableFamilyName(considering: os2Table) {
+                familyName = string
             }
-            if let styleName = nameTable.suitableStyleName(considering: os2Table) {
-                self.styleName = styleName
+            if let string = nameTable.suitableStyleName(considering: os2Table) {
+                styleName = string
             }
-            if let fullName = nameTable.englishName(for: NameTable.NameID.full.rawValue) {
-                self.fullName = fullName
+            if let string = nameTable.englishName(for: NameTable.NameID.full) {
+                fullName = string
             }
         }
 
         if let os2Table = os2Table {
-            if let weight = Weight(rawValue: Int(os2Table.usWeightClass)) {
-                self.weight = weight
+            if let value = Weight(rawValue: Int(os2Table.usWeightClass)) {
+                weight = value
             }
-            if let width = Width(rawValue: Int(os2Table.usWidthClass)) {
-                self.width = width
-            }
-
-            if (os2Table.fsSelection & OS2Table.FSSelection.oblique.rawValue) != 0 {
-                self.slope = .oblique
-            } else if (os2Table.fsSelection & OS2Table.FSSelection.italic.rawValue) != 0 {
-                self.slope = .italic
+            if let value = Width(rawValue: Int(os2Table.usWidthClass)) {
+                width = value
             }
 
-            self.strikeoutPosition = Int(os2Table.yStrikeoutPosition)
-            self.strikeoutThickness = Int(os2Table.yStrikeoutSize)
+            if (os2Table.fsSelection & OS2Table.FSSelection.oblique) != 0 {
+                slope = .oblique
+            } else if (os2Table.fsSelection & OS2Table.FSSelection.italic) != 0 {
+                slope = .italic
+            }
+
+            strikeoutPosition = Int(os2Table.yStrikeoutPosition)
+            strikeoutThickness = Int(os2Table.yStrikeoutSize)
         } else if let headTable = headTable {
             let macStyle = headTable.macStyle
 
-            if (macStyle & OS2Table.MacStyle.bold.rawValue) != 0 {
-                self.weight = .bold
+            if (macStyle & OS2Table.MacStyle.bold) != 0 {
+                weight = .bold
             }
 
-            if (macStyle & OS2Table.MacStyle.condensed.rawValue) != 0 {
-                self.width = .condensed
-            } else if (macStyle & OS2Table.MacStyle.extended.rawValue) != 0 {
-                self.width = .expanded
+            if (macStyle & OS2Table.MacStyle.condensed) != 0 {
+                width = .condensed
+            } else if (macStyle & OS2Table.MacStyle.extended) != 0 {
+                width = .expanded
             }
 
-            if (macStyle & OS2Table.MacStyle.italic.rawValue) != 0 {
-                self.slope = .italic
+            if (macStyle & OS2Table.MacStyle.italic) != 0 {
+                slope = .italic
             }
         }
     }
