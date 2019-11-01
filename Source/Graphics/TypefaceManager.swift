@@ -87,6 +87,25 @@ public class TypefaceManager {
         }
     }
 
+    /// Looks for a registered typeface having the specified full name.
+    ///
+    /// - Parameter fullName: The full name of the typeface.
+    /// - Returns: The typeface having the specified full name, or `nil` if no such typeface is
+    ///            registered.
+    public func typeface(byName fullName: String) -> Typeface? {
+        return mutex.synchronized {
+            for typeface in typefaces {
+                if typeface.fullName.compare(fullName,
+                                             options: [.caseInsensitive],
+                                             range: nil, locale: nil) == .orderedSame {
+                    return typeface
+                }
+            }
+
+            return nil
+        }
+    }
+
     /// The array of available typefaces sorted by their names in ascending order.
     public var availableTypefaces: [Typeface] {
         return mutex.synchronized {
