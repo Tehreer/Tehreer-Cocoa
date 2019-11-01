@@ -39,7 +39,7 @@ public struct NameTable {
     /// - Returns: A record of OpenType `name` table at a specified index.
     /// - Precondition: `index` must be greater than or equal to zero and less than `recordCount`.
     public func record(at index: Int) -> Record {
-        precondition(index >= 0 || index < recordCount, "Index is out of bounds")
+        precondition(index >= 0 && index < recordCount, String.indexOutOfRange)
 
         var sfntName = FT_SfntName()
         FT_Get_Sfnt_Name(typeface.ftFace, FT_UInt(index), &sfntName)
