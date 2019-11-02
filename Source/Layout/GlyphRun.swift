@@ -324,7 +324,7 @@ public class GlyphRun {
     /// - Parameters:
     ///   - glyphRange: The range of glyphs to be measured.
     /// - Returns: A rectangle that tightly encloses the paths of glyphs in the specified range.
-    public func computeBoundingBox(forGlyphRange glyphRange: Range<Int>, using renderer: Renderer) -> CGRect {
+    public func computeBoundingBox(forGlyphRange glyphRange: Range<Int>, with renderer: Renderer) -> CGRect {
         renderer.typeface = typeface
         renderer.typeSize = typeSize
         renderer.writingDirection = writingDirection
@@ -405,12 +405,12 @@ public class GlyphRun {
         context.restoreGState()
     }
 
-    /// Draws this run in the `context` using the specified `renderer`.
+    /// Draws this run in the `context` with the specified `renderer`.
     ///
     /// - Parameters:
-    ///   - renderer: The renderer to use for drawing this run.
+    ///   - renderer: The renderer with which to draw this run.
     ///   - context: The context in which to draw this run.
-    public func draw(using renderer: Renderer, in context: CGContext) {
+    public func draw(with renderer: Renderer, in context: CGContext) {
         renderer.typeface = typeface
         renderer.typeSize = typeSize
         renderer.scaleX = 1.0

@@ -186,15 +186,15 @@ public class ComposedLine {
         return penOffset
     }
 
-    /// Draws this line in the `context` using the specified renderer.
+    /// Draws this line in the `context` with the specified renderer.
     ///
     /// - Parameters:
-    ///   - renderer: The renderer to use for drawing the line.
+    ///   - renderer: The renderer with which to draw the line.
     ///   - context: The context in which to draw the line.
-    public func draw(using renderer: Renderer, in context: CGContext) {
+    public func draw(with renderer: Renderer, in context: CGContext) {
         for glyphRun in visualRuns {
             context.translateBy(x: glyphRun.origin.x, y: glyphRun.origin.y)
-            glyphRun.draw(using: renderer, in: context)
+            glyphRun.draw(with: renderer, in: context)
             context.translateBy(x: -glyphRun.origin.x, y: -glyphRun.origin.y)
         }
     }

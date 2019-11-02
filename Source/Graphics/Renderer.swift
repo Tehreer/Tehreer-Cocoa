@@ -172,7 +172,7 @@ public class Renderer {
         glyphStrike.skewX = Int((slantAngle * 0x10000) + 0.5)
     }
 
-    private func cachedGlyphPath(for glyphID: GlyphID) -> CGPath? {
+    private func cachedPath(forGlyph glyphID: GlyphID) -> CGPath? {
         return GlyphCache.instance.glyphPath(with: glyphStrike, for: glyphID)
     }
 
@@ -181,7 +181,7 @@ public class Renderer {
     /// - Parameter glyphID: The ID of glyph whose path is generated.
     /// - Returns: The path of the glyph specified by `glyphID`.
     public func makePath(glyphID: GlyphID) -> CGPath? {
-        return cachedGlyphPath(for: glyphID)?.copy()
+        return cachedPath(forGlyph: glyphID)?.copy()
     }
 
     /// Generates a cumulative path of specified glyphs.
@@ -205,7 +205,7 @@ public class Renderer {
             let offset = offsetIter.next()!
             let advance = advanceIter.next()!
 
-            if let path = cachedGlyphPath(for: glyphID) {
+            if let path = cachedPath(forGlyph: glyphID) {
                 let position = CGAffineTransform(scaleX: penX + offset.x, y: offset.y)
                 comulativePath.addPath(path, transform: position)
             }
@@ -216,7 +216,7 @@ public class Renderer {
         return comulativePath
     }
 
-    private func cachedBoundingBox(for glyphID: GlyphID) -> CGRect {
+    private func cachedBoundingBox(forGlyph glyphID: GlyphID) -> CGRect {
         let glyph = GlyphCache.instance.maskGlyph(with: glyphStrike, for: glyphID)
 
         return CGRect(x: CGFloat(glyph.lsb) / renderScale,
@@ -229,8 +229,8 @@ public class Renderer {
     ///
     /// - Parameter glyphID: The ID of glyph whose bounding box is calculated.
     /// - Returns: A rectangle that tightly encloses the path of the specified glyph.
-    public func computeBoundingBox(for glyphID: GlyphID) -> CGRect {
-        return cachedBoundingBox(for: glyphID)
+    public func computeBoundingBox(forGlyph glyphID: GlyphID) -> CGRect {
+        return cachedBoundingBox(forGlyph: glyphID)
     }
 
     /// Calculates the bounding box of specified glyphs.
@@ -254,7 +254,7 @@ public class Renderer {
             let offset = offsetIter.next()!
             let advance = advanceIter.next()!
 
-            var glyphBox = cachedBoundingBox(for: glyphID)
+            var glyphBox = cachedBoundingBox(forGlyph: glyphID)
             glyphBox = glyphBox.offsetBy(dx: penX + offset.x, dy: offset.y)
 
             comulativeBox = comulativeBox.union(glyphBox)

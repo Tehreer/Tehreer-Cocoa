@@ -136,13 +136,13 @@ public class Typeface {
                 let unmanaged = Unmanaged<Typeface>.fromOpaque(object!)
                 let typeface = unmanaged.takeUnretainedValue()
 
-                return typeface.glyphID(for: codepoint)
+                return typeface.glyphID(forCodePoint: codepoint)
             },
             getAdvanceForGlyph: { (object, layout, glyphID) in
                 let unmanaged = Unmanaged<Typeface>.fromOpaque(object!)
                 let typeface = unmanaged.takeUnretainedValue()
-                let advance = typeface.fixedAdvance(for: FT_UInt(glyphID),
-                                                    vertical: layout == SFFontLayoutVertical)
+                let advance = typeface.unscaledAdvance(forGlyph: FT_UInt(glyphID),
+                                                       vertical: layout == SFFontLayoutVertical)
 
                 return SFInt32(advance)
             }
@@ -336,7 +336,7 @@ public class Typeface {
     ///
     /// - Parameter tag: The tag of the table.
     /// - Returns: The data of the intended table, or `nil` if no such table exists.
-    public func tableData(for tag: SFNTTag) -> Data? {
+    public func dataOfTable(_ tag: SFNTTag) -> Data? {
         let inputTag = FT_ULong(tag.rawValue)
 
         return withFreeTypeFace { (face) in
@@ -359,7 +359,7 @@ public class Typeface {
     ///
     /// - Parameter codePoint: The code point for which the glyph id is obtained.
     /// - Returns: The glyph id for the specified code point.
-    public func glyphID(for codePoint: UTF32Char) -> UInt16 {
+    public func glyphID(forCodePoint codePoint: UTF32Char) -> GlyphID {
         let glyphID = withFreeTypeFace { (face) in
             FT_Get_Char_Index(face, FT_ULong(codePoint))
         }
@@ -372,7 +372,7 @@ public class Typeface {
         return GlyphID(glyphID)
     }
 
-    private func fixedAdvance(for glyphID: FT_UInt, vertical: Bool) -> FT_Fixed {
+    private func unscaledAdvance(forGlyph glyphID: FT_UInt, vertical: Bool) -> FT_Fixed {
         var loadFlags: FT_Int32 = FT_Int32(FT_LOAD_NO_SCALE)
         if (vertical) {
             loadFlags |= FT_Int32(FT_LOAD_VERTICAL_LAYOUT)
@@ -386,7 +386,7 @@ public class Typeface {
         }
     }
 
-    private func fixedAdvance(for glyphID: FT_UInt, typeSize: FT_F26Dot6, vertical: Bool) -> FT_Fixed {
+    private func fixedAdvance(forGlyph glyphID: FT_UInt, typeSize: FT_F26Dot6, vertical: Bool) -> FT_Fixed {
         var loadFlags: FT_Int32 = FT_LOAD_DEFAULT
         if (vertical) {
             loadFlags |= FT_Int32(FT_LOAD_VERTICAL_LAYOUT)
@@ -411,8 +411,8 @@ public class Typeface {
     ///   - typeSize: The size for which the advance is retrieved.
     ///   - vertical: The flag which indicates the type of advance, either horizontal or vertical.
     /// - Returns: The advance for the specified glyph.
-    public func advance(for glyphID: GlyphID, typeSize: CGFloat, vertical: Bool) -> CGFloat {
-        let advance = fixedAdvance(for: FT_UInt(glyphID),
+    public func advance(forGlyph glyphID: GlyphID, typeSize: CGFloat, vertical: Bool) -> CGFloat {
+        let advance = fixedAdvance(forGlyph: FT_UInt(glyphID),
                                    typeSize: toF26Dot6(typeSize),
                                    vertical: vertical)
 
@@ -490,7 +490,7 @@ public class Typeface {
     ///   - transform: The transform applied to the path. Can be `nil` if no transformation is
     ///                required.
     /// - Returns: The path for the specified glyph.
-    public func glyphPath(for glyphID: GlyphID, typeSize: CGFloat, transform: CGAffineTransform?) -> CGPath? {
+    public func path(forGlyph glyphID: GlyphID, typeSize: CGFloat, transform: CGAffineTransform?) -> CGPath? {
         let fixedSize = toF26Dot6(typeSize)
         var matrix = FT_Matrix(xx: 0x10000, xy: 0, yx: 0, yy: -0x10000)
         var delta = FT_Vector(x: 0, y: 0)

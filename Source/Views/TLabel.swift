@@ -133,7 +133,7 @@ import UIKit
             context.saveGState()
 
             if let textFrame = textFrame {
-                textFrame.draw(using: renderer, in: context, at: .zero)
+                textFrame.draw(with: renderer, in: context, at: .zero)
             }
 
             context.restoreGState()

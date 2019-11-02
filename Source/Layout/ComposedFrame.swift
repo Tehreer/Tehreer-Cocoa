@@ -104,11 +104,11 @@ public class ComposedFrame {
         }
     }
 
-    /// Makes a path that contains a set of rectangles covering the specified character range.
+    /// Creates a path that contains a set of rectangles covering the specified character range.
     ///
     /// - Parameter characterRange: The selection range in source string.
     /// - Returns: A path that contains a set of rectangles covering the specified character range.
-    public func makeSelectionPath(characterRange: Range<String.Index>) -> CGPath {
+    public func selectionPath(forCharacterRange characterRange: Range<String.Index>) -> CGPath {
         let selectionPath = CGMutablePath()
 
         let firstIndex = indexOfLine(forCharacterAt: characterRange.lowerBound)
@@ -163,20 +163,20 @@ public class ComposedFrame {
         return selectionPath
     }
 
-    /// Draws this frame in the `context` using the specified renderer.
+    /// Draws this frame in the `context` with the specified renderer.
     ///
     /// - Parameters:
-    ///   - renderer: The renderer to use for drawing the frame.
+    ///   - renderer: The renderer with which to draw the frame.
     ///   - context: The context in which to draw the frame.
     ///   - point: The position at which to draw the frame.
-    public func draw(using renderer: Renderer, in context: CGContext, at point: CGPoint) {
+    public func draw(with renderer: Renderer, in context: CGContext, at point: CGPoint) {
         context.translateBy(x: point.x, y: point.y)
 
         for line in lines {
             // TODO: Handle Attributes.
 
             context.translateBy(x: line.origin.x, y: line.origin.y)
-            line.draw(using: renderer, in: context)
+            line.draw(with: renderer, in: context)
             context.translateBy(x: -line.origin.x, y: -line.origin.y)
         }
 
