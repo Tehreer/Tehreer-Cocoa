@@ -180,12 +180,8 @@ public class Renderer {
     ///
     /// - Parameter glyphID: The ID of glyph whose path is generated.
     /// - Returns: The path of the glyph specified by `glyphID`.
-    public func makePath(glyphID: GlyphID) -> UIBezierPath? {
-        if let glyphPath = cachedGlyphPath(for: glyphID) {
-            return UIBezierPath(cgPath: glyphPath)
-        }
-
-        return nil
+    public func makePath(glyphID: GlyphID) -> CGPath? {
+        return cachedGlyphPath(for: glyphID)?.copy()
     }
 
     /// Generates a cumulative path of specified glyphs.
@@ -195,7 +191,7 @@ public class Renderer {
     ///   - offsets: A sequence of glyph offsets.
     ///   - advances: A sequence of glyph advances.
     /// - Returns: The cumulative path of specified glyphs.
-    public func makePath<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS) -> UIBezierPath
+    public func makePath<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS) -> CGPath?
         where GS : Sequence, GS.Element == GlyphID,
               OS : Sequence, OS.Element == CGPoint,
               AS : Sequence, AS.Element == CGFloat {
@@ -217,7 +213,7 @@ public class Renderer {
             penX += advance
         }
 
-        return UIBezierPath(cgPath: comulativePath)
+        return comulativePath
     }
 
     private func cachedBoundingBox(for glyphID: GlyphID) -> CGRect {
