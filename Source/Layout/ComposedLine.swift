@@ -35,10 +35,10 @@ public class ComposedLine {
         self.visualRuns = visualRuns
     }
 
-    /// The index to the first character of this line in source text.
+    /// The index to the first character of this line in source string.
     public let startIndex: String.Index
 
-    /// The index after the last character of this line in source text.
+    /// The index after the last character of this line in source string.
     public let endIndex: String.Index
 
     /// The paragraph level of this line.
@@ -100,7 +100,7 @@ public class ComposedLine {
     /// Determines the distance of specified character from the start of the line assumed at zero.
     ///
     /// - Parameters:
-    ///   - index: The index of character in source text.
+    ///   - index: The index of character in source string.
     /// - Returns: The distance of specified character from the start of the line assumed at zero.
     public func distance(forCharacterAt index: String.Index) -> CGFloat {
         checkCharacterIndex(index)
@@ -170,11 +170,11 @@ public class ComposedLine {
     /// Returns the pen offset required to draw flush text.
     ///
     /// - Parameters:
-    ///   - factor: Specifies the kind of flushness. A flush factor of 0 or less indicates left
-    ///             flush. A flushFactor of 1.0 or more indicates right flush. Flush factors between
-    ///             0 and 1.0 indicate varying degrees of center flush, with a value of 0.5 being
-    ///             totally center flush.
-    ///   - extent: Specifies the extent that the flushness operation should apply to.
+    ///   - flushFactor: Specifies the kind of flushness. A flush factor of 0 or less indicates left
+    ///                  flush. A flushFactor of 1.0 or more indicates right flush. Flush factors
+    ///                  between 0 and 1.0 indicate varying degrees of center flush, with a value of
+    ///                  0.5 being totally center flush.
+    ///   - flushExtent: Specifies the extent that the flushness operation should apply to.
     /// - Returns: A value which can be used to offset the current pen position for the flush
     ///            operation.
     public func penOffset(forFlushFactor flushFactor: CGFloat, flushExtent: CGFloat) -> CGFloat {

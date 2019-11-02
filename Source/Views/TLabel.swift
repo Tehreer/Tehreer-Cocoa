@@ -16,6 +16,7 @@
 
 import UIKit
 
+/// A view that displays read-only text to the user.
 @IBDesignable public class TLabel: UIView {
     private let renderer = Renderer()
     private let resolver = FrameResolver()
@@ -201,6 +202,7 @@ import UIKit
         setNeedsDisplay()
     }
 
+    /// The text alignment to apply on each line. Its default value is `.intrinsic`.
     public var textAlignment: TextAlignment {
         get {
             return resolver.textAlignment
@@ -213,6 +215,7 @@ import UIKit
         }
     }
 
+    /// The vertical alignment to apply on the contents. Its default value is `.top`.
     public var verticalAlignment: VerticalAlignment {
         get {
             return resolver.verticalAlignment
@@ -225,6 +228,12 @@ import UIKit
         }
     }
 
+    /// The typesetter that is used to compose text lines.
+    ///
+    /// Setting this property will make `text` and `attributedText` properties `nil`.
+    ///
+    /// A typesetter is preferred over `attributedText` as it avoids an extra step of creating the typesetter
+    /// from the `attributedText`.
     public var typesetter: Typesetter? {
         get {
             return _typesetter
@@ -240,6 +249,12 @@ import UIKit
         }
     }
 
+    /// The current styled text that is displayed by the label.
+    ///
+    /// This property will be `nil` if either `text` or `typesetter` is being used instead. Setting
+    /// this property will make `text` property `nil`.
+    ///
+    /// If performance is required, a typesetter should be used directly.
     public var attributedText: NSAttributedString! {
         get {
             return _attributedText
@@ -253,6 +268,7 @@ import UIKit
         }
     }
 
+    /// The typeface in which the text is displayed.
     public var typeface: Typeface? {
         get {
             return renderer.typeface
@@ -263,6 +279,12 @@ import UIKit
         }
     }
 
+    /// The current text that is displayed by the label.
+    ///
+    /// This property will be `nil` if either `attributedText` or `typesetter` is being used
+    /// instead. Setting this property will make `text` property `nil`.
+    ///
+    /// If performance is required, a typesetter should be used directly.
     @IBInspectable public var text: String! {
         get {
             return _text
@@ -276,6 +298,7 @@ import UIKit
         }
     }
 
+    /// The default size of the text.
     @IBInspectable public var textSize: CGFloat {
         get {
             return renderer.typeSize
@@ -286,6 +309,7 @@ import UIKit
         }
     }
 
+    /// The default color of the text.
     @IBInspectable public var textColor: UIColor {
         get {
             return renderer.fillColor
@@ -296,6 +320,7 @@ import UIKit
         }
     }
 
+    /// The maximum number of lines to use for rendering text.
     public var maxLines: Int? {
         get {
             return resolver.maxLines
@@ -308,6 +333,8 @@ import UIKit
         }
     }
 
+    /// The extra spacing that is added after each text line. It is resolved before line height
+    /// multiplier. Its default value is zero.
     @IBInspectable public var extraLineSpacing: CGFloat {
         get {
             return resolver.extraLineSpacing
@@ -320,6 +347,11 @@ import UIKit
         }
     }
 
+    /// The height multiplier that is applied on each text line. It is resolved after extra line
+    /// spacing. Its default value is one.
+    ///
+    /// The additional spacing is adjusted in such a way that text remains in the middle of the
+    /// line.
     @IBInspectable public var lineHeightMultiplier: CGFloat {
         get {
             return resolver.lineHeightMultiplier

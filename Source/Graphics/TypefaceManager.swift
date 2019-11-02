@@ -80,7 +80,8 @@ public class TypefaceManager {
     /// Returns the tag of a registered typeface.
     ///
     /// - Parameter typeface: The typeface whose tag is returned.
-    /// - Returns: The tag of the typeface, or `nil` if no tag was specified while registration.
+    /// - Returns: The tag of the typeface, or `nil` if it is not registered, or no tag was
+    ///            specified while registration.
     public func tag(of typeface: Typeface) -> TypefaceTag? {
         return mutex.synchronized {
             typeface.tag

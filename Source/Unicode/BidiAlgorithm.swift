@@ -42,8 +42,8 @@ extension BaseDirection {
 /// This class implements Unicode Bidirectional Algorithm available at
 /// [http://www.unicode.org/reports/tr9](http://www.unicode.org/reports/tr9).
 ///
-/// A `BidiAlgorithm` object provides information related to individual paragraphs in source text by
-/// applying rule P1. It can be used to create paragraph objects by explicitly specifying the
+/// A `BidiAlgorithm` object provides information related to individual paragraphs in source string
+/// by applying rule P1. It can be used to create paragraph objects by explicitly specifying the
 /// paragraph level or deriving it from rules P2 and P3. Once a paragraph object is created,
 /// embedding levels of characters can be queried from it.
 public class BidiAlgorithm {
@@ -53,9 +53,9 @@ public class BidiAlgorithm {
     private let buffer: BidiBuffer
     private let algorithm: SBAlgorithmRef
 
-    /// Creates a bidi algorithm object for the given text.
+    /// Creates a bidi algorithm object for the specified string.
     ///
-    /// - Parameter text: The text to apply unicode bidirectional algorithm on.
+    /// - Parameter string: The string to apply unicode bidirectional algorithm on.
     public init?(string: String) {
         guard !string.isEmpty else {
             return nil
@@ -75,7 +75,7 @@ public class BidiAlgorithm {
         SBAlgorithmRelease(algorithm)
     }
 
-    /// Returns the boundary of the first paragraph within the specified range.
+    /// Returns the boundary of the first paragraph within the specified character range.
     ///
     /// The boundary of the paragraph occurs after a character whose bidirectional type is Paragraph
     /// Separator (B), or the `range.upperLimit` if no such character exists before it. The
@@ -84,7 +84,7 @@ public class BidiAlgorithm {
     /// considered after LF character.
     ///
     /// - Parameter characterRange: The suggested range of the paragraph in source string.
-    /// - Returns: The boundary of the first paragraph within the specified range.
+    /// - Returns: The boundary of the first paragraph within the specified character range.
     public func paragraphBoundary(inCharacterRange characterRange: Range<String.Index>) -> String.Index {
         let string = buffer.string
         let utf16Range: NSRange = string.utf16Range(forCharacterRange: characterRange)

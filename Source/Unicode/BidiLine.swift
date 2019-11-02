@@ -57,8 +57,8 @@ public class BidiLine {
         return VisualRuns(self)
     }
 
-    /// The sequence of mirroring pairs in this line. You can use the iterable to  implement Rule L4
-    /// of Unicode Bidirectional Algorithm.
+    /// The sequence of mirroring pairs in this line. You can use it to implement Rule L4 of Unicode
+    /// Bidirectional Algorithm.
     public var mirroringPairs: MirrorSequence {
         return MirrorSequence(self)
     }

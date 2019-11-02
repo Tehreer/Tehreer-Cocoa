@@ -24,8 +24,7 @@ private struct ClusterRange {
     var glyphEnd: Int
 }
 
-/// A `GlyphRun` object is a collection of consecutive glyphs sharing the same attributes and
-/// direction.
+/// A glyph run is a collection of consecutive glyphs sharing the same attributes and direction.
 public class GlyphRun {
     private let attributes: [NSAttributedString.Key: Any]
     private let utf16: String.UTF16View

@@ -17,8 +17,8 @@
 import CoreGraphics
 import Foundation
 
-/// Represents a frame containing multiple lines of text. The frame object is the output resulting
-/// from text-framing process performed by a typesetter object.
+/// Represents a frame containing multiple lines of text. It is the output resulting from
+/// text-framing process performed by a typesetter.
 public class ComposedFrame {
     private let string: String
 
@@ -32,7 +32,7 @@ public class ComposedFrame {
     /// The index to the first character of this frame in source string.
     public let startIndex: String.Index
 
-    /// The index after the last character of this frame in source text.
+    /// The index after the last character of this frame in source string.
     public let endIndex: String.Index
 
     /// The width of this frame.

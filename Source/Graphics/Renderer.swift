@@ -45,7 +45,7 @@ public class Renderer {
     }
 
     /// Specifies the treatment where lines and curve segments join on a stroked path.
-    public enum StrokeJoin : Int {
+    public enum StrokeJoin: Int {
         /// The outer edges of a join meet with a straight line.
         case bevel = 1
         /// The outer edges of a join meet at a sharp angle.
@@ -82,38 +82,39 @@ public class Renderer {
         }
     }
 
-    /// The type size, applied on glyphs while drawing.
+    /// The type size applied on the glyphs while drawing.
     public var typeSize: CGFloat = 16.0 {
         didSet {
             updatePixelSizes()
         }
     }
 
-    /// The slant angle for glyphs. Its default value is 0.
+    /// The slant angle for glyphs. Its default value is zero.
     public var slantAngle: CGFloat = 0.0 {
         didSet {
             updateTransform()
         }
     }
 
+    /// The scale factor applied to the glyphs and their metrics such as offsets and advances.
     public var renderScale: CGFloat = 1.0 {
         didSet {
             updatePixelSizes()
         }
     }
 
-    /// The horizontal scale factor for drawing/measuring glyphs. Its default value is 1.0. Values
-    /// greater than 1.0 will stretch the glyphs wider. Values less than 1.0 will stretch the glyphs
-    /// narrower.
+    /// The horizontal scale factor applied on the glyphs while drawing. Its default value is 1.0.
+    /// Values greater than 1.0 will stretch the glyphs wider. Values less than 1.0 will stretch the
+    /// glyphs narrower.
     public var scaleX: CGFloat = 1.0 {
         didSet {
             updatePixelSizes()
         }
     }
 
-    /// The vertical scale factor for drawing/measuring glyphs. Its default value is 1.0. Values
-    /// greater than 1.0 will stretch the glyphs wider. Values less than 1.0 will stretch the glyphs
-    /// narrower.
+    /// The vertical scale factor applied on the glyphs while drawing. Its default value is 1.0.
+    /// Values greater than 1.0 will stretch the glyphs wider. Values less than 1.0 will stretch the
+    /// glyphs narrower.
     public var scaleY: CGFloat = 1.0 {
         didSet {
             updatePixelSizes()
@@ -318,7 +319,7 @@ public class Renderer {
         }
     }
 
-    /// Draws specified glyphs onto the given context.
+    /// Draws the glyphs in the specified context.
     ///
     /// - Parameters:
     ///   - context: The context onto which to draw the glyphs.

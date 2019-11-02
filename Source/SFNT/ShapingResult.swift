@@ -39,10 +39,12 @@ public class ShapingResult {
     /// A boolean value that indicates whether the shaped text segment flows backward.
     public private(set) var isBackward: Bool = false
 
+    /// The index to the first character in source string.
     public var startIndex: String.Index {
         return stringRange.lowerBound
     }
 
+    /// The index after the last character in source string.
     public var endIndex: String.Index {
         return stringRange.upperBound
     }
@@ -74,13 +76,18 @@ public class ShapingResult {
     /// 1. If a single code unit translates into multiple glyphs, then it maps to the first glyph in
     ///    the sequence.
     /// 2. If multiple code units form a group, such as a grapheme, which in turn translates into
-    ///    into multiple glyphs, then each character maps to the first glyph in the sequence.
+    ///    multiple glyphs, then each character maps to the first glyph in the sequence.
     /// 3. If nonconsecutive code units translate to a single glyph or ligature, then each
     ///    participating code unit, and all in-between characters, map to this glyph or ligature.
     public var clusterMap: ClusterMap {
         return ClusterMap(self)
     }
 
+    /// Creates an array of caret edges.
+    ///
+    /// - Parameter caretStops: An array for caret stops of the UTF-16 code units represented by
+    ///                         this object.
+    /// - Returns: An array of caret edges.
     public func makeCaretEdges(caretStops: [Bool]?) -> [CGFloat] {
         if let caretStops = caretStops {
             precondition(caretStops.count >= codeUnitCount)

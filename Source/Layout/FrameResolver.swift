@@ -41,6 +41,7 @@ private struct FrameContext {
     }
 }
 
+/// This class resolves text frames by using a typesetter object.
 public class FrameResolver {
     /// The typesetter to use for resolving frames.
     public var typesetter: Typesetter!
@@ -76,18 +77,26 @@ public class FrameResolver {
     /// spacing. Its default value is one.
     public var lineHeightMultiplier: CGFloat = 1.0
 
-    public func makeFrame(characterRange range: Range<String.Index>) -> ComposedFrame? {
-        var context = FrameContext(resolver: self, startIndex: range.lowerBound, endIndex: range.upperBound)
+    /// Creates a frame representing specified string range in source string.
+    ///
+    /// The resolver keeps on filling the frame until it either runs out of text or it finds that
+    /// text no longer fits in frame bounds. The resulting frame consists of at least one line even
+    /// if frame bounds are smaller.
+    ///
+    /// - Parameter characterRange: The character range of the frame in source string.
+    /// - Returns: A new composed frame.
+    public func makeFrame(characterRange: Range<String.Index>) -> ComposedFrame? {
+        var context = FrameContext(resolver: self, startIndex: characterRange.lowerBound, endIndex: characterRange.upperBound)
 
         let allParagraphs = typesetter.paragraphs
-        var paragraphIndex = allParagraphs.binarySearchIndex(ofCharacterAt: range.lowerBound)
+        var paragraphIndex = allParagraphs.binarySearchIndex(ofCharacterAt: characterRange.lowerBound)
 
-        var segmentStart = range.lowerBound
+        var segmentStart = characterRange.lowerBound
 
         // Iterate over all paragraphs in provided range.
         repeat {
             let paragraph = allParagraphs[paragraphIndex]
-            let segmentEnd = min(range.upperBound, paragraph.endIndex)
+            let segmentEnd = min(characterRange.upperBound, paragraph.endIndex)
 
             // Setup the frame filler and add the lines.
             context.startIndex = segmentStart
@@ -101,12 +110,12 @@ public class FrameResolver {
 
             segmentStart = segmentEnd
             paragraphIndex += 1
-        } while segmentStart < range.upperBound
+        } while segmentStart < characterRange.upperBound
 
         resolveAlignments(context: &context)
 
         let textFrame = ComposedFrame(string: typesetter.text.string,
-                                      startIndex: range.lowerBound,
+                                      startIndex: characterRange.lowerBound,
                                       endIndex: context.endIndex,
                                       lines: context.textLines)
         textFrame.width = context.layoutWidth
