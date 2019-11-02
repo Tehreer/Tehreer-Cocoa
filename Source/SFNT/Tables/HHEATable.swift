@@ -25,7 +25,7 @@ public struct HHEATable {
     /// Creates a `hhea` table representation from the specified typeface.
     ///
     /// - Parameter typeface: The typeface for accessing the data of the table.
-    init?(typeface: Typeface) {
+    public init?(typeface: Typeface) {
         let pointer = FT_Get_Sfnt_Table(typeface.ftFace, FT_SFNT_HHEA)
         guard let raw = pointer else {
             return nil

@@ -24,7 +24,7 @@ public struct NameTable {
     /// Creates a `name` table representation from the specified typeface.
     ///
     /// - Parameter typeface: The typeface for accessing the data of the table.
-    init?(typeface: Typeface) {
+    public init?(typeface: Typeface) {
         self.typeface = typeface
     }
 
