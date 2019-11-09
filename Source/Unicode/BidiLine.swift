@@ -67,10 +67,10 @@ public class BidiLine {
 // MARK: - VisualRuns
 
 extension BidiLine {
+    /// A collection of visually ordered runs in a line.
     public struct VisualRuns: RandomAccessCollection {
         private let owner: BidiLine
         private let pointer: UnsafePointer<SBRun>!
-        public let count: Int
 
         init(_ owner: BidiLine) {
             self.owner = owner
@@ -78,18 +78,27 @@ extension BidiLine {
             self.count = Int(SBLineGetRunCount(owner.line))
         }
 
+        /// The number of elements in the collection.
+        public let count: Int
+
+        /// The index to the first element.
         public var startIndex: Int {
             return 0
         }
 
+        /// The index after the last element.
         public var endIndex: Int {
             return count
         }
 
-        public subscript(position: Int) -> BidiRun {
-            precondition(position >= 0 && position < count, String.indexOutOfRange)
+        /// Accesses the bidirectional run at the specified position.
+        ///
+        /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
+        ///                    `startIndex` and less than `endIndex`.
+        public subscript(index: Int) -> BidiRun {
+            precondition(index >= 0 && index < count, String.indexOutOfRange)
 
-            let runPtr = pointer[position]
+            let runPtr = pointer[index]
             let string = owner.buffer.string
             let utf16Range = NSRange(location: Int(runPtr.offset), length: Int(runPtr.length))
             let runRange = string.characterRange(forUTF16Range: utf16Range)
@@ -104,6 +113,7 @@ extension BidiLine {
 // MARK: - MirrorSequence
 
 extension BidiLine {
+    /// A sequence of mirrored characters in a line.
     public struct MirrorSequence: Sequence {
         private let owner: BidiLine
 
@@ -111,11 +121,13 @@ extension BidiLine {
             self.owner = owner
         }
 
+        /// Returns an iterator over the elements of this sequence.
         public func makeIterator() -> MirrorIterator {
             return MirrorIterator(owner)
         }
     }
 
+    /// An iterator over the mirrored characters.
     public class MirrorIterator: IteratorProtocol {
         private let owner: BidiLine
         private let locator: SBMirrorLocatorRef
@@ -134,6 +146,7 @@ extension BidiLine {
             SBMirrorLocatorRelease(locator)
         }
 
+        /// Advances to the next element and returns it, or `nil` if no next element exists.
         public func next() -> BidiPair? {
             if SBMirrorLocatorMoveNext(locator) != 0 {
                 let bidiBuffer = owner.buffer

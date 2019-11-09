@@ -95,10 +95,10 @@ public class BidiParagraph {
 // MARK: - EmbeddingLevels
 
 extension BidiParagraph {
+    /// A collection of the embedding levels of a paragraph, represented by UTF-16 code unit indices.
     public struct EmbeddingLevels: RandomAccessCollection {
         private let owner: BidiParagraph
         private let pointer: UnsafePointer<SBLevel>!
-        public let count: Int
 
         init(_ owner: BidiParagraph) {
             self.owner = owner
@@ -106,18 +106,27 @@ extension BidiParagraph {
             self.count = Int(SBParagraphGetLength(owner.paragraph))
         }
 
+        /// The number of elements in the collection.
+        public let count: Int
+
+        /// The index to the first element.
         public var startIndex: Int {
             return 0
         }
 
+        /// The index after the last element.
         public var endIndex: Int {
             return count
         }
 
-        public subscript(position: Int) -> UInt8 {
-            precondition(position >= 0 && position < count, String.indexOutOfRange)
+        /// Accesses the embedding level at the specified position.
+        ///
+        /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
+        ///                    `startIndex` and less than `endIndex`.
+        public subscript(index: Int) -> UInt8 {
+            precondition(index >= 0 && index < count, String.indexOutOfRange)
 
-            return pointer[position]
+            return pointer[index]
         }
     }
 }
@@ -125,6 +134,7 @@ extension BidiParagraph {
 // MARK: - RunSequence
 
 extension BidiParagraph {
+    /// A sequence of bidirectional runs in a paragraph.
     public struct RunSequence: Sequence {
         private let owner: BidiParagraph
 
@@ -132,11 +142,13 @@ extension BidiParagraph {
             self.owner = owner
         }
 
+        /// Returns an iterator over the elements of this sequence.
         public func makeIterator() -> RunIterator {
             return RunIterator(owner)
         }
     }
 
+    /// An iterator over the bidirectional runs.
     public struct RunIterator: IteratorProtocol {
         private let owner: BidiParagraph
         private var levelIndex: Int
@@ -146,6 +158,7 @@ extension BidiParagraph {
             self.levelIndex = 0
         }
 
+        /// Advances to the next bidirectional run and returns it, or `nil` if no next run exists.
         public mutating func next() -> BidiRun? {
             let bidiParagraph = owner.paragraph
             let paragraphOffset = SBParagraphGetOffset(bidiParagraph)

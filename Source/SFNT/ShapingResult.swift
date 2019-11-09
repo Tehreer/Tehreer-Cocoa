@@ -126,11 +126,13 @@ public class ShapingResult {
     }
 }
 
+// MARK: - Collections
+
 extension ShapingResult {
+    /// A collection of the glyph ids in a shaping result.
     public struct GlyphIDs: RandomAccessCollection {
         private let owner: ShapingResult
         private let pointer: UnsafePointer<GlyphID>!
-        public let count: Int
 
         init(_ owner: ShapingResult) {
             self.owner = owner
@@ -138,25 +140,34 @@ extension ShapingResult {
             self.count = owner.glyphCount
         }
 
+        /// The number of elements in the collection.
+        public let count: Int
+
+        /// The index to the first element.
         public var startIndex: Int {
             return 0
         }
 
+        /// The index after the last element.
         public var endIndex: Int {
             return count
         }
 
-        public subscript(position: Int) -> GlyphID {
-            precondition(position >= 0 && position < count, String.indexOutOfRange)
+        /// Accesses the glyph id at the specified position.
+        ///
+        /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
+        ///                    `startIndex` and less than `endIndex`.
+        public subscript(index: Int) -> GlyphID {
+            precondition(index >= 0 && index < count, String.indexOutOfRange)
 
-            return pointer[position]
+            return pointer[index]
         }
     }
 
+    /// A collection of the glyph offsets in a shaping result.
     public struct GlyphOffsets: RandomAccessCollection {
         private let owner: ShapingResult
         private let pointer: UnsafePointer<SFPoint>!
-        public let count: Int
 
         init(_ owner: ShapingResult) {
             self.owner = owner
@@ -164,26 +175,35 @@ extension ShapingResult {
             self.count = owner.glyphCount
         }
 
+        /// The number of elements in the collection.
+        public let count: Int
+
+        /// The index to the first element.
         public var startIndex: Int {
             return 0
         }
 
+        /// The index after the last element.
         public var endIndex: Int {
             return count
         }
 
-        public subscript(position: Int) -> CGPoint {
-            precondition(position >= 0 && position < count, String.indexOutOfRange)
+        /// Accesses the glyph offset at the specified position.
+        ///
+        /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
+        ///                    `startIndex` and less than `endIndex`.
+        public subscript(index: Int) -> CGPoint {
+            precondition(index >= 0 && index < count, String.indexOutOfRange)
 
-            return CGPoint(x: CGFloat(pointer[position].x) * owner.sizeByEm,
-                           y: CGFloat(pointer[position].y) * owner.sizeByEm)
+            return CGPoint(x: CGFloat(pointer[index].x) * owner.sizeByEm,
+                           y: CGFloat(pointer[index].y) * owner.sizeByEm)
         }
     }
 
+    /// A collection of the glyph advances in a shaping result.
     public struct GlyphAdvances: RandomAccessCollection {
         private let owner: ShapingResult
         private let pointer: UnsafePointer<SFInt32>!
-        public let count: Int
 
         init(_ owner: ShapingResult) {
             self.owner = owner
@@ -191,25 +211,34 @@ extension ShapingResult {
             self.count = owner.glyphCount
         }
 
+        /// The number of elements in the collection.
+        public let count: Int
+
+        /// The index to the first element.
         public var startIndex: Int {
             return 0
         }
 
+        /// The index after the last element.
         public var endIndex: Int {
             return count
         }
 
-        public subscript(position: Int) -> CGFloat {
-            precondition(position >= 0 && position < count, String.indexOutOfRange)
+        /// Accesses the glyph advance at the specified position.
+        ///
+        /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
+        ///                    `startIndex` and less than `endIndex`.
+        public subscript(index: Int) -> CGFloat {
+            precondition(index >= 0 && index < count, String.indexOutOfRange)
 
-            return CGFloat(pointer[position]) * owner.sizeByEm
+            return CGFloat(pointer[index]) * owner.sizeByEm
         }
     }
 
+    /// A collection of the cluster map in a shaping result, represented by UTF-16 code unit indices.
     public struct ClusterMap: RandomAccessCollection {
         private let owner: ShapingResult
         private let pointer: UnsafePointer<SFUInteger>!
-        public let count: Int
 
         init(_ owner: ShapingResult) {
             self.owner = owner
@@ -217,18 +246,27 @@ extension ShapingResult {
             self.count = owner.codeUnitCount
         }
 
+        /// The number of elements in the collection.
+        public let count: Int
+
+        /// The index to the first element.
         public var startIndex: Int {
             return 0
         }
 
+        /// The index after the last element.
         public var endIndex: Int {
             return count
         }
 
-        public subscript(position: Int) -> Int {
-            precondition(position >= 0 && position < count, String.indexOutOfRange)
+        /// Accesses the glyph index at the specified position.
+        ///
+        /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
+        ///                    `startIndex` and less than `endIndex`.
+        public subscript(index: Int) -> Int {
+            precondition(index >= 0 && index < count, String.indexOutOfRange)
 
-            return Int(pointer[position])
+            return Int(pointer[index])
         }
     }
 }

@@ -20,15 +20,21 @@ private func isValidByte(_ byte: UInt8) -> Bool {
     return byte >= 0x32 && byte <= 0x7E
 }
 
+/// An SFNT tag value type.
 public struct SFNTTag: RawRepresentable {
-    public typealias RawValue = UInt32
-
+    /// The corresponding value of the raw type.
     public let rawValue: UInt32
 
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
     public init?(rawValue: UInt32) {
         self.rawValue = rawValue
     }
 
+    /// Creates a new instance with the specified tag string.
+    ///
+    /// - Parameter string: The tag string.
     public init?(string: String) {
         var counter: Int = 0
         var bytes: [UInt8] = [0, 0, 0, 0]
@@ -59,8 +65,9 @@ public struct SFNTTag: RawRepresentable {
 }
 
 extension SFNTTag: ExpressibleByStringLiteral {
-    public typealias StringLiteralType = String
-
+    /// Creates an instance initialized to the specified tag string.
+    ///
+    /// - Parameter value: The tag string.
     public init(stringLiteral value: String) {
         guard let tag = SFNTTag(string: value) else {
             fatalError("Invalid tag string")
@@ -71,6 +78,7 @@ extension SFNTTag: ExpressibleByStringLiteral {
 }
 
 extension SFNTTag: CustomStringConvertible {
+    /// A textual representation of this tag.
     public var description: String {
         let bytes = [
             UInt8(rawValue >> 24),
