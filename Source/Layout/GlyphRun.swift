@@ -16,6 +16,7 @@
 
 import CoreGraphics
 import Foundation
+import UIKit
 
 private struct ClusterRange {
     var actualStart: String.Index
@@ -425,6 +426,10 @@ public class GlyphRun {
             case .scaleY:
                 if let scaleY = value as? CGFloat {
                     renderer.scaleY = scaleY
+                }
+            case .foregroundColor:
+                if let color = value as? UIColor {
+                    renderer.fillColor = color
                 }
             default:
                 break
