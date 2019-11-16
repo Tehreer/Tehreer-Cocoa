@@ -17,7 +17,7 @@
 import Foundation
 import FreeType
 
-public class FontFile {
+class FontFile {
     private var arguments: FT_Open_Args
     private let faceCount: Int
 
