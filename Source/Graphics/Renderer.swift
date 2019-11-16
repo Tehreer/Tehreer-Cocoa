@@ -241,7 +241,7 @@ public class Renderer {
     ///   - offsets: A sequence of glyph offsets.
     ///   - advances: A sequence of glyph advances.
     /// - Returns: A rectangle that tightly encloses the paths of specified glyphs.
-    public func computeBoundingBox<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS) -> CGRect
+    public func computeBoundingBox<GS, OS, AS>(forGlyphs glyphIDs: GS, offsets: OS, advances: AS) -> CGRect
         where GS: Sequence, GS.Element == GlyphID,
               OS: Sequence, OS.Element == CGPoint,
               AS: Sequence, AS.Element == CGFloat {

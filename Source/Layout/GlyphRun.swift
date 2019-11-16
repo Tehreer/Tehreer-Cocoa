@@ -328,7 +328,7 @@ public class GlyphRun {
         renderer.typeSize = typeSize
         renderer.writingDirection = writingDirection
 
-        return renderer.computeBoundingBox(glyphIDs: glyphIDs[glyphRange],
+        return renderer.computeBoundingBox(forGlyphs: glyphIDs[glyphRange],
                                            offsets: glyphOffsets[glyphRange],
                                            advances: glyphAdvances[glyphRange])
     }
