@@ -51,6 +51,9 @@ private func makeScriptsBuffer(string: String) -> UnsafeBufferPointer<SBScript> 
 public class ScriptClassifier {
     private let scriptsBuffer: UnsafeBufferPointer<SBScript>
 
+    /// Creates a script classifier for the specified string.
+    ///
+    /// - Parameter string: The string whose script classification is desired.
     public init(string: String) {
         self.string = string
         self.scriptsBuffer = makeScriptsBuffer(string: string)

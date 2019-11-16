@@ -35,8 +35,10 @@ private func f26Dot6ToFloat(_ value: FT_Pos) -> CGFloat {
     return CGFloat(value) / 64.0
 }
 
+/// An ID of a glyph in a font.
 public typealias GlyphID = UInt16
 
+/// A tag of a typeface.
 public typealias TypefaceTag = AnyHashable
 
 /// The `Typeface` class specifies the typeface and intrinsic style of a font. This is used in the

@@ -17,6 +17,9 @@
 import Foundation
 import SheenBidi
 
+/// Represents the script of a character in Unicode specification. The literals of enum correspond
+/// to the script property values defined in
+/// [Unicode Standard Annex #24: PropertyValueAliases.txt](https://www.unicode.org/reports/tr24/#Data_File_PVA).
 public enum Script: Int {
     /// Script "Inherited".
     case inherited = 0x01
@@ -467,6 +470,16 @@ public enum Script: Int {
 }
 
 extension Script {
+    /// Returns the OpenType tag of the specified script.
+    ///
+    /// The association between Unicode Script property and OpenType script tags is taken from the
+    /// specification: [https://docs.microsoft.com/en-us/typography/opentype/spec/scripttags](https://docs.microsoft.com/en-us/typography/opentype/spec/scripttags).
+    ///
+    /// If more than one tag is associated with a script, then the latest one is returned. For
+    /// example, Devanagari script has two tags, `deva` and `dev2`. So in this case, `dev2` will be
+    /// returned.
+    ///
+    /// If no tag is associated with a script, then `DFLT` is returned.
     public var openTypeTag: SFNTTag {
         return SFNTTag(rawValue: SBScriptGetOpenTypeTag(SBScript(rawValue)))!
     }

@@ -17,8 +17,16 @@
 import Foundation
 
 extension NSAttributedString.Key {
+    /// The value of this attribute is a `Typeface` object. Use this attribute to specify the
+    /// typeface of the text during rendering.
     public static let typeface = NSAttributedString.Key("TTypeface")
+    /// The value of this attribute is a `CGFloat` value. Use this attribute to specify the size of
+    /// of the typeface during rendering.
     public static let typeSize = NSAttributedString.Key("TSize")
+    /// The value of this attribute is a `CGFloat` value. Use this attribute to specify the scale of
+    /// of the typeface during rendering.
     public static let scaleX = NSAttributedString.Key("TScaleX")
+    /// The value of this attribute is a `CGFloat` value. Use this attribute to specify the scale of
+    /// of the typeface during rendering.
     public static let scaleY = NSAttributedString.Key("TScaleY")
 }
