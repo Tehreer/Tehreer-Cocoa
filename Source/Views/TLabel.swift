@@ -17,7 +17,7 @@
 import UIKit
 
 /// A view that displays read-only text to the user.
-@IBDesignable public class TLabel: UIView {
+public class TLabel: UIView {
     private let renderer = Renderer()
     private let resolver = FrameResolver()
 
@@ -285,7 +285,7 @@ import UIKit
     /// instead. Setting this property will make `text` property `nil`.
     ///
     /// If performance is required, a typesetter should be used directly.
-    @IBInspectable public var text: String! {
+    public var text: String! {
         get {
             return _text
         }
@@ -299,7 +299,7 @@ import UIKit
     }
 
     /// The default size of the text.
-    @IBInspectable public var textSize: CGFloat {
+    public var textSize: CGFloat {
         get {
             return renderer.typeSize
         }
@@ -310,7 +310,7 @@ import UIKit
     }
 
     /// The default color of the text.
-    @IBInspectable public var textColor: UIColor {
+    public var textColor: UIColor {
         get {
             return renderer.fillColor
         }
@@ -335,7 +335,7 @@ import UIKit
 
     /// The extra spacing that is added after each text line. It is resolved before line height
     /// multiplier. Its default value is zero.
-    @IBInspectable public var extraLineSpacing: CGFloat {
+    public var extraLineSpacing: CGFloat {
         get {
             return resolver.extraLineSpacing
         }
@@ -352,7 +352,7 @@ import UIKit
     ///
     /// The additional spacing is adjusted in such a way that text remains in the middle of the
     /// line.
-    @IBInspectable public var lineHeightMultiplier: CGFloat {
+    public var lineHeightMultiplier: CGFloat {
         get {
             return resolver.lineHeightMultiplier
         }
