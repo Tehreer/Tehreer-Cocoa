@@ -73,7 +73,7 @@ class BidiInfoViewController: UIViewController {
         let suggestedEnd = bidiText.endIndex
 
         while paragraphStart != suggestedEnd {
-            guard let paragraph = algorithm.makeParagraph(range: paragraphStart ..< suggestedEnd, baseLevel: BaseDirection.defaultLeftToRight.rawValue) else {
+            guard let paragraph = algorithm.makeParagraph(characterRange: paragraphStart ..< suggestedEnd, baseLevel: BaseDirection.defaultLeftToRight.rawValue) else {
                 continue
             }
 
@@ -110,7 +110,7 @@ class BidiInfoViewController: UIViewController {
             counter += 1
         }
 
-        if let line = paragraph.makeLine(range: paragraphStart ..< paragraphEnd) {
+        if let line = paragraph.makeLine(characterRange: paragraphStart ..< paragraphEnd) {
             writeLineText(line: line, index: index)
             writeMirrorsText(line: line)
         }

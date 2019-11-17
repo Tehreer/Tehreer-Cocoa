@@ -29,7 +29,7 @@ class OpenTypeShapingViewController: UITableViewController {
     @IBOutlet private weak var languageTagField: UITextField!
     @IBOutlet private weak var inputTextView: UITextView!
 
-    private var selectedTypeface: Typeface! = TypefaceManager.shared.availableTypefaces.first
+    private var selectedTypeface: Typeface! = TypefaceManager.default.availableTypefaces.first
 
     override func viewDidLoad() {
         super.viewDidLoad()

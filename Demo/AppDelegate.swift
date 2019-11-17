@@ -28,17 +28,17 @@ typealias ActionCallback = () -> Void
 @UIApplicationMain class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
-    func register(_ file: (name: String, type: String), for tag: String) {
+    func register(file: (name: String, type: String), forTag tag: String) {
         if let fullPath = Bundle.main.path(forResource: file.name, ofType: file.type),
            let typeface = Typeface(path: fullPath) {
-            TypefaceManager.shared.register(typeface, for: tag)
+            TypefaceManager.default.register(typeface, forTag: tag)
         }
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        register(("MehrNastaliq", "ttf"), for: TypefaceTag.mehrNastaliq)
-        register(("NafeesWeb", "ttf"), for: TypefaceTag.nafeesWeb)
-        register(("TajNastaleeq", "ttf"), for: TypefaceTag.tajNastaleeq)
+        register(file: ("MehrNastaliq", "ttf"), forTag: TypefaceTag.mehrNastaliq)
+        register(file: ("NafeesWeb", "ttf"), forTag: TypefaceTag.nafeesWeb)
+        register(file: ("TajNastaleeq", "ttf"), forTag: TypefaceTag.tajNastaleeq)
 
         return true
     }

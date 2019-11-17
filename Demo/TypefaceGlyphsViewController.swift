@@ -43,7 +43,7 @@ class GlyphShapeView: UIView {
         let fontDscent = CGFloat(typeface.descent) * sizeByEm
         let fontHeight = fontAscent + fontDscent
 
-        let glyphBounds = renderer.computeBoundingBox(for: glyphID)
+        let glyphBounds = renderer.computeBoundingBox(forGlyph: glyphID)
         let glyphX = round((bounds.width - glyphBounds.width) / 2.0 - glyphBounds.minX)
         let glyphY = round((bounds.height - fontHeight) / 2.0 + fontAscent)
 
@@ -77,7 +77,7 @@ class TypefaceGlyphsViewController: UIViewController, UIScrollViewDelegate, UICo
         renderer.renderScale = UIScreen.main.scale
         renderer.typeSize = 28.0
 
-        selectTypeface(TypefaceManager.shared.availableTypefaces.first)
+        selectTypeface(TypefaceManager.default.availableTypefaces.first)
     }
 
     private func selectTypeface(_ typeface: Typeface!) {

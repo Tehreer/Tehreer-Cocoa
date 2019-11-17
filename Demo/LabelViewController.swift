@@ -69,7 +69,7 @@ class LabelViewController: UIViewController {
             }
         }
 
-        label.typeface = TypefaceManager.shared.typeface(for: TypefaceTag.tajNastaleeq)
+        label.typeface = TypefaceManager.default.typeface(forTag: TypefaceTag.tajNastaleeq)
         label.textSize = 20
         label.attributedText = text
     }

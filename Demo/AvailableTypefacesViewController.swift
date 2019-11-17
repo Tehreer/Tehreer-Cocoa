@@ -22,7 +22,7 @@ private enum CellID {
 }
 
 class AvailableTypefacesViewController: UITableViewController {
-    private let availableTypefaces = TypefaceManager.shared.availableTypefaces
+    private let availableTypefaces = TypefaceManager.default.availableTypefaces
 
     private(set) var selectedTypeface: Typeface?
     private var onSelectionChanged: ActionCallback!

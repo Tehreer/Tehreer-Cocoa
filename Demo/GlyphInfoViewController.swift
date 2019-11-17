@@ -64,8 +64,8 @@ class GlyphInfoView: UIView {
 
         fontAscent = CGFloat(typeface.ascent) * sizeScale
         fontDescent = CGFloat(typeface.descent) * sizeScale
-        glyphAdvance = typeface.advance(for: glyphID, typeSize: typeSize, vertical: false) * sizeScale
-        glyphPath = typeface.glyphPath(for: glyphID, typeSize: typeSize, transform: transform)
+        glyphAdvance = typeface.advance(forGlyph: glyphID, typeSize: typeSize, vertical: false) * sizeScale
+        glyphPath = typeface.path(forGlyph: glyphID, typeSize: typeSize, transform: transform)
         glyphBounds = glyphPath.boundingBox
     }
 

@@ -19,17 +19,17 @@ import UIKit
 
 private struct ClusterDetail {
     let codePoints: [UnicodeScalar]
-    let glyphIDs: PrimitiveCollection<UInt16>
-    let glyphOffsets: PrimitiveCollection<CGPoint>
-    let glyphAdvances: PrimitiveCollection<CGFloat>
+    let glyphIDs: Slice<ShapingResult.GlyphIDs>
+    let glyphOffsets: Slice<ShapingResult.GlyphOffsets>
+    let glyphAdvances: Slice<ShapingResult.GlyphAdvances>
 }
 
 private struct TextDetail {
     let string: String
-    let glyphIDs: PrimitiveCollection<UInt16>
-    let glyphOffsets: PrimitiveCollection<CGPoint>
-    let glyphAdvances: PrimitiveCollection<CGFloat>
-    let clusterMap: PrimitiveCollection<Int>
+    let glyphIDs: ShapingResult.GlyphIDs
+    let glyphOffsets: ShapingResult.GlyphOffsets
+    let glyphAdvances: ShapingResult.GlyphAdvances
+    let clusterMap: ShapingResult.ClusterMap
     let clusterInitials: [Int]
 
     var clusterCount: Int {
@@ -110,7 +110,7 @@ class ClusterDetailCell: UITableViewCell, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch tableView {
         case charactersTableView:
-            let codePoint = clusterDetail.codePoints[indexPath.row]
+            let codePoint = clusterDetail.codePoints[clusterDetail.codePoints.startIndex + indexPath.row]
 
             let cell = tableView.dequeueReusableCell(withIdentifier: "\(CharacterDetailCell.self)", for: indexPath) as! CharacterDetailCell
             cell.characterLabel.text = String(format: "\u{202A}%04X (\(Character(codePoint)))", codePoint.value)
@@ -118,9 +118,9 @@ class ClusterDetailCell: UITableViewCell, UITableViewDataSource {
             return cell
 
         case glyphsTableView:
-            let glyphID = clusterDetail.glyphIDs[indexPath.row]
-            let glyphOffset = clusterDetail.glyphOffsets[indexPath.row]
-            let glyphAdvance = clusterDetail.glyphAdvances[indexPath.row]
+            let glyphID = clusterDetail.glyphIDs[clusterDetail.glyphIDs.startIndex + indexPath.row]
+            let glyphOffset = clusterDetail.glyphOffsets[clusterDetail.glyphOffsets.startIndex + indexPath.row]
+            let glyphAdvance = clusterDetail.glyphAdvances[clusterDetail.glyphAdvances.startIndex + indexPath.row]
 
             let cell = tableView.dequeueReusableCell(withIdentifier: "\(GlyphDetailCell.self)", for: indexPath) as! GlyphDetailCell
             cell.glyphIDLabel.text = String(format: "%04X", glyphID)
