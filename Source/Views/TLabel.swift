@@ -46,6 +46,8 @@ public class TLabel: UIView {
         }
     }
 
+    /// The frame rectangle, which describes the view’s location and size in its superview’s
+    /// coordinate system.
     public override var frame: CGRect {
         get {
             return super.frame
@@ -61,6 +63,8 @@ public class TLabel: UIView {
         }
     }
 
+    /// The bounds rectangle, which describes the view’s location and size in its own coordinate
+    /// system.
     public override var bounds: CGRect {
         get {
             return super.bounds
@@ -76,6 +80,7 @@ public class TLabel: UIView {
         }
     }
 
+    /// The natural size for the receiving view, considering only properties of the view itself.
     public override var intrinsicContentSize: CGSize {
         if typesetter != nil && preferredWidth == nil {
             resolver.fitsHorizontally = true
@@ -91,7 +96,8 @@ public class TLabel: UIView {
 
         return fittingSize
     }
-    
+
+    /// Lays out subviews.
     public override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -120,6 +126,9 @@ public class TLabel: UIView {
         }
     }
 
+    /// Draws the receiver’s image within the passed-in rectangle.
+    ///
+    /// - Parameter rect: The portion of the view’s bounds that needs to be updated.
     public override func draw(_ rect: CGRect) {
         super.draw(rect)
 
