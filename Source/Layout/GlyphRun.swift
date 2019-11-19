@@ -117,19 +117,12 @@ public class GlyphRun {
     /// The leading of this run, which is the distance that should be placed between two lines.
     public let leading: CGFloat
 
-    private(set) var extent: CGFloat = -.infinity
-
     /// The origin of this run in parent line.
     public internal(set) var origin: CGPoint = .zero
 
     /// The typographic width of this run.
     public var width: CGFloat {
-        // Locking is not required for constant width.
-        if extent == -CGFloat.infinity {
-            extent = typographicExtent(forGlyphRange: 0 ..< glyphIDs.count)
-        }
-
-        return extent
+        return distance(forCharacterRange: startIndex ..< endIndex)
     }
 
     /// The typographic height of this run.
@@ -230,8 +223,8 @@ public class GlyphRun {
         return caretEdges[arrayIndex]
     }
 
-    private func leadingEdge(forCharacterRange range: Range<String.Index>) -> CGFloat {
-        return caretEdge(forCharacterAt: !isBackward ? range.lowerBound : range.upperBound)
+    private func leadingEdge(from start: String.Index, to end: String.Index) -> CGFloat {
+        return caretEdge(forCharacterAt: !isBackward ? start : end)
     }
 
     /// Returns the distance of specified character from the start of the run assumed at zero.
@@ -382,20 +375,21 @@ public class GlyphRun {
         let startClipped = (cluster.actualStart < startIndex)
         let endClipped = (cluster.actualEnd > endIndex)
 
+        let bbox = context.boundingBoxOfClipPath
         let clipLeft: CGFloat
         let clipRight: CGFloat
 
         if !isRTL {
-            clipLeft = (startClipped ? caretEdge(forCharacterAt: startIndex) : -.infinity)
-            clipRight = (endClipped ? caretEdge(forCharacterAt: endIndex) : .infinity)
+            clipLeft = (startClipped ? caretEdge(forCharacterAt: startIndex) : bbox.minX)
+            clipRight = (endClipped ? caretEdge(forCharacterAt: endIndex) : bbox.maxX)
         } else {
-            clipRight = (startClipped ? caretEdge(forCharacterAt: startIndex) : .infinity)
-            clipLeft = (endClipped ? caretEdge(forCharacterAt: endIndex) : -.infinity)
+            clipRight = (startClipped ? caretEdge(forCharacterAt: startIndex) : bbox.maxX)
+            clipLeft = (endClipped ? caretEdge(forCharacterAt: endIndex) : bbox.minX)
         }
 
         context.saveGState()
-        context.clip(to: CGRect(x: clipLeft, y: -.infinity, width: clipRight - clipLeft, height: .infinity))
-        context.translateBy(x: leadingEdge(forCharacterRange: cluster.actualStart ..< cluster.actualEnd), y: 0.0)
+        context.clip(to: CGRect(x: clipLeft, y: bbox.minY, width: clipRight - clipLeft, height: bbox.height))
+        context.translateBy(x: leadingEdge(from: cluster.actualStart, to: cluster.actualEnd), y: 0.0)
 
         renderer.drawGlyphs(in: context,
                             glyphIDs: glyphIDs[cluster.glyphStart ..< cluster.glyphEnd],
@@ -471,7 +465,7 @@ public class GlyphRun {
         }
 
         context.saveGState()
-        context.translateBy(x: leadingEdge(forCharacterRange: chunkStart ..< chunkEnd), y: 0.0)
+        context.translateBy(x: leadingEdge(from: chunkStart, to: chunkEnd), y: 0.0)
 
         renderer.drawGlyphs(in: context,
                             glyphIDs: glyphIDs[glyphStart ..< glyphEnd],
