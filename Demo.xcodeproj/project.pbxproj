@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E0B69BC2385A85F001C231F /* TehreerCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EE0A4472305C6080061D4EB /* TehreerCocoa.framework */; };
+		6E0B69BD2385A85F001C231F /* TehreerCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6EE0A4472305C6080061D4EB /* TehreerCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E0B69C02385B0E8001C231F /* UIColor+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0B69BF2385B0E8001C231F /* UIColor+Additions.swift */; };
 		6E16908323819B59000A032B /* TypefaceInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E16908223819B58000A032B /* TypefaceInfoViewController.swift */; };
 		6E987FF823313A06009E721B /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E987FF723313A06009E721B /* UIViewController+Alert.swift */; };
 		6E987FFA23313F06009E721B /* OpenTypeInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E987FF923313F06009E721B /* OpenTypeInfoViewController.swift */; };
@@ -22,12 +25,26 @@
 		6EE0A4392305C56C0061D4EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EE0A4372305C56C0061D4EB /* Main.storyboard */; };
 		6EE0A43B2305C5760061D4EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EE0A43A2305C5760061D4EB /* Assets.xcassets */; };
 		6EE0A43E2305C5760061D4EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EE0A43C2305C5760061D4EB /* LaunchScreen.storyboard */; };
-		6EE0A4482305C6080061D4EB /* TehreerCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EE0A4472305C6080061D4EB /* TehreerCocoa.framework */; };
 		6EE775C8235219A200919591 /* BidiAlgorithmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE775C7235219A200919591 /* BidiAlgorithmViewController.swift */; };
 		6EE775CA23521D2600919591 /* BidiInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE775C923521D2600919591 /* BidiInfoViewController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		6E0B69BE2385A85F001C231F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6E0B69BD2385A85F001C231F /* TehreerCocoa.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		6E0B69BF2385B0E8001C231F /* UIColor+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Additions.swift"; sourceTree = "<group>"; };
 		6E16908223819B58000A032B /* TypefaceInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypefaceInfoViewController.swift; sourceTree = "<group>"; };
 		6E987FF723313A06009E721B /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		6E987FF923313F06009E721B /* OpenTypeInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenTypeInfoViewController.swift; sourceTree = "<group>"; };
@@ -55,7 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6EE0A4482305C6080061D4EB /* TehreerCocoa.framework in Frameworks */,
+				6E0B69BC2385A85F001C231F /* TehreerCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +82,7 @@
 		6E987FF6233139DC009E721B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				6E0B69BF2385B0E8001C231F /* UIColor+Additions.swift */,
 				6E987FF723313A06009E721B /* UIViewController+Alert.swift */,
 			);
 			path = Extensions;
@@ -139,6 +157,7 @@
 				6EE0A42C2305C56C0061D4EB /* Sources */,
 				6EE0A42D2305C56C0061D4EB /* Frameworks */,
 				6EE0A42E2305C56C0061D4EB /* Resources */,
+				6E0B69BE2385A85F001C231F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -208,6 +227,7 @@
 				6EE775C8235219A200919591 /* BidiAlgorithmViewController.swift in Sources */,
 				6EB1AFFA2336246900548553 /* TypefaceGlyphsViewController.swift in Sources */,
 				6EB91DB52340C2C100595946 /* LabelViewController.swift in Sources */,
+				6E0B69C02385B0E8001C231F /* UIColor+Additions.swift in Sources */,
 				6EB1AFFE2336A0F500548553 /* GlyphInfoViewController.swift in Sources */,
 				6E16908323819B59000A032B /* TypefaceInfoViewController.swift in Sources */,
 				6EB90B15232D0077000FA74E /* AvailableTypefacesViewController.swift in Sources */,

@@ -65,6 +65,9 @@ class BidiInfoViewController: UIViewController {
         if let algorithm = BidiAlgorithm(string: bidiText) {
             writeAlgorithmText(algorithm: algorithm)
         }
+
+        pageText.addAttribute(.foregroundColor, value: UIColor.text,
+                              range: NSRange(location: 0, length: pageText.length))
     }
 
     private func writeAlgorithmText(algorithm: BidiAlgorithm) {
