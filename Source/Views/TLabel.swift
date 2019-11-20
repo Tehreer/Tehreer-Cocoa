@@ -117,7 +117,7 @@ public class TLabel: UIView {
             invalidateIntrinsicContentSize()
             setNeedsLayout()
             setNeedsDisplay()
-        } else if preferredWidth == nil || viewSize.height != sceil(textFrame?.height ?? .zero) {
+        } else {
             resolver.fitsHorizontally = false
             resolver.fitsVertically = false
 
