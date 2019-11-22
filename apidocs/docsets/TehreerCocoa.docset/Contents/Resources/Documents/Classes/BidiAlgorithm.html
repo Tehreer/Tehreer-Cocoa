@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>BidiAlgorithm Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/BidiAlgorithm" class="dashAnchor"></a>
+    <a title="BidiAlgorithm Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">TehreerCocoa Docs</a> (84% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">TehreerCocoa Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        BidiAlgorithm Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/BidiAlgorithm.html">BidiAlgorithm</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine.html">BidiLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine/VisualRuns.html">– VisualRuns</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine/MirrorSequence.html">– MirrorSequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine/MirrorIterator.html">– MirrorIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph.html">BidiParagraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph/EmbeddingLevels.html">– EmbeddingLevels</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph/RunSequence.html">– RunSequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph/RunIterator.html">– RunIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ComposedFrame.html">ComposedFrame</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FrameResolver.html">FrameResolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/GlyphRun.html">GlyphRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer.html">Renderer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer/RenderingStyle.html">– RenderingStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer/StrokeCap.html">– StrokeCap</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer/StrokeJoin.html">– StrokeJoin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier.html">ScriptClassifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier/CharacterScripts.html">– CharacterScripts</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier/RunSequence.html">– RunSequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier/RunIterator.html">– RunIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingEngine.html">ShapingEngine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult.html">ShapingResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/GlyphIDs.html">– GlyphIDs</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/GlyphOffsets.html">– GlyphOffsets</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/GlyphAdvances.html">– GlyphAdvances</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/ClusterMap.html">– ClusterMap</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TLabel.html">TLabel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Weight.html">– Weight</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Width.html">– Width</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typesetter.html">Typesetter</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/BaseDirection.html">BaseDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/BreakMode.html">BreakMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/Script.html">Script</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ShapingOrder.html">ShapingOrder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TextAlignment.html">TextAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/VerticalAlignment.html">VerticalAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/WritingDirection.html">WritingDirection</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/NSAttributedString.html">NSAttributedString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/BidiPair.html">BidiPair</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/BidiRun.html">BidiRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HHEATable.html">HHEATable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HeadTable.html">HeadTable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NameTable.html">NameTable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OS2Table.html">OS2Table</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PrimitiveCollection.html">PrimitiveCollection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PrimitiveIterator.html">PrimitiveIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SFNTTag.html">SFNTTag</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12TehreerCocoa7GlyphIDa">GlyphID</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12TehreerCocoa11TypefaceTaga">TypefaceTag</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>BidiAlgorithm</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">BidiAlgorithm</span></code></pre>
+
+                </div>
+              </div>
+            <p>This class implements Unicode Bidirectional Algorithm available at
+<a href="http://www.unicode.org/reports/tr9">http://www.unicode.org/reports/tr9</a>.</p>
+
+<p>A <code>BidiAlgorithm</code> object provides information related to individual paragraphs in source string
+by applying rule P1. It can be used to create paragraph objects by explicitly specifying the
+paragraph level or deriving it from rules P2 and P3. Once a paragraph object is created,
+embedding levels of characters can be queried from it.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13BidiAlgorithmC8maxLevels5UInt8VvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/maxLevel" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13BidiAlgorithmC8maxLevels5UInt8VvpZ">maxLevel</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Maximum explicit embedding level.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">maxLevel</span><span class="p">:</span> <span class="kt">UInt8</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13BidiAlgorithmC6stringACSgSS_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(string:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13BidiAlgorithmC6stringACSgSS_tcfc">init(string:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a bidi algorithm object for the specified string.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">?(</span><span class="nv">string</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>string</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The string to apply unicode bidirectional algorithm on.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13BidiAlgorithmC17paragraphBoundary16inCharacterRangeSS5IndexVSnyAGG_tF"></a>
+                    <a name="//apple_ref/swift/Method/paragraphBoundary(inCharacterRange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13BidiAlgorithmC17paragraphBoundary16inCharacterRangeSS5IndexVSnyAGG_tF">paragraphBoundary(inCharacterRange:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the boundary of the first paragraph within the specified character range.</p>
+
+<p>The boundary of the paragraph occurs after a character whose bidirectional type is Paragraph
+Separator (B), or the <code>range.upperLimit</code> if no such character exists before it. The
+exception to this rule is when a Carriage Return (CR) is followed by a Line Feed (LF). Both
+CR and LF are paragraph separators, but in that case, the boundary of the paragraph is
+considered after LF character.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">paragraphBoundary</span><span class="p">(</span><span class="n">inCharacterRange</span> <span class="nv">characterRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>characterRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The suggested range of the paragraph in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The boundary of the first paragraph within the specified character range.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13BidiAlgorithmC13makeParagraph14characterRange9directionAA0cF0CSgSnySS5IndexVG_AA13BaseDirectionOtF"></a>
+                    <a name="//apple_ref/swift/Method/makeParagraph(characterRange:direction:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13BidiAlgorithmC13makeParagraph14characterRange9directionAA0cF0CSgSnySS5IndexVG_AA13BaseDirectionOtF">makeParagraph(characterRange:direction:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a paragraph object processed with Unicode Bidirectional Algorithm.</p>
+
+<p>This method processes only first paragraph starting at <code>range.lowerBound</code> and ending at
+either <code>range.upperBound</code> or some character before it, in accordance with Rule P1 of Unicode
+Bidirectional Algorithm.</p>
+
+<p>The paragraph level is determined by applying Rules P2-P3 and embedding levels are resolved
+by applying Rules X1-I2.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeParagraph</span><span class="p">(</span><span class="nv">characterRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">direction</span><span class="p">:</span> <span class="kt"><a href="../Enums/BaseDirection.html">BaseDirection</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/BidiParagraph.html">BidiParagraph</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>characterRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The suggested range of the paragraph in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>direction</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The base direction of the paragraph.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A paragraph object processed with Unicode Bidirectional Algorithm.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13BidiAlgorithmC13makeParagraph14characterRange9baseLevelAA0cF0CSgSnySS5IndexVG_s5UInt8VtF"></a>
+                    <a name="//apple_ref/swift/Method/makeParagraph(characterRange:baseLevel:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13BidiAlgorithmC13makeParagraph14characterRange9baseLevelAA0cF0CSgSnySS5IndexVG_s5UInt8VtF">makeParagraph(characterRange:baseLevel:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a paragraph object processed with Unicode Bidirectional Algorithm.</p>
+
+<p>This method processes only first paragraph starting at <code>range.lowerBound</code> and ending at
+either <code>range.upperBound</code> or some character before it, in accordance with Rule P1 of Unicode
+Bidirectional Algorithm.</p>
+
+<p>The paragraph level is overridden by <code>baseLevel</code> parameter and embedding levels are resolved
+by applying Rules X1-I2.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeParagraph</span><span class="p">(</span><span class="nv">characterRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">baseLevel</span><span class="p">:</span> <span class="kt">UInt8</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/BidiParagraph.html">BidiParagraph</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>characterRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The suggested range of the paragraph in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>baseLevel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Base level to override.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A paragraph object processed with Unicode Bidirectional Algorithm.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-11-21)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

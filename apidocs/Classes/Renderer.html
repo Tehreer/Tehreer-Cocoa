@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Renderer Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/Renderer" class="dashAnchor"></a>
+    <a title="Renderer Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">TehreerCocoa Docs</a> (84% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">TehreerCocoa Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Renderer Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/BidiAlgorithm.html">BidiAlgorithm</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine.html">BidiLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine/VisualRuns.html">– VisualRuns</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine/MirrorSequence.html">– MirrorSequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine/MirrorIterator.html">– MirrorIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph.html">BidiParagraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph/EmbeddingLevels.html">– EmbeddingLevels</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph/RunSequence.html">– RunSequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph/RunIterator.html">– RunIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ComposedFrame.html">ComposedFrame</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FrameResolver.html">FrameResolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/GlyphRun.html">GlyphRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer.html">Renderer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer/RenderingStyle.html">– RenderingStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer/StrokeCap.html">– StrokeCap</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer/StrokeJoin.html">– StrokeJoin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier.html">ScriptClassifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier/CharacterScripts.html">– CharacterScripts</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier/RunSequence.html">– RunSequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier/RunIterator.html">– RunIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingEngine.html">ShapingEngine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult.html">ShapingResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/GlyphIDs.html">– GlyphIDs</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/GlyphOffsets.html">– GlyphOffsets</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/GlyphAdvances.html">– GlyphAdvances</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/ClusterMap.html">– ClusterMap</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TLabel.html">TLabel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Weight.html">– Weight</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Width.html">– Width</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typesetter.html">Typesetter</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/BaseDirection.html">BaseDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/BreakMode.html">BreakMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/Script.html">Script</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ShapingOrder.html">ShapingOrder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TextAlignment.html">TextAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/VerticalAlignment.html">VerticalAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/WritingDirection.html">WritingDirection</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/NSAttributedString.html">NSAttributedString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/BidiPair.html">BidiPair</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/BidiRun.html">BidiRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HHEATable.html">HHEATable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HeadTable.html">HeadTable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NameTable.html">NameTable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OS2Table.html">OS2Table</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PrimitiveCollection.html">PrimitiveCollection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PrimitiveIterator.html">PrimitiveIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SFNTTag.html">SFNTTag</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12TehreerCocoa7GlyphIDa">GlyphID</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12TehreerCocoa11TypefaceTaga">TypefaceTag</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Renderer</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Renderer</span></code></pre>
+
+                </div>
+              </div>
+            <p>The <code>Renderer</code> class represents a generic glyph renderer. It can be used to generate glyph
+paths, measure their bounding boxes and draw them in a <code>CGContext</code> object.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC14RenderingStyleO"></a>
+                    <a name="//apple_ref/swift/Enum/RenderingStyle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC14RenderingStyleO">RenderingStyle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Specifies if the glyph being drawn is filled, stroked, or both.</p>
+
+                        <a href="../Classes/Renderer/RenderingStyle.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">RenderingStyle</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC9StrokeCapO"></a>
+                    <a name="//apple_ref/swift/Enum/StrokeCap" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC9StrokeCapO">StrokeCap</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Specifies the treatment for the beginning and ending of stroked lines and paths.</p>
+
+                        <a href="../Classes/Renderer/StrokeCap.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">StrokeCap</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC10StrokeJoinO"></a>
+                    <a name="//apple_ref/swift/Enum/StrokeJoin" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC10StrokeJoinO">StrokeJoin</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Specifies the treatment where lines and curve segments join on a stroked path.</p>
+
+                        <a href="../Classes/Renderer/StrokeJoin.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">StrokeJoin</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererCACycfc"></a>
+                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererCACycfc">init()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a renderer.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC9fillColorSo7UIColorCvp"></a>
+                    <a name="//apple_ref/swift/Property/fillColor" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC9fillColorSo7UIColorCvp">fillColor</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The fill color for glyphs. Its default value is <code>.black</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">fillColor</span><span class="p">:</span> <span class="kt">UIColor</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC14renderingStyleAC09RenderingE0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/renderingStyle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC14renderingStyleAC09RenderingE0Ovp">renderingStyle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The style, used for controlling how glyphs should appear while drawing. Its default value is
+<code>.fill</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">renderingStyle</span><span class="p">:</span> <span class="kt">Renderer</span><span class="o">.</span><span class="kt"><a href="../Classes/Renderer/RenderingStyle.html">RenderingStyle</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC16writingDirectionAA07WritingE0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/writingDirection" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC16writingDirectionAA07WritingE0Ovp">writingDirection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The direction in which the pen will advance after drawing a glyph. Its default value is
+<code>.leftToRight</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">writingDirection</span><span class="p">:</span> <span class="kt"><a href="../Enums/WritingDirection.html">WritingDirection</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC8typefaceAA8TypefaceCSgvp"></a>
+                    <a name="//apple_ref/swift/Property/typeface" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC8typefaceAA8TypefaceCSgvp">typeface</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The typeface, used for drawing glyphs.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">typeface</span><span class="p">:</span> <span class="kt"><a href="../Classes/Typeface.html">Typeface</a></span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC8typeSize12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/typeSize" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC8typeSize12CoreGraphics7CGFloatVvp">typeSize</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The type size applied on the glyphs while drawing.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">typeSize</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC10slantAngle12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/slantAngle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC10slantAngle12CoreGraphics7CGFloatVvp">slantAngle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The slant angle for glyphs. Its default value is zero.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">slantAngle</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC11renderScale12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/renderScale" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC11renderScale12CoreGraphics7CGFloatVvp">renderScale</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The scale factor applied to the glyphs and their metrics such as offsets and advances.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">renderScale</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC6scaleX12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/scaleX" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC6scaleX12CoreGraphics7CGFloatVvp">scaleX</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The horizontal scale factor applied on the glyphs while drawing. Its default value is 1.0.
+Values greater than 1.0 will stretch the glyphs wider. Values less than 1.0 will stretch the
+glyphs narrower.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">scaleX</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC6scaleY12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/scaleY" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC6scaleY12CoreGraphics7CGFloatVvp">scaleY</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The vertical scale factor applied on the glyphs while drawing. Its default value is 1.0.
+Values greater than 1.0 will stretch the glyphs wider. Values less than 1.0 will stretch the
+glyphs narrower.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">scaleY</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC11strokeColorSo7UIColorCvp"></a>
+                    <a name="//apple_ref/swift/Property/strokeColor" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC11strokeColorSo7UIColorCvp">strokeColor</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The stroke color for glyphs. Its default value is <code>.black</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">strokeColor</span><span class="p">:</span> <span class="kt">UIColor</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC11strokeWidth12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/strokeWidth" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC11strokeWidth12CoreGraphics7CGFloatVvp">strokeWidth</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The width, in pixels, for stroking glyphs.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">strokeWidth</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC9strokeCapAC06StrokeE0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/strokeCap" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC9strokeCapAC06StrokeE0Ovp">strokeCap</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The stroke cap style which controls how the start and end of stroked lines and paths are
+treated. Its default value is <code>.butt</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">strokeCap</span><span class="p">:</span> <span class="kt">Renderer</span><span class="o">.</span><span class="kt"><a href="../Classes/Renderer/StrokeCap.html">StrokeCap</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC10strokeJoinAC06StrokeE0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/strokeJoin" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC10strokeJoinAC06StrokeE0Ovp">strokeJoin</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The stroke join type. Its default value is <code>.round</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">strokeJoin</span><span class="p">:</span> <span class="kt">Renderer</span><span class="o">.</span><span class="kt"><a href="../Classes/Renderer/StrokeJoin.html">StrokeJoin</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC11strokeMiter12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/strokeMiter" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC11strokeMiter12CoreGraphics7CGFloatVvp">strokeMiter</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The stroke miter limit in pixels. This is used to control the behavior of miter joins when
+the joins angle is sharp.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">strokeMiter</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC12shadowRadius12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/shadowRadius" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC12shadowRadius12CoreGraphics7CGFloatVvp">shadowRadius</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The shadow radius, in pixels, used when drawing glyphs. Its default value is
+zero. The shadow would be disabled if the value is set to zero.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shadowRadius</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC8shadowDx12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/shadowDx" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC8shadowDx12CoreGraphics7CGFloatVvp">shadowDx</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The horizontal shadow offset, in pixels.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shadowDx</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC8shadowDy12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/shadowDy" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC8shadowDy12CoreGraphics7CGFloatVvp">shadowDy</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The vertical shadow offset in pixels.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shadowDy</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC11shadowColorSo7UIColorCvp"></a>
+                    <a name="//apple_ref/swift/Property/shadowColor" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC11shadowColorSo7UIColorCvp">shadowColor</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The shadow color.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shadowColor</span><span class="p">:</span> <span class="kt">UIColor</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC8makePath7glyphIDSo9CGPathRefaSgs6UInt16V_tF"></a>
+                    <a name="//apple_ref/swift/Method/makePath(glyphID:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC8makePath7glyphIDSo9CGPathRefaSgs6UInt16V_tF">makePath(glyphID:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Generates the path of specified glyph.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makePath</span><span class="p">(</span><span class="nv">glyphID</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12TehreerCocoa7GlyphIDa">GlyphID</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGPath</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>glyphID</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The ID of glyph whose path is generated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The path of the glyph specified by <code>glyphID</code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC8makePath8glyphIDs7offsets8advancesSo9CGPathRefaSgx_q_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVAMRt_12CoreGraphics7CGFloatVAMRt0_r1_lF"></a>
+                    <a name="//apple_ref/swift/Method/makePath(glyphIDs:offsets:advances:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC8makePath8glyphIDs7offsets8advancesSo9CGPathRefaSgx_q_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVAMRt_12CoreGraphics7CGFloatVAMRt0_r1_lF">makePath(glyphIDs:offsets:advances:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Generates a cumulative path of specified glyphs.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">makePath</span><span class="o">&lt;</span><span class="kt">GS</span><span class="p">,</span> <span class="kt">OS</span><span class="p">,</span> <span class="kt">AS</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">glyphIDs</span><span class="p">:</span> <span class="kt">GS</span><span class="p">,</span> <span class="nv">offsets</span><span class="p">:</span> <span class="kt">OS</span><span class="p">,</span> <span class="nv">advances</span><span class="p">:</span> <span class="kt">AS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGPath</span><span class="p">?</span>
+    <span class="k">where</span> <span class="kt">GS</span> <span class="p">:</span> <span class="kt">Sequence</span><span class="p">,</span> <span class="kt">GS</span><span class="o">.</span><span class="kt">Element</span> <span class="o">==</span> <span class="kt"><a href="../Typealiases.html#/s:12TehreerCocoa7GlyphIDa">GlyphID</a></span><span class="p">,</span>
+          <span class="kt">OS</span> <span class="p">:</span> <span class="kt">Sequence</span><span class="p">,</span> <span class="kt">OS</span><span class="o">.</span><span class="kt">Element</span> <span class="o">==</span> <span class="kt">CGPoint</span><span class="p">,</span>
+          <span class="kt">AS</span> <span class="p">:</span> <span class="kt">Sequence</span><span class="p">,</span> <span class="kt">AS</span><span class="o">.</span><span class="kt">Element</span> <span class="o">==</span> <span class="kt">CGFloat</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>glyphIds</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A sequence of glyph IDs.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>offsets</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A sequence of glyph offsets.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>advances</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A sequence of glyph advances.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The cumulative path of specified glyphs.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC18computeBoundingBox8forGlyphSo6CGRectVs6UInt16V_tF"></a>
+                    <a name="//apple_ref/swift/Method/computeBoundingBox(forGlyph:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC18computeBoundingBox8forGlyphSo6CGRectVs6UInt16V_tF">computeBoundingBox(forGlyph:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Calculates the bounding box of specified glyph.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">computeBoundingBox</span><span class="p">(</span><span class="n">forGlyph</span> <span class="nv">glyphID</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12TehreerCocoa7GlyphIDa">GlyphID</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGRect</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>glyphID</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The ID of glyph whose bounding box is calculated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A rectangle that tightly encloses the path of the specified glyph.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC18computeBoundingBox9forGlyphs7offsets8advancesSo6CGRectVx_q_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVALRt_12CoreGraphics7CGFloatVALRt0_r1_lF"></a>
+                    <a name="//apple_ref/swift/Method/computeBoundingBox(forGlyphs:offsets:advances:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC18computeBoundingBox9forGlyphs7offsets8advancesSo6CGRectVx_q_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVALRt_12CoreGraphics7CGFloatVALRt0_r1_lF">computeBoundingBox(forGlyphs:offsets:advances:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Calculates the bounding box of specified glyphs.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">computeBoundingBox</span><span class="o">&lt;</span><span class="kt">GS</span><span class="p">,</span> <span class="kt">OS</span><span class="p">,</span> <span class="kt">AS</span><span class="o">&gt;</span><span class="p">(</span><span class="n">forGlyphs</span> <span class="nv">glyphIDs</span><span class="p">:</span> <span class="kt">GS</span><span class="p">,</span> <span class="nv">offsets</span><span class="p">:</span> <span class="kt">OS</span><span class="p">,</span> <span class="nv">advances</span><span class="p">:</span> <span class="kt">AS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGRect</span>
+    <span class="k">where</span> <span class="kt">GS</span><span class="p">:</span> <span class="kt">Sequence</span><span class="p">,</span> <span class="kt">GS</span><span class="o">.</span><span class="kt">Element</span> <span class="o">==</span> <span class="kt"><a href="../Typealiases.html#/s:12TehreerCocoa7GlyphIDa">GlyphID</a></span><span class="p">,</span>
+          <span class="kt">OS</span><span class="p">:</span> <span class="kt">Sequence</span><span class="p">,</span> <span class="kt">OS</span><span class="o">.</span><span class="kt">Element</span> <span class="o">==</span> <span class="kt">CGPoint</span><span class="p">,</span>
+          <span class="kt">AS</span><span class="p">:</span> <span class="kt">Sequence</span><span class="p">,</span> <span class="kt">AS</span><span class="o">.</span><span class="kt">Element</span> <span class="o">==</span> <span class="kt">CGFloat</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>glyphIDs</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A sequence of glyph IDs.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>offsets</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A sequence of glyph offsets.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>advances</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A sequence of glyph advances.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A rectangle that tightly encloses the paths of specified glyphs.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8RendererC10drawGlyphs2in8glyphIDs7offsets8advancesySo12CGContextRefa_xq_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVAMRt_12CoreGraphics7CGFloatVAMRt0_r1_lF"></a>
+                    <a name="//apple_ref/swift/Method/drawGlyphs(in:glyphIDs:offsets:advances:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC10drawGlyphs2in8glyphIDs7offsets8advancesySo12CGContextRefa_xq_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVAMRt_12CoreGraphics7CGFloatVAMRt0_r1_lF">drawGlyphs(in:glyphIDs:offsets:advances:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Draws the glyphs in the specified context.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">drawGlyphs</span><span class="o">&lt;</span><span class="kt">GS</span><span class="p">,</span> <span class="kt">OS</span><span class="p">,</span> <span class="kt">AS</span><span class="o">&gt;</span><span class="p">(</span><span class="k">in</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">CGContext</span><span class="p">,</span> <span class="nv">glyphIDs</span><span class="p">:</span> <span class="kt">GS</span><span class="p">,</span> <span class="nv">offsets</span><span class="p">:</span> <span class="kt">OS</span><span class="p">,</span> <span class="nv">advances</span><span class="p">:</span> <span class="kt">AS</span><span class="p">)</span>
+    <span class="k">where</span> <span class="kt">GS</span><span class="p">:</span> <span class="kt">Sequence</span><span class="p">,</span> <span class="kt">GS</span><span class="o">.</span><span class="kt">Element</span> <span class="o">==</span> <span class="kt"><a href="../Typealiases.html#/s:12TehreerCocoa7GlyphIDa">GlyphID</a></span><span class="p">,</span>
+          <span class="kt">OS</span><span class="p">:</span> <span class="kt">Sequence</span><span class="p">,</span> <span class="kt">OS</span><span class="o">.</span><span class="kt">Element</span> <span class="o">==</span> <span class="kt">CGPoint</span><span class="p">,</span>
+          <span class="kt">AS</span><span class="p">:</span> <span class="kt">Sequence</span><span class="p">,</span> <span class="kt">AS</span><span class="o">.</span><span class="kt">Element</span> <span class="o">==</span> <span class="kt">CGFloat</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The context onto which to draw the glyphs.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>glyphIDs</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A sequence of glyph IDs.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>offsets</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A sequence of glyph offsets.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>advances</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A sequence of glyph advances.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-11-21)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

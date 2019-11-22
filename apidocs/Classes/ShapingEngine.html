@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ShapingEngine Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/ShapingEngine" class="dashAnchor"></a>
+    <a title="ShapingEngine Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">TehreerCocoa Docs</a> (84% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">TehreerCocoa Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        ShapingEngine Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/BidiAlgorithm.html">BidiAlgorithm</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine.html">BidiLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine/VisualRuns.html">– VisualRuns</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine/MirrorSequence.html">– MirrorSequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine/MirrorIterator.html">– MirrorIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph.html">BidiParagraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph/EmbeddingLevels.html">– EmbeddingLevels</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph/RunSequence.html">– RunSequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph/RunIterator.html">– RunIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ComposedFrame.html">ComposedFrame</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FrameResolver.html">FrameResolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/GlyphRun.html">GlyphRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer.html">Renderer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer/RenderingStyle.html">– RenderingStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer/StrokeCap.html">– StrokeCap</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer/StrokeJoin.html">– StrokeJoin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier.html">ScriptClassifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier/CharacterScripts.html">– CharacterScripts</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier/RunSequence.html">– RunSequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier/RunIterator.html">– RunIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingEngine.html">ShapingEngine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult.html">ShapingResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/GlyphIDs.html">– GlyphIDs</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/GlyphOffsets.html">– GlyphOffsets</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/GlyphAdvances.html">– GlyphAdvances</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/ClusterMap.html">– ClusterMap</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TLabel.html">TLabel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Weight.html">– Weight</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Width.html">– Width</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typesetter.html">Typesetter</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/BaseDirection.html">BaseDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/BreakMode.html">BreakMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/Script.html">Script</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ShapingOrder.html">ShapingOrder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TextAlignment.html">TextAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/VerticalAlignment.html">VerticalAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/WritingDirection.html">WritingDirection</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/NSAttributedString.html">NSAttributedString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/BidiPair.html">BidiPair</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/BidiRun.html">BidiRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HHEATable.html">HHEATable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HeadTable.html">HeadTable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NameTable.html">NameTable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OS2Table.html">OS2Table</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PrimitiveCollection.html">PrimitiveCollection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PrimitiveIterator.html">PrimitiveIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SFNTTag.html">SFNTTag</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12TehreerCocoa7GlyphIDa">GlyphID</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12TehreerCocoa11TypefaceTaga">TypefaceTag</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>ShapingEngine</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">ShapingEngine</span></code></pre>
+
+                </div>
+              </div>
+            <p>The <code>ShapingEngine</code> class represents text shaping engine.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingEngineCACycfc"></a>
+                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineCACycfc">init()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a shaping engine.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingEngineC25defaultDirectionForScriptyAA07WritingF0OAA7SFNTTagVFZ"></a>
+                    <a name="//apple_ref/swift/Method/defaultDirectionForScript(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC25defaultDirectionForScriptyAA07WritingF0OAA7SFNTTagVFZ">defaultDirectionForScript(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the default writing direction of a script.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">defaultDirectionForScript</span><span class="p">(</span><span class="n">_</span> <span class="nv">scriptTag</span><span class="p">:</span> <span class="kt"><a href="../Structs/SFNTTag.html">SFNTTag</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/WritingDirection.html">WritingDirection</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>scriptTag</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The tag of the script whose default direction is returned.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The default writing direction of the script identified by <code><a href="../Classes/ShapingEngine.html#/s:12TehreerCocoa13ShapingEngineC9scriptTagAA7SFNTTagVvp">scriptTag</a></code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingEngineC8typefaceAA8TypefaceCSgvp"></a>
+                    <a name="//apple_ref/swift/Property/typeface" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC8typefaceAA8TypefaceCSgvp">typeface</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The typeface which this shaping engine will use for shaping text.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">typeface</span><span class="p">:</span> <span class="kt"><a href="../Classes/Typeface.html">Typeface</a></span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingEngineC8typeSize12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/typeSize" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC8typeSize12CoreGraphics7CGFloatVvp">typeSize</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The type size which this shaping engine will use for shaping text.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">typeSize</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingEngineC9scriptTagAA7SFNTTagVvp"></a>
+                    <a name="//apple_ref/swift/Property/scriptTag" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC9scriptTagAA7SFNTTagVvp">scriptTag</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The script tag which this shaping engine will use for shaping text. Its default value is
+<code>DFLT</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">scriptTag</span><span class="p">:</span> <span class="kt"><a href="../Structs/SFNTTag.html">SFNTTag</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingEngineC11languageTagAA7SFNTTagVvp"></a>
+                    <a name="//apple_ref/swift/Property/languageTag" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC11languageTagAA7SFNTTagVvp">languageTag</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The language tag which this shaping engine will use for shaping text. Its default value is
+<code>dflt</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">languageTag</span><span class="p">:</span> <span class="kt"><a href="../Structs/SFNTTag.html">SFNTTag</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingEngineC16openTypeFeaturesSDyAA7SFNTTagVSiGvp"></a>
+                    <a name="//apple_ref/swift/Property/openTypeFeatures" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC16openTypeFeaturesSDyAA7SFNTTagVSiGvp">openTypeFeatures</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The user-specified open type feature settings.</p>
+
+<p>If the value of a feature is set to zero, it would be disabled provided that it is not a
+required feature of the chosen script. If the value of a feature is greater than zero, it
+would be enabled. In case of an alternate feature, this value would be used to pick the
+alternate glyph at this position.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">openTypeFeatures</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/SFNTTag.html">SFNTTag</a></span> <span class="p">:</span> <span class="kt">Int</span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingEngineC16writingDirectionAA07WritingF0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/writingDirection" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC16writingDirectionAA07WritingF0Ovp">writingDirection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The direction in which this shaping engine will place the resultant glyphs. Its default
+value is <code>.leftToRight</code>.</p>
+
+<p>The value of writing direction must reflect the rendering direction of source script so that
+cursive and mark glyphs are placed at appropriate locations. It should not be confused with
+the direction of a bidirectional run as that may not reflect the script direction if
+overridden explicitly.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">writingDirection</span><span class="p">:</span> <span class="kt"><a href="../Enums/WritingDirection.html">WritingDirection</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingEngineC12shapingOrderAA0cF0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/shapingOrder" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC12shapingOrderAA0cF0Ovp">shapingOrder</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The order in which this shaping engine will process the text. Its default value is
+<code>.forward</code>.</p>
+
+<p>This method provides a convenient way to shape a bidirectional run whose direction is
+opposite to that of script. For example, if the direction of a run, &lsquo;car&rsquo; is explicitly set
+as right-to-left, backward order will automatically read it as &lsquo;rac&rsquo; without reordering the
+original text.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shapingOrder</span><span class="p">:</span> <span class="kt"><a href="../Enums/ShapingOrder.html">ShapingOrder</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingEngineC5shape4text5rangeAA0C6ResultCSS_SnySS5IndexVGtF"></a>
+                    <a name="//apple_ref/swift/Method/shape(text:range:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC5shape4text5rangeAA0C6ResultCSS_SnySS5IndexVGtF">shape(text:range:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Shapes the specified range of text into glyphs.</p>
+
+<p>The output glyphs in the <code><a href="../Classes/ShapingResult.html">ShapingResult</a></code> object flow visually in writing direction. For
+left-to-right direction, the position of pen is incremented with glyph&rsquo;s advance after
+rendering it. Similarly, for right-to-left direction, the position of pen is decremented
+with glyph&rsquo;s advance after rendering it.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">shape</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ShapingResult.html">ShapingResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>text</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The text to shape into glyphs.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>range</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The range of text to be shaped.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new <code><a href="../Classes/ShapingResult.html">ShapingResult</a></code> object.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-11-21)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

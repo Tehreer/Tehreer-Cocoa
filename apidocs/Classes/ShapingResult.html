@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ShapingResult Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/ShapingResult" class="dashAnchor"></a>
+    <a title="ShapingResult Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">TehreerCocoa Docs</a> (84% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">TehreerCocoa Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        ShapingResult Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/BidiAlgorithm.html">BidiAlgorithm</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine.html">BidiLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine/VisualRuns.html">– VisualRuns</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine/MirrorSequence.html">– MirrorSequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiLine/MirrorIterator.html">– MirrorIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph.html">BidiParagraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph/EmbeddingLevels.html">– EmbeddingLevels</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph/RunSequence.html">– RunSequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BidiParagraph/RunIterator.html">– RunIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ComposedFrame.html">ComposedFrame</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FrameResolver.html">FrameResolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/GlyphRun.html">GlyphRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer.html">Renderer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer/RenderingStyle.html">– RenderingStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer/StrokeCap.html">– StrokeCap</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Renderer/StrokeJoin.html">– StrokeJoin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier.html">ScriptClassifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier/CharacterScripts.html">– CharacterScripts</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier/RunSequence.html">– RunSequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ScriptClassifier/RunIterator.html">– RunIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingEngine.html">ShapingEngine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult.html">ShapingResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/GlyphIDs.html">– GlyphIDs</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/GlyphOffsets.html">– GlyphOffsets</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/GlyphAdvances.html">– GlyphAdvances</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ShapingResult/ClusterMap.html">– ClusterMap</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TLabel.html">TLabel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Weight.html">– Weight</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Width.html">– Width</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typesetter.html">Typesetter</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/BaseDirection.html">BaseDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/BreakMode.html">BreakMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/Script.html">Script</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ShapingOrder.html">ShapingOrder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TextAlignment.html">TextAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/VerticalAlignment.html">VerticalAlignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/WritingDirection.html">WritingDirection</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/NSAttributedString.html">NSAttributedString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/BidiPair.html">BidiPair</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/BidiRun.html">BidiRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HHEATable.html">HHEATable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HeadTable.html">HeadTable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NameTable.html">NameTable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OS2Table.html">OS2Table</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PrimitiveCollection.html">PrimitiveCollection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PrimitiveIterator.html">PrimitiveIterator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SFNTTag.html">SFNTTag</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12TehreerCocoa7GlyphIDa">GlyphID</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12TehreerCocoa11TypefaceTaga">TypefaceTag</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>ShapingResult</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">ShapingResult</span></code></pre>
+
+                </div>
+              </div>
+            <p>A <code>ShapingResult</code> object is a container for the results of text shaping. It is generated by a
+<code><a href="../Classes/ShapingEngine.html">ShapingEngine</a></code> object to provide the information related to characters, their glyphs, offsets,
+and advances.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingResultC10isBackwardSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isBackward" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC10isBackwardSbvp">isBackward</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A boolean value that indicates whether the shaped text segment flows backward.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">isBackward</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingResultC10startIndexSS0F0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/startIndex" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC10startIndexSS0F0Vvp">startIndex</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The index to the first character in source string.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">startIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingResultC8endIndexSS0F0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/endIndex" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC8endIndexSS0F0Vvp">endIndex</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The index after the last character in source string.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">endIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingResultC8glyphIDsAC05GlyphF0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/glyphIDs" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC8glyphIDsAC05GlyphF0Vvp">glyphIDs</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The collection of glyph IDs.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">glyphIDs</span><span class="p">:</span> <span class="kt"><a href="../Classes/ShapingResult/GlyphIDs.html">GlyphIDs</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingResultC12glyphOffsetsAC05GlyphF0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/glyphOffsets" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC12glyphOffsetsAC05GlyphF0Vvp">glyphOffsets</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The collection of glyph offsets.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">glyphOffsets</span><span class="p">:</span> <span class="kt"><a href="../Classes/ShapingResult/GlyphOffsets.html">GlyphOffsets</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingResultC13glyphAdvancesAC05GlyphF0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/glyphAdvances" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC13glyphAdvancesAC05GlyphF0Vvp">glyphAdvances</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The collection of glyph advances.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">glyphAdvances</span><span class="p">:</span> <span class="kt"><a href="../Classes/ShapingResult/GlyphAdvances.html">GlyphAdvances</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingResultC10clusterMapAC07ClusterF0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/clusterMap" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC10clusterMapAC07ClusterF0Vvp">clusterMap</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A collection of indexes, mapping each shaped UTF-16 code unit in source string to
+corresponding glyph.</p>
+
+<p>The map is produced according to following rules.</p>
+
+<ol>
+<li>If a single code unit translates into multiple glyphs, then it maps to the first glyph in
+the sequence.</li>
+<li>If multiple code units form a group, such as a grapheme, which in turn translates into
+multiple glyphs, then each character maps to the first glyph in the sequence.</li>
+<li>If nonconsecutive code units translate to a single glyph or ligature, then each
+participating code unit, and all in-between characters, map to this glyph or ligature.</li>
+</ol>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">clusterMap</span><span class="p">:</span> <span class="kt"><a href="../Classes/ShapingResult/ClusterMap.html">ClusterMap</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingResultC14makeCaretEdges10caretStopsSay12CoreGraphics7CGFloatVGSaySbGSg_tF"></a>
+                    <a name="//apple_ref/swift/Method/makeCaretEdges(caretStops:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC14makeCaretEdges10caretStopsSay12CoreGraphics7CGFloatVGSaySbGSg_tF">makeCaretEdges(caretStops:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an array of caret edges.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeCaretEdges</span><span class="p">(</span><span class="nv">caretStops</span><span class="p">:</span> <span class="p">[</span><span class="kt">Bool</span><span class="p">]?)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">CGFloat</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>caretStops</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array for caret stops of the UTF-16 code units represented by
+                    this object.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An array of caret edges.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Collections"></a>
+                <a name="//apple_ref/swift/Section/Collections" class="dashAnchor"></a>
+                <a href="#/Collections">
+                  <h3 class="section-name">Collections</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingResultC8GlyphIDsV"></a>
+                    <a name="//apple_ref/swift/Struct/GlyphIDs" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC8GlyphIDsV">GlyphIDs</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A collection of the glyph ids in a shaping result.</p>
+
+                        <a href="../Classes/ShapingResult/GlyphIDs.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">GlyphIDs</span> <span class="p">:</span> <span class="kt">RandomAccessCollection</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingResultC12GlyphOffsetsV"></a>
+                    <a name="//apple_ref/swift/Struct/GlyphOffsets" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC12GlyphOffsetsV">GlyphOffsets</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A collection of the glyph offsets in a shaping result.</p>
+
+                        <a href="../Classes/ShapingResult/GlyphOffsets.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">GlyphOffsets</span> <span class="p">:</span> <span class="kt">RandomAccessCollection</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingResultC13GlyphAdvancesV"></a>
+                    <a name="//apple_ref/swift/Struct/GlyphAdvances" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC13GlyphAdvancesV">GlyphAdvances</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A collection of the glyph advances in a shaping result.</p>
+
+                        <a href="../Classes/ShapingResult/GlyphAdvances.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">GlyphAdvances</span> <span class="p">:</span> <span class="kt">RandomAccessCollection</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingResultC10ClusterMapV"></a>
+                    <a name="//apple_ref/swift/Struct/ClusterMap" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC10ClusterMapV">ClusterMap</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A collection of the cluster map in a shaping result, represented by UTF-16 code unit indices.</p>
+
+                        <a href="../Classes/ShapingResult/ClusterMap.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ClusterMap</span> <span class="p">:</span> <span class="kt">RandomAccessCollection</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-11-21)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
