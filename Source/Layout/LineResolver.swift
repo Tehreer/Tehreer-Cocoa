@@ -158,7 +158,7 @@ struct LineResolver {
 
             if let previousRun = previousRun {
                 if bidiLevel != previousRun.bidiLevel || isForwardRun {
-                    insertIndex = runs.count
+                    insertIndex = visualRuns.count
                 }
             }
 
