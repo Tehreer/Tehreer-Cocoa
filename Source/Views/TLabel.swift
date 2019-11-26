@@ -16,6 +16,14 @@
 
 import UIKit
 
+private class SizeLabel: UILabel {
+    weak var parent: TLabel!
+
+    public override var intrinsicContentSize: CGSize {
+        return parent.intrinsicContentSize(for: preferredMaxLayoutWidth)
+    }
+}
+
 /// A view that displays read-only text to the user.
 public class TLabel: UIView {
     private let renderer = Renderer()
@@ -24,26 +32,76 @@ public class TLabel: UIView {
     private var _text: String!
     private var _attributedText: NSAttributedString!
     private var _typesetter: Typesetter?
-    private var _fittingSize: CGSize = .zero
+    private var _sizeLabel = SizeLabel()
 
     private var needsTypesetter: Bool = false
-    private var preferredWidth: CGFloat?
-    private var layoutRect: CGRect = .zero
     private var textFrame: ComposedFrame? = nil
+
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        addSizeLabel()
+    }
+
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSizeLabel()
+    }
+
+    public override class var requiresConstraintBasedLayout: Bool {
+        return true
+    }
+
+    private func addSizeLabel() {
+        _sizeLabel.parent = self
+        _sizeLabel.alpha = 0.0
+        _sizeLabel.isUserInteractionEnabled = false
+        _sizeLabel.translatesAutoresizingMaskIntoConstraints = false
+        _sizeLabel.numberOfLines = 0
+        _sizeLabel.text = ""
+
+        addSubview(_sizeLabel)
+
+        addConstraint(NSLayoutConstraint(item: _sizeLabel, attribute: .left, relatedBy: .equal,
+                                         toItem: self, attribute: .left,
+                                         multiplier: 1.0, constant: 0.0))
+        addConstraint(NSLayoutConstraint(item: _sizeLabel, attribute: .top, relatedBy: .equal,
+                                         toItem: self, attribute: .top,
+                                         multiplier: 1.0, constant: 0.0))
+        addConstraint(NSLayoutConstraint(item: _sizeLabel, attribute: .right, relatedBy: .equal,
+                                         toItem: self, attribute: .right,
+                                         multiplier: 1.0, constant: 0.0))
+        addConstraint(NSLayoutConstraint(item: _sizeLabel, attribute: .bottom, relatedBy: .equal,
+                                         toItem: self, attribute: .bottom,
+                                         multiplier: 1.0, constant: 0.0))
+    }
 
     private func sceil(_ x: CGFloat) -> CGFloat {
         let scale = layer.contentsScale
         return ceil(x * scale) / scale
     }
 
-    private var fittingSize: CGSize {
-        get {
-            return _fittingSize
-        }
-        set {
-            _fittingSize.width = sceil(newValue.width)
-            _fittingSize.height = sceil(newValue.height)
-        }
+    func intrinsicContentSize(for width: CGFloat) -> CGSize {
+        resolver.fitsHorizontally = true
+        resolver.fitsVertically = true
+
+        guard let textFrame = makeTextFrame(paddingLeft: .zero, paddingTop: .zero,
+                                            layoutWidth: width == 0 ? .infinity : width,
+                                            layoutHeight: .infinity) else { return .zero }
+
+        return CGSize(width: sceil(textFrame.width), height: sceil(textFrame.height))
+    }
+
+    /// Lays out subviews.
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+
+        let viewSize = bounds.size
+
+        resolver.fitsHorizontally = false
+        resolver.fitsVertically = false
+
+        updateFrame(paddingLeft: .zero, paddingTop: .zero,
+                    layoutWidth: viewSize.width, layoutHeight: viewSize.height)
     }
 
     /// The frame rectangle, which describes the view’s location and size in its superview’s
@@ -80,52 +138,6 @@ public class TLabel: UIView {
         }
     }
 
-    /// The natural size for the receiving view, considering only properties of the view itself.
-    public override var intrinsicContentSize: CGSize {
-        if typesetter != nil && preferredWidth == nil {
-            resolver.fitsHorizontally = true
-            resolver.fitsVertically = true
-
-            updateFrame(paddingLeft: .zero, paddingTop: .zero,
-                        layoutWidth: .infinity, layoutHeight: .infinity)
-
-            fittingSize = CGSize(width: textFrame?.width ?? .zero,
-                                 height: textFrame?.height ?? .zero)
-            preferredWidth = fittingSize.width
-        }
-
-        return fittingSize
-    }
-
-    /// Lays out subviews.
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-
-        let viewSize = bounds.size
-
-        if preferredWidth != nil && viewSize.width != preferredWidth {
-            resolver.fitsHorizontally = true
-            resolver.fitsVertically = true
-
-            updateFrame(paddingLeft: .zero, paddingTop: .zero,
-                        layoutWidth: viewSize.width, layoutHeight: .infinity)
-
-            fittingSize = CGSize(width: textFrame?.width ?? .zero,
-                                 height: textFrame?.height ?? .zero)
-            preferredWidth = viewSize.width
-
-            invalidateIntrinsicContentSize()
-            setNeedsLayout()
-            setNeedsDisplay()
-        } else {
-            resolver.fitsHorizontally = false
-            resolver.fitsVertically = false
-
-            updateFrame(paddingLeft: .zero, paddingTop: .zero,
-                        layoutWidth: viewSize.width, layoutHeight: viewSize.height)
-        }
-    }
-
     /// Draws the receiver’s image within the passed-in rectangle.
     ///
     /// - Parameter rect: The portion of the view’s bounds that needs to be updated.
@@ -153,28 +165,22 @@ public class TLabel: UIView {
         }
     }
 
-    private func setNeedsLayoutAndSize() {
-        preferredWidth = nil
-        setNeedsLayout()
+    private func makeTextFrame(paddingLeft: CGFloat, paddingTop: CGFloat, layoutWidth: CGFloat, layoutHeight: CGFloat) -> ComposedFrame? {
+        if let typesetter = typesetter {
+            resolver.typesetter = typesetter
+            resolver.frameBounds = CGRect(x: paddingLeft, y: paddingTop, width: layoutWidth, height: layoutHeight)
+
+            let string = typesetter.text.string
+            let frame = resolver.makeFrame(characterRange: string.startIndex ..< string.endIndex)
+
+            return frame
+        }
+
+        return nil
     }
 
     private func updateFrame(paddingLeft: CGFloat, paddingTop: CGFloat, layoutWidth: CGFloat, layoutHeight: CGFloat) {
-        textFrame = nil
-
-        if let typesetter = typesetter {
-            let t1 = CFAbsoluteTimeGetCurrent()
-
-            layoutRect = CGRect(x: paddingLeft, y: paddingTop, width: layoutWidth, height: layoutHeight)
-
-            resolver.typesetter = typesetter
-            resolver.frameBounds = layoutRect
-
-            let string = typesetter.text.string
-            textFrame = resolver.makeFrame(characterRange: string.startIndex ..< string.endIndex)
-
-            let t2 = CFAbsoluteTimeGetCurrent()
-            print("Time taken to resolve frame: \((t2 - t1) * 1E3)")
-        }
+        textFrame = makeTextFrame(paddingLeft: paddingLeft, paddingTop: paddingTop, layoutWidth: layoutWidth, layoutHeight: layoutHeight)
     }
 
     private func updateTypesetter() {
@@ -207,7 +213,8 @@ public class TLabel: UIView {
         let t2 = CFAbsoluteTimeGetCurrent()
         print("Time taken to create typesetter: \((t2 - t1) * 1E3)")
 
-        setNeedsLayoutAndSize()
+        _sizeLabel.invalidateIntrinsicContentSize()
+        setNeedsLayout()
         setNeedsDisplay()
     }
 
@@ -253,7 +260,8 @@ public class TLabel: UIView {
             _typesetter = newValue
             needsTypesetter = true
 
-            setNeedsLayoutAndSize()
+            _sizeLabel.invalidateIntrinsicContentSize()
+            setNeedsLayout()
             setNeedsDisplay()
         }
     }
@@ -337,7 +345,8 @@ public class TLabel: UIView {
         set {
             resolver.maxLines = newValue
 
-            setNeedsLayoutAndSize()
+            _sizeLabel.invalidateIntrinsicContentSize()
+            setNeedsLayout()
             setNeedsDisplay()
         }
     }
@@ -351,7 +360,8 @@ public class TLabel: UIView {
         set {
             resolver.extraLineSpacing = newValue
 
-            setNeedsLayoutAndSize()
+            _sizeLabel.invalidateIntrinsicContentSize()
+            setNeedsLayout()
             setNeedsDisplay()
         }
     }
@@ -368,7 +378,8 @@ public class TLabel: UIView {
         set {
             resolver.lineHeightMultiplier = newValue
 
-            setNeedsLayoutAndSize()
+            _sizeLabel.invalidateIntrinsicContentSize()
+            setNeedsLayout()
             setNeedsDisplay()
         }
     }
