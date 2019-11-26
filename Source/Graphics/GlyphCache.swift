@@ -36,7 +36,7 @@ private class FontCache: LRUSegment<UInt16, Glyph> {
 }
 
 class GlyphCache: LRUCache<UInt16, Glyph> {
-    static let instance = GlyphCache(capacity: 4096)
+    static let instance = GlyphCache(capacity: 8192 * 1024)
 
     private let mutex = Mutex()
     private var segments: [GlyphStrike: FontCache] = [:]
