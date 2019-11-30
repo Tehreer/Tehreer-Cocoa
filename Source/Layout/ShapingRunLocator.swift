@@ -84,23 +84,23 @@ struct ShapingRunLocator {
                     shapingRun.typeface = typeface
                 }
             case .typeSize:
-                if let typeSize = value as? CGFloat {
+                if let number = value as? NSNumber, let typeSize = CGFloat(exactly: number) {
                     shapingRun.typeSize = typeSize
                 }
             case .scaleX:
-                if let scaleX = value as? CGFloat {
+                if let number = value as? NSNumber, let scaleX = CGFloat(exactly: number) {
                     shapingRun.scaleX = scaleX
                 }
             case .scaleY:
-                if let scaleY = value as? CGFloat {
+                if let number = value as? NSNumber, let scaleY = CGFloat(exactly: number) {
                     shapingRun.scaleY = scaleY
                 }
             case .baselineOffset:
-                if let baselineOffset = value as? CGFloat {
+                if let number = value as? NSNumber, let baselineOffset = CGFloat(exactly: number) {
                     shapingRun.baselineOffset = baselineOffset
                 }
             case .obliqueness:
-                if let obliqueness = value as? CGFloat {
+                if let number = value as? NSNumber, let obliqueness = CGFloat(exactly: number) {
                     shapingRun.obliqueness = obliqueness
                 }
             default:
