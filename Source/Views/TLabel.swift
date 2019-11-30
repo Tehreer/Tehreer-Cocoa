@@ -149,19 +149,11 @@ public class TLabel: UIView {
         }
 
         if let context = UIGraphicsGetCurrentContext() {
-            let t1 = CFAbsoluteTimeGetCurrent()
-
             renderer.renderScale = layer.contentsScale
-            context.saveGState()
 
             if let textFrame = textFrame {
                 textFrame.draw(with: renderer, in: context, at: .zero)
             }
-
-            context.restoreGState()
-
-            let t2 = CFAbsoluteTimeGetCurrent()
-            print("Time taken to render label: \((t2 - t1) * 1E3)")
         }
     }
 
@@ -189,8 +181,6 @@ public class TLabel: UIView {
         }
         _typesetter = nil
 
-        let t1 = CFAbsoluteTimeGetCurrent()
-
         if let text = text {
             if let typeface = typeface, !text.isEmpty {
                 let defaultAttributes: [NSAttributedString.Key: Any] = [
@@ -209,9 +199,6 @@ public class TLabel: UIView {
                 _typesetter = Typesetter(text: attributedText, defaultAttributes: defaultAttributes)
             }
         }
-
-        let t2 = CFAbsoluteTimeGetCurrent()
-        print("Time taken to create typesetter: \((t2 - t1) * 1E3)")
 
         _sizeLabel.invalidateIntrinsicContentSize()
         setNeedsLayout()
