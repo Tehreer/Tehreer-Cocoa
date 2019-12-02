@@ -16,25 +16,43 @@
 
 import CoreGraphics
 import Foundation
+import UIKit
+
+private struct TextSpan<Attribute> {
+    let attribute: Attribute
+    let range: NSRange
+}
 
 private struct FrameContext {
+    // MARK: Layout Properties
+
     var layoutWidth: CGFloat = .zero
     var layoutHeight: CGFloat = .zero
 
     let maxLines: Int
 
+    var textLines: [ComposedLine] = []
+    var isFilled: Bool = false
+
+    var occupiedWidth: CGFloat = .zero
+    var occupiedHeight: CGFloat = .zero
+
+    // MARK: Paragraph Properties
+
     var startIndex: String.Index
     var endIndex: String.Index
     var baseLevel: UInt8 = .zero
 
-    var textLines: [ComposedLine] = []
-    var lineTop: CGFloat = .zero
+    // MARK: Line Properties
 
-    var isFilled: Bool = false
+    var lineExtent: CGFloat = .zero
+    var lineMargins: CGFloat = .zero
+    var leftIndent: CGFloat = .zero
+    var flushFactor: CGFloat = .zero
 
     init(resolver: FrameResolver, startIndex: String.Index, endIndex: String.Index) {
-        self.layoutWidth = resolver.frameBounds.width
-        self.layoutHeight = resolver.frameBounds.height
+        self.layoutWidth = min(max(resolver.frameBounds.width, 0), .greatestFiniteMagnitude)
+        self.layoutHeight = min(max(resolver.frameBounds.height, 0), .greatestFiniteMagnitude)
         self.maxLines = resolver.maxLines ?? .max
         self.startIndex = startIndex
         self.endIndex = endIndex
@@ -98,11 +116,18 @@ public class FrameResolver {
             let paragraph = allParagraphs[paragraphIndex]
             let segmentEnd = min(characterRange.upperBound, paragraph.endIndex)
 
-            // Setup the frame filler and add the lines.
+            // Setup the paragraph properties.
             context.startIndex = segmentStart
             context.endIndex = segmentEnd
             context.baseLevel = paragraph.baseLevel
-            addParagraphLines(context: &context)
+
+            // Setup the line properties.
+            context.lineExtent = context.layoutWidth
+            context.lineMargins = .zero
+            context.leftIndent = .zero
+            context.flushFactor = textAlignment.flushFactor(for: context.baseLevel)
+
+            resolveParagraphLines(context: &context)
 
             if (context.isFilled) {
                 break
@@ -124,27 +149,58 @@ public class FrameResolver {
         return textFrame
     }
 
-    private func addParagraphLines(context: inout FrameContext) {
-        let flushFactor = textAlignment.flushFactor(for: context.baseLevel)
+    // MARK: Paragraph Handling
+
+    private func resolveParagraphLines(context: inout FrameContext) {
+        let text = typesetter.text
+        let string = text.string
+
+        let (spans, defaultSpan) = extractParagraphSpans(context: &context, text: text)
+        resolveParagraphStyle(context: &context, span: defaultSpan)
+
+        var lineIndex = 0
         var lineStart = context.startIndex
 
         // Iterate over each line of this paragraph.
         while lineStart != context.endIndex {
+            resolveHeadIndent(context: &context, lineIndex: lineIndex, style: defaultSpan?.attribute)
+
+            // Find out the style of new line, if any.
+            let utf16Start = string.utf16Index(forCharacterAt: lineStart)
+            let lineStyle = spans.last { $0.range.contains(utf16Start) }?.attribute
+
+            // Find out the length of new line.
             let lineEnd = typesetter.suggestForwardBreak(inCharacterRange: lineStart ..< context.endIndex,
-                                                         extent: context.layoutWidth, breakMode: .line)
+                                                         extent: context.lineExtent, breakMode: .line)
 
+            // Create the line and resolve its attributes.
             let textLine = typesetter.makeSimpleLine(characterRange: lineStart ..< lineEnd)
-            prepareLine(context: &context, textLine: textLine, flushFactor: flushFactor)
+            resolveLineStyle(textLine: textLine, style: lineStyle)
+            resolveLineHeightMultiplier(textLine: textLine, multiplier: lineHeightMultiplier)
+            resolveExtraLineSpacing(textLine: textLine, spacing: extraLineSpacing)
 
+            // Compute the origin of current line.
+            let originX = context.leftIndent + textLine.penOffset(forFlushFactor: context.flushFactor, flushExtent: context.lineExtent)
+            let originY = context.occupiedHeight + textLine.ascent
+
+            // Update the properties of current line.
+            textLine.origin = CGPoint(x: originX, y: originY)
+            textLine.flushFactor = context.flushFactor
+
+            // Compute the line width and the height.
+            let lineWidth = context.lineMargins + textLine.width - textLine.trailingWhitespaceExtent
             let lineHeight = textLine.height
 
             // Make sure that at least one line is added even if frame is smaller in height.
-            if context.lineTop + lineHeight > frameBounds.height && !context.textLines.isEmpty {
+            if context.occupiedHeight + lineHeight > frameBounds.height && !context.textLines.isEmpty {
                 context.isFilled = true
                 return
             }
 
+            // Append the line, and update the occupied width and height.
             context.textLines.append(textLine)
+            context.occupiedWidth = max(context.occupiedWidth, lineWidth)
+            context.occupiedHeight += lineHeight
 
             // Stop the filling process if maximum lines have been added.
             if context.textLines.count == context.maxLines {
@@ -152,52 +208,141 @@ public class FrameResolver {
                 return
             }
 
+            lineIndex += 1
             lineStart = lineEnd
-            context.lineTop += lineHeight
+        }
+
+        resolveParagraphSpacing(context: &context, string: string, span: defaultSpan)
+    }
+
+    private func extractParagraphSpans(context: inout FrameContext, text: NSAttributedString) -> (spans: [TextSpan<NSParagraphStyle>], defaultSpan: TextSpan<NSParagraphStyle>?) {
+        let range: NSRange = text.string.utf16Range(forCharacterRange: context.startIndex ..< context.endIndex)
+
+        var spans: [TextSpan<NSParagraphStyle>] = []
+        var defaultSpan: TextSpan<NSParagraphStyle>?
+
+        text.enumerateAttribute(.paragraphStyle, in: range, options: []) { (attribute, spanRange, stop) in
+            guard let attribute = attribute as? NSParagraphStyle else { return }
+            let span = TextSpan(attribute: attribute, range: spanRange)
+
+            if spanRange.contains(range.location) {
+                defaultSpan = span
+            }
+
+            spans.append(span)
+        }
+
+        return (spans, defaultSpan)
+    }
+
+    private func resolveParagraphStyle(context: inout FrameContext, span: TextSpan<NSParagraphStyle>?) {
+        guard let span = span else { return }
+        let style = span.attribute
+
+        // Resolve `alignment`.
+        context.flushFactor = style.alignment.flushFactor(for: context.baseLevel)
+
+        // Resolve `paragraphSpacingBefore` if it is not the first paragraph.
+        if span.range.location > 0 {
+            context.occupiedHeight += style.paragraphSpacingBefore
+        }
+
+        // Resolve `firstLineHeadIndent` and `tailIndent`.
+        resolveIndents(context: &context,
+                       headIndent: style.firstLineHeadIndent,
+                       tailIndent: style.tailIndent)
+    }
+
+    private func resolveIndents(context: inout FrameContext, headIndent: CGFloat, tailIndent: CGFloat) {
+        let isRTL = context.baseLevel & 1 == 1
+
+        if tailIndent > .zero {
+            let resolvedIndent = context.layoutWidth - (headIndent + tailIndent)
+            context.leftIndent = isRTL ? resolvedIndent : headIndent
+            context.lineMargins = headIndent + resolvedIndent
+            context.lineExtent = tailIndent
+        } else {
+            context.leftIndent = isRTL ? -tailIndent : headIndent
+            context.lineMargins = headIndent + -tailIndent
+            context.lineExtent = context.layoutWidth - context.lineMargins
         }
     }
 
-    private func prepareLine(context: inout FrameContext, textLine: ComposedLine, flushFactor: CGFloat) {
-        // Resolve line height multiplier.
-        if lineHeightMultiplier != .zero {
+    private func resolveHeadIndent(context: inout FrameContext, lineIndex: Int, style: NSParagraphStyle?) {
+        guard lineIndex == 1, let style = style else { return }
+
+        resolveIndents(context: &context,
+                       headIndent: style.headIndent,
+                       tailIndent: style.tailIndent)
+    }
+
+    private func resolveParagraphSpacing(context: inout FrameContext, string: String, span: TextSpan<NSParagraphStyle>?) {
+        guard let span = span else { return }
+
+        // Resolve `paragraphSpacing` if it is not the last paragraph.
+        if context.endIndex < string.endIndex {
+            context.occupiedHeight += span.attribute.paragraphSpacing
+        }
+    }
+
+    // MARK: Line Handling
+
+    private func resolveLineStyle(textLine: ComposedLine, style: NSParagraphStyle?) {
+        guard let style = style else { return }
+
+        // Resolve `lineHeightMultiple`.
+        if style.lineHeightMultiple > .zero {
             let oldHeight = textLine.height
-            let newHeight = oldHeight * lineHeightMultiplier
-            let midOffset = (newHeight - oldHeight) / 2.0
-
-            // Adjust metrics in such a way that text remains in the middle of the line.
-            textLine.ascent += midOffset
-            textLine.descent += midOffset
+            let newHeight = oldHeight * style.lineHeightMultiple
+            textLine.ascent += newHeight - oldHeight
         }
 
-        // Resolve extra line spacing.
-        if extraLineSpacing != .zero {
-            textLine.leading += extraLineSpacing
+        // Resolve `minimumLineHeight`.
+        if style.minimumLineHeight > .zero {
+            if textLine.height < style.minimumLineHeight {
+                textLine.ascent += style.minimumLineHeight - textLine.height
+            }
         }
 
-        // Compute the origin of the line.
-        let originX = textLine.penOffset(forFlushFactor: flushFactor, flushExtent: context.layoutWidth)
-        let originY = context.lineTop + textLine.ascent
+        // Resolve `maximumLineHeight`.
+        if style.maximumLineHeight > .zero {
+            if textLine.height > style.maximumLineHeight {
+                textLine.ascent -= textLine.height - style.maximumLineHeight
+            }
+        }
 
-        // Update the properties of line.
-        textLine.origin = CGPoint(x: originX, y: originY)
-        textLine.flushFactor = flushFactor
+        // Resolve `lineSpacing`.
+        textLine.leading += style.lineSpacing
     }
+
+    private func resolveLineHeightMultiplier(textLine: ComposedLine, multiplier: CGFloat) {
+        guard multiplier > .zero else { return }
+
+        let oldHeight = textLine.height
+        let newHeight = oldHeight * multiplier
+        let midOffset = (newHeight - oldHeight) / 2.0
+
+        // Adjust metrics in such a way that text remains in the middle of the line.
+        textLine.ascent += midOffset
+        textLine.descent += midOffset
+    }
+
+    private func resolveExtraLineSpacing(textLine: ComposedLine, spacing: CGFloat) {
+        guard spacing > .zero else { return }
+
+        textLine.leading += spacing
+    }
+
+    // MARK: Layout Handling
 
     private func resolveAlignments(context: inout FrameContext) {
-        guard let lastLine = context.textLines.last else {
-            return
-        }
-
-        // Find out the occupied height.
-        let occupiedHeight = lastLine.bottom
-
         if fitsVertically {
             // Update the layout height to occupied height.
-            context.layoutHeight = occupiedHeight
+            context.layoutHeight = context.occupiedHeight
         } else {
             // Find out the additional top for vertical alignment.
-            let remainingHeight = context.layoutHeight - occupiedHeight
-            let additionalTop = remainingHeight * verticalAlignment.multiplier()
+            let extraHeight = context.layoutHeight - context.occupiedHeight
+            let additionalTop = extraHeight * verticalAlignment.multiplier()
 
             // Readjust the vertical position of each line.
             for textLine in context.textLines {
@@ -206,30 +351,15 @@ public class FrameResolver {
         }
 
         if fitsHorizontally {
-            var occupiedWidth: CGFloat = -.infinity
-
-            // Find out the occupied width.
-            for textLine in context.textLines {
-                let lineWidth = textLine.intrinsicMargin + textLine.width - textLine.trailingWhitespaceExtent
-                occupiedWidth = max(occupiedWidth, lineWidth)
-            }
+            let extraWidth = context.layoutWidth - context.occupiedWidth
 
             // Readjust the horizontal position of each line.
             for textLine in context.textLines {
-                let intrinsicMargin = textLine.intrinsicMargin
-                let availableWidth = occupiedWidth - intrinsicMargin
-                let alignedX = textLine.penOffset(forFlushFactor: textLine.flushFactor, flushExtent: availableWidth)
-                var marginalX: CGFloat = .zero
-
-                if (textLine.paragraphLevel & 1) == 0 {
-                    marginalX = intrinsicMargin
-                }
-
-                textLine.origin.x = marginalX + alignedX
+                textLine.origin.x -= extraWidth * textLine.flushFactor
             }
 
             // Update the layout width to occupied width.
-            context.layoutWidth = occupiedWidth
+            context.layoutWidth = context.occupiedWidth
         }
     }
 }

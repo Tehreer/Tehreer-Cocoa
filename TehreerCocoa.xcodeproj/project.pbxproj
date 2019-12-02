@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E0C83E123938412000F9401 /* NSTextAlignment+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0C83E023938412000F9401 /* NSTextAlignment+Additions.swift */; };
 		6E969D1223639B3E00377297 /* ftgzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 6ECE448A23638DA3007D8839 /* ftgzip.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		6E9734F022D4F0AA008863D0 /* FontFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734B022D4F0A9008863D0 /* FontFile.swift */; };
 		6E9734F122D4F0AA008863D0 /* FreeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734B122D4F0A9008863D0 /* FreeType.swift */; };
@@ -106,6 +107,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6E0C83E023938412000F9401 /* NSTextAlignment+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextAlignment+Additions.swift"; sourceTree = "<group>"; };
 		6E969D1D2363AC0300377297 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		6E9734A222D4F03C008863D0 /* TehreerCocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TehreerCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E9734A622D4F03C008863D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -746,6 +748,7 @@
 			children = (
 				6E9734BF22D4F0AA008863D0 /* CGMutablePath+Additions.swift */,
 				6E9734C622D4F0AA008863D0 /* NSAttributedString+Keys.swift */,
+				6E0C83E023938412000F9401 /* NSTextAlignment+Additions.swift */,
 				6E9734C722D4F0AA008863D0 /* RandomAccessCollection+BidiParagraph.swift */,
 				6E9734C822D4F0AA008863D0 /* RandomAccessCollection+IntrinsicRun.swift */,
 				6E9734BC22D4F0AA008863D0 /* BreakMode.swift */,
@@ -1738,6 +1741,7 @@
 				6ECE485823638DA8007D8839 /* ftsynth.c in Sources */,
 				6ECE485923638DA8007D8839 /* ftsystem.c in Sources */,
 				6ECE486323638DA8007D8839 /* bdf.c in Sources */,
+				6E0C83E123938412000F9401 /* NSTextAlignment+Additions.swift in Sources */,
 				6ECE488323638DA8007D8839 /* cff.c in Sources */,
 				6ECE48A423638DA8007D8839 /* type1cid.c in Sources */,
 				6E969D1223639B3E00377297 /* ftgzip.c in Sources */,
