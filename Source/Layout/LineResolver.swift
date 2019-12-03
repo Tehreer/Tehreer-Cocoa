@@ -165,12 +165,30 @@ struct LineResolver {
             let string = text.string
             let chunkRange: NSRange = string.utf16Range(forCharacterRange: feasibleStart ..< feasibleEnd)
 
-            text.enumerateAttributes(in: chunkRange, options: []) { (attributes, spanRange, stop) in
-                var allAttributes = defaultAttributes
-                attributes.forEach({ allAttributes[$0] = $1 })
+            let attrString = text as CFAttributedString
+            let effectiveRange = CFRange(location: chunkRange.location, length: chunkRange.length)
+            var spanRange = CFRange(location: chunkRange.location, length: 0)
 
+            while spanRange.location < chunkRange.upperBound {
+                defer { spanRange.location += spanRange.length }
+
+                let spanAttributes = CFAttributedStringGetAttributesAndLongestEffectiveRange(attrString, spanRange.location, effectiveRange, &spanRange);
+                var allAttributes = defaultAttributes
+
+                if let dictionary = spanAttributes {
+                    for (key, value) in dictionary as NSDictionary {
+                        guard let stringKey = key as? String else {
+                            continue
+                        }
+
+                        allAttributes[NSAttributedString.Key(stringKey)] = value
+                    }
+                }
+
+                let utf16Range = NSRange(location: spanRange.location, length: spanRange.length)
+                let runRange = string.characterRange(forUTF16Range: utf16Range)
                 let glyphRun = makeGlyphRun(intrinsicRun: intrinsicRun,
-                                            range: string.characterRange(forUTF16Range: spanRange),
+                                            range: runRange,
                                             attributes: allAttributes)
                 visualRuns.insert(glyphRun, at: insertIndex)
 
