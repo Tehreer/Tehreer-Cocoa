@@ -91,6 +91,13 @@ public class TLabel: UIView {
         return CGSize(width: sceil(textFrame.width), height: sceil(textFrame.height))
     }
 
+    private func deferNeedsTextLayout() {
+        DispatchQueue.main.async {
+            self.setNeedsLayout()
+            self.setNeedsDisplay()
+        }
+    }
+
     /// Lays out subviews.
     public override func layoutSubviews() {
         super.layoutSubviews()
@@ -115,8 +122,7 @@ public class TLabel: UIView {
             super.frame = newValue
 
             if bounds.size != oldSize {
-                setNeedsLayout()
-                setNeedsDisplay()
+                deferNeedsTextLayout()
             }
         }
     }
@@ -132,8 +138,7 @@ public class TLabel: UIView {
             super.bounds = newValue
 
             if bounds.size != oldSize {
-                setNeedsLayout()
-                setNeedsDisplay()
+                deferNeedsTextLayout()
             }
         }
     }
@@ -201,8 +206,7 @@ public class TLabel: UIView {
         }
 
         _sizeLabel.invalidateIntrinsicContentSize()
-        setNeedsLayout()
-        setNeedsDisplay()
+        deferNeedsTextLayout()
     }
 
     /// The text alignment to apply on each line. Its default value is `.intrinsic`.
@@ -212,9 +216,7 @@ public class TLabel: UIView {
         }
         set {
             resolver.textAlignment = newValue
-
-            setNeedsLayout()
-            setNeedsDisplay()
+            deferNeedsTextLayout()
         }
     }
 
@@ -225,9 +227,7 @@ public class TLabel: UIView {
         }
         set {
             resolver.verticalAlignment = newValue
-
-            setNeedsLayout()
-            setNeedsDisplay()
+            deferNeedsTextLayout()
         }
     }
 
@@ -248,8 +248,7 @@ public class TLabel: UIView {
             needsTypesetter = true
 
             _sizeLabel.invalidateIntrinsicContentSize()
-            setNeedsLayout()
-            setNeedsDisplay()
+            deferNeedsTextLayout()
         }
     }
 
@@ -333,8 +332,7 @@ public class TLabel: UIView {
             resolver.maxLines = newValue
 
             _sizeLabel.invalidateIntrinsicContentSize()
-            setNeedsLayout()
-            setNeedsDisplay()
+            deferNeedsTextLayout()
         }
     }
 
@@ -348,8 +346,7 @@ public class TLabel: UIView {
             resolver.extraLineSpacing = newValue
 
             _sizeLabel.invalidateIntrinsicContentSize()
-            setNeedsLayout()
-            setNeedsDisplay()
+            deferNeedsTextLayout()
         }
     }
 
@@ -366,8 +363,7 @@ public class TLabel: UIView {
             resolver.lineHeightMultiplier = newValue
 
             _sizeLabel.invalidateIntrinsicContentSize()
-            setNeedsLayout()
-            setNeedsDisplay()
+            deferNeedsTextLayout()
         }
     }
 }
