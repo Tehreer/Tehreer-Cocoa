@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6E0C83E123938412000F9401 /* NSTextAlignment+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0C83E023938412000F9401 /* NSTextAlignment+Additions.swift */; };
+		6E10F26823A515C4008B6145 /* Patch.c in Sources */ = {isa = PBXBuildFile; fileRef = 6E10F26723A515C4008B6145 /* Patch.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		6E969D1223639B3E00377297 /* ftgzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 6ECE448A23638DA3007D8839 /* ftgzip.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		6E9734F022D4F0AA008863D0 /* FontFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734B022D4F0A9008863D0 /* FontFile.swift */; };
 		6E9734F122D4F0AA008863D0 /* FreeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734B122D4F0A9008863D0 /* FreeType.swift */; };
@@ -108,6 +109,7 @@
 
 /* Begin PBXFileReference section */
 		6E0C83E023938412000F9401 /* NSTextAlignment+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextAlignment+Additions.swift"; sourceTree = "<group>"; };
+		6E10F26723A515C4008B6145 /* Patch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Patch.c; sourceTree = "<group>"; };
 		6E969D1D2363AC0300377297 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		6E9734A222D4F03C008863D0 /* TehreerCocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TehreerCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E9734A622D4F03C008863D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -694,6 +696,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6E10F26623A515A4008B6145 /* Patch */ = {
+			isa = PBXGroup;
+			children = (
+				6E10F26723A515C4008B6145 /* Patch.c */,
+			);
+			path = Patch;
+			sourceTree = "<group>";
+		};
 		6E97349822D4F03C008863D0 = {
 			isa = PBXGroup;
 			children = (
@@ -853,6 +863,7 @@
 			children = (
 				6E969D1D2363AC0300377297 /* module.modulemap */,
 				6ECE429623638DA0007D8839 /* FreeType */,
+				6E10F26623A515A4008B6145 /* Patch */,
 				6ECE459D23638DA5007D8839 /* SheenBidi */,
 				6ECE463023638DA6007D8839 /* SheenFigure */,
 				6ECE46BE23638DA6007D8839 /* UniBreak */,
@@ -1758,6 +1769,7 @@
 				6ECE49B323638DA8007D8839 /* type1.c in Sources */,
 				6ECE49BF23638DA8007D8839 /* type42.c in Sources */,
 				6ECE49C423638DA8007D8839 /* winfnt.c in Sources */,
+				6E10F26823A515C4008B6145 /* Patch.c in Sources */,
 				6ECE4A0523638DA8007D8839 /* SheenBidi.c in Sources */,
 				6ECE4A8823638DA9007D8839 /* SheenFigure.c in Sources */,
 				6ECE4AE323638DA9007D8839 /* emojidef.c in Sources */,
@@ -1833,7 +1845,6 @@
 		6E9734A822D4F03C008863D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1884,11 +1895,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"${PROJECT_DIR}/Libraries/FreeType/include\"",
-					"\"${PROJECT_DIR}/Libraries/SheenBidi/Headers\"",
-					"\"${PROJECT_DIR}/Libraries/SheenFigure/Headers\"",
-					"\"${PROJECT_DIR}/Libraries/SheenFigure/Source\"",
-					"\"${PROJECT_DIR}/Libraries/UniBreak/src\"",
+					"\"${SRCROOT}/Libraries/FreeType/include\"",
+					"\"${SRCROOT}/Libraries/SheenBidi/Headers\"",
+					"\"${SRCROOT}/Libraries/SheenFigure/Headers\"",
+					"\"${SRCROOT}/Libraries/SheenFigure/Source\"",
+					"\"${SRCROOT}/Libraries/UniBreak/src\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -1896,7 +1907,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_INCLUDE_PATHS = "\"${PROJECT_DIR}/Libraries\"";
+				SWIFT_INCLUDE_PATHS = "\"${SRCROOT}/Libraries\" \"${SRCROOT}/Libraries/FreeType/include\" \"${SRCROOT}/Libraries/SheenBidi/Headers\" \"${SRCROOT}/Libraries/SheenFigure/Headers\" \"${SRCROOT}/Libraries/UniBreak/src\"";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1955,18 +1966,18 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"${PROJECT_DIR}/Libraries/FreeType/include\"",
-					"\"${PROJECT_DIR}/Libraries/SheenBidi/Headers\"",
-					"\"${PROJECT_DIR}/Libraries/SheenFigure/Headers\"",
-					"\"${PROJECT_DIR}/Libraries/SheenFigure/Source\"",
-					"\"${PROJECT_DIR}/Libraries/UniBreak/src\"",
+					"\"${SRCROOT}/Libraries/FreeType/include\"",
+					"\"${SRCROOT}/Libraries/SheenBidi/Headers\"",
+					"\"${SRCROOT}/Libraries/SheenFigure/Headers\"",
+					"\"${SRCROOT}/Libraries/SheenFigure/Source\"",
+					"\"${SRCROOT}/Libraries/UniBreak/src\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_INCLUDE_PATHS = "\"${PROJECT_DIR}/Libraries\"";
+				SWIFT_INCLUDE_PATHS = "\"${SRCROOT}/Libraries\" \"${SRCROOT}/Libraries/FreeType/include\" \"${SRCROOT}/Libraries/SheenBidi/Headers\" \"${SRCROOT}/Libraries/SheenFigure/Headers\" \"${SRCROOT}/Libraries/UniBreak/src\"";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
