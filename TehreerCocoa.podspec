@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
   spec.name                  = 'TehreerCocoa'
-  spec.version               = '1.0.0'
+  spec.version               = '1.0.1'
   spec.summary               = 'Standalone text engine for iOS'
 
   spec.homepage              = 'https://github.com/Tehreer/Tehreer-Cocoa'
   spec.source                = { :git => 'https://github.com/Tehreer/Tehreer-Cocoa.git',
-                                 :tag => 'v1.0',
+                                 :tag => 'v1.0.1',
                                  :submodules => true }
 
   spec.license               = { :type => 'Apache 2.0' }
@@ -46,6 +46,7 @@ Pod::Spec.new do |spec|
                                'Libraries/FreeType/src/type1/type1.c',
                                'Libraries/FreeType/src/type42/type42.c',
                                'Libraries/FreeType/src/winfonts/winfnt.c',
+                               'Libraries/Patch/*.c',
                                'Libraries/SheenBidi/Source/SheenBidi.c',
                                'Libraries/SheenFigure/Source/SheenFigure.c',
                                'Libraries/UniBreak/src/emojidef.c',
