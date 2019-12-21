@@ -1,5 +1,6 @@
 # Tehreer-Cocoa
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/TehreerCocoa.svg)](https://cocoapods.org/pods/TehreerCocoa)
 
 Tehreer is a library which gives full control over following text related technologies.
 
