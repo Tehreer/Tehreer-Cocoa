@@ -16,6 +16,9 @@ It is a wrapper over mature C libraries, [FreeType](https://www.freetype.org), [
 ## API Reference
 The [Apidocs](https://tehreer.github.io/Tehreer-Cocoa/apidocs/) are available for online browsing.
 
+## Special Thanks
+[@AbdullahRusi](https://github.com/AbdullahRusi) for QA
+
 ## License
 ```
 Copyright (C) 2019 Muhammad Tayyab Akram
