@@ -75,6 +75,18 @@ public class BidiAlgorithm {
         SBAlgorithmRelease(algorithm)
     }
 
+    public func paragraphBoundary(inCodeUnitRange codeUnitRange: Range<Int>) -> Int {
+        let paragraphOffset = SBUInteger(codeUnitRange.lowerBound)
+        let suggestedLength = SBUInteger(codeUnitRange.count)
+        var actualLength: SBUInteger = 0
+
+        SBAlgorithmGetParagraphBoundary(algorithm,
+                                        paragraphOffset, suggestedLength,
+                                        &actualLength, nil)
+
+        return Int(paragraphOffset + actualLength)
+    }
+
     /// Returns the boundary of the first paragraph within the specified character range.
     ///
     /// The boundary of the paragraph occurs after a character whose bidirectional type is Paragraph
@@ -87,16 +99,29 @@ public class BidiAlgorithm {
     /// - Returns: The boundary of the first paragraph within the specified character range.
     public func paragraphBoundary(inCharacterRange characterRange: Range<String.Index>) -> String.Index {
         let string = buffer.string
-        let utf16Range: NSRange = string.utf16Range(forCharacterRange: characterRange)
-        let paragraphOffset = SBUInteger(utf16Range.location)
-        let suggestedLength = SBUInteger(utf16Range.length)
-        var actualLength: SBUInteger = 0
+        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: characterRange)
+        let boundaryIndex = paragraphBoundary(inCodeUnitRange: codeUnitRange)
 
-        SBAlgorithmGetParagraphBoundary(algorithm,
-                                        paragraphOffset, suggestedLength,
-                                        &actualLength, nil)
+        return string.characterIndex(forUTF16Index: boundaryIndex)
+    }
 
-        return string.characterIndex(forUTF16Index: Int(paragraphOffset + actualLength))
+    public func makeParagraph(codeUnitRange: Range<Int>, direction: BaseDirection) -> BidiParagraph? {
+        return makeParagraph(codeUnitRange: codeUnitRange, baseLevel: direction.level)
+    }
+
+    public func makeParagraph(codeUnitRange: Range<Int>, baseLevel: UInt8) -> BidiParagraph? {
+        let bufferRange = Range(uncheckedBounds: (0, buffer.length))
+        let clampedRange = codeUnitRange.clamped(to: bufferRange)
+        if clampedRange.isEmpty {
+            return nil
+        }
+
+        let paragraphOffset = SBUInteger(codeUnitRange.lowerBound)
+        let suggestedLength = SBUInteger(codeUnitRange.count)
+        let inputLevel = SBLevel(baseLevel)
+        let paragraph = SBAlgorithmCreateParagraph(algorithm, paragraphOffset, suggestedLength, inputLevel)
+
+        return BidiParagraph(buffer: buffer, paragraph: paragraph!)
     }
 
     /// Creates a paragraph object processed with Unicode Bidirectional Algorithm.
@@ -130,18 +155,15 @@ public class BidiAlgorithm {
     ///   - baseLevel: Base level to override.
     /// - Returns: A paragraph object processed with Unicode Bidirectional Algorithm.
     public func makeParagraph(characterRange: Range<String.Index>, baseLevel: UInt8) -> BidiParagraph? {
-        let string = buffer.string
-        let clampedRange = characterRange.clamped(to: string.startIndex ..< string.endIndex)
-        if clampedRange.isEmpty {
+        if characterRange.isEmpty {
             return nil
         }
 
-        let utf16Range: NSRange = string.utf16Range(forCharacterRange: clampedRange)
-        let paragraphOffset = SBUInteger(utf16Range.location)
-        let suggestedLength = SBUInteger(utf16Range.length)
-        let inputLevel = SBLevel(baseLevel)
-        let paragraph = SBAlgorithmCreateParagraph(algorithm, paragraphOffset, suggestedLength, inputLevel)
+        let string = buffer.string
+        let completeRange = Range(uncheckedBounds: (string.startIndex, string.endIndex))
+        let clampedRange = characterRange.clamped(to: completeRange)
+        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: clampedRange)
 
-        return BidiParagraph(buffer: buffer, paragraph: paragraph!)
+        return makeParagraph(codeUnitRange: codeUnitRange, baseLevel: baseLevel)
     }
 }
