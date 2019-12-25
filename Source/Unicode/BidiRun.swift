@@ -19,17 +19,31 @@ import Foundation
 /// A bidi run represents a sequence of characters which have the same embedding level. The
 /// direction of run is considered right-to-left, if its embedding level is odd.
 public struct BidiRun {
-    /// The index to the first character of this run in source string.
-    public var startIndex: String.Index
+    private var string: String
 
-    /// The index after the last character of this run in source string.
-    public var endIndex: String.Index
+    public var codeUnitRange: Range<Int>
 
     /// The embedding level of the run.
     public var embeddingLevel: UInt8
+
+    init(string: String, codeUnitRange: Range<Int>, embeddingLevel: UInt8) {
+        self.string = string
+        self.codeUnitRange = codeUnitRange
+        self.embeddingLevel = embeddingLevel
+    }
 }
 
 extension BidiRun {
+    /// The index to the first character of this run in source string.
+    public var startIndex: String.Index {
+        return string.characterIndex(forUTF16Index: codeUnitRange.lowerBound)
+    }
+
+    /// The index after the last character of this run in source string.
+    public var endIndex: String.Index {
+        return string.characterIndex(forUTF16Index: codeUnitRange.upperBound)
+    }
+
     /// A Boolean value that indicates whether the run is right-to-left.
     public var isRightToLeft: Bool {
         return (embeddingLevel & 1) == 1
@@ -38,12 +52,29 @@ extension BidiRun {
 
 /// Represents a pair of a unicode code point at a specific index in source string.
 public struct BidiPair {
-    /// The index of actual code unit in source string.
-    public var codeUnitIndex: String.Index
+    private var string: String
+
+    /// The index of actual UTF-16 code unit.
+    public var codeUnitIndex: Int
 
     /// The code point of actual character in source string.
     public var actualCodePoint: UnicodeScalar
 
     /// The code point of character forming a pair with actual character.
     public var pairingCodePoint: UnicodeScalar
+
+    init(string: String, codeUnitIndex: Int,
+         actualCodePoint: UnicodeScalar, pairingCodePoint: UnicodeScalar) {
+        self.string = string
+        self.codeUnitIndex = codeUnitIndex
+        self.actualCodePoint = actualCodePoint
+        self.pairingCodePoint = pairingCodePoint
+    }
+}
+
+extension BidiPair {
+    /// The index of actual character in source string.
+    public var characterIndex: String.Index {
+        return string.characterIndex(forUTF16Index: codeUnitIndex)
+    }
 }
