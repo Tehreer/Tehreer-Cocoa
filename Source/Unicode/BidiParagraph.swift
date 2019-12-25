@@ -33,28 +33,30 @@ public class BidiParagraph {
         SBParagraphRelease(paragraph)
     }
 
-    var utf16Offset: Int {
-        return Int(SBParagraphGetOffset(paragraph))
-    }
+    public var codeUnitRange: Range<Int> {
+        let offset = Int(SBParagraphGetOffset(paragraph))
+        let length = Int(SBParagraphGetLength(paragraph))
 
-    var utf16Length: Int {
-        return Int(SBParagraphGetLength(paragraph))
+        return Range(uncheckedBounds: (offset, offset + length))
     }
 
     var stringRange: Range<String.Index> {
-        let utf16Range = NSRange(location: utf16Offset, length: utf16Length)
-
-        return buffer.string.characterRange(forUTF16Range: utf16Range)
+        return buffer.string.characterRange(forUTF16Range: codeUnitRange)
     }
 
     /// The index to the first character of this paragraph in source string.
     public var startIndex: String.Index {
-        return buffer.string.characterIndex(forUTF16Index: utf16Offset)
+        let offset = Int(SBParagraphGetOffset(paragraph))
+
+        return buffer.string.characterIndex(forUTF16Index: offset)
     }
 
     /// The index after the last character of this paragraph in source string.
     public var endIndex: String.Index {
-        return buffer.string.characterIndex(forUTF16Index: utf16Offset + utf16Length)
+        let offset = Int(SBParagraphGetOffset(paragraph))
+        let length = Int(SBParagraphGetLength(paragraph))
+
+        return buffer.string.characterIndex(forUTF16Index: offset + length)
     }
 
     /// The base level of this paragraph.
@@ -72,23 +74,28 @@ public class BidiParagraph {
         return RunSequence(self)
     }
 
+    public func makeLine(codeUnitRange: Range<Int>) -> BidiLine? {
+        let clampedRange = codeUnitRange.clamped(to: self.codeUnitRange)
+        if clampedRange.isEmpty {
+            return nil
+        }
+
+        let lineOffset = SBUInteger(clampedRange.lowerBound)
+        let lineLength = SBUInteger(clampedRange.count)
+        let bidiLine = SBParagraphCreateLine(paragraph, lineOffset, lineLength)
+
+        return BidiLine(buffer: buffer, line: bidiLine!)
+    }
+
     /// Creates a line object of specified range by applying Rules L1-L2 of Unicode Bidirectional
     /// Algorithm.
     ///
     /// - Parameter characterRange: The range of the line in source string.
     /// - Returns: A line object processed with Rules L1-L2 of Unicode Bidirectional Algorithm.
     public func makeLine(characterRange: Range<String.Index>) -> BidiLine? {
-        let clampedRange = characterRange.clamped(to: stringRange)
-        if clampedRange.isEmpty {
-            return nil
-        }
+        let codeUnitRange: Range<Int> = buffer.string.utf16Range(forCharacterRange: characterRange)
 
-        let utf16Range: NSRange = buffer.string.utf16Range(forCharacterRange: clampedRange)
-        let lineOffset = SBUInteger(utf16Range.location)
-        let lineLength = SBUInteger(utf16Range.length)
-        let bidiLine = SBParagraphCreateLine(paragraph, lineOffset, lineLength)
-
-        return BidiLine(buffer: buffer, line: bidiLine!)
+        return makeLine(codeUnitRange: codeUnitRange)
     }
 }
 
@@ -117,6 +124,14 @@ extension BidiParagraph {
         /// The index after the last element.
         public var endIndex: Int {
             return count
+        }
+
+        public subscript(index: String.Index) -> UInt8 {
+            let paragraphRange = owner.codeUnitRange
+            let codeUnitIndex = owner.buffer.string.utf16Index(forCharacterAt: index)
+            precondition(paragraphRange.contains(codeUnitIndex), String.indexOutOfRange)
+
+            return pointer[codeUnitIndex - paragraphRange.lowerBound]
         }
 
         /// Accesses the embedding level at the specified position.
@@ -179,15 +194,12 @@ extension BidiParagraph {
 
                 let runOffset = Int(paragraphOffset) + levelIndex
                 let runLength = nextIndex - levelIndex
+                let runRange = Range(uncheckedBounds: (runOffset, runOffset + runLength))
 
                 levelIndex = nextIndex
 
-                let string = owner.buffer.string
-                let utf16Range = NSRange(location: runOffset, length: runLength)
-                let runRange = string.characterRange(forUTF16Range: utf16Range)
-
-                return BidiRun(startIndex: runRange.lowerBound,
-                               endIndex: runRange.upperBound,
+                return BidiRun(string: owner.buffer.string,
+                               codeUnitRange: runRange,
                                embeddingLevel: currentLevel)
             }
 
