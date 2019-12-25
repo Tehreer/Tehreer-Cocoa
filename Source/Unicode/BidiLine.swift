@@ -34,22 +34,26 @@ public class BidiLine {
         SBLineRelease(line)
     }
 
-    var utf16Offset: Int {
-        return Int(SBLineGetOffset(line))
-    }
+    public var codeUnitRange: Range<Int> {
+        let offset = Int(SBLineGetOffset(line))
+        let length = Int(SBLineGetLength(line))
 
-    var utf16Length: Int {
-        return Int(SBLineGetLength(line))
+        return Range(uncheckedBounds: (offset, offset + length))
     }
 
     /// The index to the first character of this line in source string.
     public var startIndex: String.Index {
-        return buffer.string.characterIndex(forUTF16Index: utf16Offset)
+        let offset = Int(SBLineGetOffset(line))
+
+        return buffer.string.characterIndex(forUTF16Index: offset)
     }
 
     /// The index after the last character of this line in source string.
     public var endIndex: String.Index {
-        return buffer.string.characterIndex(forUTF16Index: utf16Offset + utf16Length)
+        let offset = Int(SBLineGetOffset(line))
+        let length = Int(SBLineGetLength(line))
+
+        return buffer.string.characterIndex(forUTF16Index: offset + length)
     }
 
     /// The collection of visually ordered runs in this line.
@@ -99,12 +103,12 @@ extension BidiLine {
             precondition(index >= 0 && index < count, String.indexOutOfRange)
 
             let runPtr = pointer[index]
-            let string = owner.buffer.string
-            let utf16Range = NSRange(location: Int(runPtr.offset), length: Int(runPtr.length))
-            let runRange = string.characterRange(forUTF16Range: utf16Range)
+            let runOffset = Int(runPtr.offset)
+            let runLength = Int(runPtr.length)
+            let runRange = Range(uncheckedBounds: (runOffset, runOffset + runLength))
 
-            return BidiRun(startIndex: runRange.lowerBound,
-                           endIndex: runRange.upperBound,
+            return BidiRun(string: owner.buffer.string,
+                           codeUnitRange: runRange,
                            embeddingLevel: UInt8(runPtr.level))
         }
     }
@@ -150,22 +154,18 @@ extension BidiLine {
         public func next() -> BidiPair? {
             if SBMirrorLocatorMoveNext(locator) != 0 {
                 let bidiBuffer = owner.buffer
-                let stringBuffer = UnsafeMutableRawPointer(mutating: bidiBuffer.data)
-                let stringLength = SBUInteger(bidiBuffer.length)
 
                 var codepointSequence = SBCodepointSequence(
                     stringEncoding: SBStringEncoding(SBStringEncodingUTF16),
-                    stringBuffer: stringBuffer,
-                    stringLength: stringLength)
+                    stringBuffer: UnsafeMutableRawPointer(mutating: bidiBuffer.data),
+                    stringLength: SBUInteger(bidiBuffer.length))
 
                 var index = agent.pointee.index
                 let source = SBCodepointSequenceGetCodepointAt(&codepointSequence, &index)
                 let mirror = agent.pointee.mirror
 
-                let string = bidiBuffer.string
-                let utf16Index = Int(agent.pointee.index)
-
-                return BidiPair(codeUnitIndex: string.characterIndex(forUTF16Index: utf16Index),
+                return BidiPair(string: bidiBuffer.string,
+                                codeUnitIndex: Int(agent.pointee.index),
                                 actualCodePoint: UnicodeScalar(source)!,
                                 pairingCodePoint: UnicodeScalar(mirror)!)
             }
