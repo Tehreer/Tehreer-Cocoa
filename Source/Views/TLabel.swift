@@ -209,6 +209,39 @@ public class TLabel: UIView {
         deferNeedsTextLayout()
     }
 
+    public func indexOfCodeUnit(at position: CGPoint) -> Int? {
+        guard let characterIndex = indexOfCharacter(at: position) else {
+            return nil
+        }
+
+        return textFrame?.string.utf16Index(forCharacterAt: characterIndex)
+    }
+
+    public func indexOfCharacter(at position: CGPoint) -> String.Index? {
+        guard let textFrame = textFrame else {
+            return nil
+        }
+
+        let lineIndex = textFrame.indexOfLine(at: position)
+        let textLine = textFrame.lines[lineIndex]
+        let lineLeft = textLine.origin.x
+        let lineRight = lineLeft + textLine.width
+
+        if position.x >= lineLeft && position.x <= lineRight {
+            let characterIndex = textLine.indexOfCharacter(at: position.x - lineLeft)
+            let lastIndex = textFrame.string.index(before: textLine.endIndex)
+
+            // Make sure to provide character of this line.
+            if characterIndex > lastIndex {
+                return lastIndex
+            }
+
+            return characterIndex
+        }
+
+        return nil
+    }
+
     /// The text alignment to apply on each line. Its default value is `.intrinsic`.
     public var textAlignment: TextAlignment {
         get {

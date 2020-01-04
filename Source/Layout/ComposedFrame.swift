@@ -20,7 +20,7 @@ import Foundation
 /// Represents a frame containing multiple lines of text. It is the output resulting from
 /// text-framing process performed by a typesetter.
 public class ComposedFrame {
-    private let string: String
+    let string: String
 
     init(string: String, startIndex: String.Index, endIndex: String.Index, lines: [ComposedLine]) {
         self.string = string
