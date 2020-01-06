@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -123,28 +123,196 @@ struct LineResolver {
     }
 
     func makeSimpleLine(range: Range<String.Index>) -> ComposedLine {
-        var lineRuns: [GlyphRun] = []
+        var runArray: [GlyphRun] = []
 
         paragraphs.forEachLineRun(inCharacterRange: range) { (bidiRun) in
-            appendVisualRuns(forCharacterRange: bidiRun.startIndex ..< bidiRun.endIndex, visualRuns: &lineRuns)
+            appendVisualRuns(from: bidiRun.startIndex, to: bidiRun.endIndex, in: &runArray)
         }
 
         return makeComposedLine(text: text.string,
                                 range: range,
-                                visualRuns: lineRuns,
-                                paragraphLevel: paragraphs.paragraph(forCharacterAt: range.lowerBound).baseLevel)
+                                visualRuns: runArray,
+                                paragraphLevel: paragraphs.baseLevel(forCharacterAt: range.lowerBound))
     }
 
-    func appendVisualRuns(forCharacterRange range: Range<String.Index>, visualRuns: inout [GlyphRun]) {
+    private struct TruncationHandler {
+        let range: Range<String.Index>
+        let skipStart: String.Index
+        let skipEnd: String.Index
+
+        var leadingTokenIndex = -1
+        var trailingTokenIndex = -1
+
+        init(range: Range<String.Index>, skipStart: String.Index, skipEnd: String.Index) {
+            self.range = range
+            self.skipStart = skipStart
+            self.skipEnd = skipEnd
+        }
+
+        mutating func appendAllRuns(using resolver: LineResolver, in runArray: inout [GlyphRun]) {
+            resolver.paragraphs.forEachLineRun(inCharacterRange: range) { (bidiRun) in
+                let visualStart = bidiRun.startIndex
+                let visualEnd = bidiRun.endIndex
+
+                if bidiRun.isRightToLeft {
+                    // Handle second part of characters.
+                    if visualEnd >= skipEnd {
+                        resolver.appendVisualRuns(from: max(visualStart, skipEnd), to: visualEnd, in: &runArray)
+
+                        if visualStart < skipEnd {
+                            trailingTokenIndex = runArray.count
+                        }
+                    }
+
+                    // Handle first part of characters.
+                    if visualStart <= skipStart {
+                        if visualEnd > skipStart {
+                            leadingTokenIndex = runArray.count
+                        }
+
+                        resolver.appendVisualRuns(from: visualStart, to: min(visualEnd, skipStart), in: &runArray)
+                    }
+                } else {
+                    // Handle first part of characters.
+                    if visualStart <= skipStart {
+                        resolver.appendVisualRuns(from: visualStart, to: min(visualEnd, skipStart), in: &runArray)
+
+                        if visualEnd > skipStart {
+                            leadingTokenIndex = runArray.count
+                        }
+                    }
+
+                    // Handle second part of characters.
+                    if visualEnd >= skipEnd {
+                        if visualStart < skipEnd {
+                            trailingTokenIndex = runArray.count
+                        }
+
+                        resolver.appendVisualRuns(from: max(visualStart, skipEnd), to: visualEnd, in: &runArray)
+                    }
+                }
+            }
+        }
+    }
+
+    private func makeStartTruncatedLine(range: Range<String.Index>,
+                                        tokenlessWidth: CGFloat,
+                                        breaks: BreakResolver,
+                                        mode: BreakMode,
+                                        token: ComposedLine) -> ComposedLine {
+        let truncatedStart = breaks.suggestBackwardBreak(for: tokenlessWidth, in: range, with: mode)
+        if truncatedStart > range.lowerBound {
+            var runArray: [GlyphRun] = []
+            var tokenInsertIndex = 0
+
+            if truncatedStart < range.upperBound {
+                var truncationHandler = TruncationHandler(range: range,
+                                                          skipStart: range.lowerBound,
+                                                          skipEnd: truncatedStart)
+                truncationHandler.appendAllRuns(using: self, in: &runArray)
+
+                tokenInsertIndex = truncationHandler.trailingTokenIndex
+            }
+            appendTokenRuns(token, in: &runArray, at: tokenInsertIndex)
+
+            return makeComposedLine(text: text.string,
+                                    range: truncatedStart ..< range.upperBound,
+                                    visualRuns: runArray,
+                                    paragraphLevel: paragraphs.baseLevel(forCharacterAt: truncatedStart))
+        }
+
+        return makeSimpleLine(range: truncatedStart ..< range.upperBound)
+    }
+
+    private func makeMiddleTruncatedLine(range: Range<String.Index>,
+                                         tokenlessWidth: CGFloat,
+                                         breaks: BreakResolver,
+                                         mode: BreakMode,
+                                         token: ComposedLine) -> ComposedLine {
+        let halfWidth = tokenlessWidth / 2.0
+        var firstMidEnd = breaks.suggestForwardBreak(for: halfWidth, in: range, with: mode)
+        var secondMidStart = breaks.suggestBackwardBreak(for: halfWidth, in: range, with: mode)
+
+        if firstMidEnd < secondMidStart {
+            // Exclude inner whitespaces as truncation token replaces them.
+            firstMidEnd = text.string.trailingWhitespaceStart(in: range.lowerBound ..< firstMidEnd)
+            secondMidStart = text.string.leadingWhitespaceEnd(in: secondMidStart ..< range.upperBound)
+
+            var runArray: [GlyphRun] = []
+            var tokenInsertIndex = 0
+
+            if range.lowerBound < firstMidEnd || secondMidStart < range.upperBound {
+                var truncationHandler = TruncationHandler(range: range,
+                                                          skipStart: firstMidEnd,
+                                                          skipEnd: secondMidStart)
+                truncationHandler.appendAllRuns(using: self, in: &runArray)
+
+                tokenInsertIndex = truncationHandler.leadingTokenIndex
+            }
+            appendTokenRuns(token, in: &runArray, at: tokenInsertIndex)
+
+            return makeComposedLine(text: text.string,
+                                    range: range,
+                                    visualRuns: runArray,
+                                    paragraphLevel: paragraphs.baseLevel(forCharacterAt: range.lowerBound))
+        }
+
+        return makeSimpleLine(range: range)
+    }
+
+    private func makeEndTruncatedLine(range: Range<String.Index>,
+                                      tokenlessWidth: CGFloat,
+                                      breaks: BreakResolver,
+                                      mode: BreakMode,
+                                      token: ComposedLine) -> ComposedLine {
+        var truncatedEnd = breaks.suggestForwardBreak(for: tokenlessWidth, in: range, with: mode)
+        if truncatedEnd < range.upperBound {
+            // Exclude trailing whitespaces as truncation token replaces them.
+            truncatedEnd = text.string.trailingWhitespaceStart(in: range.lowerBound ..< truncatedEnd)
+
+            var runArray: [GlyphRun] = []
+            var tokenInsertIndex = 0
+
+            if range.lowerBound < truncatedEnd {
+                var truncationHandler = TruncationHandler(range: range,
+                                                          skipStart: truncatedEnd,
+                                                          skipEnd: range.upperBound)
+                truncationHandler.appendAllRuns(using: self, in: &runArray)
+
+                tokenInsertIndex = truncationHandler.leadingTokenIndex
+            }
+            appendTokenRuns(token, in: &runArray, at: tokenInsertIndex)
+
+            return makeComposedLine(text: text.string,
+                                    range: range.lowerBound ..< truncatedEnd,
+                                    visualRuns: runArray,
+                                    paragraphLevel: paragraphs.baseLevel(forCharacterAt: range.lowerBound))
+        }
+
+        return makeSimpleLine(range: range.lowerBound ..< truncatedEnd)
+    }
+
+    private func appendTokenRuns(_ token: ComposedLine, in runArray: inout [GlyphRun], at index: Int) {
+        var insertIndex = index
+
+        for truncationRun in token.visualRuns {
+            let modifiedRun = GlyphRun(truncationRun)
+            runArray.append(modifiedRun)
+
+            insertIndex += 1
+        }
+    }
+
+    private func appendVisualRuns(from start: String.Index, to end: String.Index, in runArray: inout [GlyphRun]) {
         // ASSUMPTIONS:
         //      - Visual range may fall in one or more glyph runs.
         //      - Consecutive intrinsic runs may have same bidi level.
 
-        var insertIndex = visualRuns.count
+        var insertIndex = runArray.count
         var previousRun: IntrinsicRun?
 
-        var visualStart = range.lowerBound
-        let visualEnd = range.upperBound
+        var visualStart = start
+        let visualEnd = end
 
         repeat {
             let runIndex = runs.binarySearchIndex(ofCharacterAt: visualStart)
@@ -158,7 +326,7 @@ struct LineResolver {
 
             if let previousRun = previousRun {
                 if bidiLevel != previousRun.bidiLevel || isForwardRun {
-                    insertIndex = visualRuns.count
+                    insertIndex = runArray.count
                 }
             }
 
@@ -190,7 +358,7 @@ struct LineResolver {
                 let glyphRun = makeGlyphRun(intrinsicRun: intrinsicRun,
                                             range: runRange,
                                             attributes: allAttributes)
-                visualRuns.insert(glyphRun, at: insertIndex)
+                runArray.insert(glyphRun, at: insertIndex)
 
                 if isForwardRun {
                     insertIndex += 1
