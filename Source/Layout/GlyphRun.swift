@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -58,6 +58,29 @@ public class GlyphRun {
         self.glyphAdvances = glyphAdvances
         self.clusterMap = clusterMap
         self.caretEdges = caretEdges
+    }
+
+    init(_ other: GlyphRun) {
+        self.utf16 = other.utf16
+        self.startIndex = other.startIndex
+        self.endIndex = other.endIndex
+        self.startExtraLength = other.startExtraLength
+        self.endExtraLength = other.endExtraLength
+        self.attributes = other.attributes
+        self.isBackward = other.isBackward
+        self.bidiLevel = other.bidiLevel
+        self.writingDirection = other.writingDirection
+        self.typeface = other.typeface
+        self.typeSize = other.typeSize
+        self.ascent = other.ascent
+        self.descent = other.descent
+        self.leading = other.leading
+        self.glyphIDs = other.glyphIDs
+        self.glyphOffsets = other.glyphOffsets
+        self.glyphAdvances = other.glyphAdvances
+        self.clusterMap = other.clusterMap
+        self.caretEdges = other.caretEdges
+        self.origin = other.origin
     }
 
     /// The index to the first character of this run in source string.
