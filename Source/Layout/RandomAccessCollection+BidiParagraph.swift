@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,6 +43,10 @@ extension RandomAccessCollection
 
     func paragraph(forCharacterAt index: String.Index) -> BidiParagraph {
         return self[binarySearchIndex(ofCharacterAt: index)]
+    }
+
+    func baseLevel(forCharacterAt index: String.Index) -> UInt8 {
+        return paragraph(forCharacterAt: index).baseLevel
     }
 
     func forEachLineRun(inCharacterRange range: Range<String.Index>, body: (_ : BidiRun) -> Void) {
