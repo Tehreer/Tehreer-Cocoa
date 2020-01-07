@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -78,5 +78,50 @@ public class Typesetter {
     public func makeSimpleLine(characterRange: Range<String.Index>) -> ComposedLine {
         let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes, paragraphs: paragraphs, runs: runs)
         return lineResolver.makeSimpleLine(range: characterRange)
+    }
+
+    /// Creates a line of specified string range, truncating it if it overflows the specified extent.
+    ///
+    /// - Parameters:
+    ///   - characterRange: The range of the line in source string.
+    ///   - extent: The extent at which truncation will begin.
+    ///   - breakMode: The truncation mode to be used on the line.
+    ///   - truncationPlace: The place of truncation for the line.
+    ///   - tokenString: The token string to indicate the line truncation.
+    /// - Returns: The new line which is truncated if it overflows the `extent`.
+    public func makeTruncatedLine(characterRange: Range<String.Index>, extent: CGFloat,
+                                  breakMode: BreakMode, truncationPlace: TruncationPlace,
+                                  tokenString: String?) -> ComposedLine {
+        let tokenResolver = TokenResolver(string: text.string, runs: runs)
+        let tokenLine = tokenResolver.makeTokenLine(range: characterRange,
+                                                    truncationPlace: truncationPlace,
+                                                    tokenString: tokenString)
+
+        return makeTruncatedLine(characterRange: characterRange, extent: extent,
+                                 breakMode: breakMode,
+                                 truncationPlace: truncationPlace,
+                                 tokenLine: tokenLine)
+    }
+
+    /// Creates a line of specified string range, truncating it if it overflows the specified extent.
+    ///
+    /// - Parameters:
+    ///   - characterRange: The range of the line in source string.
+    ///   - extent: The extent at which truncation will begin.
+    ///   - breakMode: The truncation mode to be used on the line.
+    ///   - truncationPlace: The place of truncation for the line.
+    ///   - tokenLine: The token line to indicate the line truncation.
+    /// - Returns: The new line which is truncated if it overflows the `extent`.
+    public func makeTruncatedLine(characterRange: Range<String.Index>, extent: CGFloat,
+                                  breakMode: BreakMode, truncationPlace: TruncationPlace,
+                                  tokenLine: ComposedLine) -> ComposedLine {
+        let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes,
+                                        paragraphs: paragraphs, runs: runs)
+        let breakResolver = BreakResolver(string: text.string,
+                                          paragraphs: paragraphs, runs: runs, breaks: breaks)
+
+        return lineResolver.makeCompactLine(range: characterRange, extent: extent,
+                                            breaks: breakResolver, mode: breakMode,
+                                            place: truncationPlace, token: tokenLine)
     }
 }
