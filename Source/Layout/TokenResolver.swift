@@ -53,11 +53,12 @@ struct TokenResolver {
             }
         }
 
-        let typesetter = Typesetter(text: NSAttributedString(string: ellipsisStr),
+        let ellipsisText = NSAttributedString(string: ellipsisStr)
+        let typesetter = Typesetter(text: ellipsisText,
                                     defaultAttributes: [
                                         .typeface: tokenTypeface,
                                         .typeSize: tokenTypeSize])
-        let ellipsisRange = ellipsisStr.startIndex ..< ellipsisStr.endIndex
+        let ellipsisRange = ellipsisText.string.startIndex ..< ellipsisText.string.endIndex
 
         return typesetter.makeSimpleLine(characterRange: ellipsisRange)
     }
