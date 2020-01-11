@@ -54,17 +54,37 @@ extension RandomAccessCollection
         var feasibleStart: String.Index
         var feasibleEnd: String.Index
 
+        var isRTL: Bool!
+        var allLines: [BidiLine] = []
+
         repeat {
             let bidiParagraph = self[paragraphIndex]
+            if isRTL == nil {
+                isRTL = bidiParagraph.baseLevel & 1 == 1
+            }
+
             feasibleStart = Swift.max(bidiParagraph.startIndex, range.lowerBound)
             feasibleEnd = Swift.min(bidiParagraph.endIndex, range.upperBound)
 
-            let bidiLine: BidiLine! = bidiParagraph.makeLine(characterRange: feasibleStart ..< feasibleEnd)
-            for bidiRun in bidiLine.visualRuns {
-                body(bidiRun)
+            if let bidiLine = bidiParagraph.makeLine(characterRange: feasibleStart ..< feasibleEnd) {
+                allLines.append(bidiLine)
             }
 
             paragraphIndex += 1
         } while feasibleEnd != range.upperBound
+
+        if isRTL {
+            for bidiLine in allLines.reversed() {
+                for bidiRun in bidiLine.visualRuns {
+                    body(bidiRun)
+                }
+            }
+        } else {
+            for bidiLine in allLines {
+                for bidiRun in bidiLine.visualRuns {
+                    body(bidiRun)
+                }
+            }
+        }
     }
 }
