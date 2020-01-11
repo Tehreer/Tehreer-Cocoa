@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,12 +36,14 @@ private struct FrameContext {
 
     var occupiedWidth: CGFloat = .zero
     var occupiedHeight: CGFloat = .zero
+    var lastSize: CGSize = .zero
 
     // MARK: Paragraph Properties
 
     var startIndex: String.Index
     var endIndex: String.Index
     var baseLevel: UInt8 = .zero
+    var paragraphSpans: [TextSpan<NSParagraphStyle>] = []
 
     // MARK: Line Properties
 
@@ -83,6 +85,14 @@ public class FrameResolver {
 
     /// The vertical alignment to apply on the contents of a frame. Its default value is `.top`.
     public var verticalAlignment: VerticalAlignment = .top
+
+    /// The truncation mode to apply on the last line of a frame in case of overflow. Its default
+    /// value is `.line`.
+    public var truncationMode: BreakMode = .line
+
+    /// The truncation place for the last line of a frame. The truncation is disabled if its value
+    /// is `nil`.
+    public var truncationPlace: TruncationPlace? = nil
 
     /// The maximum number of lines that a frame should consist of.
     public var maxLines: Int? = nil
@@ -137,6 +147,7 @@ public class FrameResolver {
             paragraphIndex += 1
         } while segmentStart < characterRange.upperBound
 
+        resolveTruncation(context: &context, frameEnd: characterRange.upperBound)
         resolveAlignments(context: &context)
 
         let textFrame = ComposedFrame(string: typesetter.text.string,
@@ -155,7 +166,7 @@ public class FrameResolver {
         let text = typesetter.text
         let string = text.string
 
-        let (spans, defaultSpan) = extractParagraphSpans(context: &context, text: text)
+        let defaultSpan = extractParagraphSpans(context: &context, text: text)
         resolveParagraphStyle(context: &context, span: defaultSpan)
 
         var lineIndex = 0
@@ -165,42 +176,24 @@ public class FrameResolver {
         while lineStart != context.endIndex {
             resolveHeadIndent(context: &context, lineIndex: lineIndex, style: defaultSpan?.attribute)
 
-            // Find out the style of new line, if any.
-            let utf16Start = string.utf16Index(forCharacterAt: lineStart)
-            let lineStyle = spans.last { $0.range.contains(utf16Start) }?.attribute
-
             // Find out the length of new line.
             let lineEnd = typesetter.suggestForwardBreak(inCharacterRange: lineStart ..< context.endIndex,
                                                          extent: context.lineExtent, breakMode: .line)
 
             // Create the line and resolve its attributes.
             let textLine = typesetter.makeSimpleLine(characterRange: lineStart ..< lineEnd)
-            resolveLineStyle(textLine: textLine, style: lineStyle)
-            resolveLineHeightMultiplier(textLine: textLine, multiplier: lineHeightMultiplier)
-            resolveExtraLineSpacing(textLine: textLine, spacing: extraLineSpacing)
-
-            // Compute the origin of current line.
-            let originX = context.leftIndent + textLine.penOffset(forFlushFactor: context.flushFactor, flushExtent: context.lineExtent)
-            let originY = context.occupiedHeight + textLine.ascent
-
-            // Update the properties of current line.
-            textLine.origin = CGPoint(x: originX, y: originY)
-            textLine.flushFactor = context.flushFactor
-
-            // Compute the line width and the height.
-            let lineWidth = context.lineMargins + textLine.width - textLine.trailingWhitespaceExtent
-            let lineHeight = textLine.height
+            resolveAttributes(context: &context, textLine: textLine)
 
             // Make sure that at least one line is added even if frame is smaller in height.
-            if context.occupiedHeight + lineHeight > frameBounds.height && !context.textLines.isEmpty {
+            let occupiedSize = computeOccupiedSize(context: &context, textLine: textLine)
+            if occupiedSize.height > frameBounds.height && !context.textLines.isEmpty {
                 context.isFilled = true
                 return
             }
 
-            // Append the line, and update the occupied width and height.
+            // Append the line, and update the occupied size.
             context.textLines.append(textLine)
-            context.occupiedWidth = max(context.occupiedWidth, lineWidth)
-            context.occupiedHeight += lineHeight
+            resolveOccupiedSize(context: &context, newSize: occupiedSize)
 
             // Stop the filling process if maximum lines have been added.
             if context.textLines.count == context.maxLines {
@@ -215,10 +208,9 @@ public class FrameResolver {
         resolveParagraphSpacing(context: &context, string: string, span: defaultSpan)
     }
 
-    private func extractParagraphSpans(context: inout FrameContext, text: NSAttributedString) -> (spans: [TextSpan<NSParagraphStyle>], defaultSpan: TextSpan<NSParagraphStyle>?) {
+    private func extractParagraphSpans(context: inout FrameContext, text: NSAttributedString) -> TextSpan<NSParagraphStyle>? {
         let range: NSRange = text.string.utf16Range(forCharacterRange: context.startIndex ..< context.endIndex)
-
-        var spans: [TextSpan<NSParagraphStyle>] = []
+        var paragraphSpans: [TextSpan<NSParagraphStyle>] = []
         var defaultSpan: TextSpan<NSParagraphStyle>?
 
         text.enumerateAttribute(.paragraphStyle, in: range, options: []) { (attribute, spanRange, stop) in
@@ -229,10 +221,12 @@ public class FrameResolver {
                 defaultSpan = span
             }
 
-            spans.append(span)
+            paragraphSpans.append(span)
         }
 
-        return (spans, defaultSpan)
+        context.paragraphSpans = paragraphSpans
+
+        return defaultSpan
     }
 
     private func resolveParagraphStyle(context: inout FrameContext, span: TextSpan<NSParagraphStyle>?) {
@@ -287,6 +281,24 @@ public class FrameResolver {
 
     // MARK: Line Handling
 
+    private func resolveAttributes(context: inout FrameContext, textLine: ComposedLine) {
+        // Find out the style of the line, if any.
+        let lineStart = typesetter.text.string.utf16Index(forCharacterAt: textLine.startIndex)
+        let lineStyle = context.paragraphSpans.last { $0.range.contains(lineStart) }?.attribute
+
+        resolveLineStyle(textLine: textLine, style: lineStyle)
+        resolveLineHeightMultiplier(textLine: textLine, multiplier: lineHeightMultiplier)
+        resolveExtraLineSpacing(textLine: textLine, spacing: extraLineSpacing)
+
+        // Compute the origin of current line.
+        let originX = context.leftIndent + textLine.penOffset(forFlushFactor: context.flushFactor, flushExtent: context.lineExtent)
+        let originY = context.occupiedHeight + textLine.ascent
+
+        // Update the properties of current line.
+        textLine.origin = CGPoint(x: originX, y: originY)
+        textLine.flushFactor = context.flushFactor
+    }
+
     private func resolveLineStyle(textLine: ComposedLine, style: NSParagraphStyle?) {
         guard let style = style else { return }
 
@@ -334,6 +346,54 @@ public class FrameResolver {
     }
 
     // MARK: Layout Handling
+
+    private func computeOccupiedSize(context: inout FrameContext, textLine: ComposedLine) -> CGSize {
+        let lineWidth = context.lineMargins + textLine.width - textLine.trailingWhitespaceExtent
+        let lineHeight = textLine.height
+
+        return CGSize(width: max(context.occupiedWidth, lineWidth),
+                      height: context.occupiedHeight + lineHeight)
+    }
+
+    private func resolveOccupiedSize(context: inout FrameContext, newSize: CGSize) {
+        context.lastSize = CGSize(width: context.occupiedWidth, height: context.occupiedHeight)
+        context.occupiedWidth = newSize.width
+        context.occupiedHeight = newSize.height
+    }
+
+    private func resolveOccupiedSize(context: inout FrameContext, textLine: ComposedLine) {
+        let newSize = computeOccupiedSize(context: &context, textLine: textLine)
+        resolveOccupiedSize(context: &context, newSize: newSize)
+    }
+
+    private func resolveTruncation(context: inout FrameContext, frameEnd: String.Index) {
+        guard let truncationPlace = truncationPlace else { return }
+
+        let lastIndex = context.textLines.count - 1
+        let lastLine = context.textLines[lastIndex]
+
+        // No need to truncate if frame range is already covered.
+        if lastLine.endIndex == frameEnd {
+            return
+        }
+
+        // Restore the occupied size to previous value.
+        context.occupiedWidth = context.lastSize.width
+        context.occupiedHeight = context.lastSize.height
+
+        // Create the truncated line and resolve its attributes.
+        let lineRange = lastLine.startIndex ..< frameEnd
+        let textLine = typesetter.makeTruncatedLine(characterRange: lineRange,
+                                                    extent: context.lineExtent,
+                                                    breakMode: truncationMode,
+                                                    truncationPlace: truncationPlace,
+                                                    tokenString: nil)
+        resolveAttributes(context: &context, textLine: textLine)
+
+        // Replace the line and update the occupied size.
+        context.textLines[lastIndex] = textLine
+        resolveOccupiedSize(context: &context, textLine: textLine)
+    }
 
     private func resolveAlignments(context: inout FrameContext) {
         if fitsVertically {
