@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -353,6 +353,33 @@ public class TLabel: UIView {
         set {
             renderer.fillColor = newValue
             setNeedsDisplay()
+        }
+    }
+
+    /// The truncation mode that should be used on the last line of the text in case of overflow.
+    public var truncationMode: BreakMode {
+        get {
+            return resolver.truncationMode
+        }
+        set {
+            resolver.truncationMode = newValue
+
+            _sizeLabel.invalidateIntrinsicContentSize()
+            deferNeedsTextLayout()
+        }
+    }
+
+    /// The truncation place for the last line of the text. The truncation is disabled if its value
+    /// is `.nil`
+    public var truncationPlace: TruncationPlace? {
+        get {
+            return resolver.truncationPlace
+        }
+        set {
+            resolver.truncationPlace = newValue
+
+            _sizeLabel.invalidateIntrinsicContentSize()
+            deferNeedsTextLayout()
         }
     }
 
