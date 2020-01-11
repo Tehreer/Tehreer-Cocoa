@@ -135,6 +135,24 @@ struct LineResolver {
                                 paragraphLevel: paragraphs.baseLevel(forCharacterAt: range.lowerBound))
     }
 
+    func makeCompactLine(range: Range<String.Index>, extent: CGFloat,
+                         breaks: BreakResolver, mode: BreakMode, place: TruncationPlace,
+                         token: ComposedLine) -> ComposedLine {
+        let tokenlessWidth = extent - token.width;
+
+        switch (place) {
+        case .start:
+            return makeStartTruncatedLine(range: range, tokenlessWidth: tokenlessWidth,
+                                          breaks: breaks, mode: mode, token: token)
+        case .middle:
+            return makeMiddleTruncatedLine(range: range, tokenlessWidth: tokenlessWidth,
+                                           breaks: breaks, mode: mode, token: token)
+        case .end:
+            return makeEndTruncatedLine(range: range, tokenlessWidth: tokenlessWidth,
+                                        breaks: breaks, mode: mode, token: token)
+        }
+    }
+
     private struct TruncationHandler {
         let range: Range<String.Index>
         let skipStart: String.Index
@@ -297,13 +315,15 @@ struct LineResolver {
 
         for truncationRun in token.visualRuns {
             let modifiedRun = GlyphRun(truncationRun)
-            runArray.append(modifiedRun)
+            runArray.insert(modifiedRun, at: insertIndex)
 
             insertIndex += 1
         }
     }
 
     private func appendVisualRuns(from start: String.Index, to end: String.Index, in runArray: inout [GlyphRun]) {
+        guard start < end else { return }
+
         // ASSUMPTIONS:
         //      - Visual range may fall in one or more glyph runs.
         //      - Consecutive intrinsic runs may have same bidi level.
