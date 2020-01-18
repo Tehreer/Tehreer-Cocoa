@@ -25,7 +25,7 @@ private class SizeLabel: UILabel {
 }
 
 /// A view that displays read-only text to the user.
-public class TLabel: UIView {
+open class TLabel: UIView {
     private let renderer = Renderer()
     private let resolver = FrameResolver()
 
@@ -35,7 +35,7 @@ public class TLabel: UIView {
     private var _sizeLabel = SizeLabel()
 
     private var needsTypesetter: Bool = false
-    private var textFrame: ComposedFrame? = nil
+    private(set) open var textFrame: ComposedFrame? = nil
 
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -47,7 +47,7 @@ public class TLabel: UIView {
         addSizeLabel()
     }
 
-    public override class var requiresConstraintBasedLayout: Bool {
+    open override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
@@ -99,7 +99,7 @@ public class TLabel: UIView {
     }
 
     /// Lays out subviews.
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
 
         let viewSize = bounds.size
@@ -113,7 +113,7 @@ public class TLabel: UIView {
 
     /// The frame rectangle, which describes the view’s location and size in its superview’s
     /// coordinate system.
-    public override var frame: CGRect {
+    open override var frame: CGRect {
         get {
             return super.frame
         }
@@ -129,7 +129,7 @@ public class TLabel: UIView {
 
     /// The bounds rectangle, which describes the view’s location and size in its own coordinate
     /// system.
-    public override var bounds: CGRect {
+    open override var bounds: CGRect {
         get {
             return super.bounds
         }
@@ -146,7 +146,7 @@ public class TLabel: UIView {
     /// Draws the receiver’s image within the passed-in rectangle.
     ///
     /// - Parameter rect: The portion of the view’s bounds that needs to be updated.
-    public override func draw(_ rect: CGRect) {
+    open override func draw(_ rect: CGRect) {
         super.draw(rect)
 
         if contentMode != .center {
@@ -209,7 +209,7 @@ public class TLabel: UIView {
         deferNeedsTextLayout()
     }
 
-    public func indexOfCodeUnit(at position: CGPoint) -> Int? {
+    open func indexOfCodeUnit(at position: CGPoint) -> Int? {
         guard let characterIndex = indexOfCharacter(at: position) else {
             return nil
         }
@@ -217,7 +217,7 @@ public class TLabel: UIView {
         return textFrame?.string.utf16Index(forCharacterAt: characterIndex)
     }
 
-    public func indexOfCharacter(at position: CGPoint) -> String.Index? {
+    open func indexOfCharacter(at position: CGPoint) -> String.Index? {
         guard let textFrame = textFrame else {
             return nil
         }
@@ -243,7 +243,7 @@ public class TLabel: UIView {
     }
 
     /// The text alignment to apply on each line. Its default value is `.intrinsic`.
-    public var textAlignment: TextAlignment {
+    open var textAlignment: TextAlignment {
         get {
             return resolver.textAlignment
         }
@@ -254,7 +254,7 @@ public class TLabel: UIView {
     }
 
     /// The vertical alignment to apply on the contents. Its default value is `.top`.
-    public var verticalAlignment: VerticalAlignment {
+    open var verticalAlignment: VerticalAlignment {
         get {
             return resolver.verticalAlignment
         }
@@ -270,7 +270,7 @@ public class TLabel: UIView {
     ///
     /// A typesetter is preferred over `attributedText` as it avoids an extra step of creating the typesetter
     /// from the `attributedText`.
-    public var typesetter: Typesetter? {
+    open var typesetter: Typesetter? {
         get {
             return _typesetter
         }
@@ -291,7 +291,7 @@ public class TLabel: UIView {
     /// this property will make `text` property `nil`.
     ///
     /// If performance is required, a typesetter should be used directly.
-    public var attributedText: NSAttributedString! {
+    open var attributedText: NSAttributedString! {
         get {
             return _attributedText
         }
@@ -305,7 +305,7 @@ public class TLabel: UIView {
     }
 
     /// The typeface in which the text is displayed.
-    public var typeface: Typeface? {
+    open var typeface: Typeface? {
         get {
             return renderer.typeface
         }
@@ -321,7 +321,7 @@ public class TLabel: UIView {
     /// instead. Setting this property will make `text` property `nil`.
     ///
     /// If performance is required, a typesetter should be used directly.
-    public var text: String! {
+    open var text: String! {
         get {
             return _text
         }
@@ -335,7 +335,7 @@ public class TLabel: UIView {
     }
 
     /// The default size of the text.
-    public var textSize: CGFloat {
+    open var textSize: CGFloat {
         get {
             return renderer.typeSize
         }
@@ -346,7 +346,7 @@ public class TLabel: UIView {
     }
 
     /// The default color of the text.
-    public var textColor: UIColor {
+    open var textColor: UIColor {
         get {
             return renderer.fillColor
         }
@@ -357,7 +357,7 @@ public class TLabel: UIView {
     }
 
     /// The truncation mode that should be used on the last line of the text in case of overflow.
-    public var truncationMode: BreakMode {
+    open var truncationMode: BreakMode {
         get {
             return resolver.truncationMode
         }
@@ -371,7 +371,7 @@ public class TLabel: UIView {
 
     /// The truncation place for the last line of the text. The truncation is disabled if its value
     /// is `.nil`
-    public var truncationPlace: TruncationPlace? {
+    open var truncationPlace: TruncationPlace? {
         get {
             return resolver.truncationPlace
         }
@@ -384,7 +384,7 @@ public class TLabel: UIView {
     }
 
     /// The maximum number of lines to use for rendering text.
-    public var maxLines: Int? {
+    open var maxLines: Int? {
         get {
             return resolver.maxLines
         }
@@ -398,7 +398,7 @@ public class TLabel: UIView {
 
     /// The extra spacing that is added after each text line. It is resolved before line height
     /// multiplier. Its default value is zero.
-    public var extraLineSpacing: CGFloat {
+    open var extraLineSpacing: CGFloat {
         get {
             return resolver.extraLineSpacing
         }
@@ -415,7 +415,7 @@ public class TLabel: UIView {
     ///
     /// The additional spacing is adjusted in such a way that text remains in the middle of the
     /// line.
-    public var lineHeightMultiplier: CGFloat {
+    open var lineHeightMultiplier: CGFloat {
         get {
             return resolver.lineHeightMultiplier
         }
