@@ -11,6 +11,7 @@
 		6E0B69BD2385A85F001C231F /* TehreerCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6EE0A4472305C6080061D4EB /* TehreerCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E0B69C02385B0E8001C231F /* UIColor+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0B69BF2385B0E8001C231F /* UIColor+Additions.swift */; };
 		6E16908323819B59000A032B /* TypefaceInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E16908223819B58000A032B /* TypefaceInfoViewController.swift */; };
+		6E4FC87D23D367A900833695 /* LinkableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4FC87C23D367A900833695 /* LinkableLabel.swift */; };
 		6E987FF823313A06009E721B /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E987FF723313A06009E721B /* UIViewController+Alert.swift */; };
 		6E987FFA23313F06009E721B /* OpenTypeInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E987FF923313F06009E721B /* OpenTypeInfoViewController.swift */; };
 		6EA98E6A232D368400E582E8 /* MehrNastaliq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EA98E67232D368400E582E8 /* MehrNastaliq.ttf */; };
@@ -46,6 +47,7 @@
 /* Begin PBXFileReference section */
 		6E0B69BF2385B0E8001C231F /* UIColor+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Additions.swift"; sourceTree = "<group>"; };
 		6E16908223819B58000A032B /* TypefaceInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypefaceInfoViewController.swift; sourceTree = "<group>"; };
+		6E4FC87C23D367A900833695 /* LinkableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkableLabel.swift; sourceTree = "<group>"; };
 		6E987FF723313A06009E721B /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		6E987FF923313F06009E721B /* OpenTypeInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenTypeInfoViewController.swift; sourceTree = "<group>"; };
 		6EA98E67232D368400E582E8 /* MehrNastaliq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MehrNastaliq.ttf; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				6EE775C923521D2600919591 /* BidiInfoViewController.swift */,
 				6EB1AFFD2336A0F500548553 /* GlyphInfoViewController.swift */,
 				6EB91DB42340C2C100595946 /* LabelViewController.swift */,
+				6E4FC87C23D367A900833695 /* LinkableLabel.swift */,
 				6EB90B0B232CD19A000FA74E /* OpenTypeShapingViewController.swift */,
 				6E987FF923313F06009E721B /* OpenTypeInfoViewController.swift */,
 				6E16908223819B58000A032B /* TypefaceInfoViewController.swift */,
@@ -223,6 +226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E987FFA23313F06009E721B /* OpenTypeInfoViewController.swift in Sources */,
+				6E4FC87D23D367A900833695 /* LinkableLabel.swift in Sources */,
 				6EB90B0C232CD19A000FA74E /* OpenTypeShapingViewController.swift in Sources */,
 				6EE775C8235219A200919591 /* BidiAlgorithmViewController.swift in Sources */,
 				6EB1AFFA2336246900548553 /* TypefaceGlyphsViewController.swift in Sources */,
@@ -387,7 +391,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tehreer.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -404,7 +408,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tehreer.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
