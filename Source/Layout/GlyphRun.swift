@@ -255,7 +255,7 @@ public class GlyphRun {
     /// - Parameter index: The index of a character in source string.
     /// - Returns: The distance of specified character from the start of the run assumed at zero.
     public func distance(forCharacterAt index: String.Index) -> CGFloat {
-        checkCharacterIndex(index)
+        precondition(index >= startIndex && index <= endIndex, String.indexOutOfRange)
 
         return caretEdge(forCharacterAt: index)
     }
