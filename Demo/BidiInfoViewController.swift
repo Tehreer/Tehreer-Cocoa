@@ -174,7 +174,7 @@ class BidiInfoViewController: UIViewController {
             }
 
             appendText("*", attributes: inlineHeading())
-            appendText(" Index=\(bidiText.distance(from: bidiText.startIndex, to: bidiPair.codeUnitIndex))")
+            appendText(" Index=\(bidiPair.codeUnitIndex))")
             appendText(" Character=‘\(Character(bidiPair.actualCodePoint))’")
             appendText(" Mirror=‘\(Character(bidiPair.pairingCodePoint))’\n")
         }
