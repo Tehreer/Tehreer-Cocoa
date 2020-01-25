@@ -75,6 +75,16 @@ public class BidiAlgorithm {
         SBAlgorithmRelease(algorithm)
     }
 
+    /// Returns the boundary of the first paragraph within the specified UTF-16 range.
+    ///
+    /// The boundary of the paragraph occurs after a character whose bidirectional type is Paragraph
+    /// Separator (B), or the `codeUnitRange.upperLimit` if no such character exists before it. The
+    /// exception to this rule is when a Carriage Return (CR) is followed by a Line Feed (LF). Both
+    /// CR and LF are paragraph separators, but in that case, the boundary of the paragraph is
+    /// considered after LF character.
+    ///
+    /// - Parameter codeUnitRange: The suggested UTF-16 range of the paragraph in source string.
+    /// - Returns: The boundary of the first paragraph within the specified code unit range.
     public func paragraphBoundary(inCodeUnitRange codeUnitRange: Range<Int>) -> Int {
         let paragraphOffset = SBUInteger(codeUnitRange.lowerBound)
         let suggestedLength = SBUInteger(codeUnitRange.count)
@@ -90,12 +100,12 @@ public class BidiAlgorithm {
     /// Returns the boundary of the first paragraph within the specified character range.
     ///
     /// The boundary of the paragraph occurs after a character whose bidirectional type is Paragraph
-    /// Separator (B), or the `range.upperLimit` if no such character exists before it. The
+    /// Separator (B), or the `characterRange.upperLimit` if no such character exists before it. The
     /// exception to this rule is when a Carriage Return (CR) is followed by a Line Feed (LF). Both
     /// CR and LF are paragraph separators, but in that case, the boundary of the paragraph is
     /// considered after LF character.
     ///
-    /// - Parameter characterRange: The suggested range of the paragraph in source string.
+    /// - Parameter characterRange: The suggested character range of the paragraph in source string.
     /// - Returns: The boundary of the first paragraph within the specified character range.
     public func paragraphBoundary(inCharacterRange characterRange: Range<String.Index>) -> String.Index {
         let string = buffer.string
