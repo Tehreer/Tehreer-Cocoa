@@ -153,6 +153,9 @@
                 <a href="../Enums/TextAlignment.html">TextAlignment</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Enums/TruncationPlace.html">TruncationPlace</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Enums/VerticalAlignment.html">VerticalAlignment</a>
               </li>
               <li class="nav-group-task">
@@ -320,6 +323,62 @@ embedding levels of characters can be queried from it.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:12TehreerCocoa13BidiAlgorithmC17paragraphBoundary15inCodeUnitRangeSiSnySiG_tF"></a>
+                    <a name="//apple_ref/swift/Method/paragraphBoundary(inCodeUnitRange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13BidiAlgorithmC17paragraphBoundary15inCodeUnitRangeSiSnySiG_tF">paragraphBoundary(inCodeUnitRange:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the boundary of the first paragraph within the specified UTF-16 range.</p>
+
+<p>The boundary of the paragraph occurs after a character whose bidirectional type is Paragraph
+Separator (B), or the <code>codeUnitRange.upperLimit</code> if no such character exists before it. The
+exception to this rule is when a Carriage Return (CR) is followed by a Line Feed (LF). Both
+CR and LF are paragraph separators, but in that case, the boundary of the paragraph is
+considered after LF character.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">paragraphBoundary</span><span class="p">(</span><span class="n">inCodeUnitRange</span> <span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codeUnitRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The suggested UTF-16 range of the paragraph in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The boundary of the first paragraph within the specified code unit range.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:12TehreerCocoa13BidiAlgorithmC17paragraphBoundary16inCharacterRangeSS5IndexVSnyAGG_tF"></a>
                     <a name="//apple_ref/swift/Method/paragraphBoundary(inCharacterRange:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:12TehreerCocoa13BidiAlgorithmC17paragraphBoundary16inCharacterRangeSS5IndexVSnyAGG_tF">paragraphBoundary(inCharacterRange:)</a>
@@ -333,7 +392,7 @@ embedding levels of characters can be queried from it.</p>
                         <p>Returns the boundary of the first paragraph within the specified character range.</p>
 
 <p>The boundary of the paragraph occurs after a character whose bidirectional type is Paragraph
-Separator (B), or the <code>range.upperLimit</code> if no such character exists before it. The
+Separator (B), or the <code>characterRange.upperLimit</code> if no such character exists before it. The
 exception to this rule is when a Carriage Return (CR) is followed by a Line Feed (LF). Both
 CR and LF are paragraph separators, but in that case, the boundary of the paragraph is
 considered after LF character.</p>
@@ -359,7 +418,7 @@ considered after LF character.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The suggested range of the paragraph in source string.</p>
+                                  <p>The suggested character range of the paragraph in source string.</p>
                                 </div>
                               </td>
                             </tr>
@@ -369,6 +428,144 @@ considered after LF character.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>The boundary of the first paragraph within the specified character range.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13BidiAlgorithmC13makeParagraph13codeUnitRange9directionAA0cF0CSgSnySiG_AA13BaseDirectionOtF"></a>
+                    <a name="//apple_ref/swift/Method/makeParagraph(codeUnitRange:direction:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13BidiAlgorithmC13makeParagraph13codeUnitRange9directionAA0cF0CSgSnySiG_AA13BaseDirectionOtF">makeParagraph(codeUnitRange:direction:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a paragraph object processed with Unicode Bidirectional Algorithm.</p>
+
+<p>This method processes only first paragraph starting at <code>codeUnitRange.lowerBound</code> and ending
+at either <code>codeUnitRange.upperBound</code> or some character before it, in accordance with Rule P1
+of Unicode Bidirectional Algorithm.</p>
+
+<p>The paragraph level is determined by applying Rules P2-P3 and embedding levels are resolved
+by applying Rules X1-I2.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeParagraph</span><span class="p">(</span><span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">direction</span><span class="p">:</span> <span class="kt"><a href="../Enums/BaseDirection.html">BaseDirection</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/BidiParagraph.html">BidiParagraph</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codeUnitRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The suggested UTF-16 range of the paragraph in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>direction</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The base direction of the paragraph.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A paragraph object processed with Unicode Bidirectional Algorithm.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13BidiAlgorithmC13makeParagraph13codeUnitRange9baseLevelAA0cF0CSgSnySiG_s5UInt8VtF"></a>
+                    <a name="//apple_ref/swift/Method/makeParagraph(codeUnitRange:baseLevel:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13BidiAlgorithmC13makeParagraph13codeUnitRange9baseLevelAA0cF0CSgSnySiG_s5UInt8VtF">makeParagraph(codeUnitRange:baseLevel:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a paragraph object processed with Unicode Bidirectional Algorithm.</p>
+
+<p>This method processes only first paragraph starting at <code>codeUnitRange.lowerBound</code> and ending
+at either <code>codeUnitRange.upperBound</code> or some character before it, in accordance with Rule P1
+of Unicode Bidirectional Algorithm.</p>
+
+<p>The paragraph level is overridden by <code>baseLevel</code> parameter and embedding levels are resolved
+by applying Rules X1-I2.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeParagraph</span><span class="p">(</span><span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">baseLevel</span><span class="p">:</span> <span class="kt">UInt8</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/BidiParagraph.html">BidiParagraph</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codeUnitRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The suggested UTF-16 range of the paragraph in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>baseLevel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Base level to override.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A paragraph object processed with Unicode Bidirectional Algorithm.</p>
                       </div>
                     </section>
                   </div>
@@ -516,7 +713,7 @@ by applying Rules X1-I2.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2019-11-22)</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

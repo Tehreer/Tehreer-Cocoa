@@ -153,6 +153,9 @@
                 <a href="../Enums/TextAlignment.html">TextAlignment</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Enums/TruncationPlace.html">TruncationPlace</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Enums/VerticalAlignment.html">VerticalAlignment</a>
               </li>
               <li class="nav-group-task">
@@ -252,7 +255,7 @@ breaking, and do other contextual analysis based on the characters in the string
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The source text for which this typesetter object was created.</p>
 
                       </div>
                       <div class="declaration">
@@ -526,12 +529,212 @@ characters, then start index is returned. Otherwise, break index is returned.</p
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa10TypesetterC17makeTruncatedLine14characterRange6extent9breakMode15truncationPlace11tokenStringAA08ComposedF0CSnySS5IndexVG_12CoreGraphics7CGFloatVAA05BreakK0OAA010TruncationM0OSSSgtF"></a>
+                    <a name="//apple_ref/swift/Method/makeTruncatedLine(characterRange:extent:breakMode:truncationPlace:tokenString:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC17makeTruncatedLine14characterRange6extent9breakMode15truncationPlace11tokenStringAA08ComposedF0CSnySS5IndexVG_12CoreGraphics7CGFloatVAA05BreakK0OAA010TruncationM0OSSSgtF">makeTruncatedLine(characterRange:extent:breakMode:truncationPlace:tokenString:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a line of specified string range, truncating it if it overflows the specified extent.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeTruncatedLine</span><span class="p">(</span><span class="nv">characterRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">extent</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span>
+                              <span class="nv">breakMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/BreakMode.html">BreakMode</a></span><span class="p">,</span> <span class="nv">truncationPlace</span><span class="p">:</span> <span class="kt"><a href="../Enums/TruncationPlace.html">TruncationPlace</a></span><span class="p">,</span>
+                              <span class="nv">tokenString</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ComposedLine.html">ComposedLine</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>characterRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The range of the line in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>extent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The extent at which truncation will begin.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>breakMode</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The truncation mode to be used on the line.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>truncationPlace</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The place of truncation for the line.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>tokenString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The token string to indicate the line truncation.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The new line which is truncated if it overflows the <code>extent</code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa10TypesetterC17makeTruncatedLine14characterRange6extent9breakMode15truncationPlace05tokenF0AA08ComposedF0CSnySS5IndexVG_12CoreGraphics7CGFloatVAA05BreakK0OAA010TruncationM0OAKtF"></a>
+                    <a name="//apple_ref/swift/Method/makeTruncatedLine(characterRange:extent:breakMode:truncationPlace:tokenLine:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC17makeTruncatedLine14characterRange6extent9breakMode15truncationPlace05tokenF0AA08ComposedF0CSnySS5IndexVG_12CoreGraphics7CGFloatVAA05BreakK0OAA010TruncationM0OAKtF">makeTruncatedLine(characterRange:extent:breakMode:truncationPlace:tokenLine:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a line of specified string range, truncating it if it overflows the specified extent.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeTruncatedLine</span><span class="p">(</span><span class="nv">characterRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">extent</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span>
+                              <span class="nv">breakMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/BreakMode.html">BreakMode</a></span><span class="p">,</span> <span class="nv">truncationPlace</span><span class="p">:</span> <span class="kt"><a href="../Enums/TruncationPlace.html">TruncationPlace</a></span><span class="p">,</span>
+                              <span class="nv">tokenLine</span><span class="p">:</span> <span class="kt"><a href="../Classes/ComposedLine.html">ComposedLine</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ComposedLine.html">ComposedLine</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>characterRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The range of the line in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>extent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The extent at which truncation will begin.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>breakMode</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The truncation mode to be used on the line.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>truncationPlace</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The place of truncation for the line.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>tokenLine</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The token line to indicate the line truncation.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The new line which is truncated if it overflows the <code>extent</code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2019-11-22)</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
