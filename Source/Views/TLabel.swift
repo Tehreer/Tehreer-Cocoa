@@ -209,6 +209,10 @@ open class TLabel: UIView {
         deferNeedsTextLayout()
     }
 
+    /// Returns the UTF-16 index representing the specified position, or `nil` if there is no
+    /// character at this position.
+    ///
+    /// - Parameter position: The position for which to determine the UTF-16 index.
     open func indexOfCodeUnit(at position: CGPoint) -> Int? {
         guard let characterIndex = indexOfCharacter(at: position) else {
             return nil
@@ -217,6 +221,10 @@ open class TLabel: UIView {
         return textFrame?.string.utf16Index(forCharacterAt: characterIndex)
     }
 
+    /// Returns the index of character representing the specified position, or `nil` if there is no
+    /// character at this position.
+    ///
+    /// - Parameter position: The position for which to determine the character index.
     open func indexOfCharacter(at position: CGPoint) -> String.Index? {
         guard let textFrame = textFrame else {
             return nil

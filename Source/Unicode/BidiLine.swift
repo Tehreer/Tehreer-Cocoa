@@ -34,6 +34,7 @@ public class BidiLine {
         SBLineRelease(line)
     }
 
+    /// The UTF-16 range of this line in source string.
     public var codeUnitRange: Range<Int> {
         let offset = Int(SBLineGetOffset(line))
         let length = Int(SBLineGetLength(line))

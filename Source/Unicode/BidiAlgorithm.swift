@@ -105,10 +105,36 @@ public class BidiAlgorithm {
         return string.characterIndex(forUTF16Index: boundaryIndex)
     }
 
+    /// Creates a paragraph object processed with Unicode Bidirectional Algorithm.
+    ///
+    /// This method processes only first paragraph starting at `codeUnitRange.lowerBound` and ending
+    /// at either `codeUnitRange.upperBound` or some character before it, in accordance with Rule P1
+    /// of Unicode Bidirectional Algorithm.
+    ///
+    /// The paragraph level is determined by applying Rules P2-P3 and embedding levels are resolved
+    /// by applying Rules X1-I2.
+    ///
+    /// - Parameters:
+    ///   - codeUnitRange: The suggested UTF-16 range of the paragraph in source string.
+    ///   - direction: The base direction of the paragraph.
+    /// - Returns: A paragraph object processed with Unicode Bidirectional Algorithm.
     public func makeParagraph(codeUnitRange: Range<Int>, direction: BaseDirection) -> BidiParagraph? {
         return makeParagraph(codeUnitRange: codeUnitRange, baseLevel: direction.level)
     }
 
+    /// Creates a paragraph object processed with Unicode Bidirectional Algorithm.
+    ///
+    /// This method processes only first paragraph starting at `codeUnitRange.lowerBound` and ending
+    /// at either `codeUnitRange.upperBound` or some character before it, in accordance with Rule P1
+    /// of Unicode Bidirectional Algorithm.
+    ///
+    /// The paragraph level is overridden by `baseLevel` parameter and embedding levels are resolved
+    /// by applying Rules X1-I2.
+    ///
+    /// - Parameters:
+    ///   - codeUnitRange: The suggested UTF-16 range of the paragraph in source string.
+    ///   - baseLevel: Base level to override.
+    /// - Returns: A paragraph object processed with Unicode Bidirectional Algorithm.
     public func makeParagraph(codeUnitRange: Range<Int>, baseLevel: UInt8) -> BidiParagraph? {
         let bufferRange = Range(uncheckedBounds: (0, buffer.length))
         let clampedRange = codeUnitRange.clamped(to: bufferRange)

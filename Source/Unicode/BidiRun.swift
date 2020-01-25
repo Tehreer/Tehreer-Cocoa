@@ -21,6 +21,7 @@ import Foundation
 public struct BidiRun {
     private var string: String
 
+    /// The UTF-16 range of the run in source string.
     public var codeUnitRange: Range<Int>
 
     /// The embedding level of the run.
