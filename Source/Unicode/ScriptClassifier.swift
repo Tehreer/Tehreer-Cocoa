@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -71,12 +71,20 @@ public class ScriptClassifier {
         return CharacterScripts(self)
     }
 
-    /// Returns a sequence of resolved script runs within the specified range of source string.
+    /// Returns a sequence of resolved script runs within the specified UTF-16 range of source string.
+    ///
+    /// - Parameter codeUnitRange: The UTF-16 range in source string.
+    /// - Returns: A sequence of script runs within the specified UTF-16 range of source string.
+    public func scriptRuns(forCodeUnitRange codeUnitRange: Range<Int>) -> RunSequence {
+        return RunSequence(self, range: codeUnitRange)
+    }
+
+    /// Returns a sequence of resolved script runs within the specified character range of source string.
     ///
     /// - Parameter characterRange: The character range in source string.
-    /// - Returns: A sequence of script runs within the specified range of source text.
+    /// - Returns: A sequence of script runs within the specified character range of source string.
     public func scriptRuns(forCharacterRange characterRange: Range<String.Index>) -> RunSequence {
-        return RunSequence(self, range: string.utf16Range(forCharacterRange: characterRange))
+        return scriptRuns(forCodeUnitRange: string.utf16Range(forCharacterRange: characterRange))
     }
 }
 
@@ -101,12 +109,25 @@ extension ScriptClassifier {
             return owner.scriptsBuffer.count
         }
 
+        /// Accesses the embedding level at the specified character index.
+        ///
+        /// - Parameter index: A valid character index of the source string.
+        public subscript(index: String.Index) -> Script {
+            let string = owner.string
+            precondition(index >= string.startIndex && index < string.endIndex, .indexOutOfRange)
+
+            let codeUnitIndex = string.utf16Index(forCharacterAt: index)
+            let script = owner.scriptsBuffer[codeUnitIndex]
+
+            return Script(rawValue: Int(script))!
+        }
+
         /// Accesses the script at the specified position.
         ///
         /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
         ///                    `startIndex` and less than `endIndex`.
         public subscript(index: Int) -> Script {
-            precondition(index >= 0 && index < count, String.indexOutOfRange)
+            precondition(index >= 0 && index < count, .indexOutOfRange)
 
             return Script(rawValue: Int(owner.scriptsBuffer[index]))!
         }
@@ -158,10 +179,8 @@ extension ScriptClassifier {
                     currentIndex += 1
                 }
 
-                let range = owner.string.characterRange(forUTF16Range: startIndex ..< currentIndex)
-
-                return ScriptRun(startIndex: range.lowerBound,
-                                 endIndex: range.upperBound,
+                return ScriptRun(string: owner.string,
+                                 codeUnitRange: Range(uncheckedBounds: (startIndex, currentIndex)),
                                  script: Script(rawValue: Int(currentScript))!)
             }
 
