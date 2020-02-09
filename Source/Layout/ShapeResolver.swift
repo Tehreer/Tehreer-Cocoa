@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ struct ShapeResolver {
                                   || (!isRTL && writingDirection == .rightToLeft)
                     let shapingOrder: ShapingOrder = (isBackward ? .backward : .forward)
 
-                    runLocator.reset(for: scriptRun.startIndex ..< scriptRun.endIndex)
+                    runLocator.reset(for: scriptRun.codeUnitRange)
 
                     shapingEngine.scriptTag = scriptTag
                     shapingEngine.writingDirection = writingDirection
@@ -83,8 +83,7 @@ struct ShapeResolver {
             shapingEngine.typeface = typeface
             shapingEngine.typeSize = shapingRun.typeSize
 
-            let runRange = shapingRun.startIndex ..< shapingRun.endIndex
-            let shapingResult = shapingEngine.shape(text: string, range: runRange)
+            let shapingResult = shapingEngine.shape(text: string, codeUnitRange: shapingRun.codeUnitRange)
 
             let typeSize = shapingRun.typeSize
             let sizeByEm = typeSize / CGFloat(typeface.unitsPerEm)
@@ -119,8 +118,7 @@ struct ShapeResolver {
 
             let intrinsicRun = IntrinsicRun(
                 string: string,
-                startIndex: shapingRun.startIndex,
-                endIndex: shapingRun.endIndex,
+                codeUnitRange: shapingRun.codeUnitRange,
                 isBackward: shapingResult.isBackward,
                 bidiLevel: bidiLevel,
                 writingDirection: shapingEngine.writingDirection,

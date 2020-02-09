@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,8 +19,7 @@ import CoreGraphics
 
 class IntrinsicRun {
     let string: String
-    let startIndex: String.Index
-    let endIndex: String.Index
+    let codeUnitRange: Range<Int>
     let isBackward: Bool
     let bidiLevel: UInt8
     let writingDirection: WritingDirection
@@ -35,14 +34,13 @@ class IntrinsicRun {
     let clusterMap: [Int]
     let caretEdges: [CGFloat]
 
-    init(string: String, startIndex: String.Index, endIndex: String.Index, isBackward: Bool,
+    init(string: String, codeUnitRange: Range<Int>, isBackward: Bool,
          bidiLevel: UInt8, writingDirection: WritingDirection, typeface: Typeface,
          typeSize: CGFloat, ascent: CGFloat, descent: CGFloat, leading: CGFloat,
          glyphIDs: [GlyphID], glyphOffsets: [CGPoint], glyphAdvances: [CGFloat],
          clusterMap: [Int], caretEdges: [CGFloat]) {
         self.string = string
-        self.startIndex = startIndex
-        self.endIndex = endIndex
+        self.codeUnitRange = codeUnitRange
         self.isBackward = isBackward
         self.bidiLevel = bidiLevel
         self.writingDirection = writingDirection
@@ -56,6 +54,14 @@ class IntrinsicRun {
         self.glyphAdvances = glyphAdvances
         self.clusterMap = clusterMap
         self.caretEdges = caretEdges
+    }
+
+    var startIndex: String.Index {
+        return string.characterIndex(forUTF16Index: codeUnitRange.lowerBound)
+    }
+
+    var endIndex: String.Index {
+        return string.characterIndex(forUTF16Index: codeUnitRange.upperBound)
     }
 
     var isRTL: Bool {

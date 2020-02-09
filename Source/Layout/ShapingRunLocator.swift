@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,9 +18,7 @@ import CoreGraphics
 import Foundation
 
 struct ShapingRun {
-    var startIndex: String.Index
-    var endIndex: String.Index
-
+    var codeUnitRange: Range<Int>
     var typeface: Typeface!
     var typeSize: CGFloat = 16
     var baselineOffset: CGFloat = .zero
@@ -28,9 +26,8 @@ struct ShapingRun {
     var scaleX: CGFloat = 1.0
     var scaleY: CGFloat = 1.0
 
-    init(startIndex: String.Index, endIndex: String.Index) {
-        self.startIndex = startIndex
-        self.endIndex = endIndex
+    init(codeUnitRange: Range<Int>) {
+        self.codeUnitRange = codeUnitRange
     }
 }
 
@@ -38,31 +35,28 @@ struct ShapingRunLocator {
     let text: NSAttributedString
 
     private let string: String
-    private var chunkRange: Range<String.Index>
+    private var chunkRange: Range<Int>
     private var initialRun: ShapingRun
     private var newRun: ShapingRun!
 
     init(text: NSAttributedString, defaultAttributes: [NSAttributedString.Key: Any]) {
         self.text = text
         self.string = text.string
-        self.chunkRange = string.startIndex ..< string.endIndex
-        self.initialRun = ShapingRun(startIndex: string.startIndex, endIndex: string.endIndex)
+        self.chunkRange = Range(uncheckedBounds: (0, string.utf16.count)) 
+        self.initialRun = ShapingRun(codeUnitRange: chunkRange)
 
         resolveAttributes(shapingRun: &initialRun, attributes: defaultAttributes)
     }
 
     private mutating func resolveRun() -> ShapingRun? {
         if !chunkRange.isEmpty {
-            var utf16Range: NSRange = string.utf16Range(forCharacterRange: chunkRange)
-            let attributes = text.attributes(at: utf16Range.location,
-                                             longestEffectiveRange: &utf16Range,
-                                             in: utf16Range)
-
-            let runRange = string.characterRange(forUTF16Range: utf16Range)
+            var runRange = NSRange(chunkRange)
+            let attributes = text.attributes(at: runRange.location,
+                                             longestEffectiveRange: &runRange,
+                                             in: runRange)
 
             var shapingRun = initialRun
-            shapingRun.startIndex = runRange.lowerBound
-            shapingRun.endIndex = runRange.upperBound
+            shapingRun.codeUnitRange = chunkRange
 
             resolveAttributes(shapingRun: &shapingRun, attributes: attributes)
 
@@ -113,8 +107,8 @@ struct ShapingRunLocator {
         }
     }
 
-    mutating func reset(for range: Range<String.Index>) {
-        self.chunkRange = range
+    mutating func reset(for codeUnitRange: Range<Int>) {
+        self.chunkRange = codeUnitRange
         self.newRun = resolveRun()
     }
 
@@ -130,7 +124,9 @@ struct ShapingRunLocator {
                     && currentRun.obliqueness == nextRun.obliqueness
                     && currentRun.scaleX == nextRun.scaleX
                     && currentRun.scaleY == nextRun.scaleY {
-                    currentRun.endIndex = nextRun.endIndex
+                    let startIndex = currentRun.codeUnitRange.lowerBound
+                    let endIndex = nextRun.codeUnitRange.upperBound
+                    currentRun.codeUnitRange = Range(uncheckedBounds: (startIndex, endIndex))
                 } else {
                     break
                 }
