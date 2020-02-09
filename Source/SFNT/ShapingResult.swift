@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,9 +24,8 @@ import SheenFigure
 public class ShapingResult {
     let sfAlbum: SFAlbumRef
 
+    private var string: String!
     private var sizeByEm: CGFloat = 0.0
-    private var stringRange: Range<String.Index>!
-    private var codeUnitCount: Int = 0
 
     init() {
         sfAlbum = SFAlbumCreate()
@@ -36,17 +35,20 @@ public class ShapingResult {
         SFAlbumRelease(sfAlbum)
     }
 
+    /// The UTF-16 range in source string.
+    public private(set) var codeUnitRange = Range(uncheckedBounds: (0, 0))
+
     /// A boolean value that indicates whether the shaped text segment flows backward.
     public private(set) var isBackward: Bool = false
 
     /// The index to the first character in source string.
     public var startIndex: String.Index {
-        return stringRange.lowerBound
+        return string.characterIndex(forUTF16Index: codeUnitRange.lowerBound)
     }
 
     /// The index after the last character in source string.
     public var endIndex: String.Index {
-        return stringRange.upperBound
+        return string.characterIndex(forUTF16Index: codeUnitRange.upperBound)
     }
 
     var glyphCount: Int {
@@ -90,10 +92,10 @@ public class ShapingResult {
     /// - Returns: An array of caret edges.
     public func makeCaretEdges(caretStops: [Bool]?) -> [CGFloat] {
         if let caretStops = caretStops {
-            precondition(caretStops.count >= codeUnitCount)
+            precondition(caretStops.count >= codeUnitRange.count)
         }
 
-        let edgeCount = codeUnitCount + 1
+        let edgeCount = codeUnitRange.count + 1
         let unsafeEdges = UnsafeMutablePointer<SFInt32>.allocate(capacity: edgeCount)
         defer { unsafeEdges.deallocate() }
 
@@ -118,11 +120,11 @@ public class ShapingResult {
         return edgesArray
     }
 
-    func setAdditionalInfo(sizeByEm: CGFloat, isBackward: Bool, stringRange: Range<String.Index>, codeUnitCount: Int) {
-        self.sizeByEm = sizeByEm
+    func setup(string: String, codeUnitRange: Range<Int>, isBackward: Bool, sizeByEm: CGFloat) {
+        self.string = string
+        self.codeUnitRange = codeUnitRange
         self.isBackward = isBackward
-        self.stringRange = stringRange
-        self.codeUnitCount = codeUnitCount
+        self.sizeByEm = sizeByEm
     }
 }
 
@@ -243,7 +245,7 @@ extension ShapingResult {
         init(_ owner: ShapingResult) {
             self.owner = owner
             self.pointer = SFAlbumGetCodeunitToGlyphMapPtr(owner.sfAlbum)
-            self.count = owner.codeUnitCount
+            self.count = owner.codeUnitRange.count
         }
 
         /// The number of elements in the collection.

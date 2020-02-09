@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@ public class ShapingEngine {
         }
     }
 
-    /// Shapes the specified range of text into glyphs.
+    /// Shapes the specified UTF-16 range of text into glyphs.
     ///
     /// The output glyphs in the `ShapingResult` object flow visually in writing direction. For
     /// left-to-right direction, the position of pen is incremented with glyph's advance after
@@ -107,9 +107,9 @@ public class ShapingEngine {
     ///
     /// - Parameters:
     ///   - text: The text to shape into glyphs.
-    ///   - range: The range of text to be shaped.
+    ///   - codeUnitRange: The UTF-16 range of text to be shaped.
     /// - Returns: A new `ShapingResult` object.
-    public func shape(text: String, range: Range<String.Index>) -> ShapingResult {
+    public func shape(text: String, codeUnitRange: Range<Int>) -> ShapingResult {
         guard typeface != nil else {
             fatalError("Typeface was not set")
         }
@@ -133,7 +133,8 @@ public class ShapingEngine {
             SFPatternRelease(pattern)
         }
 
-        var codeUnits = Array(text[range].utf16)
+        let characterRange = text.characterRange(forUTF16Range: codeUnitRange)
+        var codeUnits = Array(text[characterRange].utf16)
         let length = SFUInteger(codeUnits.count)
 
         codeUnits.withUnsafeMutableBufferPointer { (pointer) -> Void in
@@ -145,12 +146,27 @@ public class ShapingEngine {
             SFArtistFillAlbum(sfArtist, shapingResult.sfAlbum)
         }
 
-        shapingResult.setAdditionalInfo(sizeByEm: typeSize / CGFloat(typeface.unitsPerEm),
-                                        isBackward: shapingOrder == .backward,
-                                        stringRange: range,
-                                        codeUnitCount: codeUnits.count)
+        shapingResult.setup(string: text,
+                            codeUnitRange: codeUnitRange,
+                            isBackward: shapingOrder == .backward,
+                            sizeByEm: typeSize / CGFloat(typeface.unitsPerEm))
 
         return shapingResult
+    }
+
+    /// Shapes the specified range of text into glyphs.
+    ///
+    /// The output glyphs in the `ShapingResult` object flow visually in writing direction. For
+    /// left-to-right direction, the position of pen is incremented with glyph's advance after
+    /// rendering it. Similarly, for right-to-left direction, the position of pen is decremented
+    /// with glyph's advance after rendering it.
+    ///
+    /// - Parameters:
+    ///   - text: The text to shape into glyphs.
+    ///   - characterRange: The character range of text to be shaped.
+    /// - Returns: A new `ShapingResult` object.
+    public func shape(text: String, characterRange: Range<String.Index>) -> ShapingResult {
+        shape(text: text, codeUnitRange: text.utf16Range(forCharacterRange: characterRange))
     }
 }
 
