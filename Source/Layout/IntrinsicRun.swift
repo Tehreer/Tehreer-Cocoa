@@ -73,7 +73,7 @@ class IntrinsicRun {
     }
 
     func glyphRange(forUTF16Range range: Range<Int>) -> Range<Int> {
-        let runStart = string.utf16Index(forCharacterAt: startIndex)
+        let runStart = codeUnitRange.lowerBound
         let lowerBound = range.lowerBound - runStart
         let upperBound = range.upperBound - runStart
 
@@ -84,7 +84,7 @@ class IntrinsicRun {
     }
 
     func clusterRange(forUTF16Range range: Range<Int>) -> Range<Int> {
-        let runStart = string.utf16Index(forCharacterAt: startIndex)
+        let runStart = codeUnitRange.lowerBound
         let lowerBound = range.lowerBound - runStart
         let upperBound = range.upperBound - runStart - 1
 
@@ -96,8 +96,11 @@ class IntrinsicRun {
 
     func measureCharacters(in range: Range<String.Index>) -> CGFloat {
         let collection = CaretEdgeCollection(allEdges: caretEdges)
-        let lowerBound = string.utf16.distance(from: startIndex, to: range.lowerBound)
-        let upperBound = string.utf16.distance(from: startIndex, to: range.upperBound)
+        let chunkRange: Range<Int> = string.utf16Range(forCharacterRange: range)
+
+        let runStart = codeUnitRange.lowerBound
+        let lowerBound = chunkRange.lowerBound - runStart
+        let upperBound = chunkRange.upperBound - runStart
 
         return collection.distance(of: lowerBound ..< upperBound, isRTL: isRTL)
     }
