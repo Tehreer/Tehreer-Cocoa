@@ -47,8 +47,7 @@ func makeGlyphRun(intrinsicRun: IntrinsicRun,
 
     return GlyphRun(
         string: string,
-        startIndex: range.lowerBound,
-        endIndex: range.upperBound,
+        codeUnitRange: utf16Range,
         startExtraLength: startExtraLength,
         endExtraLength: endExtraLength,
         attributes: attributes,

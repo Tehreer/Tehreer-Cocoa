@@ -19,29 +19,29 @@ import Foundation
 import UIKit
 
 private struct ClusterRange {
-    var actualStart: String.Index
-    var actualEnd: String.Index
+    var actualStart: Int
+    var actualEnd: Int
     var glyphStart: Int
     var glyphEnd: Int
 }
 
 /// A glyph run is a collection of consecutive glyphs sharing the same attributes and direction.
 public class GlyphRun {
+    private let string: String
+    private let codeUnitRange: Range<Int>
     private let attributes: [NSAttributedString.Key: Any]
-    private let utf16: String.UTF16View
     private let isBackward: Bool
     private let caretEdges: PrimitiveCollection<CGFloat>
 
-    init(string: String, startIndex: String.Index, endIndex: String.Index,
-         startExtraLength: Int, endExtraLength: Int, attributes: [NSAttributedString.Key: Any],
-         isBackward: Bool, bidiLevel: UInt8, writingDirection: WritingDirection, typeface: Typeface,
-         typeSize: CGFloat, ascent: CGFloat, descent: CGFloat, leading: CGFloat,
+    init(string: String, codeUnitRange: Range<Int>, startExtraLength: Int, endExtraLength: Int,
+         attributes: [NSAttributedString.Key: Any], isBackward: Bool, bidiLevel: UInt8,
+         writingDirection: WritingDirection, typeface: Typeface, typeSize: CGFloat,
+         ascent: CGFloat, descent: CGFloat, leading: CGFloat,
          glyphIDs: PrimitiveCollection<GlyphID>, glyphOffsets: PrimitiveCollection<CGPoint>,
          glyphAdvances: PrimitiveCollection<CGFloat>,
          clusterMap: PrimitiveCollection<Int>, caretEdges: PrimitiveCollection<CGFloat>) {
-        self.utf16 = string.utf16
-        self.startIndex = startIndex
-        self.endIndex = endIndex
+        self.string = string
+        self.codeUnitRange = codeUnitRange
         self.startExtraLength = startExtraLength
         self.endExtraLength = endExtraLength
         self.attributes = attributes
@@ -61,9 +61,8 @@ public class GlyphRun {
     }
 
     init(_ other: GlyphRun) {
-        self.utf16 = other.utf16
-        self.startIndex = other.startIndex
-        self.endIndex = other.endIndex
+        self.string = other.string
+        self.codeUnitRange = other.codeUnitRange
         self.startExtraLength = other.startExtraLength
         self.endExtraLength = other.endExtraLength
         self.attributes = other.attributes
@@ -84,10 +83,14 @@ public class GlyphRun {
     }
 
     /// The index to the first character of this run in source string.
-    public let startIndex: String.Index
+    public var startIndex: String.Index {
+        return string.characterIndex(forUTF16Index: codeUnitRange.lowerBound)
+    }
 
     /// The index after the last character of this run in source string.
-    public let endIndex: String.Index
+    public var endIndex: String.Index {
+        return string.characterIndex(forUTF16Index: codeUnitRange.upperBound)
+    }
 
     /// The extra excluded length at the start of the cluster map.
     ///
@@ -145,7 +148,7 @@ public class GlyphRun {
 
     /// The typographic width of this run.
     public var width: CGFloat {
-        return distance(forCharacterRange: startIndex ..< endIndex)
+        return distance(forCodeUnitRange: codeUnitRange)
     }
 
     /// The typographic height of this run.
@@ -169,9 +172,20 @@ public class GlyphRun {
     /// The indexes, mapping each code unit of this run to corresponding glyph.
     public let clusterMap: PrimitiveCollection<Int>
 
-    private func checkCharacterIndex(_ characterIndex: String.Index) {
-        precondition(characterIndex >= startIndex && characterIndex < endIndex,
-                     "Index is out of range")
+    /// Returns the index to the first UTF-16 code unit of specified cluster in source string. In
+    /// most cases, it would be the same index as the specified one. But if the code unit occurs
+    /// within a cluster, then a previous index would be returned; whether the run logically flows
+    /// forward or backward.
+    ///
+    /// - Parameter index: The index of a code unit in source string.
+    /// - Returns: The index to the first code unit of specified cluster in source string.
+    public func clusterStart(forCodeUnitAt index: Int) -> Int {
+        precondition(codeUnitRange.contains(index), String.indexOutOfRange)
+
+        let extraStart = codeUnitRange.lowerBound - startExtraLength
+        let arrayIndex = index - extraStart
+
+        return Clusters.actualClusterStart(in: clusterMap, for: arrayIndex) + extraStart
     }
 
     /// Returns the index to the first character of specified cluster in source string. In most
@@ -182,14 +196,28 @@ public class GlyphRun {
     /// - Parameter index: The index of a character in source string.
     /// - Returns: The index to the first character of specified cluster in source string.
     public func clusterStart(forCharacterAt index: String.Index) -> String.Index {
-        checkCharacterIndex(index)
+        precondition(index >= startIndex && index < endIndex, String.indexOutOfRange)
 
-        let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
-        let arrayIndex = utf16.distance(from: extraStart, to: index)
+        let inputIndex = string.utf16Index(forCharacterAt: index)
+        let actualIndex = clusterStart(forCodeUnitAt: inputIndex)
 
-        let clusterStart = Clusters.actualClusterStart(in: clusterMap, for: arrayIndex)
+        return string.characterIndex(forUTF16Index: actualIndex)
+    }
 
-        return utf16.index(extraStart, offsetBy: clusterStart)
+    /// Returns the index after the last UTF-16 code unit of specified cluster in source string. In
+    /// most cases, it would be an index after the specified one. But if the code unit occurs within
+    /// a cluster, then a farther index would be returned; whether the run logically flows forward
+    /// or backward.
+    ///
+    /// - Parameter index: The index of a code unit in source string.
+    /// - Returns: The index after the last code unit of specified cluster in source string.
+    public func clusterEnd(forCodeUnitAt index: Int) -> Int {
+        precondition(codeUnitRange.contains(index), String.indexOutOfRange)
+
+        let extraStart = codeUnitRange.lowerBound - startExtraLength
+        let arrayIndex = index - extraStart
+
+        return Clusters.actualClusterEnd(in: clusterMap, for: arrayIndex) + extraStart
     }
 
     /// Returns the index after the last character of specified cluster in source string. In most
@@ -200,16 +228,28 @@ public class GlyphRun {
     /// - Parameter index: The index of a character in source string.
     /// - Returns: The index after the last character of specified cluster in source string.
     public func clusterEnd(forCharacterAt index: String.Index) -> String.Index {
-        checkCharacterIndex(index)
+        precondition(index >= startIndex && index < endIndex, String.indexOutOfRange)
 
-        let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
-        let arrayIndex = utf16.distance(from: extraStart, to: index)
+        let inputIndex = string.utf16Index(forCharacterAt: index)
+        let actualIndex = clusterEnd(forCodeUnitAt: inputIndex)
 
-        let clusterEnd = Clusters.actualClusterEnd(in: clusterMap, for: arrayIndex)
-
-        return utf16.index(extraStart, offsetBy: clusterEnd)
+        return string.characterIndex(forUTF16Index: actualIndex)
     }
 
+    /// Returns the index of leading glyph related to the specified cluster. It will come after the
+    /// trailing glyph, if the characters of this run logically flow backward.
+    ///
+    /// - Parameter index: The index of a UTF-16 code unit in source string.
+    /// - Returns: The index of leading glyph related to the specified cluster.
+    public func leadingGlyphIndex(forCodeUnitAt index: Int) -> Int {
+        precondition(codeUnitRange.contains(index), String.indexOutOfRange)
+
+        let extraStart = codeUnitRange.lowerBound - startExtraLength
+        let arrayIndex = index - extraStart
+
+        return Clusters.leadingGlyphIndex(in: clusterMap, for: arrayIndex,
+                                          isBackward: isBackward, glyphCount: glyphCount)
+    }
 
     /// Returns the index of leading glyph related to the specified cluster. It will come after the
     /// trailing glyph, if the characters of this run logically flow backward.
@@ -217,12 +257,24 @@ public class GlyphRun {
     /// - Parameter index: The index of a character in source string.
     /// - Returns: The index of leading glyph related to the specified cluster.
     public func leadingGlyphIndex(forCharacterAt index: String.Index) -> Int {
-        checkCharacterIndex(index)
+        precondition(index >= startIndex && index < endIndex, String.indexOutOfRange)
 
-        let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
-        let arrayIndex = utf16.distance(from: extraStart, to: index)
+        return leadingGlyphIndex(forCodeUnitAt: string.utf16Index(forCharacterAt: index))
+    }
 
-        return Clusters.leadingGlyphIndex(in: clusterMap, for: arrayIndex, isBackward: isBackward, glyphCount: glyphCount)
+    /// Returns the index of trailing glyph related to the specified cluster. It will come before
+    /// the leading glyph, if the characters of this run logically flow backward.
+    ///
+    /// - Parameter index: The index of a UTF-16 code unit in source string.
+    /// - Returns: The index of trailing glyph related to the specified cluster.
+    public func trailingGlyphIndex(forCodeUnitAt index: Int) -> Int {
+        precondition(codeUnitRange.contains(index), String.indexOutOfRange)
+
+        let extraStart = codeUnitRange.lowerBound - startExtraLength
+        let arrayIndex = index - extraStart
+
+        return Clusters.trailingGlyphIndex(in: clusterMap, for: arrayIndex,
+                                           isBackward: isBackward, glyphCount: glyphCount)
     }
 
     /// Returns the index of trailing glyph related to the specified cluster. It will come before
@@ -231,23 +283,34 @@ public class GlyphRun {
     /// - Parameter index: The index of a character in source string.
     /// - Returns: The index of trailing glyph related to the specified cluster.
     public func trailingGlyphIndex(forCharacterAt index: String.Index) -> Int {
-        checkCharacterIndex(index)
+        precondition(index >= startIndex && index < endIndex, String.indexOutOfRange)
 
-        let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
-        let arrayIndex = utf16.distance(from: extraStart, to: index)
-
-        return Clusters.trailingGlyphIndex(in: clusterMap, for: arrayIndex, isBackward: isBackward, glyphCount: glyphCount)
+        return trailingGlyphIndex(forCodeUnitAt: string.utf16Index(forCharacterAt: index))
     }
 
-    private func caretEdge(forCharacterAt index: String.Index) -> CGFloat {
-        let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
-        let arrayIndex = utf16.distance(from: extraStart, to: index)
+    private func caretEdge(forCodeUnitAt index: Int) -> CGFloat {
+        let extraStart = codeUnitRange.lowerBound - startExtraLength
+        let arrayIndex = index - extraStart
 
         return caretEdges[arrayIndex]
     }
 
-    private func leadingEdge(from start: String.Index, to end: String.Index) -> CGFloat {
-        return caretEdge(forCharacterAt: !isBackward ? start : end)
+    private func caretEdge(forCharacterAt index: String.Index) -> CGFloat {
+        return caretEdge(forCodeUnitAt: string.utf16Index(forCharacterAt: index))
+    }
+
+    private func leadingEdge(from start: Int, to end: Int) -> CGFloat {
+        return caretEdge(forCodeUnitAt: !isBackward ? start : end)
+    }
+
+    /// Returns the distance of specified character from the start of the run assumed at zero.
+    ///
+    /// - Parameter index: The index of a UTF-16 code unit in source string.
+    /// - Returns: The distance of specified character from the start of the run assumed at zero.
+    public func distance(forCodeUnitAt index: Int) -> CGFloat {
+        precondition(index >= codeUnitRange.lowerBound && index <= codeUnitRange.upperBound, String.indexOutOfRange)
+
+        return caretEdge(forCodeUnitAt: index)
     }
 
     /// Returns the distance of specified character from the start of the run assumed at zero.
@@ -260,16 +323,82 @@ public class GlyphRun {
         return caretEdge(forCharacterAt: index)
     }
 
-    func distance(forCharacterRange range: Range<String.Index>) -> CGFloat {
-        let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
+    func distance(forCodeUnitRange range: Range<Int>) -> CGFloat {
+        let extraStart = codeUnitRange.lowerBound - startExtraLength
 
-        let lowerBound = utf16.distance(from: extraStart, to: range.lowerBound)
-        let upperBound = utf16.distance(from: extraStart, to: range.upperBound)
+        let lowerBound = range.lowerBound - extraStart
+        let upperBound = range.upperBound - extraStart
 
         let lowerEdge = caretEdges[lowerBound]
         let upperEdge = caretEdges[upperBound]
 
         return isRTL ? lowerEdge - upperEdge : upperEdge - lowerEdge
+    }
+
+    func distance(forCharacterRange range: Range<String.Index>) -> CGFloat {
+        return distance(forCodeUnitRange: string.utf16Range(forCharacterRange: range))
+    }
+
+    /// Determines the index of a UTF-16 code unit nearest to the specified distance.
+    ///
+    /// The process involves iterating over the clusters of the glyph run. If a cluster consists of
+    /// multiple characters, its total advance is evenly distributed among the number of characters
+    /// it contains. The advance of each character is added to track the covered distance. This way
+    /// leading and trailing characters are determined close to the specified distance. Afterwards,
+    /// the index of nearer character is returned.
+    ///
+    /// If `distance` is negative, then run's starting index is returned. If it is beyond run's
+    /// extent, then ending index is returned. The indices will be reversed in case of right-to-left
+    /// run.
+    ///
+    /// - Parameters:
+    ///   - distance: The distance for which to determine the UTF-16 code unit index. It should be offset
+    ///               from zero origin.
+    /// - Returns: The index of UTF-16 code unit in source string, nearest to the specified distance.
+    public func indexOfCodeUnit(at distance: CGFloat) -> Int {
+        let extraStart = codeUnitRange.lowerBound - startExtraLength
+
+        var leadingCharIndex: Int = -1
+        var trailingCharIndex: Int = -1
+
+        var leadingCaretEdge: CGFloat = .zero
+        var trailingCaretEdge: CGFloat = .zero
+
+        var index = isRTL ? codeUnitRange.upperBound : codeUnitRange.lowerBound
+        let next = isRTL ? -1 : 1
+
+        while index <= codeUnitRange.upperBound && index >= codeUnitRange.lowerBound {
+            let caretEdge = caretEdges[index - extraStart]
+
+            if caretEdge <= distance {
+                leadingCharIndex = index
+                leadingCaretEdge = caretEdge
+            } else {
+                trailingCharIndex = index
+                trailingCaretEdge = caretEdge
+                break
+            }
+
+            index += next
+        }
+
+        if leadingCharIndex == -1 {
+            // No char is covered by the input distance.
+            return codeUnitRange.lowerBound
+        }
+
+        if trailingCharIndex == -1 {
+            // Whole run is covered by the input distance.
+            return codeUnitRange.upperBound
+        }
+
+        if distance <= (leadingCaretEdge + trailingCaretEdge) / 2.0 {
+            // Input distance is closer to first edge.
+            return leadingCharIndex
+        }
+
+        // Input distance is closer to second edge.
+        return trailingCharIndex
     }
 
     /// Determines the index of a character nearest to the specified distance.
@@ -289,49 +418,7 @@ public class GlyphRun {
     ///               from zero origin.
     /// - Returns: The index of character in source string, nearest to the specified distance.
     public func indexOfCharacter(at distance: CGFloat) -> String.Index {
-        let extraStart = utf16.index(startIndex, offsetBy: -startExtraLength)
-
-        var leadingCharIndex: String.Index?
-        var trailingCharIndex: String.Index?
-
-        var leadingCaretEdge: CGFloat = 0.0
-        var trailingCaretEdge: CGFloat = 0.0
-
-        var index = isRTL ? endIndex : startIndex
-        let next = isRTL ? -1 : 1
-
-        while index <= endIndex && index >= startIndex {
-            let caretEdge = caretEdges[utf16.distance(from: extraStart, to: index)]
-
-            if caretEdge <= distance {
-                leadingCharIndex = index
-                leadingCaretEdge = caretEdge
-            } else {
-                trailingCharIndex = index
-                trailingCaretEdge = caretEdge
-                break
-            }
-
-            index = utf16.index(index, offsetBy: next)
-        }
-
-        if leadingCharIndex == nil {
-            // No char is covered by the input distance.
-            return startIndex
-        }
-
-        if trailingCharIndex == nil {
-            // Whole run is covered by the input distance.
-            return endIndex
-        }
-
-        if distance <= (leadingCaretEdge + trailingCaretEdge) / 2.0 {
-            // Input distance is closer to first edge.
-            return leadingCharIndex!
-        }
-
-        // Input distance is closer to second edge.
-        return trailingCharIndex!
+        return string.characterIndex(forUTF16Index: indexOfCodeUnit(at: distance))
     }
 
     /// Calculates the bounding box for the specified glyph range in this run. The bounding box is a
@@ -366,12 +453,12 @@ public class GlyphRun {
         return extent
     }
 
-    private func clusterRange(forCharacterAt index: String.Index, exclusion: ClusterRange?) -> ClusterRange? {
-        let actualStart = clusterStart(forCharacterAt: index)
-        let actualEnd = clusterEnd(forCharacterAt: index)
+    private func clusterRange(forCodeUnitAt index: Int, exclusion: ClusterRange?) -> ClusterRange? {
+        let actualStart = clusterStart(forCodeUnitAt: index)
+        let actualEnd = clusterEnd(forCodeUnitAt: index)
 
-        let leadingIndex = leadingGlyphIndex(forCharacterAt: index)
-        let trailingIndex = trailingGlyphIndex(forCharacterAt: index)
+        let leadingIndex = leadingGlyphIndex(forCodeUnitAt: index)
+        let trailingIndex = trailingGlyphIndex(forCodeUnitAt: index)
 
         var cluster = ClusterRange(
             actualStart: actualStart,
@@ -395,19 +482,19 @@ public class GlyphRun {
     }
 
     private func drawEdgeCluster(using renderer: Renderer, in context: CGContext, cluster: ClusterRange) {
-        let startClipped = (cluster.actualStart < startIndex)
-        let endClipped = (cluster.actualEnd > endIndex)
+        let startClipped = (cluster.actualStart < codeUnitRange.lowerBound)
+        let endClipped = (cluster.actualEnd > codeUnitRange.upperBound)
 
         let bbox = context.boundingBoxOfClipPath
         let clipLeft: CGFloat
         let clipRight: CGFloat
 
         if !isRTL {
-            clipLeft = (startClipped ? caretEdge(forCharacterAt: startIndex) : bbox.minX)
-            clipRight = (endClipped ? caretEdge(forCharacterAt: endIndex) : bbox.maxX)
+            clipLeft = (startClipped ? caretEdge(forCodeUnitAt: codeUnitRange.lowerBound) : bbox.minX)
+            clipRight = (endClipped ? caretEdge(forCodeUnitAt: codeUnitRange.upperBound) : bbox.maxX)
         } else {
-            clipRight = (startClipped ? caretEdge(forCharacterAt: startIndex) : bbox.maxX)
-            clipLeft = (endClipped ? caretEdge(forCharacterAt: endIndex) : bbox.minX)
+            clipRight = (startClipped ? caretEdge(forCodeUnitAt: codeUnitRange.lowerBound) : bbox.maxX)
+            clipLeft = (endClipped ? caretEdge(forCodeUnitAt: codeUnitRange.upperBound) : bbox.minX)
         }
 
         context.saveGState()
@@ -457,17 +544,17 @@ public class GlyphRun {
         var lastCluster: ClusterRange? = nil
 
         if startExtraLength > 0 {
-            firstCluster = clusterRange(forCharacterAt: startIndex, exclusion: nil)
+            firstCluster = clusterRange(forCodeUnitAt: codeUnitRange.lowerBound, exclusion: nil)
         }
         if endExtraLength > 0 {
-            lastCluster = clusterRange(forCharacterAt: utf16.index(before: endIndex), exclusion: firstCluster)
+            lastCluster = clusterRange(forCodeUnitAt: codeUnitRange.upperBound - 1, exclusion: firstCluster)
         }
 
         var glyphStart: Int = 0
         var glyphEnd = glyphCount
 
-        var chunkStart = startIndex
-        var chunkEnd = endIndex
+        var chunkStart = codeUnitRange.lowerBound
+        var chunkEnd = codeUnitRange.upperBound
 
         if let firstCluster = firstCluster {
             drawEdgeCluster(using: renderer, in: context, cluster: firstCluster)
