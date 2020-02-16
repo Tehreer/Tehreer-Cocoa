@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +27,11 @@ private func makeLineBreaksBuffer(string: String) -> UnsafeBufferPointer<Int8> {
     return UnsafeBufferPointer(breaksBuffer)
 }
 
+protocol StringBreak {
+    var codeUnitIndex: Int { get }
+    var characterIndex: String.Index { get }
+}
+
 class BreakClassifier {
     private let string: String
     private let lineBreaks: UnsafeBufferPointer<Int8>
@@ -40,31 +45,66 @@ class BreakClassifier {
         lineBreaks.deallocate()
     }
 
+    func forwardGraphemeBreaks(forCodeUnitRange range: Range<Int>) -> ForwardGraphemeBreakSequence {
+        let characterRange = string.characterRange(forUTF16Range: range)
+        return ForwardGraphemeBreakSequence(string: string, characterRange: characterRange)
+    }
+
+    func backwardGraphemeBreaks(forCodeUnitRange range: Range<Int>) -> BackwardGraphemeBreakSequence {
+        let characterRange = string.characterRange(forUTF16Range: range)
+        return BackwardGraphemeBreakSequence(string: string, characterRange: characterRange)
+    }
+
     func forwardGraphemeBreaks(forCharacterRange range: Range<String.Index>) -> ForwardGraphemeBreakSequence {
-        return ForwardGraphemeBreakSequence(string: string, range: range)
+        return ForwardGraphemeBreakSequence(string: string, characterRange: range)
     }
 
     func backwardGraphemeBreaks(forCharacterRange range: Range<String.Index>) -> BackwardGraphemeBreakSequence {
-        return BackwardGraphemeBreakSequence(string: string, range: range)
+        return BackwardGraphemeBreakSequence(string: string, characterRange: range)
+    }
+
+    func forwardLineBreaks(forCodeUnitRange range: Range<Int>) -> ForwardLineBreakSequence {
+        return ForwardLineBreakSequence(self, codeUnitRange: range)
+    }
+
+    func backwardLineBreaks(forCodeUnitRange range: Range<Int>) -> BackwardLineBreakSequence {
+        return BackwardLineBreakSequence(self, codeUnitRange: range)
     }
 
     func forwardLineBreaks(forCharacterRange range: Range<String.Index>) -> ForwardLineBreakSequence {
-        return ForwardLineBreakSequence(self, range: string.utf16Range(forCharacterRange: range))
+        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: range)
+        return ForwardLineBreakSequence(self, codeUnitRange: codeUnitRange)
     }
 
     func backwardLineBreaks(forCharacterRange range: Range<String.Index>) -> BackwardLineBreakSequence {
-        return BackwardLineBreakSequence(self, range: string.utf16Range(forCharacterRange: range))
+        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: range)
+        return BackwardLineBreakSequence(self, codeUnitRange: codeUnitRange)
     }
 }
 
 // MARK: - ForwardGraphemeBreakSequence
 
 extension BreakClassifier {
+    struct GraphemeBreak: StringBreak {
+        private let string: String
+
+        fileprivate init(string: String, characterIndex: String.Index) {
+            self.string = string
+            self.characterIndex = characterIndex
+        }
+
+        let characterIndex: String.Index
+
+        var codeUnitIndex: Int {
+            return string.utf16Index(forCharacterAt: characterIndex)
+        }
+    }
+
     struct ForwardGraphemeBreakSequence: Sequence {
         private let iterator: ForwardGraphemeBreakIterator
 
-        fileprivate init(string: String, range: Range<String.Index>) {
-            self.iterator = ForwardGraphemeBreakIterator(string: string, range: range)
+        fileprivate init(string: String, characterRange: Range<String.Index>) {
+            iterator = ForwardGraphemeBreakIterator(string: string, characterRange: characterRange)
         }
 
         func makeIterator() -> ForwardGraphemeBreakIterator {
@@ -73,20 +113,22 @@ extension BreakClassifier {
     }
 
     struct ForwardGraphemeBreakIterator: IteratorProtocol {
-        private var string: String
+        private let string: String
         private var currentIndex: String.Index
         private let endIndex: String.Index
 
-        fileprivate init(string: String, range: Range<String.Index>) {
+        fileprivate init(string: String, characterRange: Range<String.Index>) {
             self.string = string
-            self.currentIndex = range.lowerBound
-            self.endIndex = range.upperBound
+            self.currentIndex = characterRange.lowerBound
+            self.endIndex = characterRange.upperBound
         }
 
-        mutating func next() -> String.Index? {
+        mutating func next() -> StringBreak? {
             if currentIndex < endIndex {
-                currentIndex = string.index(after: currentIndex)
-                return min(currentIndex, endIndex)
+                let nextIndex = string.index(after: currentIndex)
+                currentIndex = min(endIndex, nextIndex)
+
+                return GraphemeBreak(string: string, characterIndex: currentIndex)
             }
 
             return nil
@@ -100,8 +142,8 @@ extension BreakClassifier {
     struct BackwardGraphemeBreakSequence: Sequence {
         private let iterator: BackwardGraphemeBreakIterator
 
-        fileprivate init(string: String, range: Range<String.Index>) {
-            self.iterator = BackwardGraphemeBreakIterator(string: string, range: range)
+        fileprivate init(string: String, characterRange: Range<String.Index>) {
+            iterator = BackwardGraphemeBreakIterator(string: string, characterRange: characterRange)
         }
 
         func makeIterator() -> BackwardGraphemeBreakIterator {
@@ -110,20 +152,22 @@ extension BreakClassifier {
     }
 
     struct BackwardGraphemeBreakIterator: IteratorProtocol {
-        private var string: String
+        private let string: String
         private let startIndex: String.Index
         private var currentIndex: String.Index
 
-        fileprivate init(string: String, range: Range<String.Index>) {
+        fileprivate init(string: String, characterRange: Range<String.Index>) {
             self.string = string
-            self.startIndex = range.lowerBound
-            self.currentIndex = range.upperBound
+            self.startIndex = characterRange.lowerBound
+            self.currentIndex = characterRange.upperBound
         }
 
-        mutating func next() -> String.Index? {
+        mutating func next() -> StringBreak? {
             if currentIndex > startIndex {
-                currentIndex = string.index(before: currentIndex)
-                return max(startIndex, currentIndex)
+                let previousIndex = string.index(before: currentIndex)
+                currentIndex = max(startIndex, previousIndex)
+
+                return GraphemeBreak(string: string, characterIndex: currentIndex)
             }
 
             return nil
@@ -134,11 +178,26 @@ extension BreakClassifier {
 // MARK: - ForwardLineBreakSequence
 
 extension BreakClassifier {
+    struct LineBreak: StringBreak {
+        private let string: String
+
+        fileprivate init(string: String, codeUnitIndex: Int) {
+            self.string = string
+            self.codeUnitIndex = codeUnitIndex
+        }
+
+        let codeUnitIndex: Int
+
+        var characterIndex: String.Index {
+            return string.characterIndex(forUTF16Index: codeUnitIndex)
+        }
+    }
+
     struct ForwardLineBreakSequence: Sequence {
         private let iterator: ForwardLineBreakIterator
 
-        fileprivate init(_ classifier: BreakClassifier, range: Range<Int>) {
-            self.iterator = ForwardLineBreakIterator(ForwardUTF16BreakIterator(classifier, range: range))
+        fileprivate init(_ classifier: BreakClassifier, codeUnitRange: Range<Int>) {
+            self.iterator = ForwardLineBreakIterator(classifier, codeUnitRange: codeUnitRange)
         }
 
         func makeIterator() -> ForwardLineBreakIterator {
@@ -147,36 +206,17 @@ extension BreakClassifier {
     }
 
     struct ForwardLineBreakIterator: IteratorProtocol {
-        private var utf16Iter: ForwardUTF16BreakIterator
-
-        fileprivate init(_ utf16Iter: ForwardUTF16BreakIterator) {
-            self.utf16Iter = utf16Iter
-        }
-
-        mutating func next() -> String.Index? {
-            if let value = utf16Iter.next() {
-                let string = utf16Iter.classifier.string
-                let index = string.characterIndex(forUTF16Index: value)
-
-                return index
-            }
-
-            return nil
-        }
-    }
-
-    fileprivate struct ForwardUTF16BreakIterator: IteratorProtocol {
         fileprivate let classifier: BreakClassifier
         private var currentIndex: Int
         private let endIndex: Int
 
-        init(_ classifier: BreakClassifier, range: Range<Int>) {
+        init(_ classifier: BreakClassifier, codeUnitRange: Range<Int>) {
             self.classifier = classifier
-            self.currentIndex = range.lowerBound
-            self.endIndex = range.upperBound
+            self.currentIndex = codeUnitRange.lowerBound
+            self.endIndex = codeUnitRange.upperBound
         }
 
-        mutating func next() -> Int? {
+        mutating func next() -> StringBreak? {
             if currentIndex != endIndex {
                 let lineBreaks = classifier.lineBreaks
 
@@ -189,7 +229,7 @@ extension BreakClassifier {
                     }
                 }
 
-                return currentIndex
+                return LineBreak(string: classifier.string, codeUnitIndex: currentIndex)
             }
 
             return nil
@@ -201,8 +241,8 @@ extension BreakClassifier {
     struct BackwardLineBreakSequence: Sequence {
         private let iterator: BackwardLineBreakIterator
 
-        fileprivate init(_ classifier: BreakClassifier, range: Range<Int>) {
-            self.iterator = BackwardLineBreakIterator(BackwardUTF16BreakIterator(classifier, range: range))
+        fileprivate init(_ classifier: BreakClassifier, codeUnitRange: Range<Int>) {
+            self.iterator = BackwardLineBreakIterator(classifier, codeUnitRange: codeUnitRange)
         }
 
         func makeIterator() -> BackwardLineBreakIterator {
@@ -211,36 +251,17 @@ extension BreakClassifier {
     }
 
     struct BackwardLineBreakIterator: IteratorProtocol {
-        private var utf16Iter: BackwardUTF16BreakIterator
-
-        fileprivate init(_ utf16Iter: BackwardUTF16BreakIterator) {
-            self.utf16Iter = utf16Iter
-        }
-
-        mutating func next() -> String.Index? {
-            if let value = utf16Iter.next() {
-                let string = utf16Iter.classifier.string
-                let index = string.characterIndex(forUTF16Index: value)
-
-                return index
-            }
-
-            return nil
-        }
-    }
-
-    fileprivate struct BackwardUTF16BreakIterator: IteratorProtocol {
         fileprivate let classifier: BreakClassifier
         private let startIndex: Int
         private var currentIndex: Int
 
-        init(_ classifier: BreakClassifier, range: Range<Int>) {
+        init(_ classifier: BreakClassifier, codeUnitRange: Range<Int>) {
             self.classifier = classifier
-            self.startIndex = range.lowerBound
-            self.currentIndex = range.upperBound
+            self.startIndex = codeUnitRange.lowerBound
+            self.currentIndex = codeUnitRange.upperBound
         }
 
-        mutating func next() -> Int? {
+        mutating func next() -> StringBreak? {
             if currentIndex != startIndex {
                 let lineBreaks = classifier.lineBreaks
 
@@ -255,7 +276,7 @@ extension BreakClassifier {
                     currentIndex -= 1
                 }
 
-                return currentIndex
+                return LineBreak(string: classifier.string, codeUnitIndex: currentIndex)
             }
 
             return nil

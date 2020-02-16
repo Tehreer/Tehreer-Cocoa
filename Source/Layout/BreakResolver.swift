@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,13 +23,14 @@ struct BreakResolver {
     let runs: [IntrinsicRun]
     let breaks: BreakClassifier
 
-    private func findForwardBreak<S>(for extent: CGFloat, in sequence: S, with startIndex: String.Index) -> String.Index
+    private func findForwardBreak<S>(for extent: CGFloat, in sequence: S, from startIndex: String.Index) -> String.Index
         where S: Sequence,
-              S.Element == String.Index {
+              S.Element == StringBreak {
         var forwardIndex = startIndex
         var measurement: CGFloat = 0.0
 
-        for endIndex in sequence {
+        for stringBreak in sequence {
+            let endIndex = stringBreak.characterIndex
             let segmentRange = forwardIndex ..< endIndex
 
             measurement += runs.measureCharacters(in: segmentRange)
@@ -50,13 +51,14 @@ struct BreakResolver {
         return forwardIndex
     }
 
-    private func findBackwardBreak<S>(for extent: CGFloat, in sequence: S, with endIndex: String.Index) -> String.Index
+    private func findBackwardBreak<S>(for extent: CGFloat, in sequence: S, from endIndex: String.Index) -> String.Index
         where S: Sequence,
-              S.Element == String.Index {
+              S.Element == StringBreak {
         var backwardIndex = endIndex
         var measurement: CGFloat = 0.0
 
-        for startIndex in sequence {
+        for stringBreak in sequence {
+            let startIndex = stringBreak.characterIndex
             let segmentRange = startIndex ..< backwardIndex
             measurement += runs.measureCharacters(in: segmentRange)
 
@@ -84,10 +86,10 @@ struct BreakResolver {
         switch mode {
         case .character:
             let sequence = breaks.forwardGraphemeBreaks(forCharacterRange: clampedRange)
-            return findForwardBreak(for: extent, in: sequence, with: range.lowerBound)
+            return findForwardBreak(for: extent, in: sequence, from: range.lowerBound)
         case .line:
             let sequence = breaks.forwardLineBreaks(forCharacterRange: clampedRange)
-            return findForwardBreak(for: extent, in: sequence, with: range.lowerBound)
+            return findForwardBreak(for: extent, in: sequence, from: range.lowerBound)
         }
     }
 
@@ -98,10 +100,10 @@ struct BreakResolver {
         switch mode {
         case .character:
             let sequence = breaks.backwardGraphemeBreaks(forCharacterRange: clampedRange)
-            return findBackwardBreak(for: extent, in: sequence, with: range.upperBound)
+            return findBackwardBreak(for: extent, in: sequence, from: range.upperBound)
         case .line:
             let sequence = breaks.backwardLineBreaks(forCharacterRange: clampedRange)
-            return findBackwardBreak(for: extent, in: sequence, with: range.upperBound)
+            return findBackwardBreak(for: extent, in: sequence, from: range.upperBound)
         }
     }
 
