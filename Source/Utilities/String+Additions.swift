@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +19,12 @@ import Foundation
 extension String {
     static let indexOutOfRange = "Index is out of range"
 
+    func leadingWhitespaceEnd(in codeUnitRange: Range<Int>) -> Int {
+        let index = leadingWhitespaceEnd(in: characterRange(forUTF16Range: codeUnitRange))
+
+        return utf16Index(forCharacterAt: index)
+    }
+
     func leadingWhitespaceEnd(in range: Range<String.Index>) -> String.Index {
         var index = range.lowerBound
 
@@ -31,6 +37,12 @@ extension String {
         }
 
         return range.upperBound
+    }
+
+    func trailingWhitespaceStart(in codeUnitRange: Range<Int>) -> Int {
+        let index = trailingWhitespaceStart(in: characterRange(forUTF16Range: codeUnitRange))
+
+        return utf16Index(forCharacterAt: index)
     }
 
     func trailingWhitespaceStart(in range: Range<String.Index>) -> String.Index {
