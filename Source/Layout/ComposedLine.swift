@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,13 +19,14 @@ import Foundation
 
 /// Represents a line of text consisting of an array of `GlyphRun` objects in visual order.
 public class ComposedLine {
+    private let string: String
     private var extent: CGFloat
 
-    init(startIndex: String.Index, endIndex: String.Index, paragraphLevel: UInt8,
+    init(string: String, codeUnitRange: Range<Int>, paragraphLevel: UInt8,
          ascent: CGFloat, descent: CGFloat, leading: CGFloat, extent: CGFloat,
          trailingWhitespaceExtent: CGFloat, visualRuns: [GlyphRun]) {
-        self.startIndex = startIndex
-        self.endIndex = endIndex
+        self.string = string
+        self.codeUnitRange = codeUnitRange
         self.paragraphLevel = paragraphLevel
         self.ascent = ascent
         self.descent = descent
@@ -35,11 +36,18 @@ public class ComposedLine {
         self.visualRuns = visualRuns
     }
 
+    /// The UTF-16 range of this line in source string.
+    private let codeUnitRange: Range<Int>
+
     /// The index to the first character of this line in source string.
-    public let startIndex: String.Index
+    public var startIndex: String.Index {
+        return string.characterIndex(forUTF16Index: codeUnitRange.lowerBound)
+    }
 
     /// The index after the last character of this line in source string.
-    public let endIndex: String.Index
+    public var endIndex: String.Index {
+        return string.characterIndex(forUTF16Index: codeUnitRange.upperBound)
+    }
 
     /// The paragraph level of this line.
     public let paragraphLevel: UInt8
@@ -92,24 +100,21 @@ public class ComposedLine {
     /// The glyph runs of this line in visual order.
     public let visualRuns: [GlyphRun]
 
-    private func checkCharacterIndex(_ characterIndex: String.Index) {
-        precondition(characterIndex >= startIndex && characterIndex < endIndex,
-                     "Index is out of range")
-    }
-
-    /// Determines the distance of specified character from the start of the line assumed at zero.
+    /// Determines the distance of the specified UTF-16 code unit from the start of the line assumed
+    /// at zero.
     ///
     /// - Parameters:
-    ///   - index: The index of character in source string.
-    /// - Returns: The distance of specified character from the start of the line assumed at zero.
-    public func distance(forCharacterAt index: String.Index) -> CGFloat {
-        checkCharacterIndex(index)
+    ///   - index: The index of the UTF-16 code unit in source string.
+    /// - Returns: The distance of the specified UTF-16 code unit from the start of the line assumed
+    ///            at zero.
+    public func distance(forCodeUnitAt index: Int) -> CGFloat {
+        precondition(index >= codeUnitRange.lowerBound && index <= codeUnitRange.upperBound, .indexOutOfRange)
 
         var distance: CGFloat = 0.0
 
         for glyphRun in visualRuns {
-            if index >= glyphRun.startIndex && index < glyphRun.endIndex {
-                distance += glyphRun.distance(forCharacterAt: index)
+            if glyphRun.codeUnitRange.contains(index) {
+                distance += glyphRun.distance(forCodeUnitAt: index)
                 break
             }
 
@@ -119,25 +124,49 @@ public class ComposedLine {
         return distance
     }
 
-    /// Returns an array of visual edges corresponding to the specified character range.
+    /// Determines the distance of the specified character from the start of the line assumed at
+    /// zero.
+    ///
+    /// - Parameters:
+    ///   - index: The index of character in source string.
+    /// - Returns: The distance of specified character from the start of the line assumed at zero.
+    public func distance(forCharacterAt index: String.Index) -> CGFloat {
+        precondition(index >= startIndex && index < endIndex, .indexOutOfRange)
+
+        return distance(forCodeUnitAt: string.utf16Index(forCharacterAt: index))
+    }
+
+    /// Returns an array of visual edges corresponding to the specified range of UTF-16 code units.
     ///
     /// The resulting array will contain pairs of leading and trailing edges sorted from left to
-    /// right. There will be a separate pair for each glyph run occurred in the specified character
+    /// right. There will be a separate pair for each glyph run occurred in the specified code unit
     /// range. Each edge will be positioned relative to the start of the line assumed at zero.
     ///
     /// - Parameters:
-    ///   - characterRange: The range of characters in source string.
-    /// - Returns: An array of visual edges corresponding to the specified character range.
-    public func visualEdges(forCharacterRange characterRange: Range<String.Index>) -> [CGFloat] {
+    ///   - codeUnitRange: The range of UTF-16 code units in source string.
+    /// - Returns: An array of visual edges corresponding to the specified UTF-16 code unit range.
+    public func visualEdges(forCodeUnitRange codeUnitRange: Range<Int>) -> [CGFloat] {
+        let clampedRange = codeUnitRange.clamped(to: self.codeUnitRange)
+        let visualStart = clampedRange.lowerBound
+        let visualEnd = clampedRange.upperBound
+
+        guard visualStart < visualEnd else {
+            return []
+        }
+
         var visualEdges: [CGFloat] = []
 
         for glyphRun in visualRuns {
-            if glyphRun.startIndex < characterRange.upperBound && glyphRun.endIndex > characterRange.lowerBound {
-                let selectionStart = max(characterRange.lowerBound, glyphRun.startIndex)
-                let selectionEnd = min(characterRange.upperBound, glyphRun.endIndex)
+            let runRange = glyphRun.codeUnitRange
+            let runStart = runRange.lowerBound
+            let runEnd = runRange.upperBound
 
-                let leadingEdge = glyphRun.distance(forCharacterAt: selectionStart)
-                let trailingEdge = glyphRun.distance(forCharacterAt: selectionEnd)
+            if runStart < visualEnd && runEnd > visualStart {
+                let selectionStart = max(visualStart, runStart)
+                let selectionEnd = min(visualEnd, runEnd)
+
+                let leadingEdge = glyphRun.distance(forCodeUnitAt: selectionStart)
+                let trailingEdge = glyphRun.distance(forCodeUnitAt: selectionEnd)
 
                 let relativeLeft = glyphRun.origin.x
                 let selectionLeft = min(leadingEdge, trailingEdge) + relativeLeft
@@ -151,6 +180,36 @@ public class ComposedLine {
         return visualEdges
     }
 
+    /// Returns an array of visual edges corresponding to the specified character range.
+    ///
+    /// The resulting array will contain pairs of leading and trailing edges sorted from left to
+    /// right. There will be a separate pair for each glyph run occurred in the specified character
+    /// range. Each edge will be positioned relative to the start of the line assumed at zero.
+    ///
+    /// - Parameters:
+    ///   - characterRange: The range of characters in source string.
+    /// - Returns: An array of visual edges corresponding to the specified character range.
+    public func visualEdges(forCharacterRange characterRange: Range<String.Index>) -> [CGFloat] {
+        return visualEdges(forCodeUnitRange: string.utf16Range(forCharacterRange: characterRange))
+    }
+
+    /// Returns the index of UTF-16 code unit nearest to the specified distance.
+    ///
+    /// - Parameters:
+    ///   - distance: The distance for which to determine the UTF-16 code unit index. It should be
+    ///               offset from zero origin.
+    /// - Returns: The index of UTF-16 code unit in source string, nearest to the specified
+    ///            distance.
+    public func indexOfCodeUnit(at distance: CGFloat) -> Int {
+        for glyphRun in visualRuns.reversed() {
+            if glyphRun.origin.x <= distance {
+                return glyphRun.indexOfCodeUnit(at: distance - glyphRun.origin.x)
+            }
+        }
+
+        return codeUnitRange.lowerBound
+    }
+
     /// Returns the index of character nearest to the specified distance.
     ///
     /// - Parameters:
@@ -158,13 +217,7 @@ public class ComposedLine {
     ///               from zero origin.
     /// - Returns: The index of character in source string, nearest to the specified distance.
     public func indexOfCharacter(at distance: CGFloat) -> String.Index {
-        for glyphRun in visualRuns.reversed() {
-            if glyphRun.origin.x <= distance {
-                return glyphRun.indexOfCharacter(at: distance - glyphRun.origin.x)
-            }
-        }
-
-        return startIndex
+        return string.characterIndex(forUTF16Index: indexOfCodeUnit(at: distance))
     }
 
     /// Returns the pen offset required to draw flush text.

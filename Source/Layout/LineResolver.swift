@@ -94,8 +94,8 @@ func makeComposedLine(text: String, range: Range<String.Index>,
     }
 
     return ComposedLine(
-        startIndex: range.lowerBound,
-        endIndex: range.upperBound,
+        string: text,
+        codeUnitRange: text.utf16Range(forCharacterRange: range),
         paragraphLevel: paragraphLevel,
         ascent: lineAscent,
         descent: lineDescent,

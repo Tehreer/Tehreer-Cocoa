@@ -28,7 +28,6 @@ private struct ClusterRange {
 /// A glyph run is a collection of consecutive glyphs sharing the same attributes and direction.
 public class GlyphRun {
     private let string: String
-    private let codeUnitRange: Range<Int>
     private let attributes: [NSAttributedString.Key: Any]
     private let isBackward: Bool
     private let caretEdges: PrimitiveCollection<CGFloat>
@@ -81,6 +80,9 @@ public class GlyphRun {
         self.caretEdges = other.caretEdges
         self.origin = other.origin
     }
+
+    /// The UTF-16 range of this run in source string.
+    public let codeUnitRange: Range<Int>
 
     /// The index to the first character of this run in source string.
     public var startIndex: String.Index {
