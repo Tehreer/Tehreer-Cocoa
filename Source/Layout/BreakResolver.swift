@@ -23,14 +23,14 @@ struct BreakResolver {
     let runs: [IntrinsicRun]
     let breaks: BreakClassifier
 
-    private func findForwardBreak<S>(for extent: CGFloat, in sequence: S, from startIndex: String.Index) -> String.Index
+    private func findForwardBreak<S>(for extent: CGFloat, in sequence: S, from startIndex: Int) -> Int
         where S: Sequence,
               S.Element == StringBreak {
         var forwardIndex = startIndex
         var measurement: CGFloat = 0.0
 
         for stringBreak in sequence {
-            let endIndex = stringBreak.characterIndex
+            let endIndex = stringBreak.codeUnitIndex
             let segmentRange = forwardIndex ..< endIndex
 
             measurement += runs.measureCharacters(in: segmentRange)
@@ -51,14 +51,14 @@ struct BreakResolver {
         return forwardIndex
     }
 
-    private func findBackwardBreak<S>(for extent: CGFloat, in sequence: S, from endIndex: String.Index) -> String.Index
+    private func findBackwardBreak<S>(for extent: CGFloat, in sequence: S, from endIndex: Int) -> Int
         where S: Sequence,
               S.Element == StringBreak {
         var backwardIndex = endIndex
         var measurement: CGFloat = 0.0
 
         for stringBreak in sequence {
-            let startIndex = stringBreak.characterIndex
+            let startIndex = stringBreak.codeUnitIndex
             let segmentRange = startIndex ..< backwardIndex
             measurement += runs.measureCharacters(in: segmentRange)
 
@@ -79,93 +79,123 @@ struct BreakResolver {
         return backwardIndex
     }
 
-    func findForwardBreak(for extent: CGFloat, in range: Range<String.Index>, with mode: BreakMode) -> String.Index {
-        let paragraph = paragraphs.paragraph(forCharacterAt: range.lowerBound)
-        let clampedRange = range.lowerBound ..< min(range.upperBound, paragraph.endIndex)
+    func findForwardBreak(for extent: CGFloat, in codeUnitRange: Range<Int>, with breakMode: BreakMode) -> Int {
+        let paragraph = paragraphs.paragraph(forCodeUnitAt: codeUnitRange.lowerBound)
+        let maxIndex = min(codeUnitRange.upperBound, paragraph.codeUnitRange.upperBound)
+        let clampedRange = codeUnitRange.lowerBound ..< maxIndex
 
-        switch mode {
+        switch breakMode {
         case .character:
-            let sequence = breaks.forwardGraphemeBreaks(forCharacterRange: clampedRange)
-            return findForwardBreak(for: extent, in: sequence, from: range.lowerBound)
+            let sequence = breaks.forwardGraphemeBreaks(forCodeUnitRange: clampedRange)
+            return findForwardBreak(for: extent, in: sequence, from: codeUnitRange.lowerBound)
         case .line:
-            let sequence = breaks.forwardLineBreaks(forCharacterRange: clampedRange)
-            return findForwardBreak(for: extent, in: sequence, from: range.lowerBound)
+            let sequence = breaks.forwardLineBreaks(forCodeUnitRange: clampedRange)
+            return findForwardBreak(for: extent, in: sequence, from: codeUnitRange.lowerBound)
         }
     }
 
-    func findBackwardBreak(for extent: CGFloat, in range: Range<String.Index>, with mode: BreakMode) -> String.Index {
-        let paragraph = paragraphs.paragraph(forCharacterAt: range.lowerBound)
-        let clampedRange = min(range.lowerBound, paragraph.startIndex) ..< range.upperBound
+    func findForwardBreak(for extent: CGFloat, in characterRange: Range<String.Index>, with breakMode: BreakMode) -> String.Index {
+        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: characterRange)
+        let breakIndex = findForwardBreak(for: extent, in: codeUnitRange, with: breakMode)
 
-        switch mode {
+        return string.characterIndex(forUTF16Index: breakIndex)
+    }
+
+    func findBackwardBreak(for extent: CGFloat, in codeUnitRange: Range<Int>, with breakMode: BreakMode) -> Int {
+        let paragraph = paragraphs.paragraph(forCodeUnitAt: codeUnitRange.lowerBound)
+        let minIndex = min(codeUnitRange.lowerBound, paragraph.codeUnitRange.lowerBound)
+        let clampedRange = minIndex ..< codeUnitRange.upperBound
+
+        switch breakMode {
         case .character:
-            let sequence = breaks.backwardGraphemeBreaks(forCharacterRange: clampedRange)
-            return findBackwardBreak(for: extent, in: sequence, from: range.upperBound)
+            let sequence = breaks.backwardGraphemeBreaks(forCodeUnitRange: clampedRange)
+            return findBackwardBreak(for: extent, in: sequence, from: codeUnitRange.upperBound)
         case .line:
-            let sequence = breaks.backwardLineBreaks(forCharacterRange: clampedRange)
-            return findBackwardBreak(for: extent, in: sequence, from: range.upperBound)
+            let sequence = breaks.backwardLineBreaks(forCodeUnitRange: clampedRange)
+            return findBackwardBreak(for: extent, in: sequence, from: codeUnitRange.upperBound)
         }
     }
 
-    private func suggestForwardCharacterBreak(for extent: CGFloat, in range: Range<String.Index>) -> String.Index {
-        let breakIndex = findForwardBreak(for: extent, in: range, with: .character)
+    func findBackwardBreak(for extent: CGFloat, in characterRange: Range<String.Index>, with breakMode: BreakMode) -> String.Index {
+        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: characterRange)
+        let breakIndex = findBackwardBreak(for: extent, in: codeUnitRange, with: breakMode)
+
+        return string.characterIndex(forUTF16Index: breakIndex)
+    }
+
+    private func suggestForwardCharacterBreak(for extent: CGFloat, in codeUnitRange: Range<Int>) -> Int {
+        let breakIndex = findForwardBreak(for: extent, in: codeUnitRange, with: .character)
 
         // Take at least one character (grapheme) if extent is too small.
-        if breakIndex == range.lowerBound {
-            return min(range.upperBound, string.index(after: breakIndex))
+        if breakIndex == codeUnitRange.lowerBound {
+            return min(codeUnitRange.upperBound, breakIndex + 1)
         }
 
         return breakIndex
     }
 
-    private func suggestBackwardCharacterBreak(for extent: CGFloat, in range: Range<String.Index>) -> String.Index {
-        let breakIndex = findBackwardBreak(for: extent, in: range, with: .character)
+    private func suggestBackwardCharacterBreak(for extent: CGFloat, in codeUnitRange: Range<Int>) -> Int {
+        let breakIndex = findBackwardBreak(for: extent, in: codeUnitRange, with: .character)
 
         // Take at least one character (grapheme) if extent is too small.
-        if breakIndex == range.upperBound {
-            return max(range.lowerBound, string.index(before: breakIndex))
+        if breakIndex == codeUnitRange.upperBound {
+            return max(codeUnitRange.lowerBound, breakIndex - 1)
         }
 
         return breakIndex
     }
 
-    private func suggestForwardLineBreak(for extent: CGFloat, in range: Range<String.Index>) -> String.Index {
-        let breakIndex = findForwardBreak(for: extent, in: range, with: .line)
+    private func suggestForwardLineBreak(for extent: CGFloat, in codeUnitRange: Range<Int>) -> Int {
+        let breakIndex = findForwardBreak(for: extent, in: codeUnitRange, with: .line)
 
         // Fallback to character break if no line break occurs in desired extent.
-        if breakIndex == range.lowerBound {
-            return suggestForwardCharacterBreak(for: extent, in: range)
+        if breakIndex == codeUnitRange.lowerBound {
+            return suggestForwardCharacterBreak(for: extent, in: codeUnitRange)
         }
 
         return breakIndex
     }
 
-    private func suggestBackwardLineBreak(for extent: CGFloat, in range: Range<String.Index>) -> String.Index {
-        let breakIndex = findBackwardBreak(for: extent, in: range, with: .line)
+    private func suggestBackwardLineBreak(for extent: CGFloat, in codeUnitRange: Range<Int>) -> Int {
+        let breakIndex = findBackwardBreak(for: extent, in: codeUnitRange, with: .line)
 
         // Fallback to character break if no line break occurs in desired extent.
-        if breakIndex == range.upperBound {
-            return suggestBackwardCharacterBreak(for: extent, in: range)
+        if breakIndex == codeUnitRange.upperBound {
+            return suggestBackwardCharacterBreak(for: extent, in: codeUnitRange)
         }
 
         return breakIndex
     }
 
-    func suggestForwardBreak(for extent: CGFloat, in range: Range<String.Index>, with mode: BreakMode) -> String.Index {
-        switch mode {
+    func suggestForwardBreak(for extent: CGFloat, in codeUnitRange: Range<Int>, with breakMode: BreakMode) -> Int {
+        switch breakMode {
         case .character:
-            return suggestForwardCharacterBreak(for: extent, in: range)
+            return suggestForwardCharacterBreak(for: extent, in: codeUnitRange)
         case .line:
-            return suggestForwardLineBreak(for: extent, in: range)
+            return suggestForwardLineBreak(for: extent, in: codeUnitRange)
         }
     }
 
-    func suggestBackwardBreak(for extent: CGFloat, in range: Range<String.Index>, with mode: BreakMode) -> String.Index {
-        switch mode {
+    func suggestForwardBreak(for extent: CGFloat, in characterRange: Range<String.Index>, with breakMode: BreakMode) -> String.Index {
+        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: characterRange)
+        let breakIndex = suggestForwardBreak(for: extent, in: codeUnitRange, with: breakMode)
+
+        return string.characterIndex(forUTF16Index: breakIndex)
+    }
+
+    func suggestBackwardBreak(for extent: CGFloat, in codeUnitRange: Range<Int>, with breakMode: BreakMode) -> Int {
+        switch breakMode {
         case .character:
-            return suggestBackwardCharacterBreak(for: extent, in: range)
+            return suggestBackwardCharacterBreak(for: extent, in: codeUnitRange)
         case .line:
-            return suggestBackwardLineBreak(for: extent, in: range)
+            return suggestBackwardLineBreak(for: extent, in: codeUnitRange)
         }
+    }
+
+    func suggestBackwardBreak(for extent: CGFloat, in characterRange: Range<String.Index>, with breakMode: BreakMode) -> String.Index {
+        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: characterRange)
+        let breakIndex = suggestBackwardBreak(for: extent, in: codeUnitRange, with: breakMode)
+
+        return string.characterIndex(forUTF16Index: breakIndex)
     }
 }
