@@ -19,6 +19,28 @@ import Foundation
 extension RandomAccessCollection
     where Element == BidiParagraph,
           Index == Int {
+    func binarySearchIndex(forCodeUnitAt index: Int) -> Int {
+        var low = 0
+        var high = count - 1
+
+        while low <= high {
+            let mid = (low + high) >> 1
+
+            let bidiParagraph = self[mid]
+            let paragraphRange = bidiParagraph.codeUnitRange
+
+            if index >= paragraphRange.upperBound {
+                low = mid + 1
+            } else if index < paragraphRange.lowerBound {
+                high = mid - 1
+            } else {
+                return mid
+            }
+        }
+
+        return -1
+    }
+
     func binarySearchIndex(ofCharacterAt index: String.Index) -> Int {
         var low = 0
         var high = count - 1
@@ -39,6 +61,10 @@ extension RandomAccessCollection
         }
 
         return -1
+    }
+
+    func paragraph(forCodeUnitAt index: Int) -> BidiParagraph {
+        return self[binarySearchIndex(forCodeUnitAt: index)]
     }
 
     func paragraph(forCharacterAt index: String.Index) -> BidiParagraph {
