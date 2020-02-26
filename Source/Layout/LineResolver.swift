@@ -18,17 +18,15 @@ import CoreGraphics
 import Foundation
 
 func makeGlyphRun(intrinsicRun: IntrinsicRun,
-                  range: Range<String.Index>,
+                  codeUnitRange: Range<Int>,
                   attributes: [NSAttributedString.Key: Any]) -> GlyphRun {
     let string = intrinsicRun.string
-    let runOffset = string.utf16Index(forCharacterAt: intrinsicRun.startIndex)
+    let runOffset = intrinsicRun.codeUnitRange.lowerBound
+    let clusterRange = intrinsicRun.clusterRange(forUTF16Range: codeUnitRange)
+    let glyphRange = intrinsicRun.glyphRange(forUTF16Range: codeUnitRange)
 
-    let utf16Range: Range<Int> = string.utf16Range(forCharacterRange: range)
-    let clusterRange = intrinsicRun.clusterRange(forUTF16Range: utf16Range)
-    let glyphRange = intrinsicRun.glyphRange(forUTF16Range: utf16Range)
-
-    let startExtraLength = utf16Range.lowerBound - clusterRange.lowerBound
-    let endExtraLength = clusterRange.upperBound - utf16Range.upperBound
+    let startExtraLength = codeUnitRange.lowerBound - clusterRange.lowerBound
+    let endExtraLength = clusterRange.upperBound - codeUnitRange.upperBound
 
     let chunkOffset = clusterRange.lowerBound - runOffset
     let chunkLength = clusterRange.count
@@ -47,7 +45,7 @@ func makeGlyphRun(intrinsicRun: IntrinsicRun,
 
     return GlyphRun(
         string: string,
-        codeUnitRange: utf16Range,
+        codeUnitRange: codeUnitRange,
         startExtraLength: startExtraLength,
         endExtraLength: endExtraLength,
         attributes: attributes,
@@ -66,7 +64,8 @@ func makeGlyphRun(intrinsicRun: IntrinsicRun,
         caretEdges: PrimitiveCollection(caretEdges))
 }
 
-func makeComposedLine(text: String, range: Range<String.Index>,
+func makeComposedLine(string: String,
+                      codeUnitRange: Range<Int>,
                       visualRuns: [GlyphRun],
                       paragraphLevel: UInt8) -> ComposedLine {
     var lineAscent: CGFloat = 0.0
@@ -74,17 +73,19 @@ func makeComposedLine(text: String, range: Range<String.Index>,
     var lineLeading: CGFloat = 0.0
     var lineExtent: CGFloat = 0.0
 
-    let trailingWhitespaceStart = text.trailingWhitespaceStart(in: range)
+    let trailingWhitespaceStart = string.trailingWhitespaceStart(in: codeUnitRange)
     var trailingWhitespaceExtent: CGFloat = 0.0
 
     for glyphRun in visualRuns {
         glyphRun.origin.x = lineExtent
 
-        let wsStart = max(glyphRun.startIndex, trailingWhitespaceStart)
-        let wsEnd = min(glyphRun.endIndex, range.upperBound)
+        let runRange = glyphRun.codeUnitRange
+        let wsStart = max(runRange.lowerBound, trailingWhitespaceStart)
+        let wsEnd = min(runRange.upperBound, codeUnitRange.upperBound)
 
         if wsStart < wsEnd {
-            trailingWhitespaceExtent = glyphRun.distance(forCharacterRange: wsStart ..< wsEnd)
+            let wsRange = Range(uncheckedBounds: (wsStart, wsEnd))
+            trailingWhitespaceExtent = glyphRun.distance(forCodeUnitRange: wsRange)
         }
 
         lineAscent = max(lineAscent, glyphRun.ascent)
@@ -94,8 +95,8 @@ func makeComposedLine(text: String, range: Range<String.Index>,
     }
 
     return ComposedLine(
-        string: text,
-        codeUnitRange: text.utf16Range(forCharacterRange: range),
+        string: string,
+        codeUnitRange: codeUnitRange,
         paragraphLevel: paragraphLevel,
         ascent: lineAscent,
         descent: lineDescent,
@@ -121,55 +122,57 @@ struct LineResolver {
         self.runs = runs
     }
 
-    func makeSimpleLine(range: Range<String.Index>) -> ComposedLine {
-        var runArray: [GlyphRun] = []
+    func makeSimpleLine(codeUnitRange: Range<Int>) -> ComposedLine {
+        var lineRuns: [GlyphRun] = []
 
-        paragraphs.forEachLineRun(inCharacterRange: range) { (bidiRun) in
-            appendVisualRuns(from: bidiRun.startIndex, to: bidiRun.endIndex, in: &runArray)
+        paragraphs.forEachLineRun(in: codeUnitRange) { (bidiRun) in
+            let runRange = bidiRun.codeUnitRange
+            appendVisualRuns(from: runRange.lowerBound, to: runRange.upperBound, in: &lineRuns)
         }
 
-        return makeComposedLine(text: text.string,
-                                range: range,
-                                visualRuns: runArray,
-                                paragraphLevel: paragraphs.baseLevel(forCharacterAt: range.lowerBound))
+        return makeComposedLine(string: text.string,
+                                codeUnitRange: codeUnitRange,
+                                visualRuns: lineRuns,
+                                paragraphLevel: paragraphs.paragraph(forCodeUnitAt: codeUnitRange.lowerBound).baseLevel)
     }
 
-    func makeCompactLine(range: Range<String.Index>, extent: CGFloat,
+    func makeCompactLine(codeUnitRange: Range<Int>, extent: CGFloat,
                          breaks: BreakResolver, mode: BreakMode, place: TruncationPlace,
                          token: ComposedLine) -> ComposedLine {
         let tokenlessWidth = extent - token.width;
 
         switch (place) {
         case .start:
-            return makeStartTruncatedLine(range: range, tokenlessWidth: tokenlessWidth,
+            return makeStartTruncatedLine(codeUnitRange: codeUnitRange, tokenlessWidth: tokenlessWidth,
                                           breaks: breaks, mode: mode, token: token)
         case .middle:
-            return makeMiddleTruncatedLine(range: range, tokenlessWidth: tokenlessWidth,
+            return makeMiddleTruncatedLine(codeUnitRange: codeUnitRange, tokenlessWidth: tokenlessWidth,
                                            breaks: breaks, mode: mode, token: token)
         case .end:
-            return makeEndTruncatedLine(range: range, tokenlessWidth: tokenlessWidth,
+            return makeEndTruncatedLine(codeUnitRange: codeUnitRange, tokenlessWidth: tokenlessWidth,
                                         breaks: breaks, mode: mode, token: token)
         }
     }
 
     private struct TruncationHandler {
-        let range: Range<String.Index>
-        let skipStart: String.Index
-        let skipEnd: String.Index
+        let codeUnitRange: Range<Int>
+        let skipStart: Int
+        let skipEnd: Int
 
         var leadingTokenIndex = -1
         var trailingTokenIndex = -1
 
-        init(range: Range<String.Index>, skipStart: String.Index, skipEnd: String.Index) {
-            self.range = range
+        init(codeUnitRange: Range<Int>, skipStart: Int, skipEnd: Int) {
+            self.codeUnitRange = codeUnitRange
             self.skipStart = skipStart
             self.skipEnd = skipEnd
         }
 
         mutating func appendAllRuns(using resolver: LineResolver, in runArray: inout [GlyphRun]) {
-            resolver.paragraphs.forEachLineRun(inCharacterRange: range) { (bidiRun) in
-                let visualStart = bidiRun.startIndex
-                let visualEnd = bidiRun.endIndex
+            resolver.paragraphs.forEachLineRun(in: codeUnitRange) { (bidiRun) in
+                let runRange = bidiRun.codeUnitRange
+                let visualStart = runRange.lowerBound
+                let visualEnd = runRange.upperBound
 
                 if bidiRun.isRightToLeft {
                     // Handle second part of characters.
@@ -212,19 +215,19 @@ struct LineResolver {
         }
     }
 
-    private func makeStartTruncatedLine(range: Range<String.Index>,
+    private func makeStartTruncatedLine(codeUnitRange: Range<Int>,
                                         tokenlessWidth: CGFloat,
                                         breaks: BreakResolver,
                                         mode: BreakMode,
                                         token: ComposedLine) -> ComposedLine {
-        let truncatedStart = breaks.suggestBackwardBreak(for: tokenlessWidth, in: range, with: mode)
-        if truncatedStart > range.lowerBound {
+        let truncatedStart = breaks.suggestBackwardBreak(for: tokenlessWidth, in: codeUnitRange, with: mode)
+        if truncatedStart > codeUnitRange.lowerBound {
             var runArray: [GlyphRun] = []
             var tokenInsertIndex = 0
 
-            if truncatedStart < range.upperBound {
-                var truncationHandler = TruncationHandler(range: range,
-                                                          skipStart: range.lowerBound,
+            if truncatedStart < codeUnitRange.upperBound {
+                var truncationHandler = TruncationHandler(codeUnitRange: codeUnitRange,
+                                                          skipStart: codeUnitRange.lowerBound,
                                                           skipEnd: truncatedStart)
                 truncationHandler.appendAllRuns(using: self, in: &runArray)
 
@@ -232,34 +235,34 @@ struct LineResolver {
             }
             appendTokenRuns(token, in: &runArray, at: tokenInsertIndex)
 
-            return makeComposedLine(text: text.string,
-                                    range: truncatedStart ..< range.upperBound,
+            return makeComposedLine(string: text.string,
+                                    codeUnitRange: truncatedStart ..< codeUnitRange.upperBound,
                                     visualRuns: runArray,
-                                    paragraphLevel: paragraphs.baseLevel(forCharacterAt: truncatedStart))
+                                    paragraphLevel: paragraphs.baseLevel(forCodeUnitAt: truncatedStart))
         }
 
-        return makeSimpleLine(range: truncatedStart ..< range.upperBound)
+        return makeSimpleLine(codeUnitRange: truncatedStart ..< codeUnitRange.upperBound)
     }
 
-    private func makeMiddleTruncatedLine(range: Range<String.Index>,
+    private func makeMiddleTruncatedLine(codeUnitRange: Range<Int>,
                                          tokenlessWidth: CGFloat,
                                          breaks: BreakResolver,
                                          mode: BreakMode,
                                          token: ComposedLine) -> ComposedLine {
         let halfWidth = tokenlessWidth / 2.0
-        var firstMidEnd = breaks.suggestForwardBreak(for: halfWidth, in: range, with: mode)
-        var secondMidStart = breaks.suggestBackwardBreak(for: halfWidth, in: range, with: mode)
+        var firstMidEnd = breaks.suggestForwardBreak(for: halfWidth, in: codeUnitRange, with: mode)
+        var secondMidStart = breaks.suggestBackwardBreak(for: halfWidth, in: codeUnitRange, with: mode)
 
         if firstMidEnd < secondMidStart {
             // Exclude inner whitespaces as truncation token replaces them.
-            firstMidEnd = text.string.trailingWhitespaceStart(in: range.lowerBound ..< firstMidEnd)
-            secondMidStart = text.string.leadingWhitespaceEnd(in: secondMidStart ..< range.upperBound)
+            firstMidEnd = text.string.trailingWhitespaceStart(in: codeUnitRange.lowerBound ..< firstMidEnd)
+            secondMidStart = text.string.leadingWhitespaceEnd(in: secondMidStart ..< codeUnitRange.upperBound)
 
             var runArray: [GlyphRun] = []
             var tokenInsertIndex = 0
 
-            if range.lowerBound < firstMidEnd || secondMidStart < range.upperBound {
-                var truncationHandler = TruncationHandler(range: range,
+            if codeUnitRange.lowerBound < firstMidEnd || secondMidStart < codeUnitRange.upperBound {
+                var truncationHandler = TruncationHandler(codeUnitRange: codeUnitRange,
                                                           skipStart: firstMidEnd,
                                                           skipEnd: secondMidStart)
                 truncationHandler.appendAllRuns(using: self, in: &runArray)
@@ -268,45 +271,45 @@ struct LineResolver {
             }
             appendTokenRuns(token, in: &runArray, at: tokenInsertIndex)
 
-            return makeComposedLine(text: text.string,
-                                    range: range,
+            return makeComposedLine(string: text.string,
+                                    codeUnitRange: codeUnitRange,
                                     visualRuns: runArray,
-                                    paragraphLevel: paragraphs.baseLevel(forCharacterAt: range.lowerBound))
+                                    paragraphLevel: paragraphs.baseLevel(forCodeUnitAt: codeUnitRange.lowerBound))
         }
 
-        return makeSimpleLine(range: range)
+        return makeSimpleLine(codeUnitRange: codeUnitRange)
     }
 
-    private func makeEndTruncatedLine(range: Range<String.Index>,
+    private func makeEndTruncatedLine(codeUnitRange: Range<Int>,
                                       tokenlessWidth: CGFloat,
                                       breaks: BreakResolver,
                                       mode: BreakMode,
                                       token: ComposedLine) -> ComposedLine {
-        var truncatedEnd = breaks.suggestForwardBreak(for: tokenlessWidth, in: range, with: mode)
-        if truncatedEnd < range.upperBound {
+        var truncatedEnd = breaks.suggestForwardBreak(for: tokenlessWidth, in: codeUnitRange, with: mode)
+        if truncatedEnd < codeUnitRange.upperBound {
             // Exclude trailing whitespaces as truncation token replaces them.
-            truncatedEnd = text.string.trailingWhitespaceStart(in: range.lowerBound ..< truncatedEnd)
+            truncatedEnd = text.string.trailingWhitespaceStart(in: codeUnitRange.lowerBound ..< truncatedEnd)
 
             var runArray: [GlyphRun] = []
             var tokenInsertIndex = 0
 
-            if range.lowerBound < truncatedEnd {
-                var truncationHandler = TruncationHandler(range: range,
+            if codeUnitRange.lowerBound < truncatedEnd {
+                var truncationHandler = TruncationHandler(codeUnitRange: codeUnitRange,
                                                           skipStart: truncatedEnd,
-                                                          skipEnd: range.upperBound)
+                                                          skipEnd: codeUnitRange.upperBound)
                 truncationHandler.appendAllRuns(using: self, in: &runArray)
 
                 tokenInsertIndex = truncationHandler.leadingTokenIndex
             }
             appendTokenRuns(token, in: &runArray, at: tokenInsertIndex)
 
-            return makeComposedLine(text: text.string,
-                                    range: range.lowerBound ..< truncatedEnd,
+            return makeComposedLine(string: text.string,
+                                    codeUnitRange: codeUnitRange.lowerBound ..< truncatedEnd,
                                     visualRuns: runArray,
-                                    paragraphLevel: paragraphs.baseLevel(forCharacterAt: range.lowerBound))
+                                    paragraphLevel: paragraphs.baseLevel(forCodeUnitAt: codeUnitRange.lowerBound))
         }
 
-        return makeSimpleLine(range: range.lowerBound ..< truncatedEnd)
+        return makeSimpleLine(codeUnitRange: codeUnitRange.lowerBound ..< truncatedEnd)
     }
 
     private func appendTokenRuns(_ token: ComposedLine, in runArray: inout [GlyphRun], at index: Int) {
@@ -320,7 +323,7 @@ struct LineResolver {
         }
     }
 
-    private func appendVisualRuns(from start: String.Index, to end: String.Index, in runArray: inout [GlyphRun]) {
+    private func appendVisualRuns(from start: Int, to end: Int, in runArray: inout [GlyphRun]) {
         guard start < end else { return }
 
         // ASSUMPTIONS:
@@ -334,11 +337,12 @@ struct LineResolver {
         let visualEnd = end
 
         repeat {
-            let runIndex = runs.binarySearchIndex(ofCharacterAt: visualStart)
+            let runIndex = runs.binarySearchIndex(forCodeUnitAt: visualStart)
 
             let intrinsicRun = runs[runIndex]
-            let feasibleStart = max(intrinsicRun.startIndex, visualStart)
-            let feasibleEnd = min(intrinsicRun.endIndex, visualEnd)
+            let runRange = intrinsicRun.codeUnitRange
+            let feasibleStart = max(runRange.lowerBound, visualStart)
+            let feasibleEnd = min(runRange.upperBound, visualEnd)
 
             let bidiLevel = intrinsicRun.bidiLevel
             let isForwardRun = (bidiLevel & 1) == 0
@@ -350,13 +354,11 @@ struct LineResolver {
             }
 
             let string = text.string
-            let chunkRange: NSRange = string.utf16Range(forCharacterRange: feasibleStart ..< feasibleEnd)
-
             let attrString = text as CFAttributedString
-            let effectiveRange = CFRange(location: chunkRange.location, length: chunkRange.length)
-            var spanRange = CFRange(location: chunkRange.location, length: 0)
+            let effectiveRange = CFRange(location: feasibleStart, length: feasibleEnd - feasibleStart)
+            var spanRange = CFRange(location: feasibleStart, length: 0)
 
-            while spanRange.location < chunkRange.upperBound {
+            while spanRange.location < feasibleEnd {
                 defer { spanRange.location += spanRange.length }
 
                 let spanAttributes = CFAttributedStringGetAttributesAndLongestEffectiveRange(attrString, spanRange.location, effectiveRange, &spanRange);
@@ -372,10 +374,9 @@ struct LineResolver {
                     }
                 }
 
-                let utf16Range = NSRange(location: spanRange.location, length: spanRange.length)
-                let runRange = string.characterRange(forUTF16Range: utf16Range)
+                let codeUnitRange = spanRange.location ..< spanRange.location + spanRange.length
                 let glyphRun = makeGlyphRun(intrinsicRun: intrinsicRun,
-                                            range: runRange,
+                                            codeUnitRange: codeUnitRange,
                                             attributes: allAttributes)
                 runArray.insert(glyphRun, at: insertIndex)
 

@@ -78,7 +78,8 @@ public class Typesetter {
     /// - Returns: The new line.
     public func makeSimpleLine(characterRange: Range<String.Index>) -> ComposedLine {
         let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes, paragraphs: paragraphs, runs: runs)
-        return lineResolver.makeSimpleLine(range: characterRange)
+        let codeUnitRange: Range<Int> = text.string.utf16Range(forCharacterRange: characterRange)
+        return lineResolver.makeSimpleLine(codeUnitRange: codeUnitRange)
     }
 
     /// Creates a line of specified string range, truncating it if it overflows the specified extent.
@@ -120,8 +121,9 @@ public class Typesetter {
                                         paragraphs: paragraphs, runs: runs)
         let breakResolver = BreakResolver(string: text.string,
                                           paragraphs: paragraphs, runs: runs, breaks: breaks)
+        let codeUnitRange: Range<Int> = text.string.utf16Range(forCharacterRange: characterRange)
 
-        return lineResolver.makeCompactLine(range: characterRange, extent: extent,
+        return lineResolver.makeCompactLine(codeUnitRange: codeUnitRange, extent: extent,
                                             breaks: breakResolver, mode: breakMode,
                                             place: truncationPlace, token: tokenLine)
     }

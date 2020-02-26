@@ -71,14 +71,18 @@ extension RandomAccessCollection
         return self[binarySearchIndex(ofCharacterAt: index)]
     }
 
+    func baseLevel(forCodeUnitAt index: Int) -> UInt8 {
+        return paragraph(forCodeUnitAt: index).baseLevel
+    }
+
     func baseLevel(forCharacterAt index: String.Index) -> UInt8 {
         return paragraph(forCharacterAt: index).baseLevel
     }
 
-    func forEachLineRun(inCharacterRange range: Range<String.Index>, body: (_ : BidiRun) -> Void) {
-        var paragraphIndex = binarySearchIndex(ofCharacterAt: range.lowerBound)
-        var feasibleStart: String.Index
-        var feasibleEnd: String.Index
+    func forEachLineRun(in codeUnitRange: Range<Int>, body: (BidiRun) -> Void) {
+        var paragraphIndex = binarySearchIndex(forCodeUnitAt: codeUnitRange.lowerBound)
+        var feasibleStart: Int
+        var feasibleEnd: Int
 
         var isRTL: Bool!
         var allLines: [BidiLine] = []
@@ -89,15 +93,16 @@ extension RandomAccessCollection
                 isRTL = bidiParagraph.baseLevel & 1 == 1
             }
 
-            feasibleStart = Swift.max(bidiParagraph.startIndex, range.lowerBound)
-            feasibleEnd = Swift.min(bidiParagraph.endIndex, range.upperBound)
+            let paragraphRange = bidiParagraph.codeUnitRange
+            feasibleStart = Swift.max(paragraphRange.lowerBound, codeUnitRange.lowerBound)
+            feasibleEnd = Swift.min(paragraphRange.upperBound, codeUnitRange.upperBound)
 
-            if let bidiLine = bidiParagraph.makeLine(characterRange: feasibleStart ..< feasibleEnd) {
+            if let bidiLine = bidiParagraph.makeLine(codeUnitRange: feasibleStart ..< feasibleEnd) {
                 allLines.append(bidiLine)
             }
 
             paragraphIndex += 1
-        } while feasibleEnd != range.upperBound
+        } while feasibleEnd != codeUnitRange.upperBound
 
         if isRTL {
             for bidiLine in allLines.reversed() {
