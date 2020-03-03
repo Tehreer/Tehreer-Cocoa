@@ -45,6 +45,20 @@ public class Typesetter {
     }
 
     /// Suggests a forward break index based on the specified range and the extent. The measurement
+    /// proceeds from first UTF-16 code unit to last code unit. If there is still room after
+    /// measuring all characters, then last index is returned. Otherwise, break index is returned.
+    ///
+    /// - Parameters:
+    ///   - codeUnitRange: The UTF-16 range for break calculations.
+    ///   - extent: The requested break extent.
+    ///   - mode: The requested break mode.
+    /// - Returns: The index (exclusive) that would cause the break.
+    public func suggestForwardBreak(inCodeUnitRange codeUnitRange: Range<Int>, extent: CGFloat, breakMode: BreakMode) -> Int {
+        let breakResolver = BreakResolver(string: text.string, paragraphs: paragraphs, runs: runs, breaks: breaks)
+        return breakResolver.suggestForwardBreak(for: extent, in: codeUnitRange, with: breakMode)
+    }
+
+    /// Suggests a forward break index based on the specified range and the extent. The measurement
     /// proceeds from first character to last character. If there is still room after measuring all
     /// characters, then last index is returned. Otherwise, break index is returned.
     ///
@@ -59,11 +73,25 @@ public class Typesetter {
     }
 
     /// Suggests a backward break index based on the specified range and the extent. The measurement
+    /// proceeds from last UTF-16 code unit to first code unit. If there is still room after
+    /// measuring all characters, then start index is returned. Otherwise, break index is returned.
+    ///
+    /// - Parameters:
+    ///   - codeUnitRange: The UTF-16 range for break calculations.
+    ///   - extent: The requested break extent.
+    ///   - mode: The requested break mode.
+    /// - Returns: The index (inclusive) that would cause the break.
+    public func suggestBackwardBreak(inCodeUnitRange codeUnitRange: Range<Int>, extent: CGFloat, breakMode: BreakMode) -> Int {
+        let breakResolver = BreakResolver(string: text.string, paragraphs: paragraphs, runs: runs, breaks: breaks)
+        return breakResolver.suggestBackwardBreak(for: extent, in: codeUnitRange, with: breakMode)
+    }
+
+    /// Suggests a backward break index based on the specified range and the extent. The measurement
     /// proceeds from last character to first character. If there is still room after measuring all
     /// characters, then start index is returned. Otherwise, break index is returned.
     ///
     /// - Parameters:
-    ///   - characterRange: The string range for break calculations.
+    ///   - characterRange: The character range for break calculations.
     ///   - extent: The requested break extent.
     ///   - mode: The requested break mode.
     /// - Returns: The index (inclusive) that would cause the break.
@@ -72,14 +100,46 @@ public class Typesetter {
         return breakResolver.suggestBackwardBreak(for: extent, in: characterRange, with: breakMode)
     }
 
+    /// Creates a simple line having the specified UTF-16 range.
+    ///
+    /// - Parameter codeUnitRange: The UTF-16 range of the line in source string.
+    /// - Returns: The new line.
+    public func makeSimpleLine(codeUnitRange: Range<Int>) -> ComposedLine {
+        let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes, paragraphs: paragraphs, runs: runs)
+        return lineResolver.makeSimpleLine(codeUnitRange: codeUnitRange)
+    }
+
     /// Creates a simple line having the specified character range.
     ///
-    /// - Parameter characterRange: The range of the line in source string.
+    /// - Parameter characterRange: The character range of the line in source string.
     /// - Returns: The new line.
     public func makeSimpleLine(characterRange: Range<String.Index>) -> ComposedLine {
-        let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes, paragraphs: paragraphs, runs: runs)
         let codeUnitRange: Range<Int> = text.string.utf16Range(forCharacterRange: characterRange)
-        return lineResolver.makeSimpleLine(codeUnitRange: codeUnitRange)
+        return makeSimpleLine(codeUnitRange: codeUnitRange)
+    }
+
+    /// Creates a line of specified UTF-16 range, truncating it if it overflows the specified extent.
+    ///
+    /// - Parameters:
+    ///   - codeUnitRange: The UTF-16 range of the line in source string.
+    ///   - extent: The extent at which truncation will begin.
+    ///   - breakMode: The truncation mode to be used on the line.
+    ///   - truncationPlace: The place of truncation for the line.
+    ///   - tokenString: The token string to indicate the line truncation.
+    /// - Returns: The new line which is truncated if it overflows the `extent`.
+    public func makeTruncatedLine(codeUnitRange: Range<Int>, extent: CGFloat,
+                                  breakMode: BreakMode, truncationPlace: TruncationPlace,
+                                  tokenString: String?) -> ComposedLine {
+        let characterRange = text.string.characterRange(forUTF16Range: codeUnitRange)
+        let tokenResolver = TokenResolver(string: text.string, runs: runs)
+        let tokenLine = tokenResolver.makeTokenLine(range: characterRange,
+                                                    truncationPlace: truncationPlace,
+                                                    tokenString: tokenString)
+
+        return makeTruncatedLine(codeUnitRange: codeUnitRange, extent: extent,
+                                 breakMode: breakMode,
+                                 truncationPlace: truncationPlace,
+                                 tokenLine: tokenLine)
     }
 
     /// Creates a line of specified string range, truncating it if it overflows the specified extent.
@@ -105,10 +165,32 @@ public class Typesetter {
                                  tokenLine: tokenLine)
     }
 
-    /// Creates a line of specified string range, truncating it if it overflows the specified extent.
+    /// Creates a line of specified UTF-16 range, truncating it if it overflows the specified extent.
     ///
     /// - Parameters:
-    ///   - characterRange: The range of the line in source string.
+    ///   - codeUnitRange: The UTF-16 range of the line in source string.
+    ///   - extent: The extent at which truncation will begin.
+    ///   - breakMode: The truncation mode to be used on the line.
+    ///   - truncationPlace: The place of truncation for the line.
+    ///   - tokenLine: The token line to indicate the line truncation.
+    /// - Returns: The new line which is truncated if it overflows the `extent`.
+    public func makeTruncatedLine(codeUnitRange: Range<Int>, extent: CGFloat,
+                                  breakMode: BreakMode, truncationPlace: TruncationPlace,
+                                  tokenLine: ComposedLine) -> ComposedLine {
+        let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes,
+                                        paragraphs: paragraphs, runs: runs)
+        let breakResolver = BreakResolver(string: text.string,
+                                          paragraphs: paragraphs, runs: runs, breaks: breaks)
+
+        return lineResolver.makeCompactLine(codeUnitRange: codeUnitRange, extent: extent,
+                                            breaks: breakResolver, mode: breakMode,
+                                            place: truncationPlace, token: tokenLine)
+    }
+
+    /// Creates a line of specified character range, truncating it if it overflows the specified extent.
+    ///
+    /// - Parameters:
+    ///   - characterRange: The character range of the line in source string.
     ///   - extent: The extent at which truncation will begin.
     ///   - breakMode: The truncation mode to be used on the line.
     ///   - truncationPlace: The place of truncation for the line.
@@ -117,14 +199,9 @@ public class Typesetter {
     public func makeTruncatedLine(characterRange: Range<String.Index>, extent: CGFloat,
                                   breakMode: BreakMode, truncationPlace: TruncationPlace,
                                   tokenLine: ComposedLine) -> ComposedLine {
-        let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes,
-                                        paragraphs: paragraphs, runs: runs)
-        let breakResolver = BreakResolver(string: text.string,
-                                          paragraphs: paragraphs, runs: runs, breaks: breaks)
         let codeUnitRange: Range<Int> = text.string.utf16Range(forCharacterRange: characterRange)
 
-        return lineResolver.makeCompactLine(codeUnitRange: codeUnitRange, extent: extent,
-                                            breaks: breakResolver, mode: breakMode,
-                                            place: truncationPlace, token: tokenLine)
+        return makeTruncatedLine(codeUnitRange: codeUnitRange, extent: extent, breakMode: breakMode,
+                                 truncationPlace: truncationPlace, tokenLine: tokenLine)
     }
 }
