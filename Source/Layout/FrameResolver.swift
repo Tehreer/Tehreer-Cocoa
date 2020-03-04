@@ -150,9 +150,10 @@ public class FrameResolver {
         resolveTruncation(context: &context, frameEnd: characterRange.upperBound)
         resolveAlignments(context: &context)
 
-        let textFrame = ComposedFrame(string: typesetter.text.string,
-                                      startIndex: characterRange.lowerBound,
-                                      endIndex: context.endIndex,
+        let string = typesetter.text.string
+        let frameRange = characterRange.lowerBound ..< context.endIndex
+        let textFrame = ComposedFrame(string: string,
+                                      codeUnitRange: string.utf16Range(forCharacterRange: frameRange),
                                       lines: context.textLines)
         textFrame.width = context.layoutWidth
         textFrame.height = context.layoutHeight
