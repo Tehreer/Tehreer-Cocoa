@@ -37,7 +37,7 @@ public class ComposedLine {
     }
 
     /// The UTF-16 range of this line in source string.
-    private let codeUnitRange: Range<Int>
+    public let codeUnitRange: Range<Int>
 
     /// The index to the first character of this line in source string.
     public var startIndex: String.Index {
