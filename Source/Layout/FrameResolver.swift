@@ -40,8 +40,8 @@ private struct FrameContext {
 
     // MARK: Paragraph Properties
 
-    var startIndex: String.Index
-    var endIndex: String.Index
+    var startIndex: Int = .zero
+    var endIndex: Int = .zero
     var baseLevel: UInt8 = .zero
     var paragraphSpans: [TextSpan<NSParagraphStyle>] = []
 
@@ -52,12 +52,10 @@ private struct FrameContext {
     var leftIndent: CGFloat = .zero
     var flushFactor: CGFloat = .zero
 
-    init(resolver: FrameResolver, startIndex: String.Index, endIndex: String.Index) {
+    init(resolver: FrameResolver) {
         self.layoutWidth = min(max(resolver.frameBounds.width, 0), .greatestFiniteMagnitude)
         self.layoutHeight = min(max(resolver.frameBounds.height, 0), .greatestFiniteMagnitude)
         self.maxLines = resolver.maxLines ?? .max
-        self.startIndex = startIndex
-        self.endIndex = endIndex
     }
 }
 
@@ -105,26 +103,27 @@ public class FrameResolver {
     /// spacing. Its default value is one.
     public var lineHeightMultiplier: CGFloat = 1.0
 
-    /// Creates a frame representing specified string range in source string.
+    /// Creates a frame representing the specified UTF-16 range in source string.
     ///
     /// The resolver keeps on filling the frame until it either runs out of text or it finds that
     /// text no longer fits in frame bounds. The resulting frame consists of at least one line even
     /// if frame bounds are smaller.
     ///
-    /// - Parameter characterRange: The character range of the frame in source string.
+    /// - Parameter codeUnitRange: The UTF-16 range of the frame in source string.
     /// - Returns: A new composed frame.
-    public func makeFrame(characterRange: Range<String.Index>) -> ComposedFrame? {
-        var context = FrameContext(resolver: self, startIndex: characterRange.lowerBound, endIndex: characterRange.upperBound)
+    public func makeFrame(codeUnitRange: Range<Int>) -> ComposedFrame? {
+        var context = FrameContext(resolver: self)
 
         let allParagraphs = typesetter.paragraphs
-        var paragraphIndex = allParagraphs.binarySearchIndex(ofCharacterAt: characterRange.lowerBound)
+        var paragraphIndex = allParagraphs.binarySearchIndex(forCodeUnitAt: codeUnitRange.lowerBound)
 
-        var segmentStart = characterRange.lowerBound
+        var segmentStart = codeUnitRange.lowerBound
 
         // Iterate over all paragraphs in provided range.
         repeat {
             let paragraph = allParagraphs[paragraphIndex]
-            let segmentEnd = min(characterRange.upperBound, paragraph.endIndex)
+            let paragraphRange = paragraph.codeUnitRange
+            let segmentEnd = min(codeUnitRange.upperBound, paragraphRange.upperBound)
 
             // Setup the paragraph properties.
             context.startIndex = segmentStart
@@ -145,20 +144,33 @@ public class FrameResolver {
 
             segmentStart = segmentEnd
             paragraphIndex += 1
-        } while segmentStart < characterRange.upperBound
+        } while segmentStart < codeUnitRange.upperBound
 
-        resolveTruncation(context: &context, frameEnd: characterRange.upperBound)
+        resolveTruncation(context: &context, frameEnd: codeUnitRange.upperBound)
         resolveAlignments(context: &context)
 
-        let string = typesetter.text.string
-        let frameRange = characterRange.lowerBound ..< context.endIndex
-        let textFrame = ComposedFrame(string: string,
-                                      codeUnitRange: string.utf16Range(forCharacterRange: frameRange),
+        let textFrame = ComposedFrame(string: typesetter.text.string,
+                                      codeUnitRange: codeUnitRange.lowerBound ..< context.endIndex,
                                       lines: context.textLines)
         textFrame.width = context.layoutWidth
         textFrame.height = context.layoutHeight
 
         return textFrame
+    }
+
+    /// Creates a frame representing the specified character range in source string.
+    ///
+    /// The resolver keeps on filling the frame until it either runs out of text or it finds that
+    /// text no longer fits in frame bounds. The resulting frame consists of at least one line even
+    /// if frame bounds are smaller.
+    ///
+    /// - Parameter characterRange: The character range of the frame in source string.
+    /// - Returns: A new composed frame.
+    public func makeFrame(characterRange: Range<String.Index>) -> ComposedFrame? {
+        let string = typesetter.text.string
+        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: characterRange)
+
+        return makeFrame(codeUnitRange: codeUnitRange)
     }
 
     // MARK: Paragraph Handling
@@ -178,11 +190,11 @@ public class FrameResolver {
             resolveHeadIndent(context: &context, lineIndex: lineIndex, style: defaultSpan?.attribute)
 
             // Find out the length of new line.
-            let lineEnd = typesetter.suggestForwardBreak(inCharacterRange: lineStart ..< context.endIndex,
+            let lineEnd = typesetter.suggestForwardBreak(inCodeUnitRange: lineStart ..< context.endIndex,
                                                          extent: context.lineExtent, breakMode: .line)
 
             // Create the line and resolve its attributes.
-            let textLine = typesetter.makeSimpleLine(characterRange: lineStart ..< lineEnd)
+            let textLine = typesetter.makeSimpleLine(codeUnitRange: lineStart ..< lineEnd)
             resolveAttributes(context: &context, textLine: textLine)
 
             // Make sure that at least one line is added even if frame is smaller in height.
@@ -210,7 +222,7 @@ public class FrameResolver {
     }
 
     private func extractParagraphSpans(context: inout FrameContext, text: NSAttributedString) -> TextSpan<NSParagraphStyle>? {
-        let range: NSRange = text.string.utf16Range(forCharacterRange: context.startIndex ..< context.endIndex)
+        let range = NSRange(location: context.startIndex, length: context.endIndex - context.startIndex)
         var paragraphSpans: [TextSpan<NSParagraphStyle>] = []
         var defaultSpan: TextSpan<NSParagraphStyle>?
 
@@ -275,7 +287,7 @@ public class FrameResolver {
         guard let span = span else { return }
 
         // Resolve `paragraphSpacing` if it is not the last paragraph.
-        if context.endIndex < string.endIndex {
+        if context.endIndex < string.utf16.count {
             context.occupiedHeight += span.attribute.paragraphSpacing
         }
     }
@@ -367,14 +379,15 @@ public class FrameResolver {
         resolveOccupiedSize(context: &context, newSize: newSize)
     }
 
-    private func resolveTruncation(context: inout FrameContext, frameEnd: String.Index) {
+    private func resolveTruncation(context: inout FrameContext, frameEnd: Int) {
         guard let truncationPlace = truncationPlace else { return }
 
         let lastIndex = context.textLines.count - 1
         let lastLine = context.textLines[lastIndex]
+        let lastRange = lastLine.codeUnitRange
 
         // No need to truncate if frame range is already covered.
-        if lastLine.endIndex == frameEnd {
+        if lastRange.upperBound == frameEnd {
             return
         }
 
@@ -383,8 +396,8 @@ public class FrameResolver {
         context.occupiedHeight = context.lastSize.height
 
         // Create the truncated line and resolve its attributes.
-        let lineRange = lastLine.startIndex ..< frameEnd
-        let textLine = typesetter.makeTruncatedLine(characterRange: lineRange,
+        let lineRange = lastRange.lowerBound ..< frameEnd
+        let textLine = typesetter.makeTruncatedLine(codeUnitRange: lineRange,
                                                     extent: context.lineExtent,
                                                     breakMode: truncationMode,
                                                     truncationPlace: truncationPlace,
