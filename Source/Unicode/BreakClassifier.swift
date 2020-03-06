@@ -55,30 +55,12 @@ class BreakClassifier {
         return BackwardGraphemeBreakSequence(string: string, characterRange: characterRange)
     }
 
-    func forwardGraphemeBreaks(forCharacterRange range: Range<String.Index>) -> ForwardGraphemeBreakSequence {
-        return ForwardGraphemeBreakSequence(string: string, characterRange: range)
-    }
-
-    func backwardGraphemeBreaks(forCharacterRange range: Range<String.Index>) -> BackwardGraphemeBreakSequence {
-        return BackwardGraphemeBreakSequence(string: string, characterRange: range)
-    }
-
     func forwardLineBreaks(forCodeUnitRange range: Range<Int>) -> ForwardLineBreakSequence {
         return ForwardLineBreakSequence(self, codeUnitRange: range)
     }
 
     func backwardLineBreaks(forCodeUnitRange range: Range<Int>) -> BackwardLineBreakSequence {
         return BackwardLineBreakSequence(self, codeUnitRange: range)
-    }
-
-    func forwardLineBreaks(forCharacterRange range: Range<String.Index>) -> ForwardLineBreakSequence {
-        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: range)
-        return ForwardLineBreakSequence(self, codeUnitRange: codeUnitRange)
-    }
-
-    func backwardLineBreaks(forCharacterRange range: Range<String.Index>) -> BackwardLineBreakSequence {
-        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: range)
-        return BackwardLineBreakSequence(self, codeUnitRange: codeUnitRange)
     }
 }
 

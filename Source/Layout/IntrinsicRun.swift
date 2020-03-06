@@ -103,15 +103,4 @@ class IntrinsicRun {
 
         return collection.distance(of: lowerBound ..< upperBound, isRTL: isRTL)
     }
-
-    func measureCharacters(in range: Range<String.Index>) -> CGFloat {
-        let collection = CaretEdgeCollection(allEdges: caretEdges)
-        let chunkRange: Range<Int> = string.utf16Range(forCharacterRange: range)
-
-        let runStart = codeUnitRange.lowerBound
-        let lowerBound = chunkRange.lowerBound - runStart
-        let upperBound = chunkRange.upperBound - runStart
-
-        return collection.distance(of: lowerBound ..< upperBound, isRTL: isRTL)
-    }
 }

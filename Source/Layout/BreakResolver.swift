@@ -94,13 +94,6 @@ struct BreakResolver {
         }
     }
 
-    func findForwardBreak(for extent: CGFloat, in characterRange: Range<String.Index>, with breakMode: BreakMode) -> String.Index {
-        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: characterRange)
-        let breakIndex = findForwardBreak(for: extent, in: codeUnitRange, with: breakMode)
-
-        return string.characterIndex(forUTF16Index: breakIndex)
-    }
-
     func findBackwardBreak(for extent: CGFloat, in codeUnitRange: Range<Int>, with breakMode: BreakMode) -> Int {
         let paragraph = paragraphs.paragraph(forCodeUnitAt: codeUnitRange.lowerBound)
         let minIndex = min(codeUnitRange.lowerBound, paragraph.codeUnitRange.lowerBound)
@@ -114,13 +107,6 @@ struct BreakResolver {
             let sequence = breaks.backwardLineBreaks(forCodeUnitRange: clampedRange)
             return findBackwardBreak(for: extent, in: sequence, from: codeUnitRange.upperBound)
         }
-    }
-
-    func findBackwardBreak(for extent: CGFloat, in characterRange: Range<String.Index>, with breakMode: BreakMode) -> String.Index {
-        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: characterRange)
-        let breakIndex = findBackwardBreak(for: extent, in: codeUnitRange, with: breakMode)
-
-        return string.characterIndex(forUTF16Index: breakIndex)
     }
 
     private func suggestForwardCharacterBreak(for extent: CGFloat, in codeUnitRange: Range<Int>) -> Int {
