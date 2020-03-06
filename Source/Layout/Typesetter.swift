@@ -68,8 +68,12 @@ public class Typesetter {
     ///   - mode: The requested break mode.
     /// - Returns: The index (exclusive) that would cause the break.
     public func suggestForwardBreak(inCharacterRange characterRange: Range<String.Index>, extent: CGFloat, breakMode: BreakMode) -> String.Index {
-        let breakResolver = BreakResolver(string: text.string, paragraphs: paragraphs, runs: runs, breaks: breaks)
-        return breakResolver.suggestForwardBreak(for: extent, in: characterRange, with: breakMode)
+        let string = text.string
+        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: characterRange)
+        let breakIndex = suggestForwardBreak(inCodeUnitRange: codeUnitRange,
+                                             extent: extent, breakMode: breakMode)
+
+        return string.characterIndex(forUTF16Index: breakIndex)
     }
 
     /// Suggests a backward break index based on the specified range and the extent. The measurement
@@ -96,8 +100,12 @@ public class Typesetter {
     ///   - mode: The requested break mode.
     /// - Returns: The index (inclusive) that would cause the break.
     public func suggestBackwardBreak(inCharacterRange characterRange: Range<String.Index>, extent: CGFloat, breakMode: BreakMode) -> String.Index {
-        let breakResolver = BreakResolver(string: text.string, paragraphs: paragraphs, runs: runs, breaks: breaks)
-        return breakResolver.suggestBackwardBreak(for: extent, in: characterRange, with: breakMode)
+        let string = text.string
+        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: characterRange)
+        let breakIndex = suggestBackwardBreak(inCodeUnitRange: codeUnitRange,
+                                              extent: extent, breakMode: breakMode)
+
+        return string.characterIndex(forUTF16Index: breakIndex)
     }
 
     /// Creates a simple line having the specified UTF-16 range.

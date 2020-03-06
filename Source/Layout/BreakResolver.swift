@@ -162,13 +162,6 @@ struct BreakResolver {
         }
     }
 
-    func suggestForwardBreak(for extent: CGFloat, in characterRange: Range<String.Index>, with breakMode: BreakMode) -> String.Index {
-        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: characterRange)
-        let breakIndex = suggestForwardBreak(for: extent, in: codeUnitRange, with: breakMode)
-
-        return string.characterIndex(forUTF16Index: breakIndex)
-    }
-
     func suggestBackwardBreak(for extent: CGFloat, in codeUnitRange: Range<Int>, with breakMode: BreakMode) -> Int {
         switch breakMode {
         case .character:
@@ -176,12 +169,5 @@ struct BreakResolver {
         case .line:
             return suggestBackwardLineBreak(for: extent, in: codeUnitRange)
         }
-    }
-
-    func suggestBackwardBreak(for extent: CGFloat, in characterRange: Range<String.Index>, with breakMode: BreakMode) -> String.Index {
-        let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: characterRange)
-        let breakIndex = suggestBackwardBreak(for: extent, in: codeUnitRange, with: breakMode)
-
-        return string.characterIndex(forUTF16Index: breakIndex)
     }
 }
