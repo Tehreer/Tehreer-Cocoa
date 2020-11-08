@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -149,7 +149,7 @@ class OpenTypeInfoViewController: UITableViewController {
         shapingEngine.languageTag = languageTag
 
         let textRange = sourceText.startIndex ..< sourceText.endIndex
-        let shapingResult = shapingEngine.shape(text: sourceText, range: textRange)
+        let shapingResult = shapingEngine.shape(text: sourceText, characterRange: textRange)
         let clusterMap = shapingResult.clusterMap
         let length = clusterMap.count
 
