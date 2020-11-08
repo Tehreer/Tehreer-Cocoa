@@ -68,8 +68,9 @@ class GlyphDetailCell: UITableViewCell {
 class ClusterDetailCell: UITableViewCell, UITableViewDataSource {
     @IBOutlet private weak var charactersTableView: UITableView!
     @IBOutlet private weak var glyphsTableView: UITableView!
-    @IBOutlet private weak var charactersHeightConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var glyphsHeightConstraint: NSLayoutConstraint!
+
+    @IBOutlet private var charactersHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private var glyphsHeightConstraint: NSLayoutConstraint!
 
     private var clusterDetail: ClusterDetail!
 
