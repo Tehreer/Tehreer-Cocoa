@@ -310,7 +310,7 @@ public class Renderer {
                     width: size.width,
                     height: size.height)
 
-                maskImage.draw(in: rect)
+                context.draw(maskImage, in: rect)
             }
 
             if !reverseMode {

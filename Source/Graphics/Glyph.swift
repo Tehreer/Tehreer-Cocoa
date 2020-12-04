@@ -24,7 +24,7 @@ class Glyph {
 
     private(set) var lsb: Int = .zero
     private(set) var tsb: Int = .zero
-    private(set) var image: UIImage?
+    private(set) var image: CGLayer?
     private(set) var outline: FT_Glyph?
 
     private(set) var path: CGPath?
@@ -37,13 +37,8 @@ class Glyph {
         FT_Done_Glyph(outline)
     }
 
-    func own(image: CGImage?, left: Int, top: Int) {
-        if let image = image {
-            self.image = UIImage(cgImage: image).withRenderingMode(.alwaysTemplate)
-        } else {
-            self.image = nil
-        }
-
+    func own(image: CGLayer?, left: Int, top: Int) {
+        self.image = image
         self.lsb = left
         self.tsb = top
     }

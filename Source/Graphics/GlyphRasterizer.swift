@@ -20,6 +20,7 @@ import FreeType
 
 class GlyphRasterizer {
     private static var decode: [CGFloat] = [1.0, 0.0]
+    private static var colorSpace = CGColorSpaceCreateDeviceGray()
 
     let typeface: Typeface
 
@@ -48,26 +49,23 @@ class GlyphRasterizer {
         FT_Set_Transform(face, &transform, nil)
     }
 
-    private func makeImage(bitmap: UnsafePointer<FT_Bitmap>) -> CGImage? {
+    private func makeImage(bitmap: UnsafePointer<FT_Bitmap>) -> CGLayer? {
         let pixelMode = bitmap.pointee.pixel_mode
-        var glyphImage: CGImage?
+        var glyphImage: CGLayer?
 
         switch (pixelMode) {
         case UInt8(FT_PIXEL_MODE_GRAY.rawValue):
             let bitmapLength = Int(bitmap.pointee.width * bitmap.pointee.rows)
             if bitmapLength > 0 {
-                let data = UnsafeMutablePointer<UInt8>.allocate(capacity: bitmapLength)
-                data.assign(from: bitmap.pointee.buffer, count: bitmapLength)
+                let data = bitmap.pointee.buffer!
 
                 let provider = CGDataProvider(
                     dataInfo: nil,
                     data: data,
                     size: bitmapLength,
-                    releaseData: { (info, data, size) in
-                        data.deallocate()
-                    })!
+                    releaseData: { (info, data, size) in })!
 
-                glyphImage = CGImage(
+                let mask = CGImage(
                     maskWidth: Int(bitmap.pointee.width),
                     height: Int(bitmap.pointee.rows),
                     bitsPerComponent: 8,
@@ -75,7 +73,28 @@ class GlyphRasterizer {
                     bytesPerRow: Int(bitmap.pointee.width),
                     provider: provider,
                     decode: &GlyphRasterizer.decode,
-                    shouldInterpolate: false)
+                    shouldInterpolate: false)!
+
+                let context = CGContext(
+                    data: data,
+                    width: Int(bitmap.pointee.width),
+                    height: Int(bitmap.pointee.rows),
+                    bitsPerComponent: 8,
+                    bytesPerRow: Int(bitmap.pointee.width),
+                    space: GlyphRasterizer.colorSpace,
+                    bitmapInfo: CGImageAlphaInfo.alphaOnly.rawValue)!
+
+                let rect = CGRect(
+                    x: 0.0, y: 0.0,
+                    width: CGFloat(bitmap.pointee.width),
+                    height: CGFloat(bitmap.pointee.rows))
+
+                glyphImage = CGLayer(context, size: rect.size, auxiliaryInfo: nil)
+
+                let glyphContext = glyphImage?.context
+                glyphContext?.translateBy(x: 0, y: rect.height)
+                glyphContext?.scaleBy(x: 1.0, y: -1.0)
+                glyphContext?.draw(mask, in: rect)
             }
 
         default:
@@ -85,8 +104,8 @@ class GlyphRasterizer {
         return glyphImage
     }
 
-    func makeImage(glyphID: GlyphID) -> (image: CGImage?, left: Int, top: Int) {
-        var glyphImage: CGImage?
+    func makeImage(glyphID: GlyphID) -> (image: CGLayer?, left: Int, top: Int) {
+        var glyphImage: CGLayer?
         var left = 0
         var top = 0
 
@@ -146,7 +165,7 @@ class GlyphRasterizer {
                 FT_Glyph_To_Bitmap(&baseGlyph, FT_RENDER_MODE_NORMAL, nil, 1)
 
                 let bitmapGlyph = UnsafeMutablePointer<FT_BitmapGlyphRec_>(OpaquePointer(baseGlyph))!
-                var strokeImage: CGImage? = nil
+                var strokeImage: CGLayer? = nil
                 var left = 0
                 var top = 0
 
