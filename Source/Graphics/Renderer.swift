@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,16 @@
 
 import Foundation
 import FreeType
+
+#if os(iOS)
+
 import UIKit
+
+#elseif os(macOS)
+
+import AppKit
+
+#endif
 
 /// The `Renderer` class represents a generic glyph renderer. It can be used to generate glyph
 /// paths, measure their bounding boxes and draw them in a `CGContext` object.
@@ -64,8 +73,17 @@ public class Renderer {
         updatePixelSizes()
     }
 
+    #if os(iOS)
+
     /// The fill color for glyphs. Its default value is `.black`.
     public var fillColor: UIColor = .black
+
+    #elseif os(macOS)
+
+    /// The fill color for glyphs. Its default value is `.black`.
+    public var fillColor: NSColor = .black
+
+    #endif
 
     /// The style, used for controlling how glyphs should appear while drawing. Its default value is
     /// `.fill`.
@@ -121,8 +139,17 @@ public class Renderer {
         }
     }
 
+    #if os(iOS)
+
     /// The stroke color for glyphs. Its default value is `.black`.
     public var strokeColor: UIColor = .black
+
+    #elseif os(macOS)
+
+    /// The stroke color for glyphs. Its default value is `.black`.
+    public var strokeColor: NSColor = .black
+
+    #endif
 
     /// The width, in pixels, for stroking glyphs.
     public var strokeWidth: CGFloat = 1.0 {
@@ -156,8 +183,17 @@ public class Renderer {
     /// The vertical shadow offset in pixels.
     public var shadowDy: CGFloat = 0.0
 
+    #if os(iOS)
+
     /// The shadow color.
     public var shadowColor: UIColor = .black
+
+    #elseif os(macOS)
+
+    /// The shadow color.
+    public var shadowColor: NSColor = .black
+
+    #endif
 
     private func updatePixelSizes() {
         let pixelWidth = Int((typeSize * scaleX * renderScale * 64.0) + 0.5)
@@ -346,12 +382,6 @@ public class Renderer {
         context.translateBy(x: translation.width, y: translation.height)
         context.scaleBy(x: 1.0 / renderScale, y: 1.0 / renderScale)
 
-        // Push the context, if needed.
-        let current = UIGraphicsGetCurrentContext()
-        if context !== current {
-            UIGraphicsPushContext(context)
-        }
-
         if renderingStyle == .fill || renderingStyle == .fillStroke {
             context.setFillColor(fillColor.cgColor)
             drawGlyphs(in: context, glyphIDs: glyphIDs, offsets: offsets, advances: advances, strokeMode: false)
@@ -365,10 +395,5 @@ public class Renderer {
         // Reset the scale and the translation.
         context.scaleBy(x: renderScale, y: renderScale)
         context.translateBy(x: -translation.width, y: -translation.height)
-
-        // Pop the context, if needed.
-        if context !== current {
-            UIGraphicsPopContext()
-        }
     }
 }

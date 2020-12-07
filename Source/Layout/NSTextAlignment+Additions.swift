@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2020 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,15 @@
 // limitations under the License.
 //
 
+#if os(iOS)
+
 import UIKit
+
+#elseif os(macOS)
+
+import AppKit
+
+#endif
 
 extension NSTextAlignment {
     func flushFactor(for paragraphLevel: UInt8) -> CGFloat {

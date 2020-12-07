@@ -16,7 +16,16 @@
 
 import CoreGraphics
 import Foundation
+
+#if os(iOS)
+
 import UIKit
+
+#elseif os(macOS)
+
+import AppKit
+
+#endif
 
 private struct TextSpan<Attribute> {
     let attribute: Attribute
