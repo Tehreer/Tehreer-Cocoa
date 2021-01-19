@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import Foundation
 import FreeType
 
-struct GlyphStrike {
+struct GlyphKey {
     var typeface: Typeface!
     var pixelWidth: FT_F26Dot6      // 26.6 fixed-point value.
     var pixelHeight: FT_F26Dot6     // 26.6 fixed-point value.
@@ -31,8 +31,8 @@ struct GlyphStrike {
     }
 }
 
-extension GlyphStrike: Hashable {
-    static func ==(lhs: GlyphStrike, rhs: GlyphStrike) -> Bool {
+extension GlyphKey: Hashable {
+    static func ==(lhs: GlyphKey, rhs: GlyphKey) -> Bool {
         return lhs.typeface === rhs.typeface
             && lhs.pixelWidth == rhs.pixelWidth
             && lhs.pixelHeight == rhs.pixelHeight

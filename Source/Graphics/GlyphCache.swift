@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
     static let instance = GlyphCache(capacity: 8192 * 1024)
 
     private let mutex = Mutex()
-    private var segments: [GlyphStrike: FontCache] = [:]
+    private var segments: [GlyphKey: FontCache] = [:]
 
     init(capacity: Int) {
         super.init(capacity: capacity, dummyPair: (1, Glyph(glyphID: 0)))
@@ -50,7 +50,7 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
         segments.removeAll()
     }
 
-    private func secureGlyph(for strike: GlyphStrike, _ glyphID: GlyphID) -> (FontCache, Glyph) {
+    private func secureGlyph(for strike: GlyphKey, _ glyphID: GlyphID) -> (FontCache, Glyph) {
         return mutex.synchronized {
             let fontCache: FontCache
             let glyph: Glyph
@@ -73,7 +73,7 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
         }
     }
 
-    func maskGlyph(with strike: GlyphStrike, for glyphID: GlyphID) -> Glyph {
+    func maskGlyph(with strike: GlyphKey, for glyphID: GlyphID) -> Glyph {
         let (fontCache, glyph) = secureGlyph(for: strike, glyphID)
 
         if glyph.image == nil {
@@ -92,7 +92,7 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
         return glyph
     }
 
-    func maskGlyph(with strike: GlyphStrike, for glyphID: GlyphID, lineRadius: FT_Fixed, lineCap: FT_Stroker_LineCap, lineJoin: FT_Stroker_LineJoin, miterLimit: FT_Fixed) -> Glyph {
+    func maskGlyph(with strike: GlyphKey, for glyphID: GlyphID, lineRadius: FT_Fixed, lineCap: FT_Stroker_LineCap, lineJoin: FT_Stroker_LineJoin, miterLimit: FT_Fixed) -> Glyph {
         let (fontCache, glyph) = secureGlyph(for: strike, glyphID)
 
         if glyph.outline == nil {
@@ -117,7 +117,7 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
                                                      miterLimit: miterLimit)
     }
 
-    func glyphPath(with strike: GlyphStrike, for glyphID: GlyphID) -> CGPath? {
+    func glyphPath(with strike: GlyphKey, for glyphID: GlyphID) -> CGPath? {
         let (fontCache, glyph) = secureGlyph(for: strike, glyphID)
 
         if glyph.path == nil {

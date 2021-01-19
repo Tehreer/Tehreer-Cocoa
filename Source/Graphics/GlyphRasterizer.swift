@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ class GlyphRasterizer {
     private var size: FT_Size!
     private var transform: FT_Matrix
 
-    init(_ strike: GlyphStrike) {
+    init(_ strike: GlyphKey) {
         self.typeface = strike.typeface
         self.transform = FT_Matrix(xx: 0x10000, xy: -strike.skewX, yx: 0, yy: 0x10000)
 

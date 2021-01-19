@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ public class Renderer {
         case round = 0
     }
 
-    private var glyphStrike: GlyphStrike = GlyphStrike()
+    private var glyphStrike: GlyphKey = GlyphKey()
     private var glyphLineRadius: Int = 32
     private var glyphMiterLimit: Int = 0x10000
     private var shouldRender: Bool = false
