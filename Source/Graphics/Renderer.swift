@@ -54,7 +54,7 @@ public class Renderer {
         case round = 0
     }
 
-    private var glyphStrike: GlyphKey = GlyphKey()
+    private var glyphStrike: GlyphKey = GlyphKey.Data()
     private var glyphLineRadius: Int = 32
     private var glyphMiterLimit: Int = 0x10000
     private var shouldRender: Bool = false

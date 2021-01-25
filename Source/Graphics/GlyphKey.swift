@@ -17,26 +17,34 @@
 import Foundation
 import FreeType
 
-struct GlyphKey {
-    var typeface: Typeface!
-    var pixelWidth: FT_F26Dot6      // 26.6 fixed-point value.
-    var pixelHeight: FT_F26Dot6     // 26.6 fixed-point value.
-    var skewX: FT_Fixed             // 16.16 fixed-point value.
+class GlyphKey: Hashable {
+    var typeface: Typeface! = nil
+    var pixelWidth: FT_F26Dot6 = 0  // 26.6 fixed-point value.
+    var pixelHeight: FT_F26Dot6 = 0 // 26.6 fixed-point value.
+    var skewX: FT_Fixed = 0         // 16.16 fixed-point value.
 
-    init() {
-        typeface = nil
-        pixelWidth = 0
-        pixelHeight = 0
-        skewX = 0
+    fileprivate init() { }
+
+    func copy() -> GlyphKey {
+        fatalError()
     }
-}
 
-extension GlyphKey: Hashable {
+    fileprivate func set(from key: GlyphKey) {
+        typeface = key.typeface
+        pixelWidth = key.pixelWidth
+        pixelHeight = key.pixelHeight
+        skewX = key.skewX
+    }
+
+    fileprivate func equals(_ key: GlyphKey) -> Bool {
+        return typeface === key.typeface
+            && pixelWidth == key.pixelWidth
+            && pixelHeight == key.pixelHeight
+            && skewX == key.skewX
+    }
+
     static func ==(lhs: GlyphKey, rhs: GlyphKey) -> Bool {
-        return lhs.typeface === rhs.typeface
-            && lhs.pixelWidth == rhs.pixelWidth
-            && lhs.pixelHeight == rhs.pixelHeight
-            && lhs.skewX == rhs.skewX
+        return lhs.equals(rhs)
     }
 
     func hash(into hasher: inout Hasher) {
@@ -47,5 +55,29 @@ extension GlyphKey: Hashable {
         hasher.combine(pixelWidth)
         hasher.combine(pixelHeight)
         hasher.combine(skewX)
+    }
+}
+
+extension GlyphKey {
+    final class Data: GlyphKey {
+        override init() { }
+
+        override func copy() -> Data {
+            let key = Data()
+            key.set(from: self)
+
+            return key
+        }
+
+        override func equals(_ key: GlyphKey) -> Bool {
+            if self === key {
+                return true
+            }
+            guard let key = key as? Data else {
+                return false
+            }
+
+            return super.equals(key)
+        }
     }
 }

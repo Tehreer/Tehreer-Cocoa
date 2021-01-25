@@ -60,7 +60,7 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
             } else {
                 let rasterizer = GlyphRasterizer(strike)
                 fontCache = FontCache(cache: self, rasterizer: rasterizer)
-                segments[strike] = fontCache
+                segments[strike.copy()] = fontCache
             }
 
             if let value = fontCache.value(forKey: glyphID) {
