@@ -50,17 +50,17 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
         segments.removeAll()
     }
 
-    private func secureGlyph(for strike: GlyphKey, _ glyphID: GlyphID) -> (FontCache, Glyph) {
+    private func secureGlyph(for key: GlyphKey, _ glyphID: GlyphID) -> (FontCache, Glyph) {
         return mutex.synchronized {
             let fontCache: FontCache
             let glyph: Glyph
 
-            if let value = segments[strike] {
+            if let value = segments[key] {
                 fontCache = value
             } else {
-                let rasterizer = GlyphRasterizer(strike)
+                let rasterizer = GlyphRasterizer(key)
                 fontCache = FontCache(cache: self, rasterizer: rasterizer)
-                segments[strike.copy()] = fontCache
+                segments[key.copy()] = fontCache
             }
 
             if let value = fontCache.value(forKey: glyphID) {
@@ -73,8 +73,8 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
         }
     }
 
-    func maskGlyph(with strike: GlyphKey, for glyphID: GlyphID) -> Glyph {
-        let (fontCache, glyph) = secureGlyph(for: strike, glyphID)
+    func maskGlyph(with key: GlyphKey, for glyphID: GlyphID) -> Glyph {
+        let (fontCache, glyph) = secureGlyph(for: key, glyphID)
 
         if glyph.image == nil {
             let result = fontCache.rasterizer.makeImage(glyphID: glyph.glyphID)
@@ -92,8 +92,8 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
         return glyph
     }
 
-    func maskGlyph(with strike: GlyphKey, for glyphID: GlyphID, lineRadius: FT_Fixed, lineCap: FT_Stroker_LineCap, lineJoin: FT_Stroker_LineJoin, miterLimit: FT_Fixed) -> Glyph {
-        let (fontCache, glyph) = secureGlyph(for: strike, glyphID)
+    func maskGlyph(with key: GlyphKey, for glyphID: GlyphID, lineRadius: FT_Fixed, lineCap: FT_Stroker_LineCap, lineJoin: FT_Stroker_LineJoin, miterLimit: FT_Fixed) -> Glyph {
+        let (fontCache, glyph) = secureGlyph(for: key, glyphID)
 
         if glyph.outline == nil {
             let outline = fontCache.rasterizer.makeOutline(glyphID: glyph.glyphID)
@@ -117,8 +117,8 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
                                                      miterLimit: miterLimit)
     }
 
-    func glyphPath(with strike: GlyphKey, for glyphID: GlyphID) -> CGPath? {
-        let (fontCache, glyph) = secureGlyph(for: strike, glyphID)
+    func glyphPath(with key: GlyphKey, for glyphID: GlyphID) -> CGPath? {
+        let (fontCache, glyph) = secureGlyph(for: key, glyphID)
 
         if glyph.path == nil {
             let path = fontCache.rasterizer.makePath(glyphID: glyphID)

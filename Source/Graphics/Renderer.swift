@@ -54,7 +54,7 @@ public class Renderer {
         case round = 0
     }
 
-    private var glyphStrike: GlyphKey = GlyphKey.Data()
+    private var glyphKey = GlyphKey.Data()
     private var glyphLineRadius: Int = 32
     private var glyphMiterLimit: Int = 0x10000
     private var shouldRender: Bool = false
@@ -78,7 +78,7 @@ public class Renderer {
     /// The typeface, used for drawing glyphs.
     public var typeface: Typeface! = nil {
         didSet {
-            glyphStrike.typeface = typeface
+            glyphKey.typeface = typeface
         }
     }
 
@@ -165,16 +165,16 @@ public class Renderer {
 
         // Minimum size supported by Freetype is 64x64.
         shouldRender = (pixelWidth >= 64 && pixelHeight >= 64)
-        glyphStrike.pixelWidth = pixelWidth
-        glyphStrike.pixelHeight = pixelHeight
+        glyphKey.pixelWidth = pixelWidth
+        glyphKey.pixelHeight = pixelHeight
     }
 
     private func updateTransform() {
-        glyphStrike.skewX = Int((slantAngle * 0x10000) + 0.5)
+        glyphKey.skewX = Int((slantAngle * 0x10000) + 0.5)
     }
 
     private func cachedPath(forGlyph glyphID: GlyphID) -> CGPath? {
-        return GlyphCache.instance.glyphPath(with: glyphStrike, for: glyphID)
+        return GlyphCache.instance.glyphPath(with: glyphKey, for: glyphID)
     }
 
     /// Generates the path of specified glyph.
@@ -218,7 +218,7 @@ public class Renderer {
     }
 
     private func cachedBoundingBox(forGlyph glyphID: GlyphID) -> CGRect {
-        let glyph = GlyphCache.instance.maskGlyph(with: glyphStrike, for: glyphID)
+        let glyph = GlyphCache.instance.maskGlyph(with: glyphKey, for: glyphID)
 
         return CGRect(x: CGFloat(glyph.lsb) / renderScale,
                       y: CGFloat(glyph.tsb) / renderScale,
@@ -291,10 +291,10 @@ public class Renderer {
             let maskGlyph: Glyph
 
             if !strokeMode {
-                maskGlyph = cache.maskGlyph(with: glyphStrike, for: glyphID)
+                maskGlyph = cache.maskGlyph(with: glyphKey, for: glyphID)
             } else {
                 maskGlyph = cache.maskGlyph(
-                    with: glyphStrike,
+                    with: glyphKey,
                     for: glyphID,
                     lineRadius: glyphLineRadius,
                     lineCap: FT_Stroker_LineCap(UInt32(strokeCap.rawValue)),

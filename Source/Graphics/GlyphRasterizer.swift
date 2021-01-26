@@ -26,14 +26,14 @@ class GlyphRasterizer {
     private var size: FT_Size!
     private var transform: FT_Matrix
 
-    init(_ strike: GlyphKey) {
-        self.typeface = strike.typeface
-        self.transform = FT_Matrix(xx: 0x10000, xy: -strike.skewX, yx: 0, yy: 0x10000)
+    init(_ key: GlyphKey) {
+        self.typeface = key.typeface
+        self.transform = FT_Matrix(xx: 0x10000, xy: -key.skewX, yx: 0, yy: 0x10000)
 
         typeface.withFreeTypeFace { (face) in
             FT_New_Size(face, &size)
             FT_Activate_Size(size)
-            FT_Set_Char_Size(face, strike.pixelWidth, strike.pixelHeight, 0, 0)
+            FT_Set_Char_Size(face, key.pixelWidth, key.pixelHeight, 0, 0)
         }
     }
 
