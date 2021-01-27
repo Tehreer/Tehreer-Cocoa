@@ -16,10 +16,12 @@
 		6E9734F122D4F0AA008863D0 /* FreeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734B122D4F0A9008863D0 /* FreeType.swift */; };
 		6E9734F222D4F0AA008863D0 /* Glyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734B222D4F0A9008863D0 /* Glyph.swift */; };
 		6E9734F322D4F0AA008863D0 /* GlyphCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734B322D4F0A9008863D0 /* GlyphCache.swift */; };
-		6E9734F422D4F0AA008863D0 /* GlyphRasterizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734B422D4F0A9008863D0 /* GlyphRasterizer.swift */; };
+		7D33A2FB25C188B400F9A02B /* GlyphImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D33A2FA25C188B400F9A02B /* GlyphImage.swift */; };
 		6E9734F522D4F0AA008863D0 /* GlyphKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734B522D4F0A9008863D0 /* GlyphKey.swift */; };
+		6E9734F422D4F0AA008863D0 /* GlyphRasterizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734B422D4F0A9008863D0 /* GlyphRasterizer.swift */; };
 		6E9734F622D4F0AA008863D0 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734B622D4F0A9008863D0 /* Renderer.swift */; };
 		6E9734F722D4F0AA008863D0 /* Typeface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734B722D4F0A9008863D0 /* Typeface.swift */; };
+		6EE0A44A2305C6D20061D4EB /* TypefaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */; };
 		6E9734FB22D4F0AA008863D0 /* BreakMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734BC22D4F0AA008863D0 /* BreakMode.swift */; };
 		6E9734FC22D4F0AA008863D0 /* BreakResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734BD22D4F0AA008863D0 /* BreakResolver.swift */; };
 		6E9734FD22D4F0AA008863D0 /* CaretEdgeCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E9734BE22D4F0AA008863D0 /* CaretEdgeCollection.swift */; };
@@ -106,7 +108,6 @@
 		6ECE4AFC23638DA9007D8839 /* unibreakbase.c in Sources */ = {isa = PBXBuildFile; fileRef = 6ECE46EA23638DA7007D8839 /* unibreakbase.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		6ECE4AFE23638DA9007D8839 /* unibreakdef.c in Sources */ = {isa = PBXBuildFile; fileRef = 6ECE46EC23638DA7007D8839 /* unibreakdef.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		6ECE4B0023638DA9007D8839 /* wordbreak.c in Sources */ = {isa = PBXBuildFile; fileRef = 6ECE46EE23638DA7007D8839 /* wordbreak.c */; settings = {COMPILER_FLAGS = "-w"; }; };
-		6EE0A44A2305C6D20061D4EB /* TypefaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -121,10 +122,12 @@
 		6E9734B122D4F0A9008863D0 /* FreeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FreeType.swift; sourceTree = "<group>"; };
 		6E9734B222D4F0A9008863D0 /* Glyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Glyph.swift; sourceTree = "<group>"; };
 		6E9734B322D4F0A9008863D0 /* GlyphCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlyphCache.swift; sourceTree = "<group>"; };
-		6E9734B422D4F0A9008863D0 /* GlyphRasterizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlyphRasterizer.swift; sourceTree = "<group>"; };
+		7D33A2FA25C188B400F9A02B /* GlyphImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphImage.swift; sourceTree = "<group>"; };
 		6E9734B522D4F0A9008863D0 /* GlyphKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlyphKey.swift; sourceTree = "<group>"; };
+		6E9734B422D4F0A9008863D0 /* GlyphRasterizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlyphRasterizer.swift; sourceTree = "<group>"; };
 		6E9734B622D4F0A9008863D0 /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		6E9734B722D4F0A9008863D0 /* Typeface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Typeface.swift; sourceTree = "<group>"; };
+		6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypefaceManager.swift; sourceTree = "<group>"; };
 		6E9734BC22D4F0AA008863D0 /* BreakMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakMode.swift; sourceTree = "<group>"; };
 		6E9734BD22D4F0AA008863D0 /* BreakResolver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakResolver.swift; sourceTree = "<group>"; };
 		6E9734BE22D4F0AA008863D0 /* CaretEdgeCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaretEdgeCollection.swift; sourceTree = "<group>"; };
@@ -686,7 +689,6 @@
 		6ECE4B6F2363928E007D8839 /* ftcolor.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ftcolor.c; sourceTree = "<group>"; };
 		6ECE4B702363928E007D8839 /* ftcalc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ftcalc.c; sourceTree = "<group>"; };
 		6ECE4B712363928F007D8839 /* ftutil.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ftutil.c; sourceTree = "<group>"; };
-		6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypefaceManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -748,8 +750,9 @@
 				6E9734B122D4F0A9008863D0 /* FreeType.swift */,
 				6E9734B222D4F0A9008863D0 /* Glyph.swift */,
 				6E9734B322D4F0A9008863D0 /* GlyphCache.swift */,
-				6E9734B422D4F0A9008863D0 /* GlyphRasterizer.swift */,
+				7D33A2FA25C188B400F9A02B /* GlyphImage.swift */,
 				6E9734B522D4F0A9008863D0 /* GlyphKey.swift */,
+				6E9734B422D4F0A9008863D0 /* GlyphRasterizer.swift */,
 				6E9734B622D4F0A9008863D0 /* Renderer.swift */,
 				6E9734B722D4F0A9008863D0 /* Typeface.swift */,
 				6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */,
@@ -1798,8 +1801,9 @@
 				6E9734F122D4F0AA008863D0 /* FreeType.swift in Sources */,
 				6E9734F222D4F0AA008863D0 /* Glyph.swift in Sources */,
 				6E9734F322D4F0AA008863D0 /* GlyphCache.swift in Sources */,
-				6E9734F422D4F0AA008863D0 /* GlyphRasterizer.swift in Sources */,
+				7D33A2FB25C188B400F9A02B /* GlyphImage.swift in Sources */,
 				6E9734F522D4F0AA008863D0 /* GlyphKey.swift in Sources */,
+				6E9734F422D4F0AA008863D0 /* GlyphRasterizer.swift in Sources */,
 				6E9734F622D4F0AA008863D0 /* Renderer.swift in Sources */,
 				6E9734F722D4F0AA008863D0 /* Typeface.swift in Sources */,
 				6EE0A44A2305C6D20061D4EB /* TypefaceManager.swift in Sources */,
