@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,11 +22,8 @@ import UIKit
 class Glyph {
     let glyphID: GlyphID
 
-    private(set) var lsb: Int = .zero
-    private(set) var tsb: Int = .zero
-    private(set) var image: UIImage?
+    private(set) var image: GlyphImage?
     private(set) var outline: FT_Glyph?
-
     private(set) var path: CGPath?
 
     init(glyphID: GlyphID) {
@@ -39,13 +36,10 @@ class Glyph {
 
     func own(image: CGImage?, left: Int, top: Int) {
         if let image = image {
-            self.image = UIImage(cgImage: image).withRenderingMode(.alwaysTemplate)
+            self.image = GlyphImage(image: UIImage(cgImage: image).withRenderingMode(.alwaysTemplate), left: CGFloat(left), top: CGFloat(top))
         } else {
             self.image = nil
         }
-
-        self.lsb = left
-        self.tsb = top
     }
 
     func own(outline: FT_Glyph?) {

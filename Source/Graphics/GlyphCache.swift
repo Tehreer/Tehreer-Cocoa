@@ -27,11 +27,11 @@ private class FontCache: LRUSegment<UInt16, Glyph> {
     }
 
     override func sizeOf(key: UInt16, value: Glyph) -> Int {
-        guard let imageSize = value.image?.size else {
+        guard let image = value.image else {
             return 0
         }
 
-        return Int(imageSize.width * imageSize.height)
+        return Int(image.width * image.height)
     }
 }
 

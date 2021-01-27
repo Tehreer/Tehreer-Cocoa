@@ -218,12 +218,14 @@ public class Renderer {
     }
 
     private func cachedBoundingBox(forGlyph glyphID: GlyphID) -> CGRect {
-        let glyph = GlyphCache.instance.maskGlyph(with: glyphKey, for: glyphID)
+        if let glyphImage = GlyphCache.instance.maskGlyph(with: glyphKey, for: glyphID).image {
+            return CGRect(x: glyphImage.left / renderScale,
+                          y: glyphImage.top / renderScale,
+                          width: glyphImage.width / renderScale,
+                          height: glyphImage.height / renderScale)
+        }
 
-        return CGRect(x: CGFloat(glyph.lsb) / renderScale,
-                      y: CGFloat(glyph.tsb) / renderScale,
-                      width: CGFloat(glyph.image?.size.width ?? 0) / renderScale,
-                      height: CGFloat(glyph.image?.size.height ?? 0) / renderScale)
+        return .zero
     }
 
     /// Calculates the bounding box of specified glyph.
@@ -303,14 +305,13 @@ public class Renderer {
             }
 
             if let maskImage = maskGlyph.image {
-                let size = maskImage.size
                 let rect = CGRect(
-                    x: round(penX + offset.x + CGFloat(maskGlyph.lsb)),
-                    y: round(-offset.y - CGFloat(maskGlyph.tsb)),
-                    width: size.width,
-                    height: size.height)
+                    x: round(penX + offset.x + maskImage.left),
+                    y: round(-offset.y - maskImage.top),
+                    width: maskImage.width,
+                    height: maskImage.height)
 
-                maskImage.draw(in: rect)
+                maskImage.image.draw(in: rect)
             }
 
             if !reverseMode {
