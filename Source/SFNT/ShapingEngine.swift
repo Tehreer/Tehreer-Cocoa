@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -106,10 +106,10 @@ public class ShapingEngine {
     /// with glyph's advance after rendering it.
     ///
     /// - Parameters:
-    ///   - text: The text to shape into glyphs.
+    ///   - string: The text to shape into glyphs.
     ///   - codeUnitRange: The UTF-16 range of text to be shaped.
     /// - Returns: A new `ShapingResult` object.
-    public func shape(text: String, codeUnitRange: Range<Int>) -> ShapingResult {
+    public func shape(string: String, codeUnitRange: Range<Int>) -> ShapingResult {
         guard typeface != nil else {
             fatalError("Typeface was not set")
         }
@@ -133,8 +133,8 @@ public class ShapingEngine {
             SFPatternRelease(pattern)
         }
 
-        let characterRange = text.characterRange(forUTF16Range: codeUnitRange)
-        var codeUnits = Array(text[characterRange].utf16)
+        let characterRange = string.characterRange(forUTF16Range: codeUnitRange)
+        var codeUnits = Array(string[characterRange].utf16)
         let length = SFUInteger(codeUnits.count)
 
         codeUnits.withUnsafeMutableBufferPointer { (pointer) -> Void in
@@ -146,7 +146,7 @@ public class ShapingEngine {
             SFArtistFillAlbum(sfArtist, shapingResult.sfAlbum)
         }
 
-        shapingResult.setup(string: text,
+        shapingResult.setup(string: string,
                             codeUnitRange: codeUnitRange,
                             isBackward: shapingOrder == .backward,
                             sizeByEm: typeSize / CGFloat(typeface.unitsPerEm))
@@ -162,11 +162,11 @@ public class ShapingEngine {
     /// with glyph's advance after rendering it.
     ///
     /// - Parameters:
-    ///   - text: The text to shape into glyphs.
+    ///   - string: The text to shape into glyphs.
     ///   - characterRange: The character range of text to be shaped.
     /// - Returns: A new `ShapingResult` object.
-    public func shape(text: String, characterRange: Range<String.Index>) -> ShapingResult {
-        shape(text: text, codeUnitRange: text.utf16Range(forCharacterRange: characterRange))
+    public func shape(string: String, characterRange: Range<String.Index>) -> ShapingResult {
+        shape(string: string, codeUnitRange: string.utf16Range(forCharacterRange: characterRange))
     }
 }
 

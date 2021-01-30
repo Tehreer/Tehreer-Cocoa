@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ struct ShapeResolver {
             shapingEngine.typeface = typeface
             shapingEngine.typeSize = shapingRun.typeSize
 
-            let shapingResult = shapingEngine.shape(text: string, codeUnitRange: shapingRun.codeUnitRange)
+            let shapingResult = shapingEngine.shape(string: string, codeUnitRange: shapingRun.codeUnitRange)
 
             let typeSize = shapingRun.typeSize
             let sizeByEm = typeSize / CGFloat(typeface.unitsPerEm)
