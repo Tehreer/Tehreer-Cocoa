@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ public class BidiParagraph {
         SBParagraphRelease(paragraph)
     }
 
+    /// The UTF-16 range of this paragraph in source string.
     public var codeUnitRange: Range<Int> {
         let offset = Int(SBParagraphGetOffset(paragraph))
         let length = Int(SBParagraphGetLength(paragraph))
@@ -131,6 +132,10 @@ extension BidiParagraph {
             return count
         }
 
+        /// Accesses the embedding level at the specified character index.
+        ///
+        /// - Parameter index: A valid character index of the source string. It must be within the
+        ///                    paragraph's range.
         public subscript(index: String.Index) -> UInt8 {
             let paragraphRange = owner.codeUnitRange
             let codeUnitIndex = owner.buffer.string.utf16Index(forCharacterAt: index)
@@ -141,8 +146,8 @@ extension BidiParagraph {
 
         /// Accesses the embedding level at the specified position.
         ///
-        /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
-        ///                    `startIndex` and less than `endIndex`.
+        /// - Parameter index: The position of the element to access. `index` must be greater than
+        ///                    or equal to `startIndex` and less than `endIndex`.
         public subscript(index: Int) -> UInt8 {
             precondition(index >= 0 && index < count, String.indexOutOfRange)
 
