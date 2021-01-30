@@ -22,7 +22,7 @@ The [Apidocs](https://tehreer.github.io/Tehreer-Cocoa/apidocs/) are available fo
 
 ## License
 ```
-Copyright (C) 2019-2020 Muhammad Tayyab Akram
+Copyright (C) 2019-2021 Muhammad Tayyab Akram
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
