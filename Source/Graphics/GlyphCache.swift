@@ -77,13 +77,13 @@ class GlyphCache: LRUCache<UInt16, Glyph> {
         let (fontCache, glyph) = secureGlyph(for: key, glyphID)
 
         if glyph.image == nil {
-            let result = fontCache.rasterizer.makeImage(glyphID: glyph.glyphID)
+            let image = fontCache.rasterizer.makeImage(glyphID: glyph.glyphID)
 
             mutex.synchronized {
                 if glyph.image == nil {
                     fontCache.removeValue(forKey: glyphID)
 
-                    glyph.own(image: result.image, left: result.left, top: result.top)
+                    glyph.own(image: image)
                     fontCache.setValue(glyph, forKey: glyphID)
                 }
             }

@@ -20,6 +20,7 @@ import FreeType
 
 class GlyphRasterizer {
     private static var decode: [CGFloat] = [1.0, 0.0]
+    private static var colorSpace = CGColorSpaceCreateDeviceGray()
 
     let typeface: Typeface
 
@@ -48,26 +49,24 @@ class GlyphRasterizer {
         FT_Set_Transform(face, &transform, nil)
     }
 
-    private func makeImage(bitmap: UnsafePointer<FT_Bitmap>) -> CGImage? {
-        let pixelMode = bitmap.pointee.pixel_mode
-        var glyphImage: CGImage?
-
-        switch (pixelMode) {
+    private func makeLayer(bitmap: UnsafePointer<FT_Bitmap>) -> CGLayer? {
+        switch bitmap.pointee.pixel_mode {
         case UInt8(FT_PIXEL_MODE_GRAY.rawValue):
             let bitmapLength = Int(bitmap.pointee.width * bitmap.pointee.rows)
-            if bitmapLength > 0 {
-                let data = UnsafeMutablePointer<UInt8>.allocate(capacity: bitmapLength)
-                data.assign(from: bitmap.pointee.buffer, count: bitmapLength)
-
-                let provider = CGDataProvider(
+            guard bitmapLength > 0 else {
+                return nil
+            }
+            guard let data = bitmap.pointee.buffer else {
+                return nil
+            }
+            guard let provider = CGDataProvider(
                     dataInfo: nil,
                     data: data,
                     size: bitmapLength,
-                    releaseData: { (info, data, size) in
-                        data.deallocate()
-                    })!
-
-                glyphImage = CGImage(
+                    releaseData: { (info, data, size) in }) else {
+                return nil
+            }
+            guard let mask = CGImage(
                     maskWidth: Int(bitmap.pointee.width),
                     height: Int(bitmap.pointee.rows),
                     bitsPerComponent: 8,
@@ -75,36 +74,57 @@ class GlyphRasterizer {
                     bytesPerRow: Int(bitmap.pointee.width),
                     provider: provider,
                     decode: &GlyphRasterizer.decode,
-                    shouldInterpolate: false)
+                    shouldInterpolate: false) else {
+                return nil
             }
+            guard let context = CGContext(
+                    data: data,
+                    width: Int(bitmap.pointee.width),
+                    height: Int(bitmap.pointee.rows),
+                    bitsPerComponent: 8,
+                    bytesPerRow: Int(bitmap.pointee.width),
+                    space: GlyphRasterizer.colorSpace,
+                    bitmapInfo: CGImageAlphaInfo.alphaOnly.rawValue) else {
+                return nil
+            }
+
+            let rect = CGRect(x: 0.0, y: 0.0,
+                              width: CGFloat(bitmap.pointee.width),
+                              height: CGFloat(bitmap.pointee.rows))
+
+            let glyphLayer = CGLayer(context, size: rect.size, auxiliaryInfo: nil)
+
+            let glyphContext = glyphLayer?.context
+            glyphContext?.translateBy(x: 0, y: rect.height)
+            glyphContext?.scaleBy(x: 1.0, y: -1.0)
+            glyphContext?.draw(mask, in: rect)
+
+            return glyphLayer
 
         default:
             print("Unsupported pixel mode of freetype bitmap")
+            return nil
         }
-
-        return glyphImage
     }
 
-    func makeImage(glyphID: GlyphID) -> (image: CGImage?, left: Int, top: Int) {
-        var glyphImage: CGImage?
-        var left = 0
-        var top = 0
-
-        typeface.withFreeTypeFace { (face) in
+    func makeImage(glyphID: GlyphID) -> GlyphImage? {
+        return typeface.withFreeTypeFace { (face) in
             activate(for: face)
 
             if FT_Load_Glyph(face, FT_UInt(glyphID), FT_Int32(FT_LOAD_RENDER)) == FT_Err_Ok {
-                let glyphSlot = face.pointee.glyph
-                glyphImage = makeImage(bitmap: &glyphSlot!.pointee.bitmap)
+                let glyphSlot: FT_GlyphSlot! = face.pointee.glyph
 
-                if glyphImage != nil {
-                    left = Int(glyphSlot!.pointee.bitmap_left)
-                    top = Int(glyphSlot!.pointee.bitmap_top)
+                guard let glyphLayer = makeLayer(bitmap: &glyphSlot.pointee.bitmap) else {
+                    return nil
                 }
-            }
-        }
 
-        return (glyphImage, left, top)
+                return GlyphImage(layer: glyphLayer,
+                                  left: CGFloat(glyphSlot.pointee.bitmap_left),
+                                  top: CGFloat(glyphSlot.pointee.bitmap_top))
+            }
+
+            return nil
+        }
     }
 
     func makeOutline(glyphID: GlyphID) -> FT_Glyph? {
@@ -146,17 +166,12 @@ class GlyphRasterizer {
                 FT_Glyph_To_Bitmap(&baseGlyph, FT_RENDER_MODE_NORMAL, nil, 1)
 
                 let bitmapGlyph = UnsafeMutablePointer<FT_BitmapGlyphRec_>(OpaquePointer(baseGlyph))!
-                var strokeImage: CGImage? = nil
-                var left = 0
-                var top = 0
 
-                strokeImage = makeImage(bitmap: &bitmapGlyph.pointee.bitmap)
-                if strokeImage != nil {
-                    left = Int(bitmapGlyph.pointee.left)
-                    top = Int(bitmapGlyph.pointee.top)
+                if let strokeLayer = makeLayer(bitmap: &bitmapGlyph.pointee.bitmap) {
+                    result.own(image: GlyphImage(layer: strokeLayer,
+                                                 left: CGFloat(bitmapGlyph.pointee.left),
+                                                 top: CGFloat(bitmapGlyph.pointee.top)))
                 }
-
-                result.own(image: strokeImage, left: left, top: top)
 
                 // Dispose the stroked / bitmap glyph.
                 FT_Done_Glyph(baseGlyph)

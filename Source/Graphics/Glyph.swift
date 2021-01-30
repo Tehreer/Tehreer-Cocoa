@@ -34,12 +34,8 @@ class Glyph {
         FT_Done_Glyph(outline)
     }
 
-    func own(image: CGImage?, left: Int, top: Int) {
-        if let image = image {
-            self.image = GlyphImage(image: UIImage(cgImage: image).withRenderingMode(.alwaysTemplate), left: CGFloat(left), top: CGFloat(top))
-        } else {
-            self.image = nil
-        }
+    func own(image: GlyphImage?) {
+        self.image = image
     }
 
     func own(outline: FT_Glyph?) {

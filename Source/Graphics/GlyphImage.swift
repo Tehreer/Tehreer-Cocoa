@@ -14,25 +14,24 @@
 // limitations under the License.
 //
 
-import Foundation
-import UIKit
+import CoreGraphics
 
 class GlyphImage {
-    let image: UIImage
+    let layer: CGLayer
     let left: CGFloat
     let top: CGFloat
 
-    init(image: UIImage, left: CGFloat, top: CGFloat) {
-        self.image = image
+    init(layer: CGLayer, left: CGFloat, top: CGFloat) {
+        self.layer = layer
         self.left = left
         self.top = top
     }
 
     var width: CGFloat {
-        return image.size.width
+        return layer.size.width
     }
 
     var height: CGFloat {
-        return image.size.height
+        return layer.size.height
     }
 }
