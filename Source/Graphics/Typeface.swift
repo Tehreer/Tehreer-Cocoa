@@ -56,6 +56,17 @@ public class Typeface {
         case bold = 700
         case extraBold = 800
         case heavy = 900
+
+        static let allValues: [Typeface.Weight] = [
+            .thin, .extraLight, .light,
+            .regular, .medium, .semiBold,
+            .bold, .extraBold, .heavy
+        ]
+
+        init(value: UInt16) {
+            let index = Int((Float(value) / 100.0) - 0.5)
+            self = Typeface.Weight.allValues[max(0, min(8, index))]
+        }
     }
 
     /// Specifies the wideness of a typeface, in terms of the width of characters in relation to
