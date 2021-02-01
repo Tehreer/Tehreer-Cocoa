@@ -81,6 +81,17 @@ public class Typeface {
         case expanded = 7
         case extraExpanded = 8
         case ultraExpanded = 9
+
+        static let allValues: [Typeface.Width] = [
+            .ultraCondensed, .extraCondensed, .condensed,
+            .semiCondensed, .normal, .semiExpanded,
+            .expanded, .extraExpanded, .ultraExpanded
+        ]
+
+        init(value: UInt16) {
+            let index = Int(value - 1)
+            self = Typeface.Width.allValues[max(0, min(8, index))]
+        }
     }
 
     /// Specifies the slope of a typeface.
