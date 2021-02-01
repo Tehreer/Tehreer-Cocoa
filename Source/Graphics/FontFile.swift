@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ import Foundation
 import FreeType
 
 class FontFile {
-    private var arguments: FT_Open_Args
-    private let faceCount: Int
+    private var arguments = FT_Open_Args()
+    private var faceCount: Int = 0
 
-    public convenience init?(path: String) {
+    public init?(path: String) {
         let utf8Path = path.utf8CString.withUnsafeBufferPointer { (pointer) -> UnsafeMutablePointer<FT_String>? in
             guard let baseAddress = pointer.baseAddress else {
                 return nil
@@ -39,10 +39,12 @@ class FontFile {
         arguments.pathname = utf8Path
         arguments.stream = nil
 
-        self.init(arguments: &arguments)
+        guard setup(arguments: &arguments) else {
+            return nil
+        }
     }
 
-    public convenience init?(stream: InputStream) {
+    public init?(stream: InputStream) {
         let fontStream = UnsafeMutablePointer<FT_StreamRec>.allocate(capacity: 1)
         fontStream.pointee.base = nil
         fontStream.pointee.size = 0
@@ -75,10 +77,12 @@ class FontFile {
         arguments.pathname = nil
         arguments.stream = fontStream
 
-        self.init(arguments: &arguments)
+        guard setup(arguments: &arguments) else {
+            return nil
+        }
     }
 
-    private convenience init?(arguments: inout FT_Open_Args) {
+    private func setup(arguments: inout FT_Open_Args) -> Bool {
         let numFaces = FreeType.withLibrary { (library) -> FT_Long in
             var face: FT_Face!
 
@@ -91,15 +95,15 @@ class FontFile {
 
             return 0
         }
-
         guard numFaces > 0 else {
-            return nil
+            return false
         }
 
-        self.init(arguments: &arguments, numFaces: numFaces)
+        setup(arguments: &arguments, numFaces: numFaces)
+        return true
     }
 
-    private init(arguments: inout FT_Open_Args, numFaces: Int) {
+    private func setup(arguments: inout FT_Open_Args, numFaces: Int) {
         self.arguments = arguments
         self.faceCount = numFaces
     }
@@ -108,7 +112,6 @@ class FontFile {
         if let utf8Path = arguments.pathname {
             utf8Path.deallocate()
         }
-
         if let stream = arguments.stream {
             stream.pointee.close(stream)
             stream.deallocate()
