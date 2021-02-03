@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -421,6 +421,10 @@ public class GlyphRun {
     /// - Returns: The index of character in source string, nearest to the specified distance.
     public func indexOfCharacter(at distance: CGFloat) -> String.Index {
         return string.characterIndex(forUTF16Index: indexOfCodeUnit(at: distance))
+    }
+
+    func computeBoundingBox(with renderer: Renderer) -> CGRect {
+        return computeBoundingBox(forGlyphRange: 0 ..< glyphCount, with: renderer)
     }
 
     /// Calculates the bounding box for the specified glyph range in this run. The bounding box is a
