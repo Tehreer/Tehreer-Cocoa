@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -237,6 +237,19 @@ public class ComposedLine {
         }
 
         return penOffset
+    }
+
+    func computeBoundingBox(with renderer: Renderer) -> CGRect {
+        var comulativeBox = CGRect()
+
+        for glyphRun in visualRuns {
+            var runBox = glyphRun.computeBoundingBox(with: renderer)
+            runBox = runBox.offsetBy(dx: glyphRun.origin.x, dy: glyphRun.origin.y)
+
+            comulativeBox = comulativeBox.union(runBox)
+        }
+
+        return comulativeBox
     }
 
     /// Draws this line in the `context` with the specified renderer.
