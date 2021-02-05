@@ -219,10 +219,10 @@ public class Renderer {
 
     private func cachedBoundingBox(forGlyph glyphID: GlyphID) -> CGRect {
         if let glyphImage = GlyphCache.instance.maskGlyph(with: glyphKey, for: glyphID).image {
-            return CGRect(x: glyphImage.left / renderScale,
-                          y: glyphImage.top / renderScale,
-                          width: glyphImage.width / renderScale,
-                          height: glyphImage.height / renderScale)
+            return CGRect(x: glyphImage.left,
+                          y: glyphImage.top,
+                          width: glyphImage.width,
+                          height: glyphImage.height)
         }
 
         return .zero
@@ -233,7 +233,13 @@ public class Renderer {
     /// - Parameter glyphID: The ID of glyph whose bounding box is calculated.
     /// - Returns: A rectangle that tightly encloses the path of the specified glyph.
     public func computeBoundingBox(forGlyph glyphID: GlyphID) -> CGRect {
-        return cachedBoundingBox(forGlyph: glyphID)
+        var glyphBox = cachedBoundingBox(forGlyph: glyphID)
+        glyphBox.origin.x /= renderScale
+        glyphBox.origin.y /= renderScale
+        glyphBox.size.width /= renderScale
+        glyphBox.size.height /= renderScale
+
+        return glyphBox
     }
 
     /// Calculates the bounding box of specified glyphs.
@@ -247,23 +253,48 @@ public class Renderer {
         where GS: Sequence, GS.Element == GlyphID,
               OS: Sequence, OS.Element == CGPoint,
               AS: Sequence, AS.Element == CGFloat {
-        var comulativeBox = CGRect()
-        var penX: CGFloat = 0.0
+        let reverseMode = (writingDirection == .rightToLeft)
+
+        var comulativeBox = CGRect.null
+        var totalAdvance: CGFloat = .zero
+        var penX: CGFloat = .zero
 
         var offsetIter = offsets.makeIterator()
         var advanceIter = advances.makeIterator()
 
         for glyphID in glyphIDs {
-            let offset = offsetIter.next()!
-            let advance = advanceIter.next()!
+            let unscaledOffset = offsetIter.next()!
+            let unscaledAdvance = advanceIter.next()!
+
+            let offset = CGPoint(x: unscaledOffset.x * renderScale,
+                                 y: unscaledOffset.y * renderScale)
+            let advance = unscaledAdvance * renderScale
+
+            if reverseMode {
+                penX -= advance
+            }
 
             var glyphBox = cachedBoundingBox(forGlyph: glyphID)
-            glyphBox = glyphBox.offsetBy(dx: penX + offset.x, dy: offset.y)
+            glyphBox.origin.x = round(penX + offset.x + glyphBox.origin.x)
+            glyphBox.origin.y = round(-offset.y - glyphBox.origin.y)
 
             comulativeBox = comulativeBox.union(glyphBox)
 
-            penX += advance
+            if !reverseMode {
+                penX += advance
+            }
+
+            totalAdvance += advance
         }
+
+        if reverseMode {
+            comulativeBox.origin.x += ceil(totalAdvance)
+        }
+
+        comulativeBox.origin.x /= renderScale
+        comulativeBox.origin.y /= renderScale
+        comulativeBox.size.width /= renderScale
+        comulativeBox.size.height /= renderScale
 
         return comulativeBox
     }

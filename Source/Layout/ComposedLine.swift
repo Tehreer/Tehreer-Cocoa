@@ -240,7 +240,7 @@ public class ComposedLine {
     }
 
     func computeBoundingBox(with renderer: Renderer) -> CGRect {
-        var comulativeBox = CGRect()
+        var comulativeBox = CGRect.null
 
         for glyphRun in visualRuns {
             var runBox = glyphRun.computeBoundingBox(with: renderer)
