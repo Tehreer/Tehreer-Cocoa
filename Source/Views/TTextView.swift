@@ -311,17 +311,6 @@ open class TTextView: UIView {
         }
     }
 
-    /// The vertical alignment to apply on the contents. Its default value is `.top`.
-    open var verticalAlignment: VerticalAlignment {
-        get {
-            return resolver.verticalAlignment
-        }
-        set {
-            resolver.verticalAlignment = newValue
-            deferNeedsTextLayout()
-        }
-    }
-
     /// The typesetter that is used to compose text lines.
     ///
     /// Setting this property will make `text` and `attributedText` properties `nil`.
@@ -398,40 +387,6 @@ open class TTextView: UIView {
     @objc open var textColor: UIColor = .black {
         didSet {
             setNeedsDisplay()
-        }
-    }
-
-    /// The truncation mode that should be used on the last line of the text in case of overflow.
-    open var truncationMode: BreakMode {
-        get {
-            return resolver.truncationMode
-        }
-        set {
-            resolver.truncationMode = newValue
-            deferNeedsTextLayout()
-        }
-    }
-
-    /// The truncation place for the last line of the text. The truncation is disabled if its value
-    /// is `.nil`
-    open var truncationPlace: TruncationPlace? {
-        get {
-            return resolver.truncationPlace
-        }
-        set {
-            resolver.truncationPlace = newValue
-            deferNeedsTextLayout()
-        }
-    }
-
-    /// The maximum number of lines to use for rendering text.
-    open var maxLines: Int? {
-        get {
-            return resolver.maxLines
-        }
-        set {
-            resolver.maxLines = newValue
-            deferNeedsTextLayout()
         }
     }
 
