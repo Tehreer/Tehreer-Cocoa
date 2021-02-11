@@ -28,6 +28,8 @@
 		6EE0A43E2305C5760061D4EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EE0A43C2305C5760061D4EB /* LaunchScreen.storyboard */; };
 		6EE775C8235219A200919591 /* BidiAlgorithmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE775C7235219A200919591 /* BidiAlgorithmViewController.swift */; };
 		6EE775CA23521D2600919591 /* BidiInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE775C923521D2600919591 /* BidiInfoViewController.swift */; };
+		7DB535E325D5A84A0066A9AD /* TextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB535E225D5A84A0066A9AD /* TextViewController.swift */; };
+		7DB5E1CF25D655DF00587743 /* Noorehuda.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7DB5E1CE25D655DE00587743 /* Noorehuda.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -67,6 +69,8 @@
 		6EE0A4472305C6080061D4EB /* TehreerCocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TehreerCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EE775C7235219A200919591 /* BidiAlgorithmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BidiAlgorithmViewController.swift; sourceTree = "<group>"; };
 		6EE775C923521D2600919591 /* BidiInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BidiInfoViewController.swift; sourceTree = "<group>"; };
+		7DB535E225D5A84A0066A9AD /* TextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewController.swift; sourceTree = "<group>"; };
+		7DB5E1CE25D655DE00587743 /* Noorehuda.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Noorehuda.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +99,7 @@
 			children = (
 				6EA98E67232D368400E582E8 /* MehrNastaliq.ttf */,
 				6EA98E68232D368400E582E8 /* NafeesWeb.ttf */,
+				7DB5E1CE25D655DE00587743 /* Noorehuda.ttf */,
 				6EA98E69232D368400E582E8 /* TajNastaleeq.ttf */,
 			);
 			name = Fonts;
@@ -132,6 +137,7 @@
 				6E4FC87C23D367A900833695 /* LinkableLabel.swift */,
 				6EB90B0B232CD19A000FA74E /* OpenTypeShapingViewController.swift */,
 				6E987FF923313F06009E721B /* OpenTypeInfoViewController.swift */,
+				7DB535E225D5A84A0066A9AD /* TextViewController.swift */,
 				6E16908223819B58000A032B /* TypefaceInfoViewController.swift */,
 				6EB1AFF92336246900548553 /* TypefaceGlyphsViewController.swift */,
 				6EE0A4372305C56C0061D4EB /* Main.storyboard */,
@@ -214,6 +220,7 @@
 				6EE0A4392305C56C0061D4EB /* Main.storyboard in Resources */,
 				6EA98E6A232D368400E582E8 /* MehrNastaliq.ttf in Resources */,
 				6EA98E6B232D368400E582E8 /* NafeesWeb.ttf in Resources */,
+				7DB5E1CF25D655DF00587743 /* Noorehuda.ttf in Resources */,
 				6EA98E6C232D368400E582E8 /* TajNastaleeq.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -227,6 +234,7 @@
 			files = (
 				6E987FFA23313F06009E721B /* OpenTypeInfoViewController.swift in Sources */,
 				6E4FC87D23D367A900833695 /* LinkableLabel.swift in Sources */,
+				7DB535E325D5A84A0066A9AD /* TextViewController.swift in Sources */,
 				6EB90B0C232CD19A000FA74E /* OpenTypeShapingViewController.swift in Sources */,
 				6EE775C8235219A200919591 /* BidiAlgorithmViewController.swift in Sources */,
 				6EB1AFFA2336246900548553 /* TypefaceGlyphsViewController.swift in Sources */,

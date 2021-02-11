@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import UIKit
 enum TypefaceTag {
     static let mehrNastaliq = "MehrNastaliq"
     static let nafeesWeb = "NafeesWeb"
+    static let noorehuda = "Noorehuda"
     static let tajNastaleeq = "TajNstaleeq"
 }
 
@@ -38,6 +39,7 @@ typealias ActionCallback = () -> Void
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         register(file: ("MehrNastaliq", "ttf"), forTag: TypefaceTag.mehrNastaliq)
         register(file: ("NafeesWeb", "ttf"), forTag: TypefaceTag.nafeesWeb)
+        register(file: ("Noorehuda", "ttf"), forTag: TypefaceTag.noorehuda)
         register(file: ("TajNastaleeq", "ttf"), forTag: TypefaceTag.tajNastaleeq)
 
         return true
