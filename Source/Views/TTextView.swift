@@ -16,9 +16,7 @@
 
 import UIKit
 
-open class TTextView: UIView {
-    private let scrollView = UIScrollView()
-    private let delegate = Delegate()
+open class TTextView: UIScrollView {
     private let renderer = Renderer()
     private let resolver = FrameResolver()
 
@@ -45,39 +43,8 @@ open class TTextView: UIView {
     private func setup() {
         renderScale = UIScreen.main.scale
 
-        delegate.parent = self
-
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.delegate = delegate
-
-        addSubview(scrollView)
-
-        addConstraint(NSLayoutConstraint(item: scrollView, attribute: .left, relatedBy: .equal,
-                                         toItem: self, attribute: .left,
-                                         multiplier: 1.0, constant: 0.0))
-        addConstraint(NSLayoutConstraint(item: scrollView, attribute: .top, relatedBy: .equal,
-                                         toItem: self, attribute: .top,
-                                         multiplier: 1.0, constant: 0.0))
-        addConstraint(NSLayoutConstraint(item: scrollView, attribute: .right, relatedBy: .equal,
-                                         toItem: self, attribute: .right,
-                                         multiplier: 1.0, constant: 0.0))
-        addConstraint(NSLayoutConstraint(item: scrollView, attribute: .bottom, relatedBy: .equal,
-                                         toItem: self, attribute: .bottom,
-                                         multiplier: 1.0, constant: 0.0))
-    }
-
-    private func deferNeedsTextLayout() {
         resolver.fitsHorizontally = false
         resolver.fitsVertically = true
-
-        updateFrame(paddingLeft: .zero, paddingTop: .zero,
-                    layoutWidth: bounds.width, layoutHeight: .greatestFiniteMagnitude)
-    }
-
-    /// Lays out subviews.
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-        layoutLines()
     }
 
     /// The frame rectangle, which describes the view’s location and size in its superview’s
@@ -87,11 +54,15 @@ open class TTextView: UIView {
             return super.frame
         }
         set {
-            let oldSize = bounds.size
+            let oldWidth = layoutWidth
+            let oldFrame = frame
+
             super.frame = newValue
 
-            if bounds.size != oldSize {
+            if layoutWidth != oldWidth {
                 deferNeedsTextLayout()
+            } else if newValue != oldFrame {
+                layoutLines()
             }
         }
     }
@@ -103,29 +74,77 @@ open class TTextView: UIView {
             return super.bounds
         }
         set {
-            let oldSize = bounds.size
+            let oldWidth = layoutWidth
+            let oldBounds = bounds
+
             super.bounds = newValue
 
-            if bounds.size != oldSize {
+            if layoutWidth != oldWidth {
                 deferNeedsTextLayout()
+            } else if newValue != oldBounds {
+                layoutLines()
             }
         }
     }
 
-    private func makeTextFrame(paddingLeft: CGFloat, paddingTop: CGFloat,
-                               layoutWidth: CGFloat, layoutHeight: CGFloat) -> ComposedFrame? {
+    open override var contentOffset: CGPoint {
+        didSet(value) {
+            layoutLines()
+        }
+    }
+
+    open override var contentInset: UIEdgeInsets {
+        get {
+            return super.contentInset
+        }
+        set {
+            let oldWidth = layoutWidth
+            let oldInset = contentInset
+
+            super.contentInset = newValue
+
+            if layoutWidth != oldWidth {
+                deferNeedsTextLayout()
+            } else if newValue != oldInset {
+                layoutLines()
+            }
+        }
+    }
+
+    private var layoutWidth: CGFloat {
+        return bounds.width - (contentInset.left + contentInset.right)
+    }
+
+    private var visibleRect: CGRect {
+        return CGRect(origin: contentOffset, size: bounds.size)
+    }
+
+    private func removeAllLineViews() {
+        for view in subviews {
+            if view is LineView {
+                view.removeFromSuperview()
+            }
+        }
+    }
+
+    private func deferNeedsTextLayout() {
+        resolveTextFrame()
+        resolveLineBoxes()
+        removeAllLineViews()
+        layoutLines()
+    }
+
+    private func resolveTextFrame() {
         guard let typesetter = typesetter else {
-            return nil
+            return
         }
 
         resolver.typesetter = typesetter
-        resolver.frameBounds = CGRect(x: paddingLeft, y: paddingTop,
-                                      width: layoutWidth, height: layoutHeight)
+        resolver.frameBounds = CGRect(x: .zero, y: .zero,
+                                      width: layoutWidth, height: .greatestFiniteMagnitude)
 
         let string = typesetter.text.string
-        let frame = resolver.makeFrame(characterRange: string.startIndex ..< string.endIndex)
-
-        return frame
+        textFrame = resolver.makeFrame(characterRange: string.startIndex ..< string.endIndex)
     }
 
     private func resolveLineBoxes() {
@@ -142,24 +161,22 @@ open class TTextView: UIView {
             lineBoxes.append(lineBox)
         }
 
-        scrollView.contentSize = CGSize(width: textFrame.width, height: textFrame.height)
+        contentSize = CGSize(width: textFrame.width, height: textFrame.height)
     }
 
-    fileprivate func layoutLines() {
+    private func layoutLines() {
         guard let textFrame = textFrame else {
             return
         }
 
-        let contentOffset = scrollView.contentOffset
-        let visibleSize = scrollView.bounds.size
-        let visibleRect = CGRect(origin: contentOffset, size: visibleSize)
+        let scrollRect = visibleRect
 
         var outsideViews: [LineView] = []
         var insideViews: [LineView] = []
 
         // Get outside and inside line views.
         for lineView in lineViews {
-            if lineView.frame.intersects(visibleRect) {
+            if lineView.frame.intersects(scrollRect) {
                 insideViews.append(lineView)
             } else {
                 outsideViews.append(lineView)
@@ -170,7 +187,7 @@ open class TTextView: UIView {
 
         // Get line indexes that should be visible.
         for i in 0 ..< lineBoxes.count {
-            if lineBoxes[i].intersects(visibleRect) {
+            if lineBoxes[i].intersects(scrollRect) {
                 visibleIndexes.append(i)
             }
         }
@@ -205,21 +222,13 @@ open class TTextView: UIView {
             }
 
             if let previousView = previousView {
-                scrollView.insertSubview(lineView, aboveSubview: previousView)
+                insertSubview(lineView, aboveSubview: previousView)
             } else {
-                scrollView.addSubview(lineView)
+                addSubview(lineView)
             }
 
             previousView = lineView
         }
-    }
-
-    private func updateFrame(paddingLeft: CGFloat, paddingTop: CGFloat,
-                             layoutWidth: CGFloat, layoutHeight: CGFloat) {
-        textFrame = makeTextFrame(paddingLeft: paddingLeft, paddingTop: paddingTop,
-                                  layoutWidth: layoutWidth, layoutHeight: layoutHeight)
-        resolveLineBoxes()
-        layoutLines()
     }
 
     private func updateTypesetter() {
@@ -415,13 +424,5 @@ open class TTextView: UIView {
             resolver.lineHeightMultiplier = newValue
             deferNeedsTextLayout()
         }
-    }
-}
-
-private class Delegate: NSObject, UIScrollViewDelegate {
-    weak var parent: TTextView!
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        parent.layoutLines()
     }
 }
