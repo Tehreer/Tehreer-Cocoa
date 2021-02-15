@@ -16,7 +16,100 @@
 
 import UIKit
 
+private class TextData {
+    weak var textView: TTextView?
+    var typesetter: Typesetter?
+    var textFrame: ComposedFrame?
+}
+
+private class TypesettingOperation: Operation {
+    private let data: TextData
+
+    init(data: TextData) {
+        self.data = data
+    }
+
+    override func main() {
+        guard let params = data.textView?.typesetterParams(),
+              !isCancelled else {
+            return
+        }
+
+        data.typesetter = Typesetter(text: params.text, defaultAttributes: params.defaultAttributes)
+    }
+}
+
+private class FrameResolvingOperation: Operation {
+    private let data: TextData
+
+    init(data: TextData) {
+        self.data = data
+    }
+
+    override func main() {
+        guard let typesetter = data.typesetter,
+              let resolver = data.textView?.frameResolver(for: typesetter),
+              !isCancelled else {
+            return
+        }
+
+        let string = typesetter.text.string
+        data.textFrame = resolver.makeFrame(characterRange: string.startIndex ..< string.endIndex)
+    }
+}
+
+private class LineBoxesOperation: Operation {
+    private let data: TextData
+    private let updateBlock: (([CGRect]) -> Void)?
+
+    init(data: TextData, updateBlock: (([CGRect]) -> Void)?) {
+        self.data = data
+        self.updateBlock = updateBlock
+    }
+
+    override func main() {
+        guard let lines = data.textFrame?.lines,
+              let renderer = data.textView?.boxRenderer(),
+              !isCancelled else {
+            return
+        }
+
+        var lineCount = 0
+        var lineBoxes: [CGRect] = []
+
+        for textLine in lines {
+            defer {
+                lineCount += 1
+            }
+
+            var boundingBox = textLine.computeBoundingBox(with: renderer)
+            boundingBox = boundingBox.offsetBy(dx: textLine.origin.x, dy: textLine.origin.y)
+
+            lineBoxes.append(boundingBox)
+
+            if isCancelled {
+                return
+            }
+
+            if lineCount == 32 {
+                DispatchQueue.main.async {
+                    self.updateBlock?(lineBoxes)
+                }
+            }
+        }
+
+        DispatchQueue.main.async {
+            if !self.isCancelled {
+                self.updateBlock?(lineBoxes)
+            }
+        }
+    }
+}
+
 open class TTextView: UIScrollView {
+    private let lock = NSRecursiveLock()
+    private let operationQueue = OperationQueue()
+
     private let renderer = Renderer()
     private let resolver = FrameResolver()
 
@@ -26,6 +119,8 @@ open class TTextView: UIScrollView {
 
     private var needsTypesetter: Bool = false
     private(set) open var textFrame: ComposedFrame? = nil
+
+    private var layoutWidth: CGFloat = .zero
 
     private var lineViews: [LineView] = []
     private var lineBoxes: [CGRect] = []
@@ -58,6 +153,7 @@ open class TTextView: UIScrollView {
             let oldFrame = frame
 
             super.frame = newValue
+            updateLayoutWidth()
 
             if layoutWidth != oldWidth {
                 deferNeedsTextLayout()
@@ -78,6 +174,7 @@ open class TTextView: UIScrollView {
             let oldBounds = bounds
 
             super.bounds = newValue
+            updateLayoutWidth()
 
             if layoutWidth != oldWidth {
                 deferNeedsTextLayout()
@@ -102,6 +199,7 @@ open class TTextView: UIScrollView {
             let oldInset = contentInset
 
             super.contentInset = newValue
+            updateLayoutWidth()
 
             if layoutWidth != oldWidth {
                 deferNeedsTextLayout()
@@ -111,12 +209,12 @@ open class TTextView: UIScrollView {
         }
     }
 
-    private var layoutWidth: CGFloat {
-        return bounds.width - (contentInset.left + contentInset.right)
-    }
-
     private var visibleRect: CGRect {
         return CGRect(origin: contentOffset, size: bounds.size)
+    }
+
+    private func updateLayoutWidth() {
+        layoutWidth = bounds.width - (contentInset.left + contentInset.right)
     }
 
     private func removeAllLineViews() {
@@ -128,40 +226,115 @@ open class TTextView: UIScrollView {
     }
 
     private func deferNeedsTextLayout() {
-        resolveTextFrame()
-        resolveLineBoxes()
-        removeAllLineViews()
-        layoutLines()
+        lock.lock()
+        defer { lock.unlock() }
+
+        let data = TextData()
+        data.textView = self
+        data.typesetter = _typesetter
+
+        var operations: [Operation] = []
+        var typesettingOperation: TypesettingOperation? = nil
+
+        if _typesetter == nil {
+            typesettingOperation = TypesettingOperation(data: data)
+            typesettingOperation?.qualityOfService = .userInitiated
+            typesettingOperation?.completionBlock = {
+                DispatchQueue.main.async {
+                    self._typesetter = data.typesetter
+                }
+            }
+
+            operations.append(typesettingOperation!)
+        }
+
+        let frameResolvingOperation = FrameResolvingOperation(data: data)
+        frameResolvingOperation.qualityOfService = .userInitiated
+        frameResolvingOperation.completionBlock = {
+            guard let textFrame = data.textFrame else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                self.textFrame = textFrame
+                self.contentSize = CGSize(width: textFrame.width, height: textFrame.height)
+            }
+        }
+        if let typesettingOperation = typesettingOperation {
+            frameResolvingOperation.addDependency(typesettingOperation)
+        }
+
+        operations.append(frameResolvingOperation)
+
+        let lineBoxesOperation = LineBoxesOperation(data: data) { (lineBoxes) in
+            self.lineBoxes = lineBoxes
+            self.layoutLines()
+        }
+        lineBoxesOperation.qualityOfService = .userInteractive
+        lineBoxesOperation.addDependency(frameResolvingOperation)
+
+        operations.append(lineBoxesOperation)
+
+        operationQueue.cancelAllOperations()
+        operationQueue.addOperations(operations, waitUntilFinished: false)
     }
 
-    private func resolveTextFrame() {
-        guard let typesetter = typesetter else {
-            return
+    fileprivate func typesetterParams() -> (text: NSAttributedString, defaultAttributes: [NSAttributedString.Key: Any])? {
+        lock.lock()
+        defer { lock.unlock() }
+
+        if let string = text {
+            if let typeface = typeface, !string.isEmpty {
+                let defaultAttributes: [NSAttributedString.Key: Any] = [
+                    .typeface: typeface,
+                    .typeSize: textSize]
+
+                return (NSAttributedString(string: string), defaultAttributes)
+            }
+        } else if let attributedText = attributedText {
+            if let typeface = typeface, !attributedText.string.isEmpty {
+                let defaultAttributes: [NSAttributedString.Key: Any] = [
+                    .typeface: typeface,
+                    .typeSize: textSize]
+
+                return (attributedText, defaultAttributes)
+            }
         }
 
-        resolver.typesetter = typesetter
-        resolver.frameBounds = CGRect(x: .zero, y: .zero,
-                                      width: layoutWidth, height: .greatestFiniteMagnitude)
-
-        let string = typesetter.text.string
-        textFrame = resolver.makeFrame(characterRange: string.startIndex ..< string.endIndex)
+        return nil
     }
 
-    private func resolveLineBoxes() {
-        guard let textFrame = textFrame else {
-            return
-        }
+    fileprivate func frameResolver(for typesetter: Typesetter) -> FrameResolver {
+        lock.lock()
+        defer { lock.unlock() }
 
-        lineBoxes.removeAll()
+        let copy = FrameResolver()
+        copy.typesetter = typesetter
+        copy.frameBounds = CGRect(x: .zero, y: .zero, width: layoutWidth, height: .greatestFiniteMagnitude)
+        copy.fitsHorizontally = resolver.fitsHorizontally
+        copy.fitsVertically = resolver.fitsVertically
+        copy.textAlignment = resolver.textAlignment
+        copy.verticalAlignment = resolver.verticalAlignment
+        copy.truncationMode = resolver.truncationMode
+        copy.truncationPlace = resolver.truncationPlace
+        copy.maxLines = resolver.maxLines
+        copy.extraLineSpacing = resolver.extraLineSpacing
+        copy.lineHeightMultiplier = resolver.lineHeightMultiplier
 
-        for textLine in textFrame.lines {
-            var lineBox = textLine.computeBoundingBox(with: renderer)
-            lineBox = lineBox.offsetBy(dx: textLine.origin.x, dy: textLine.origin.y)
+        return copy
+    }
 
-            lineBoxes.append(lineBox)
-        }
+    fileprivate func boxRenderer() -> Renderer {
+        lock.lock()
+        defer { lock.unlock() }
 
-        contentSize = CGSize(width: textFrame.width, height: textFrame.height)
+        let copy = Renderer()
+        copy.typeface = typeface
+        copy.typeSize = textSize
+        copy.fillColor = textColor
+        copy.renderScale = renderScale
+
+        return copy
     }
 
     private func layoutLines() {
@@ -235,27 +408,8 @@ open class TTextView: UIScrollView {
         if needsTypesetter {
             return
         }
+
         _typesetter = nil
-
-        if let text = text {
-            if let typeface = typeface, !text.isEmpty {
-                let defaultAttributes: [NSAttributedString.Key: Any] = [
-                    .typeface: typeface,
-                    .typeSize: textSize]
-
-                _typesetter = Typesetter(text: NSAttributedString(string: text),
-                                         defaultAttributes: defaultAttributes)
-            }
-        } else if let attributedText = attributedText {
-            if let typeface = typeface, !attributedText.string.isEmpty {
-                let defaultAttributes: [NSAttributedString.Key: Any] = [
-                    .typeface: typeface,
-                    .typeSize: textSize]
-
-                _typesetter = Typesetter(text: attributedText, defaultAttributes: defaultAttributes)
-            }
-        }
-
         deferNeedsTextLayout()
     }
 
