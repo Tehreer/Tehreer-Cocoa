@@ -17,7 +17,7 @@
 import UIKit
 
 private class TextContext {
-    let layoutID = NSObject()
+    var layoutID: NSObject!
     var renderScale: CGFloat = 1.0
     var layoutWidth: CGFloat = .zero
     var typeface: Typeface?
@@ -190,18 +190,19 @@ private class LineBoxesOperation: Operation {
 
 open class TTextView: UIScrollView {
     private let operationQueue = OperationQueue()
-    private var layoutID: NSObject?
+    private var layoutID: NSObject!
+    private var needsTextLayout = false
+
+    private var isTypesetterUserDefined = false
+    private var isTypesetterResolved = false
+    private var isTextFrameResolved = false
 
     private var renderScale: CGFloat = 1.0
-    private var keepTypesetter = false
 
     private var _text: String!
     private var _attributedText: NSAttributedString!
     private var _typesetter: Typesetter?
     private var _textFrame: ComposedFrame?
-
-    private var needsTypesetter = false
-    private var needsTextLayout = false
 
     private var lineViews: [LineView] = []
     private var lineBoxes: [CGRect] = []
@@ -233,7 +234,7 @@ open class TTextView: UIScrollView {
             super.frame = newValue
 
             if layoutWidth != oldWidth {
-                setNeedsTextLayout()
+                setNeedsUpdateTextFrame()
             } else if newValue != oldFrame {
                 setNeedsLayout()
             }
@@ -253,7 +254,7 @@ open class TTextView: UIScrollView {
             super.bounds = newValue
 
             if layoutWidth != oldWidth {
-                setNeedsTextLayout()
+                setNeedsUpdateTextFrame()
             } else if newValue != oldBounds {
                 setNeedsLayout()
             }
@@ -271,7 +272,7 @@ open class TTextView: UIScrollView {
             super.contentInset = newValue
 
             if layoutWidth != oldWidth {
-                setNeedsTextLayout()
+                setNeedsUpdateTextFrame()
             } else if newValue != oldInset {
                 setNeedsLayout()
             }
@@ -306,6 +307,7 @@ open class TTextView: UIScrollView {
 
     private func performTextLayout() {
         let context = TextContext()
+        context.layoutID = layoutID
         context.renderScale = renderScale
         context.layoutWidth = layoutWidth
         context.typeface = typeface
@@ -321,7 +323,7 @@ open class TTextView: UIScrollView {
         var operations: [Operation] = []
         var typesettingOperation: TypesettingOperation? = nil
 
-        if needsTypesetter {
+        if !isTypesetterResolved {
             typesettingOperation = TypesettingOperation(context) { (typesetter) in
                 self.updateTypesetter(typesetter, identifying: context.layoutID)
             }
@@ -349,23 +351,21 @@ open class TTextView: UIScrollView {
 
         operations.append(lineBoxesOperation)
 
-        layoutID = context.layoutID
-        needsTypesetter = false
-        needsTextLayout = false
-
-        operationQueue.cancelAllOperations()
         operationQueue.addOperations(operations, waitUntilFinished: false)
+        needsTextLayout = false
     }
 
     private func updateTypesetter(_ typesetter: Typesetter?, identifying layoutID: NSObject) {
         guard layoutID === self.layoutID else { return }
 
+        isTypesetterResolved = true
         _typesetter = typesetter
     }
 
     private func updateTextFrame(_ textFrame: ComposedFrame?, identifying layoutID: NSObject) {
         guard layoutID === self.layoutID else { return }
 
+        isTextFrameResolved = true
         _textFrame = textFrame
 
         if let textFrame = textFrame {
@@ -449,15 +449,21 @@ open class TTextView: UIScrollView {
         }
     }
 
-    private func setNeedsTypesetter() {
-        if !keepTypesetter {
-            needsTypesetter = true
-            setNeedsTextLayout()
-        }
+    private func setNeedsUpdateTypesetter() {
+        isTypesetterResolved = isTypesetterUserDefined
+        setNeedsUpdateTextFrame()
+    }
+
+    private func setNeedsUpdateTextFrame() {
+        isTextFrameResolved = false
+        setNeedsTextLayout()
     }
 
     private func setNeedsTextLayout() {
+        operationQueue.cancelAllOperations()
+        layoutID = NSObject()
         needsTextLayout = true
+
         setNeedsLayout()
     }
 
@@ -503,13 +509,13 @@ open class TTextView: UIScrollView {
     }
 
     open var textFrame: ComposedFrame? {
-        return _textFrame
+        return isTextFrameResolved ? _textFrame : nil
     }
 
     /// The text alignment to apply on each line. Its default value is `.intrinsic`.
     open var textAlignment: TextAlignment = .intrinsic {
         didSet {
-            setNeedsTextLayout()
+            setNeedsUpdateTextFrame()
         }
     }
 
@@ -521,15 +527,15 @@ open class TTextView: UIScrollView {
     /// from the `attributedText`.
     open var typesetter: Typesetter? {
         get {
-            return _typesetter
+            return isTypesetterResolved ? _typesetter : nil
         }
         set {
             _text = nil
             _attributedText = nil
             _typesetter = newValue
-            keepTypesetter = true
+            isTypesetterUserDefined = true
 
-            setNeedsTextLayout()
+            setNeedsUpdateTypesetter()
         }
     }
 
@@ -546,16 +552,16 @@ open class TTextView: UIScrollView {
         set {
             _text = nil
             _attributedText = newValue
-            keepTypesetter = false
+            isTypesetterUserDefined = false
 
-            setNeedsTypesetter()
+            setNeedsUpdateTypesetter()
         }
     }
 
     /// The typeface in which the text is displayed.
     open var typeface: Typeface? {
         didSet {
-            setNeedsTypesetter()
+            setNeedsUpdateTypesetter()
         }
     }
 
@@ -572,16 +578,16 @@ open class TTextView: UIScrollView {
         set {
             _text = newValue ?? ""
             _attributedText = nil
-            keepTypesetter = false
+            isTypesetterUserDefined = false
 
-            setNeedsTypesetter()
+            setNeedsUpdateTypesetter()
         }
     }
 
     /// The default size of the text.
     open var textSize: CGFloat = 16.0 {
         didSet {
-            setNeedsTypesetter()
+            setNeedsUpdateTypesetter()
         }
     }
 
@@ -596,7 +602,7 @@ open class TTextView: UIScrollView {
     /// multiplier. Its default value is zero.
     open var extraLineSpacing: CGFloat = .zero {
         didSet {
-            setNeedsTextLayout()
+            setNeedsUpdateTextFrame()
         }
     }
 
@@ -607,7 +613,7 @@ open class TTextView: UIScrollView {
     /// line.
     open var lineHeightMultiplier: CGFloat = 1.0 {
         didSet {
-            setNeedsTextLayout()
+            setNeedsUpdateTextFrame()
         }
     }
 }
