@@ -463,6 +463,15 @@ open class TTextView: UIScrollView {
         }
     }
 
+    private func updateLineColors() {
+        for lineView in lineViews {
+            let renderer = lineView.renderer
+            renderer.fillColor = textColor
+
+            lineView.setNeedsDisplay()
+        }
+    }
+
     private func setNeedsUpdateTypesetter() {
         isTypesetterResolved = isTypesetterUserDefined
         setNeedsUpdateTextFrame()
@@ -606,9 +615,9 @@ open class TTextView: UIScrollView {
     }
 
     /// The default color of the text.
-    @objc open var textColor: UIColor = .black {
+    open var textColor: UIColor = .black {
         didSet {
-            setNeedsDisplay()
+            updateLineColors()
         }
     }
 
