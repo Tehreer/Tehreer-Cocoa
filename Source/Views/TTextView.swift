@@ -368,11 +368,25 @@ open class TTextView: UIScrollView {
         isTextFrameResolved = true
         _textFrame = textFrame
 
+        lineBoxes = []
+        lineViews = []
+        removeAllLineViews()
+
         if let textFrame = textFrame {
             contentSize = CGSize(width: textFrame.width, height: textFrame.height)
         } else {
             contentSize = .zero
         }
+
+        let insets: UIEdgeInsets
+
+        if #available(iOS 11.0, *) {
+            insets = adjustedContentInset
+        } else {
+            insets = contentInset
+        }
+
+        contentOffset = CGPoint(x: -insets.left, y: -insets.top)
     }
 
     private func updateLineBoxes(_ array: [CGRect], identifying layoutID: NSObject) {
