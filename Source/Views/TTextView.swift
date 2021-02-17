@@ -205,7 +205,11 @@ open class TTextView: UIScrollView {
     private var _textFrame: ComposedFrame?
 
     private var lineViews: [LineView] = []
+    private var insideViews: [LineView] = []
+    private var outsideViews: [LineView] = []
+
     private var lineBoxes: [CGRect] = []
+    private var visibleIndexes: [Int] = []
 
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -403,8 +407,8 @@ open class TTextView: UIScrollView {
 
         let scrollRect = visibleRect
 
-        var outsideViews: [LineView] = []
-        var insideViews: [LineView] = []
+        insideViews.removeAll()
+        outsideViews.removeAll()
 
         // Get outside and inside line views.
         for lineView in lineViews {
@@ -415,7 +419,7 @@ open class TTextView: UIScrollView {
             }
         }
 
-        var visibleIndexes: [Int] = []
+        visibleIndexes.removeAll()
 
         // Get line indexes that should be visible.
         for i in 0 ..< lineBoxes.count {
