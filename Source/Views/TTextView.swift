@@ -322,7 +322,7 @@ open class TTextView: UIScrollView {
         context.textColor = textColor
         context.extraLineSpacing = extraLineSpacing
         context.lineHeightMultiplier = lineHeightMultiplier
-        context.typesetter = _typesetter
+        context.typesetter = typesetter
 
         var operations: [Operation] = []
         var typesettingOperation: TypesettingOperation? = nil
