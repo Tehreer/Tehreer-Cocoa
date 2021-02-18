@@ -527,6 +527,8 @@ public class GlyphRun {
         renderer.scaleY = 1.0
         renderer.writingDirection = writingDirection
 
+        let defaultFillColor = renderer.fillColor
+
         for (key, value) in attributes {
             switch key {
             case .scaleX:
@@ -593,5 +595,7 @@ public class GlyphRun {
         if let lastCluster = lastCluster {
             drawEdgeCluster(using: renderer, in: context, cluster: lastCluster)
         }
+
+        renderer.fillColor = defaultFillColor
     }
 }
