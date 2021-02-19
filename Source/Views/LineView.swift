@@ -21,13 +21,13 @@ class LineView: UIView {
 
     var line: ComposedLine? {
         didSet {
-            setNeedsDisplay()
+            DispatchQueue.main.async {
+                self.setNeedsDisplay()
+            }
         }
     }
 
     override func draw(_ rect: CGRect) {
-        super.draw(rect)
-
         guard let context = UIGraphicsGetCurrentContext(),
               let line = line else { return }
 
