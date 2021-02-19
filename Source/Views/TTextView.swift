@@ -265,6 +265,7 @@ open class TTextView: UIScrollView {
         }
     }
 
+    /// The custom distance that the content view is inset from the safe area or scroll view edges.
     open override var contentInset: UIEdgeInsets {
         get {
             return super.contentInset
@@ -291,6 +292,7 @@ open class TTextView: UIScrollView {
         return bounds.width - (contentInset.left + contentInset.right)
     }
 
+    /// Lays out subviews.
     open override func layoutSubviews() {
         super.layoutSubviews()
 
