@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -141,7 +141,7 @@ public class Typeface {
         self.init(fontFile: fontFile, faceIndex: 0, instanceIndex: 0)
     }
 
-    private init?(fontFile: FontFile, faceIndex: Int, instanceIndex: Int) {
+    init?(fontFile: FontFile, faceIndex: Int, instanceIndex: Int) {
         guard let ftFace = fontFile.createFTFace(faceIndex: faceIndex, instanceIndex: instanceIndex) else {
             return nil
         }
@@ -271,6 +271,11 @@ public class Typeface {
         }
 
         return try body(ftStroker)
+    }
+
+    public var variationCoordinates: [Float] {
+        // TODO: Implement the method.
+        return []
     }
 
     /// The family name of this typeface.

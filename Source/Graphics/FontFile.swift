@@ -18,6 +18,9 @@ import Foundation
 import FreeType
 
 class FontFile {
+    private let mutex = Mutex()
+
+    private var defaultTypefaces: [Typeface]!
     private var arguments = FT_Open_Args()
     private var faceCount: Int = 0
 
@@ -132,5 +135,52 @@ class FontFile {
 
             return face
         }
+    }
+
+    private func loadTypefaces() {
+        defaultTypefaces = []
+
+        for i in 0 ..< faceCount {
+            guard let firstTypeface = Typeface(fontFile: self, faceIndex: i, instanceIndex: 0) else {
+                continue
+            }
+
+            let instanceStart = defaultTypefaces.count;
+            let instanceCount = firstTypeface.ftFace.pointee.style_flags >> 16
+
+            defaultTypefaces.append(firstTypeface)
+
+            for j in 1 ..< instanceCount {
+                guard let instanceTypeface = Typeface(fontFile: self, faceIndex: i, instanceIndex: j) else {
+                    continue
+                }
+
+                let instanceCoords = instanceTypeface.variationCoordinates
+                if !instanceCoords.isEmpty {
+                    // Remove existing duplicate instances.
+                    for k in (instanceStart ..< defaultTypefaces.count).reversed() {
+                        let referenceCoords = defaultTypefaces[k].variationCoordinates
+
+                        if instanceCoords == referenceCoords {
+                            defaultTypefaces.remove(at: k)
+                        }
+                    }
+                }
+
+                defaultTypefaces.append(instanceTypeface)
+            }
+        }
+    }
+
+    public var typefaces: [Typeface] {
+        if defaultTypefaces == nil {
+            mutex.synchronized {
+                if defaultTypefaces == nil {
+                    loadTypefaces()
+                }
+            }
+        }
+
+        return defaultTypefaces
     }
 }
