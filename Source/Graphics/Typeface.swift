@@ -138,6 +138,10 @@ public class Typeface {
         init(ital: FT_Fixed) {
             self = ital >= 0x10000 ? .italic : .plain
         }
+
+        init(slnt: FT_Fixed) {
+            self = slnt != 0 ? .oblique : .plain
+        }
     }
 
     private let mutex = Mutex()
