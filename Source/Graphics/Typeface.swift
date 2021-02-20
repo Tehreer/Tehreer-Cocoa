@@ -134,6 +134,10 @@ public class Typeface {
         case italic = 1
         /// The oblique slope indicating artificially slanted characters.
         case oblique = 2
+
+        init(ital: FT_Fixed) {
+            self = ital >= 0x10000 ? .italic : .plain
+        }
     }
 
     private let mutex = Mutex()
