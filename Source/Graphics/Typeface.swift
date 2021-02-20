@@ -145,27 +145,26 @@ public class Typeface {
     }
 
     private let mutex = Mutex()
-    private let fontFile: FontFile
+    private var fontFile: FontFile!
 
     var tag: TypefaceTag?
 
-    let ftFace: FT_Face
-    private let ftSize: FT_Size
+    var ftFace: FT_Face!
+    private var ftSize: FT_Size!
     private var ftStroker: FT_Stroker!
 
-    var sfFont: SFFontRef! = nil
+    var sfFont: SFFontRef!
     let patternCache = PatternCache()
 
     /// Creates a typeface from the specified file. The data for the font is directly read from the
     /// file when needed.
     ///
     /// - Parameter path: The path of the font file.
-    public convenience init?(path: String) {
-        guard let fontFile = FontFile(path: path) else {
+    public init?(path: String) {
+        guard let fontFile = FontFile(path: path),
+              setup(fontFile: fontFile, faceIndex: 0, instanceIndex: 0) else {
             return nil
         }
-
-        self.init(fontFile: fontFile, faceIndex: 0, instanceIndex: 0)
     }
 
     /// Creates a typeface from the specified input stream. The data of the stream is not copied
@@ -173,17 +172,22 @@ public class Typeface {
     /// of resulting typeface might be slower and should be used with caution.
     ///
     /// - Parameter stream: The input stream that contains the data of the font.
-    public convenience init?(stream: InputStream) {
-        guard let fontFile = FontFile(stream: stream) else {
+    public init?(stream: InputStream) {
+        guard let fontFile = FontFile(stream: stream),
+              setup(fontFile: fontFile, faceIndex: 0, instanceIndex: 0) else {
             return nil
         }
-
-        self.init(fontFile: fontFile, faceIndex: 0, instanceIndex: 0)
     }
 
     init?(fontFile: FontFile, faceIndex: Int, instanceIndex: Int) {
-        guard let ftFace = fontFile.createFTFace(faceIndex: faceIndex, instanceIndex: instanceIndex) else {
+        guard setup(fontFile: fontFile, faceIndex: faceIndex, instanceIndex: instanceIndex) else {
             return nil
+        }
+    }
+
+    private func setup(fontFile: FontFile, faceIndex: Int, instanceIndex: Int) -> Bool {
+        guard let ftFace = fontFile.createFTFace(faceIndex: faceIndex, instanceIndex: instanceIndex) else {
+            return false
         }
 
         var fontProtocol = SFFontProtocol(
@@ -221,6 +225,8 @@ public class Typeface {
         self.sfFont = SFFontCreateWithProtocol(&fontProtocol, Unmanaged.passUnretained(self).toOpaque())
 
         setupDescription()
+
+        return true
     }
 
     private func setupDescription() {
