@@ -107,6 +107,23 @@ public class Typeface {
             let index = Int(value - 1)
             self = Typeface.Width.allValues[max(0, min(8, index))]
         }
+
+        init(wdth: FT_Fixed) {
+            let value = f16Dot16ToFloat(wdth)
+            var width: UInt16
+
+            if (value < 50) {
+                width = 1
+            } else if (value < 125) {
+                width = UInt16(((value - 50) / 12.5) + 1)
+            } else if (value < 200) {
+                width = UInt16(((value - 125) / 25) + 7)
+            } else {
+                width = 9
+            }
+
+            self.init(value: width)
+        }
     }
 
     /// Specifies the slope of a typeface.
