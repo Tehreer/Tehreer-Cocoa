@@ -67,6 +67,21 @@ public class Typeface {
             let index = Int((Float(value) / 100.0) - 0.5)
             self = Typeface.Weight.allValues[max(0, min(8, index))]
         }
+
+        init(wght: FT_Fixed) {
+            let value = f16Dot16ToFloat(wght)
+            var weight: UInt16
+
+            if (value < 1) {
+                weight = 1
+            } else if (value > 1000) {
+                weight = 1000
+            } else {
+                weight = UInt16(value)
+            }
+
+            self.init(value: weight)
+        }
     }
 
     /// Specifies the wideness of a typeface, in terms of the width of characters in relation to
