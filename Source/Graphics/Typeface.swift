@@ -281,6 +281,91 @@ public class Typeface {
         }
     }
 
+    private func setupVariation() {
+        var variation: UnsafeMutablePointer<FT_MM_Var>!
+        guard FT_Get_MM_Var(ftFace, &variation) == FT_Err_Ok else { return }
+
+        defer {
+            FreeType.withLibrary { (library) -> Void in
+                FT_Done_MM_Var(library, variation)
+            }
+        }
+
+        let numCoords = variation.pointee.num_axis
+        var fixedCoords = Array<FT_Fixed>(repeating: 0, count: Int(numCoords))
+
+        if FT_Get_Var_Blend_Coordinates(ftFace, numCoords, &fixedCoords) == FT_Err_Ok {
+            let normalFont = sfFont
+            var coordArray = Array<SFInt16>(repeating: 0, count: Int(numCoords))
+
+            // Convert the FreeType's F16DOT16 coordinates to standard normalized F2DOT14 format.
+            for i in 0 ..< Int(numCoords) {
+                coordArray[i] = SFInt16(fixedCoords[i] >> 2)
+            }
+
+            // Derive the variable font of SheenFigure.
+            sfFont = SFFontCreateWithVariationCoordinates(normalFont, Unmanaged.passUnretained(self).toOpaque(), &coordArray, SFUInteger(numCoords))
+            SFFontRelease(normalFont)
+        }
+
+        if FT_Get_Var_Design_Coordinates(ftFace, numCoords, &fixedCoords) == FT_Err_Ok {
+            // Reset the style name and the full name.
+            styleName = ""
+            fullName = ""
+
+            // Get the style name of this instance.
+            for i in 0 ..< Int(variation.pointee.num_namedstyles) {
+                let namedStyle = variation.pointee.namedstyle[i]
+                guard let namedCoords = namedStyle.coords else {
+                    continue
+                }
+
+                let areEqual = fixedCoords.withUnsafeBufferPointer { (pointer) -> Bool in
+                    guard let baseAddress = pointer.baseAddress else {
+                        return false
+                    }
+
+                    let lhs = UnsafeRawPointer(namedCoords)
+                    let rhs = UnsafeRawPointer(baseAddress)
+                    let size = MemoryLayout<FT_Fixed>.size * Int(numCoords)
+
+                    return memcmp(lhs, rhs, size) == 0
+                }
+
+                if areEqual {
+                    // TODO: Setup the style name.
+                    break
+                }
+            }
+
+            // Get the values of variation axes.
+            for i in 0 ..< Int(numCoords) {
+                let axis = variation.pointee.axis[i]
+
+                switch axis.tag {
+                case FT_ULong(SFNTTag(stringLiteral: "ital").rawValue):
+                    slope = Slope(ital: fixedCoords[i])
+                    break
+
+                case FT_ULong(SFNTTag(stringLiteral: "slnt").rawValue):
+                    slope = Slope(slnt: fixedCoords[i])
+                    break
+
+                case FT_ULong(SFNTTag(stringLiteral: "wdth").rawValue):
+                    width = Width(wdth: fixedCoords[i])
+                    break
+
+                case FT_ULong(SFNTTag(stringLiteral: "wght").rawValue):
+                    weight = Weight(wght: fixedCoords[i])
+                    break
+
+                default:
+                    break
+                }
+            }
+        }
+    }
+
     deinit {
         SFFontRelease(sfFont)
 
