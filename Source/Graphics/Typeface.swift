@@ -163,6 +163,11 @@ public class Typeface {
     }
     private var nameIndexes = NameIndexes()
 
+    struct Variation {
+        var axes: [VariationAxis]?
+    }
+    private var variation = Variation()
+
     /// Creates a typeface from the specified file. The data for the font is directly read from the
     /// file when needed.
     ///
@@ -233,6 +238,7 @@ public class Typeface {
 
         setupDescription()
         setupVariation()
+        setupAxes()
         setupNames()
 
         return true
@@ -369,6 +375,35 @@ public class Typeface {
         }
     }
 
+    private func setupAxes() {
+        guard let fvarTable = FVAR.Table(typeface: self) else { return }
+
+        let nameTable = NameTable(typeface: self)
+
+        variation.axes = []
+
+        for axisRecord in fvarTable.axisRecords {
+            let axisTag: SFNTTag! = SFNTTag(rawValue: axisRecord.axisTag)
+            let minValue = CGFloat(axisRecord.minValue)
+            let defaultValue = CGFloat(axisRecord.defaultValue)
+            let maxValue = CGFloat(axisRecord.maxValue)
+            let flags = VariationAxis.Flags(rawValue: Int(axisRecord.flags))
+            let axisNameId = axisRecord.axisNameId
+
+            var axisName = ""
+
+            if let index = nameTable?.indexOfEnglishName(for: axisNameId) {
+                axisName = nameTable?.record(at: index).string ?? ""
+            }
+
+            let variationAxis = VariationAxis(tag: axisTag, name: axisName, flags: flags,
+                                              defaultValue: defaultValue,
+                                              minValue: minValue, maxValue: maxValue)
+
+            variation.axes?.append(variationAxis)
+        }
+    }
+
     private func setupNames() {
         guard let nameTable = NameTable(typeface: self) else { return }
 
@@ -428,9 +463,49 @@ public class Typeface {
         return try body(ftStroker)
     }
 
-    public var variationCoordinates: [Float] {
-        // TODO: Implement the method.
-        return []
+    public var isVariable: Bool {
+        return variation.axes != nil
+    }
+
+    public func variationInstance(forCoordinates coordinates: [CGFloat]) -> Typeface? {
+        guard let axes = variation.axes else {
+            return nil
+        }
+        guard let typeface = Typeface(fontFile: fontFile, faceIndex: ftFace.pointee.face_index, instanceIndex: 0) else {
+            return nil
+        }
+
+        var fixedCoords = Array<FT_Fixed>(repeating: 0, count: axes.count)
+        let numCoords = min(coordinates.count, axes.count)
+
+        for i in 0 ..< numCoords {
+            fixedCoords[i] = toF16Dot16(coordinates[i])
+        }
+
+        FT_Set_Var_Design_Coordinates(typeface.ftFace, FT_UInt(axes.count), &fixedCoords)
+
+        return typeface
+    }
+
+    public var variationAxes: [VariationAxis]? {
+        return variation.axes
+    }
+
+    public var variationCoordinates: [CGFloat]? {
+        guard let axes = variation.axes else {
+            return nil
+        }
+
+        var fixedCoords = Array<FT_Fixed>(repeating: 0, count: axes.count)
+        var coordValues = Array<CGFloat>(repeating: 0, count: axes.count)
+
+        if FT_Get_Var_Design_Coordinates(ftFace, FT_UInt(axes.count), &fixedCoords) == FT_Err_Ok {
+            for i in 0 ..< axes.count {
+                coordValues[i] = f16Dot16ToFloat(fixedCoords[i])
+            }
+        }
+
+        return coordValues
     }
 
     /// The family name of this typeface.
