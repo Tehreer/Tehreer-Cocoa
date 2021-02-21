@@ -107,9 +107,14 @@
 		6ECE4AFE23638DA9007D8839 /* unibreakdef.c in Sources */ = {isa = PBXBuildFile; fileRef = 6ECE46EC23638DA7007D8839 /* unibreakdef.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		6ECE4B0023638DA9007D8839 /* wordbreak.c in Sources */ = {isa = PBXBuildFile; fileRef = 6ECE46EE23638DA7007D8839 /* wordbreak.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		6EE0A44A2305C6D20061D4EB /* TypefaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */; };
+		7D2CD32925E18EEA001E630F /* DataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2CD32825E18EEA001E630F /* DataTable.swift */; };
 		7D33A2FB25C188B400F9A02B /* GlyphImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D33A2FA25C188B400F9A02B /* GlyphImage.swift */; };
+		7D37B06225E27F9E0024750D /* SFNTTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D37B06125E27F9E0024750D /* SFNTTable.swift */; };
+		7D37B06625E27F9F0024750D /* SubTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D37B06525E27F9F0024750D /* SubTable.swift */; };
 		7D3B97E225CAECF80076CC30 /* LineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3B97E025CAECF80076CC30 /* LineView.swift */; };
 		7D67F7AE25CAF09C00A712C1 /* TTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D67F7AD25CAF09C00A712C1 /* TTextView.swift */; };
+		7D9CB6FE25E18E7300A7BEBE /* FVARTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9CB6FD25E18E7300A7BEBE /* FVARTable.swift */; };
+		7DA9C1C725E25901007A6677 /* VariationAxis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA9C1C625E25900007A6677 /* VariationAxis.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -690,9 +695,14 @@
 		6ECE4B702363928E007D8839 /* ftcalc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ftcalc.c; sourceTree = "<group>"; };
 		6ECE4B712363928F007D8839 /* ftutil.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ftutil.c; sourceTree = "<group>"; };
 		6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypefaceManager.swift; sourceTree = "<group>"; };
+		7D2CD32825E18EEA001E630F /* DataTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataTable.swift; sourceTree = "<group>"; };
 		7D33A2FA25C188B400F9A02B /* GlyphImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphImage.swift; sourceTree = "<group>"; };
+		7D37B06125E27F9E0024750D /* SFNTTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFNTTable.swift; sourceTree = "<group>"; };
+		7D37B06525E27F9F0024750D /* SubTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubTable.swift; sourceTree = "<group>"; };
 		7D3B97E025CAECF80076CC30 /* LineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineView.swift; sourceTree = "<group>"; };
 		7D67F7AD25CAF09C00A712C1 /* TTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTextView.swift; sourceTree = "<group>"; };
+		7D9CB6FD25E18E7300A7BEBE /* FVARTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVARTable.swift; sourceTree = "<group>"; };
+		7DA9C1C625E25900007A6677 /* VariationAxis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VariationAxis.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -760,6 +770,7 @@
 				6E9734B622D4F0A9008863D0 /* Renderer.swift */,
 				6E9734B722D4F0A9008863D0 /* Typeface.swift */,
 				6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */,
+				7DA9C1C625E25900007A6677 /* VariationAxis.swift */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";
@@ -819,11 +830,14 @@
 			isa = PBXGroup;
 			children = (
 				6E9734DB22D4F0AA008863D0 /* Tables */,
+				7D2CD32825E18EEA001E630F /* DataTable.swift */,
 				6E9734D622D4F0AA008863D0 /* PatternCache.swift */,
+				7D37B06125E27F9E0024750D /* SFNTTable.swift */,
 				6E9734D722D4F0AA008863D0 /* SFNTTag.swift */,
 				6E9734D822D4F0AA008863D0 /* ShapingEngine.swift */,
 				6E9734D922D4F0AA008863D0 /* ShapingOrder.swift */,
 				6E9734DA22D4F0AA008863D0 /* ShapingResult.swift */,
+				7D37B06525E27F9F0024750D /* SubTable.swift */,
 				6E9734E122D4F0AA008863D0 /* WritingDirection.swift */,
 			);
 			path = SFNT;
@@ -832,6 +846,7 @@
 		6E9734DB22D4F0AA008863D0 /* Tables */ = {
 			isa = PBXGroup;
 			children = (
+				7D9CB6FD25E18E7300A7BEBE /* FVARTable.swift */,
 				6E9734DC22D4F0AA008863D0 /* HeadTable.swift */,
 				6E9734DD22D4F0AA008863D0 /* HHEATable.swift */,
 				6E9734DE22D4F0AA008863D0 /* NameRecord.swift */,
@@ -1786,6 +1801,7 @@
 				6E10F26823A515C4008B6145 /* Patch.c in Sources */,
 				6ECE4A0523638DA8007D8839 /* SheenBidi.c in Sources */,
 				6ECE4A8823638DA9007D8839 /* SheenFigure.c in Sources */,
+				7D2CD32925E18EEA001E630F /* DataTable.swift in Sources */,
 				6ECE4AE323638DA9007D8839 /* emojidef.c in Sources */,
 				6ECE4AE623638DA9007D8839 /* graphemebreak.c in Sources */,
 				6ECE4AEC23638DA9007D8839 /* linebreak.c in Sources */,
@@ -1800,6 +1816,7 @@
 				6E0C83E123938412000F9401 /* NSTextAlignment+Additions.swift in Sources */,
 				6E97350622D4F0AA008863D0 /* RandomAccessCollection+BidiParagraph.swift in Sources */,
 				6E97350722D4F0AA008863D0 /* RandomAccessCollection+IntrinsicRun.swift in Sources */,
+				7D9CB6FE25E18E7300A7BEBE /* FVARTable.swift in Sources */,
 				6E97351122D4F0AA008863D0 /* String+Additions.swift in Sources */,
 				6E97352622D4F0AA008863D0 /* IntrinsicCollection.swift in Sources */,
 				6E97352722D4F0AA008863D0 /* PrimitiveCollection.swift in Sources */,
@@ -1814,6 +1831,7 @@
 				6E9734F722D4F0AA008863D0 /* Typeface.swift in Sources */,
 				6EE0A44A2305C6D20061D4EB /* TypefaceManager.swift in Sources */,
 				6E9734FB22D4F0AA008863D0 /* BreakMode.swift in Sources */,
+				7D37B06225E27F9E0024750D /* SFNTTable.swift in Sources */,
 				6E9734FC22D4F0AA008863D0 /* BreakResolver.swift in Sources */,
 				6E9734FD22D4F0AA008863D0 /* CaretEdgeCollection.swift in Sources */,
 				6E9734FF22D4F0AA008863D0 /* ComposedFrame.swift in Sources */,
@@ -1826,6 +1844,7 @@
 				6E97350922D4F0AA008863D0 /* ShapingRunLocator.swift in Sources */,
 				6E97350A22D4F0AA008863D0 /* TextAlignment.swift in Sources */,
 				6E35D87623C3576300716706 /* TokenResolver.swift in Sources */,
+				7DA9C1C725E25901007A6677 /* VariationAxis.swift in Sources */,
 				6E35D87423C3542A00716706 /* TruncationPlace.swift in Sources */,
 				6E97350B22D4F0AA008863D0 /* Typesetter.swift in Sources */,
 				6E97350C22D4F0AA008863D0 /* VerticalAlignment.swift in Sources */,
@@ -1843,6 +1862,7 @@
 				6E97351D22D4F0AA008863D0 /* BidiAlgorithm.swift in Sources */,
 				6E97351E22D4F0AA008863D0 /* BidiBuffer.swift in Sources */,
 				6E97351F22D4F0AA008863D0 /* BidiLine.swift in Sources */,
+				7D37B06625E27F9F0024750D /* SubTable.swift in Sources */,
 				6E97352022D4F0AA008863D0 /* BidiParagraph.swift in Sources */,
 				6E97352122D4F0AA008863D0 /* BidiRun.swift in Sources */,
 				6E97352222D4F0AA008863D0 /* BreakClassifier.swift in Sources */,
