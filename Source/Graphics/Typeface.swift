@@ -156,6 +156,13 @@ public class Typeface {
     var sfFont: SFFontRef!
     let patternCache = PatternCache()
 
+    struct NameIndexes {
+        var family: Int?
+        var style: Int?
+        var full: Int?
+    }
+    private var nameIndexes = NameIndexes()
+
     /// Creates a typeface from the specified file. The data for the font is directly read from the
     /// file when needed.
     ///
@@ -225,6 +232,8 @@ public class Typeface {
         self.sfFont = SFFontCreateWithProtocol(&fontProtocol, Unmanaged.passUnretained(self).toOpaque())
 
         setupDescription()
+        setupVariation()
+        setupNames()
 
         return true
     }
@@ -234,17 +243,9 @@ public class Typeface {
         let os2Table = OS2Table(typeface: self)
         let nameTable = NameTable(typeface: self)
 
-        if let nameTable = nameTable {
-            if let string = nameTable.suitableFamilyName(considering: os2Table) {
-                familyName = string
-            }
-            if let string = nameTable.suitableStyleName(considering: os2Table) {
-                styleName = string
-            }
-            if let string = nameTable.englishName(for: NameTable.NameID.full) {
-                fullName = string
-            }
-        }
+        nameIndexes.family = nameTable?.indexOfFamilyName(considering: os2Table)
+        nameIndexes.style = nameTable?.indexOfStyleName(considering: os2Table)
+        nameIndexes.full = nameTable?.indexOfEnglishName(for: NameTable.NameID.full)
 
         if let os2Table = os2Table {
             if let value = Weight(rawValue: Int(os2Table.usWeightClass)) {
@@ -309,9 +310,11 @@ public class Typeface {
         }
 
         if FT_Get_Var_Design_Coordinates(ftFace, numCoords, &fixedCoords) == FT_Err_Ok {
+            let nameTable = NameTable(typeface: self)
+
             // Reset the style name and the full name.
-            styleName = ""
-            fullName = ""
+            nameIndexes.style = nil
+            nameIndexes.full = nil
 
             // Get the style name of this instance.
             for i in 0 ..< Int(variation.pointee.num_namedstyles) {
@@ -333,7 +336,7 @@ public class Typeface {
                 }
 
                 if areEqual {
-                    // TODO: Setup the style name.
+                    nameIndexes.style = nameTable?.indexOfEnglishName(for: UInt16(namedStyle.strid))
                     break
                 }
             }
@@ -361,6 +364,27 @@ public class Typeface {
 
                 default:
                     break
+                }
+            }
+        }
+    }
+
+    private func setupNames() {
+        guard let nameTable = NameTable(typeface: self) else { return }
+
+        if let index = nameIndexes.family {
+            familyName = nameTable.record(at: index).string ?? ""
+        }
+        if let index = nameIndexes.style {
+            styleName = nameTable.record(at: index).string ?? ""
+        }
+        if let index = nameIndexes.full {
+            fullName = nameTable.record(at: index).string ?? ""
+        } else {
+            if !familyName.isEmpty {
+                fullName = familyName
+                if !styleName.isEmpty {
+                    fullName += " " + styleName
                 }
             }
         }

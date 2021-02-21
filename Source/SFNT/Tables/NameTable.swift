@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -70,8 +70,8 @@ extension NameTable {
         static let windows: UInt16 = 3
     }
 
-    func englishName(for nameID: UInt16) -> String? {
-        var candidate: Record? = nil
+    func indexOfEnglishName(for nameID: UInt16) -> Int? {
+        var candidate: Int?
 
         for i in 0 ..< recordCount {
             let current = record(at: i)
@@ -82,53 +82,49 @@ extension NameTable {
             let locale = current.locale
             if locale?.languageCode == "en" {
                 if current.platformID == PlatformID.windows && locale?.regionCode == "US" {
-                    return current.string
+                    return i
                 }
 
                 if candidate == nil || current.platformID == PlatformID.macintosh {
-                    candidate = current
+                    candidate = i
                 }
             }
         }
 
-        if let candidate = candidate {
-            return candidate.string
-        }
-
-        return nil
+        return candidate
     }
 
-    func suitableFamilyName(considering os2Table: OS2Table?) -> String? {
-        var familyName: String? = nil
+    func indexOfFamilyName(considering os2Table: OS2Table?) -> Int? {
+        var familyName: Int? = nil
 
         if let os2Table = os2Table {
             if (os2Table.fsSelection & OS2Table.FSSelection.wws) != 0 {
-                familyName = englishName(for: NameID.wwsFamily)
+                familyName = indexOfEnglishName(for: NameID.wwsFamily)
             }
         }
         if familyName == nil {
-            familyName = englishName(for: NameID.typographicFamily)
+            familyName = indexOfEnglishName(for: NameID.typographicFamily)
         }
         if familyName == nil {
-            familyName = englishName(for: NameID.fontFamily)
+            familyName = indexOfEnglishName(for: NameID.fontFamily)
         }
 
         return familyName
     }
 
-    func suitableStyleName(considering os2Table: OS2Table?) -> String? {
-        var styleName: String? = nil
+    func indexOfStyleName(considering os2Table: OS2Table?) -> Int? {
+        var styleName: Int? = nil
 
         if let os2Table = os2Table {
             if (os2Table.fsSelection & OS2Table.FSSelection.wws) != 0 {
-                styleName = englishName(for: NameID.wwsSubfamily)
+                styleName = indexOfEnglishName(for: NameID.wwsSubfamily)
             }
         }
         if styleName == nil {
-            styleName = englishName(for: NameID.typographicSubfamily)
+            styleName = indexOfEnglishName(for: NameID.typographicSubfamily)
         }
         if styleName == nil {
-            styleName = englishName(for: NameID.fontSubfamily)
+            styleName = indexOfEnglishName(for: NameID.fontSubfamily)
         }
 
         return styleName
