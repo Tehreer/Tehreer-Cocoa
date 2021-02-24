@@ -44,42 +44,47 @@ class FontStream {
     }
 
     convenience init?(stream: InputStream) {
-        let fontStream = UnsafeMutablePointer<FT_StreamRec>.allocate(capacity: 1)
-        fontStream.pointee.base = nil
-        fontStream.pointee.size = 0
-        fontStream.pointee.pos = 0
-        fontStream.pointee.descriptor.pointer = Unmanaged.passRetained(stream).toOpaque()
-        fontStream.pointee.pathname.pointer = nil
-        fontStream.pointee.read = { (stream, offset, buffer, count) in
-            let streamPointer = (stream!.pointee.descriptor.pointer)!
-            let unmanagedStream = Unmanaged<InputStream>.fromOpaque(streamPointer)
-            let platformStream = unmanagedStream.takeUnretainedValue()
-            let bytesRead = platformStream.read(buffer!, maxLength: Int(count))
+        stream.open()
 
-            return UInt(bytesRead)
-        }
-        fontStream.pointee.close = { (stream) in
-            if let streamPointer = stream!.pointee.descriptor.pointer {
-                let unmanagedStream = Unmanaged<InputStream>.fromOpaque(streamPointer)
-                unmanagedStream.release()
+        let chunkLength = 4096
+        let chunkBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: chunkLength)
 
-                stream!.pointee.base = nil
-                stream!.pointee.size = 0
-                stream!.pointee.descriptor.pointer = nil
+        var data = Data()
+
+        while true {
+            let bytesRead = stream.read(chunkBuffer, maxLength: chunkLength)
+            guard bytesRead > 0 else {
+                break
             }
+
+            data.append(chunkBuffer, count: bytesRead)
         }
 
+        chunkBuffer.deallocate()
+        stream.close()
+
+        self.init(data: data)
+    }
+
+    convenience init?(data: Data) {
+        let streamBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
+        data.copyBytes(to: streamBuffer, count: data.count)
+
+        self.init(pointer: UnsafePointer<FT_Byte>(streamBuffer), size: data.count)
+    }
+
+    private convenience init?(pointer: UnsafePointer<FT_Byte>, size: Int) {
         var arguments = FT_Open_Args()
-        arguments.flags = FT_UInt(FT_OPEN_STREAM)
-        arguments.memory_base = nil
-        arguments.memory_size = 0
+        arguments.flags = FT_UInt(FT_OPEN_MEMORY)
+        arguments.memory_base = pointer
+        arguments.memory_size = size
         arguments.pathname = nil
-        arguments.stream = fontStream
+        arguments.stream = nil
 
         self.init(arguments: &arguments)
     }
 
-    convenience init(arguments: inout FT_Open_Args) {
+    convenience init?(arguments: inout FT_Open_Args) {
         let numFaces = FreeType.withLibrary { (library) -> FT_Long in
             var face: FT_Face!
 
@@ -91,6 +96,9 @@ class FontStream {
             }
 
             return 0
+        }
+        guard numFaces > 0 else {
+            return nil
         }
 
         self.init(arguments: &arguments, numFaces: numFaces)
@@ -104,6 +112,9 @@ class FontStream {
     deinit {
         if let utf8Path = arguments.pathname {
             utf8Path.deallocate()
+        }
+        if let pointer = arguments.memory_base {
+            pointer.deallocate()
         }
         if let stream = arguments.stream {
             stream.pointee.close(stream)
@@ -128,7 +139,7 @@ class FontStream {
     }
 }
 
-class FontFile {
+public class FontFile {
     private let mutex = Mutex()
     private let fontStream: FontStream
     private var defaultTypefaces: [Typeface]!
