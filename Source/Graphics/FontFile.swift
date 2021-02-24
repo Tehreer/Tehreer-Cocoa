@@ -17,14 +17,12 @@
 import Foundation
 import FreeType
 
-class FontFile {
-    private let mutex = Mutex()
+class FontStream {
+    private var arguments: FT_Open_Args
 
-    private var defaultTypefaces: [Typeface]!
-    private var arguments = FT_Open_Args()
-    private var faceCount: Int = 0
+    let faceCount: Int
 
-    public init?(path: String) {
+    convenience init?(path: String) {
         let utf8Path = path.utf8CString.withUnsafeBufferPointer { (pointer) -> UnsafeMutablePointer<FT_String>? in
             guard let baseAddress = pointer.baseAddress else {
                 return nil
@@ -42,12 +40,10 @@ class FontFile {
         arguments.pathname = utf8Path
         arguments.stream = nil
 
-        guard setup(arguments: &arguments) else {
-            return nil
-        }
+        self.init(arguments: &arguments)
     }
 
-    public init?(stream: InputStream) {
+    convenience init?(stream: InputStream) {
         let fontStream = UnsafeMutablePointer<FT_StreamRec>.allocate(capacity: 1)
         fontStream.pointee.base = nil
         fontStream.pointee.size = 0
@@ -80,12 +76,10 @@ class FontFile {
         arguments.pathname = nil
         arguments.stream = fontStream
 
-        guard setup(arguments: &arguments) else {
-            return nil
-        }
+        self.init(arguments: &arguments)
     }
 
-    private func setup(arguments: inout FT_Open_Args) -> Bool {
+    convenience init(arguments: inout FT_Open_Args) {
         let numFaces = FreeType.withLibrary { (library) -> FT_Long in
             var face: FT_Face!
 
@@ -98,15 +92,11 @@ class FontFile {
 
             return 0
         }
-        guard numFaces > 0 else {
-            return false
-        }
 
-        setup(arguments: &arguments, numFaces: numFaces)
-        return true
+        self.init(arguments: &arguments, numFaces: numFaces)
     }
 
-    private func setup(arguments: inout FT_Open_Args, numFaces: Int) {
+    private init(arguments: inout FT_Open_Args, numFaces: Int) {
         self.arguments = arguments
         self.faceCount = numFaces
     }
@@ -121,8 +111,8 @@ class FontFile {
         }
     }
 
-    func createFTFace(faceIndex: Int, instanceIndex: Int) -> FT_Face? {
-        return FreeType.withLibrary { (library) in
+    func makeFTFace(faceIndex: Int, instanceIndex: Int) -> FT_Face? {
+        FreeType.withLibrary { (library) in
             let id: FT_Long = (instanceIndex << 16) + faceIndex
             var face: FT_Face!
 
@@ -136,12 +126,34 @@ class FontFile {
             return face
         }
     }
+}
+
+class FontFile {
+    private let mutex = Mutex()
+    private let fontStream: FontStream
+    private var defaultTypefaces: [Typeface]!
+
+    public init?(path: String) {
+        guard let fontStream = FontStream(path: path) else {
+            return nil
+        }
+
+        self.fontStream = fontStream
+    }
+
+    public init?(stream: InputStream) {
+        guard let fontStream = FontStream(stream: stream) else {
+            return nil
+        }
+
+        self.fontStream = fontStream
+    }
 
     private func loadTypefaces() {
         defaultTypefaces = []
 
-        for i in 0 ..< faceCount {
-            guard let firstTypeface = Typeface(fontFile: self, faceIndex: i, instanceIndex: 0) else {
+        for i in 0 ..< fontStream.faceCount {
+            guard let firstTypeface = Typeface(fontStream: fontStream, faceIndex: i, instanceIndex: i) else {
                 continue
             }
 
@@ -151,7 +163,7 @@ class FontFile {
             defaultTypefaces.append(firstTypeface)
 
             for j in 1 ..< instanceCount {
-                guard let instanceTypeface = Typeface(fontFile: self, faceIndex: i, instanceIndex: j) else {
+                guard let instanceTypeface = Typeface(fontStream: fontStream, faceIndex: i, instanceIndex: j) else {
                     continue
                 }
 

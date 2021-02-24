@@ -145,7 +145,7 @@ public class Typeface {
     }
 
     private let mutex = Mutex()
-    private var fontFile: FontFile!
+    private var fontStream: FontStream!
 
     var tag: TypefaceTag?
 
@@ -173,10 +173,12 @@ public class Typeface {
     ///
     /// - Parameter path: The path of the font file.
     public init?(path: String) {
-        guard let fontFile = FontFile(path: path),
-              setup(fontFile: fontFile, faceIndex: 0, instanceIndex: 0) else {
+        guard let fontStream = FontStream(path: path),
+              let ftFace = fontStream.makeFTFace(faceIndex: 0, instanceIndex: 0) else {
             return nil
         }
+
+        setup(fontStream: fontStream, ftFace: ftFace)
     }
 
     /// Creates a typeface from the specified input stream. The data of the stream is not copied
@@ -185,23 +187,27 @@ public class Typeface {
     ///
     /// - Parameter stream: The input stream that contains the data of the font.
     public init?(stream: InputStream) {
-        guard let fontFile = FontFile(stream: stream),
-              setup(fontFile: fontFile, faceIndex: 0, instanceIndex: 0) else {
+        guard let fontStream = FontStream(stream: stream),
+              let ftFace = fontStream.makeFTFace(faceIndex: 0, instanceIndex: 0) else {
             return nil
         }
+
+        setup(fontStream: fontStream, ftFace: ftFace)
     }
 
-    init?(fontFile: FontFile, faceIndex: Int, instanceIndex: Int) {
-        guard setup(fontFile: fontFile, faceIndex: faceIndex, instanceIndex: instanceIndex) else {
+    init?(fontStream: FontStream, faceIndex: Int, instanceIndex: Int) {
+        guard let ftFace = fontStream.makeFTFace(faceIndex: faceIndex, instanceIndex: instanceIndex) else {
             return nil
         }
+
+        setup(fontStream: fontStream, ftFace: ftFace)
     }
 
-    private func setup(fontFile: FontFile, faceIndex: Int, instanceIndex: Int) -> Bool {
-        guard let ftFace = fontFile.createFTFace(faceIndex: faceIndex, instanceIndex: instanceIndex) else {
-            return false
-        }
+    init(fontStream: FontStream, ftFace: FT_Face) {
+        setup(fontStream: fontStream, ftFace: ftFace)
+    }
 
+    private func setup(fontStream: FontStream, ftFace: FT_Face) {
         var fontProtocol = SFFontProtocol(
             finalize: nil,
             loadTable: { (object, tag, buffer, length) in
@@ -231,7 +237,7 @@ public class Typeface {
         var size: FT_Size! = nil
         FT_New_Size(ftFace, &size)
 
-        self.fontFile = fontFile
+        self.fontStream = fontStream
         self.ftFace = ftFace
         self.ftSize = size
         self.sfFont = SFFontCreateWithProtocol(&fontProtocol, Unmanaged.passUnretained(self).toOpaque())
@@ -240,8 +246,6 @@ public class Typeface {
         setupVariation()
         setupAxes()
         setupNames()
-
-        return true
     }
 
     private func setupDescription() {
@@ -471,7 +475,7 @@ public class Typeface {
         guard let axes = variation.axes else {
             return nil
         }
-        guard let typeface = Typeface(fontFile: fontFile, faceIndex: ftFace.pointee.face_index, instanceIndex: 0) else {
+        guard let ftFace = fontStream.makeFTFace(faceIndex: ftFace.pointee.face_index, instanceIndex: 0) else {
             return nil
         }
 
@@ -482,9 +486,9 @@ public class Typeface {
             fixedCoords[i] = toF16Dot16(coordinates[i])
         }
 
-        FT_Set_Var_Design_Coordinates(typeface.ftFace, FT_UInt(axes.count), &fixedCoords)
+        FT_Set_Var_Design_Coordinates(ftFace, FT_UInt(axes.count), &fixedCoords)
 
-        return typeface
+        return Typeface(fontStream: fontStream, ftFace: ftFace)
     }
 
     public var variationAxes: [VariationAxis]? {
