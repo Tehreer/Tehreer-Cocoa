@@ -18,8 +18,6 @@ import Foundation
 import FreeType
 
 public class FontFile {
-    private let mutex = Mutex()
-    private let fontStream: FontStream
     private var defaultTypefaces: [Typeface]!
 
     public init?(path: String) {
@@ -27,7 +25,7 @@ public class FontFile {
             return nil
         }
 
-        self.fontStream = fontStream
+        loadTypefaces(from: fontStream)
     }
 
     public init?(stream: InputStream) {
@@ -35,10 +33,10 @@ public class FontFile {
             return nil
         }
 
-        self.fontStream = fontStream
+        loadTypefaces(from: fontStream)
     }
 
-    private func loadTypefaces() {
+    private func loadTypefaces(from fontStream: FontStream) {
         defaultTypefaces = []
 
         for i in 0 ..< fontStream.faceCount {
@@ -74,14 +72,6 @@ public class FontFile {
     }
 
     public var typefaces: [Typeface] {
-        if defaultTypefaces == nil {
-            mutex.synchronized {
-                if defaultTypefaces == nil {
-                    loadTypefaces()
-                }
-            }
-        }
-
         return defaultTypefaces
     }
 }
