@@ -399,13 +399,13 @@ public class Typeface {
         return Typeface(fontStream: fontStream, ftFace: ftFace)
     }
 
-    public var variationAxes: [VariationAxis]? {
-        return variation.axes
+    public var variationAxes: [VariationAxis] {
+        return variation.axes ?? []
     }
 
-    public var variationCoordinates: [CGFloat]? {
+    public var variationCoordinates: [CGFloat] {
         guard let axes = variation.axes else {
-            return nil
+            return []
         }
 
         var fixedCoords = Array<FT_Fixed>(repeating: 0, count: axes.count)

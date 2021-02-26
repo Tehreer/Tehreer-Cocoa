@@ -62,7 +62,7 @@ public class FontFile {
                     continue
                 }
 
-                let instanceCoords = instanceTypeface.variationCoordinates ?? []
+                let instanceCoords = instanceTypeface.variationCoordinates
                 if !instanceCoords.isEmpty {
                     // Remove existing duplicate instances.
                     for k in (instanceStart ..< defaultTypefaces.count).reversed() {
