@@ -181,6 +181,15 @@ public class Typeface {
         setup(fontStream: fontStream, ftFace: ftFace)
     }
 
+    public init?(data: Data) {
+        guard let fontStream = FontStream(data: data),
+              let ftFace = fontStream.makeFTFace(faceIndex: 0, instanceIndex: 0) else {
+            return nil
+        }
+
+        setup(fontStream: fontStream, ftFace: ftFace)
+    }
+
     /// Creates a typeface from the specified input stream. The data of the stream is not copied
     /// into the memory. Rather, it is directly read from the stream when needed. So the performance
     /// of resulting typeface might be slower and should be used with caution.
