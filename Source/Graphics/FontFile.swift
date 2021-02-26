@@ -28,6 +28,14 @@ public class FontFile {
         loadTypefaces(from: fontStream)
     }
 
+    public init?(data: Data) {
+        guard let fontStream = FontStream(data: data) else {
+            return nil
+        }
+
+        loadTypefaces(from: fontStream)
+    }
+
     public init?(stream: InputStream) {
         guard let fontStream = FontStream(stream: stream) else {
             return nil
