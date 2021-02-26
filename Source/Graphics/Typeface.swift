@@ -170,12 +170,8 @@ public class Typeface {
         nameIndexes.full = nameTable?.indexOfEnglishName(for: NameTable.NameID.full)
 
         if let os2Table = os2Table {
-            if let value = Weight(rawValue: Int(os2Table.usWeightClass)) {
-                weight = value
-            }
-            if let value = Width(rawValue: Int(os2Table.usWidthClass)) {
-                width = value
-            }
+            weight = Weight(value: os2Table.usWeightClass)
+            width = Width(value: os2Table.usWidthClass)
 
             if (os2Table.fsSelection & OS2Table.FSSelection.oblique) != 0 {
                 slope = .oblique
