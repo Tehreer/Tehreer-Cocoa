@@ -45,24 +45,6 @@ public typealias TypefaceTag = AnyHashable
 /// renderer, along with optionally `Renderer` settings like `typeSize`, `slantAngle`, `scaleX`, to
 /// specify how text appears when drawn (and measured).
 public class Typeface {
-    /// Specifies the slope of a typeface.
-    public enum Slope: Int {
-        /// The plain slope indicating upright characters.
-        case plain = 0
-        /// The italic slope indicating truly slanted characters which appear as they were designed.
-        case italic = 1
-        /// The oblique slope indicating artificially slanted characters.
-        case oblique = 2
-
-        init(ital: FT_Fixed) {
-            self = ital >= 0x10000 ? .italic : .plain
-        }
-
-        init(slnt: FT_Fixed) {
-            self = slnt != 0 ? .oblique : .plain
-        }
-    }
-
     private let mutex = Mutex()
     private var fontStream: FontStream!
 
@@ -100,6 +82,9 @@ public class Typeface {
         setup(fontStream: fontStream, ftFace: ftFace)
     }
 
+    /// Creates a new typeface from the data of the font.
+    ///
+    /// - Parameter data: The data of the font.
     public init?(data: Data) {
         guard let fontStream = FontStream(data: data),
               let ftFace = fontStream.makeFTFace(faceIndex: 0, instanceIndex: 0) else {
