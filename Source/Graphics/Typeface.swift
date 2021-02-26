@@ -45,45 +45,6 @@ public typealias TypefaceTag = AnyHashable
 /// renderer, along with optionally `Renderer` settings like `typeSize`, `slantAngle`, `scaleX`, to
 /// specify how text appears when drawn (and measured).
 public class Typeface {
-    /// Specifies the thickness of a typeface, in terms of lightness or heaviness of the strokes.
-    public enum Weight: Int {
-        case thin = 100
-        case extraLight = 200
-        case light = 300
-        case regular = 400
-        case medium = 500
-        case semiBold = 600
-        case bold = 700
-        case extraBold = 800
-        case heavy = 900
-
-        static let allValues: [Typeface.Weight] = [
-            .thin, .extraLight, .light,
-            .regular, .medium, .semiBold,
-            .bold, .extraBold, .heavy
-        ]
-
-        init(value: UInt16) {
-            let index = Int((Float(value) / 100.0) - 0.5)
-            self = Typeface.Weight.allValues[max(0, min(8, index))]
-        }
-
-        init(wght: FT_Fixed) {
-            let value = f16Dot16ToFloat(wght)
-            var weight: UInt16
-
-            if (value < 1) {
-                weight = 1
-            } else if (value > 1000) {
-                weight = 1000
-            } else {
-                weight = UInt16(value)
-            }
-
-            self.init(value: weight)
-        }
-    }
-
     /// Specifies the wideness of a typeface, in terms of the width of characters in relation to
     /// their heights.
     public enum Width: Int {
@@ -377,7 +338,7 @@ public class Typeface {
                     break
 
                 case FT_ULong(SFNTTag(stringLiteral: "wght").rawValue):
-                    weight = Weight(wght: fixedCoords[i])
+                    weight = Weight(wght: f16Dot16ToFloat(fixedCoords[i]))
                     break
 
                 default:
