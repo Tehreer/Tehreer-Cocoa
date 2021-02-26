@@ -47,7 +47,7 @@ public class FontFile {
             }
 
             let instanceStart = defaultTypefaces.count;
-            let instanceCount = firstTypeface.ftFace.pointee.style_flags >> 16
+            let instanceCount = max(1, firstTypeface.ftFace.pointee.style_flags >> 16)
 
             defaultTypefaces.append(firstTypeface)
 
