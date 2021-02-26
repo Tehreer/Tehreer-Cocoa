@@ -190,9 +190,8 @@ public class Typeface {
         setup(fontStream: fontStream, ftFace: ftFace)
     }
 
-    /// Creates a typeface from the specified input stream. The data of the stream is not copied
-    /// into the memory. Rather, it is directly read from the stream when needed. So the performance
-    /// of resulting typeface might be slower and should be used with caution.
+    /// Creates a new typeface from the input stream by copying its data into a memory buffer. It
+    /// may take some time to create the typeface if the stream holds larger data.
     ///
     /// - Parameter stream: The input stream that contains the data of the font.
     public init?(stream: InputStream) {
