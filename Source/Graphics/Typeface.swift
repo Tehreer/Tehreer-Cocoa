@@ -45,48 +45,6 @@ public typealias TypefaceTag = AnyHashable
 /// renderer, along with optionally `Renderer` settings like `typeSize`, `slantAngle`, `scaleX`, to
 /// specify how text appears when drawn (and measured).
 public class Typeface {
-    /// Specifies the wideness of a typeface, in terms of the width of characters in relation to
-    /// their heights.
-    public enum Width: Int {
-        case ultraCondensed = 1
-        case extraCondensed = 2
-        case condensed = 3
-        case semiCondensed = 4
-        case normal = 5
-        case semiExpanded = 6
-        case expanded = 7
-        case extraExpanded = 8
-        case ultraExpanded = 9
-
-        static let allValues: [Typeface.Width] = [
-            .ultraCondensed, .extraCondensed, .condensed,
-            .semiCondensed, .normal, .semiExpanded,
-            .expanded, .extraExpanded, .ultraExpanded
-        ]
-
-        init(value: UInt16) {
-            let index = Int(value - 1)
-            self = Typeface.Width.allValues[max(0, min(8, index))]
-        }
-
-        init(wdth: FT_Fixed) {
-            let value = f16Dot16ToFloat(wdth)
-            var width: UInt16
-
-            if (value < 50) {
-                width = 1
-            } else if (value < 125) {
-                width = UInt16(((value - 50) / 12.5) + 1)
-            } else if (value < 200) {
-                width = UInt16(((value - 125) / 25) + 7)
-            } else {
-                width = 9
-            }
-
-            self.init(value: width)
-        }
-    }
-
     /// Specifies the slope of a typeface.
     public enum Slope: Int {
         /// The plain slope indicating upright characters.
@@ -334,7 +292,7 @@ public class Typeface {
                     break
 
                 case FT_ULong(SFNTTag(stringLiteral: "wdth").rawValue):
-                    width = Width(wdth: fixedCoords[i])
+                    width = Width(wdth: f16Dot16ToFloat(fixedCoords[i]))
                     break
 
                 case FT_ULong(SFNTTag(stringLiteral: "wght").rawValue):
