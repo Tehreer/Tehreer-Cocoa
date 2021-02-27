@@ -375,10 +375,15 @@ public class Typeface {
         return try body(ftStroker)
     }
 
+    /// A Boolean value that indicates whether the typeface supports OpenType font variations.
     public var isVariable: Bool {
         return variation.axes != nil
     }
 
+    /// Returns a variation instance of this typeface with the specified design coordinates.
+    ///
+    /// - Parameter coordinates: The variation design coordinates.
+    /// - Returns: A variation instance of this typeface with the specified design coordinates.
     public func variationInstance(forCoordinates coordinates: [CGFloat]) -> Typeface? {
         guard let axes = variation.axes else {
             return nil
@@ -399,10 +404,12 @@ public class Typeface {
         return Typeface(fontStream: fontStream, ftFace: ftFace)
     }
 
+    /// The variation axes of this typeface.
     public var variationAxes: [VariationAxis] {
         return variation.axes ?? []
     }
 
+    /// The design variation coordinates of this typeface.
     public var variationCoordinates: [CGFloat] {
         guard let axes = variation.axes else {
             return []
