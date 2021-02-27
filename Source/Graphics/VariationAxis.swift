@@ -17,22 +17,40 @@
 import CoreGraphics
 import Foundation
 
+/// Represents font variation axis.
 public struct VariationAxis {
+    /// Flags for variation axis.
     public struct Flags: OptionSet {
+        /// The axis should not be exposed directly in user interfaces.
         public static let hiddenAxis = Flags(rawValue: 0x0001)
 
+        /// The corresponding value of the raw type.
         public let rawValue: Int
 
+        /// Creates a new option set from the given raw value.
+        ///
+        /// - Parameter rawValue: The raw value of the option set to create.
         public init(rawValue: Int) {
             self.rawValue = rawValue
         }
     }
 
+    /// The tag identifying the design variation.
     public let tag: SFNTTag
+
+    /// The display name.
     public let name: String
+
+    /// The axis qualifiers.
     public let flags: Flags
+
+    /// The default coordinate value.
     public let defaultValue: CGFloat
+
+    /// The minimum coordinate value.
     public let minValue: CGFloat
+
+    /// The maximum coordinate value.
     public let maxValue: CGFloat
 
     init(tag: SFNTTag, name: String, flags: VariationAxis.Flags,

@@ -37,16 +37,24 @@ open class TLabel: UIView {
     private var needsTypesetter: Bool = false
     private(set) open var textFrame: ComposedFrame? = nil
 
+    /// Returns an object initialized from data in a given unarchiver.
+    ///
+    /// - Parameter coder: An unarchiver object.
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
         addSizeLabel()
     }
 
+    /// Initializes and returns a newly allocated view object with the specified frame rectangle.
+    ///
+    /// - Parameter frame: The frame rectangle for the view, measured in points.
     public override init(frame: CGRect) {
         super.init(frame: frame)
         addSizeLabel()
     }
 
+    /// A Boolean value that indicates whether the view depends on the constraint-based layout
+    /// system.
     open override class var requiresConstraintBasedLayout: Bool {
         return true
     }

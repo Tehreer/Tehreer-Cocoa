@@ -188,6 +188,7 @@ private class LineBoxesOperation: Operation {
     }
 }
 
+/// A scrollable, multiline text region.
 open class TTextView: UIScrollView {
     private let operationQueue = OperationQueue()
     private var layoutID: NSObject!
@@ -211,11 +212,17 @@ open class TTextView: UIScrollView {
     private var lineBoxes: [CGRect] = []
     private var visibleIndexes: [Int] = []
 
+    /// Returns an object initialized from data in a given unarchiver.
+    ///
+    /// - Parameter coder: An unarchiver object.
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
         setup()
     }
 
+    /// Initializes and returns a newly allocated view object with the specified frame rectangle.
+    ///
+    /// - Parameter frame: The frame rectangle for the view, measured in points.
     public override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -537,6 +544,7 @@ open class TTextView: UIScrollView {
         return nil
     }
 
+    /// The composed frame being displayed.
     open var textFrame: ComposedFrame? {
         return isTextFrameResolved ? _textFrame : nil
     }
