@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,19 +19,27 @@ import FreeType
 
 /// Represents an OpenType `head` table.
 public struct HeadTable {
-    private let typeface: Typeface
+    private let typeface: Typeface?
     private let table: UnsafeMutablePointer<TT_Header>
 
     /// Creates a `head` table representation from the specified typeface.
     ///
     /// - Parameter typeface: The typeface for accessing the data of the table.
     public init?(typeface: Typeface) {
-        let pointer = FT_Get_Sfnt_Table(typeface.ftFace, FT_SFNT_HEAD)
-        guard let raw = pointer else {
+        guard let raw = FT_Get_Sfnt_Table(typeface.ftFace, FT_SFNT_HEAD) else {
             return nil
         }
 
         self.typeface = typeface
+        self.table = raw.assumingMemoryBound(to: TT_Header.self)
+    }
+
+    init?(ftFace: FT_Face) {
+        guard let raw = FT_Get_Sfnt_Table(ftFace, FT_SFNT_HEAD) else {
+            return nil
+        }
+
+        self.typeface = nil
         self.table = raw.assumingMemoryBound(to: TT_Header.self)
     }
 
