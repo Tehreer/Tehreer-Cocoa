@@ -507,6 +507,7 @@ private class Instance {
 /// specify how text appears when drawn (and measured).
 public class Typeface {
     private let instance: Instance
+    private var colors: [FT_Color] = []
 
     var tag: TypefaceTag?
 
@@ -521,6 +522,7 @@ public class Typeface {
         }
 
         self.instance = Instance(fontStream: fontStream, ftFace: ftFace)
+        setup()
     }
 
     /// Creates a new typeface from the data of the font.
@@ -533,6 +535,7 @@ public class Typeface {
         }
 
         self.instance = Instance(fontStream: fontStream, ftFace: ftFace)
+        setup()
     }
 
     /// Creates a new typeface from the input stream by copying its data into a memory buffer. It
@@ -546,6 +549,7 @@ public class Typeface {
         }
 
         self.instance = Instance(fontStream: fontStream, ftFace: ftFace)
+        setup()
     }
 
     init?(fontStream: FontStream, faceIndex: Int, instanceIndex: Int) {
@@ -554,10 +558,24 @@ public class Typeface {
         }
 
         self.instance = Instance(fontStream: fontStream, ftFace: ftFace)
+        setup()
     }
 
     private init(instance: Instance) {
         self.instance = instance
+        setup()
+    }
+
+    private init(instance: Instance, colors: [FT_Color]) {
+        self.instance = instance
+        self.colors = colors
+    }
+
+    private func setup() {
+        // Select first pallete by default.
+        if let colors = instance.predefinedPalettes.first?.colors {
+            self.colors = colors.map { $0.ftColor() }
+        }
     }
 
     func withFreeTypeFace<Result>(_ body: (FT_Face) throws -> Result) rethrows -> Result {
@@ -584,6 +602,10 @@ public class Typeface {
         return instance.patternCache
     }
 
+    var ftColors: [FT_Color] {
+        return colors
+    }
+
     /// A Boolean value that indicates whether the typeface supports OpenType font variations.
     public var isVariable: Bool {
         return !variationAxes.isEmpty
@@ -598,7 +620,7 @@ public class Typeface {
             return nil
         }
 
-        return Typeface(instance: instance)
+        return Typeface(instance: instance, colors: colors)
     }
 
     /// The variation axes of this typeface.
@@ -609,6 +631,50 @@ public class Typeface {
     /// The design variation coordinates of this typeface.
     public var variationCoordinates: [CGFloat] {
         return instance.variationCoordinates
+    }
+
+    /// The names associated with palette entries if this typeface supports OpenType color palettes.
+    public var paletteEntryNames: [String] {
+        return instance.paletteEntryNames
+    }
+
+    /// The predefined palettes in this typeface if it supports OpenType color palettes.
+    public var predefinedPalettes: [ColorPalette] {
+        return instance.predefinedPalettes
+    }
+
+    /// The colors associated with this typeface if it supports OpenType color palettes.
+    public var associatedColors: [UIColor] {
+        var array: [UIColor] = []
+        array.reserveCapacity(colors.count)
+
+        for i in 0 ..< colors.count {
+            array.append(UIColor(red: CGFloat(colors[i].red) / 255.0,
+                                 green: CGFloat(colors[i].green) / 255.0,
+                                 blue: CGFloat(colors[i].blue) / 255.0,
+                                 alpha: CGFloat(colors[i].alpha) / 255.0))
+        }
+
+        return array
+    }
+
+    /// Returns a variation instance of this typeface with the specified design coordinates.
+    ///
+    /// - Parameter coordinates: The variation design coordinates.
+    /// - Returns: A variation instance of this typeface with the specified design coordinates.
+    public func colorInstance(forColors colors: [UIColor]) -> Typeface? {
+        guard !paletteEntryNames.isEmpty else {
+            return nil
+        }
+
+        var array = Array<UIColor>(repeating: .black, count: paletteEntryNames.count)
+        let count = min(array.count, paletteEntryNames.count)
+
+        for i in 0 ..< count {
+            array[i] = colors[i]
+        }
+
+        return Typeface(instance: instance, colors: array.map { $0.ftColor() })
     }
 
     /// The family name of this typeface.
