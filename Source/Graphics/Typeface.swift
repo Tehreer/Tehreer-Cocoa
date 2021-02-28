@@ -18,6 +18,7 @@ import CoreGraphics
 import Foundation
 import FreeType
 import SheenFigure
+import UIKit
 
 private func toF26Dot6(_ value: CGFloat) -> FT_F26Dot6 {
     return FT_F26Dot6((value * 64) + 0.5)
@@ -59,6 +60,9 @@ private class Instance {
     }
     var nameIndexes = NameIndexes()
     var variationAxes: [VariationAxis] = []
+
+    var paletteEntryNames: [String] = []
+    var predefinedPalettes: [ColorPalette] = []
 
     var familyName = ""
     var styleName = ""
@@ -274,6 +278,78 @@ private class Instance {
                                               minValue: minValue, maxValue: maxValue)
 
             variationAxes.append(variationAxis)
+        }
+    }
+
+    private func setupPalettes() {
+        guard let cpalData = dataOfTable("CPAL") else { return }
+
+        let cpalTable = CPAL.Table(data: cpalData)
+        let nameTable = NameTable(ftFace: ftFace)
+
+        let numPaletteEntries = Int(cpalTable.numPaletteEntries)
+        let numPalettes = Int(cpalTable.numPalettes)
+
+        let colorRecords = cpalTable.colorRecords
+        let paletteTypes = cpalTable.paletteTypes
+        let paletteLabels = cpalTable.paletteLabels
+        let paletteEntryLabels = cpalTable.paletteEntryLabels
+
+        predefinedPalettes.reserveCapacity(numPalettes)
+
+        /* Populate predefined palettes. */
+        for i in 0 ..< numPalettes {
+            var name = ""
+            var flags: ColorPalette.Flags = []
+            var colors: [UIColor] = []
+
+            if let paletteLabels = paletteLabels {
+                let nameID = paletteLabels[i]
+
+                if nameID != 0xFFFF {
+                    if let index = nameTable?.indexOfEnglishName(for: nameID) {
+                        name = nameTable?.record(at: index).string ?? ""
+                    }
+                }
+            }
+
+            if let paletteTypes = paletteTypes {
+                flags = ColorPalette.Flags(rawValue: Int(paletteTypes[i]))
+            }
+
+            let firstColorIndex = cpalTable.colorRecordIndex(at: i)
+            for j in 0 ..< numPaletteEntries {
+                let record = colorRecords[Int(firstColorIndex) + j]
+
+                colors.append(UIColor(red: CGFloat(record.red) / 255.0,
+                                      green: CGFloat(record.green) / 255.0,
+                                      blue: CGFloat(record.blue) / 255.0,
+                                      alpha: CGFloat(record.alpha) / 255.0))
+            }
+
+            predefinedPalettes.append(ColorPalette(name: name, flags: flags, colors: colors))
+        }
+
+        paletteEntryNames.reserveCapacity(numPaletteEntries)
+
+        // Populate palette entry names.
+        if let paletteEntryLabels = paletteEntryLabels {
+            for i in 0 ..< numPaletteEntries {
+                let nameID = paletteEntryLabels[i]
+                var name = ""
+
+                if nameID != 0xFFFF {
+                    if let index = nameTable?.indexOfEnglishName(for: nameID) {
+                        name = nameTable?.record(at: index).string ?? ""
+                    }
+                }
+
+                paletteEntryNames.append(name)
+            }
+        } else {
+            for _ in 0 ..< numPaletteEntries {
+                paletteEntryNames.append("")
+            }
         }
     }
 
