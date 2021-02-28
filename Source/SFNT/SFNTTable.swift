@@ -30,12 +30,18 @@ protocol SFNTTable {
 
     func readFixed(at offset: Int) -> Float32
 
+    func readOffset32(at offset: Int) -> Int
+
     func subTable(at offset: Int) -> SFNTTable
 }
 
 extension SFNTTable {
     func readFixed(at offset: Int) -> Float32 {
         return Float32(readInt32(at: offset)) / 65536.0
+    }
+
+    func readOffset32(at offset: Int) -> Int {
+        return Int(readUInt32(at: offset) & ~0x80000000)
     }
 
     func subTable(at offset: Int) -> SFNTTable {
