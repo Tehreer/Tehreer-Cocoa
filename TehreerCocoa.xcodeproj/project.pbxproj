@@ -106,6 +106,7 @@
 		6ECE4AFE23638DA9007D8839 /* unibreakdef.c in Sources */ = {isa = PBXBuildFile; fileRef = 6ECE46EC23638DA7007D8839 /* unibreakdef.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		6ECE4B0023638DA9007D8839 /* wordbreak.c in Sources */ = {isa = PBXBuildFile; fileRef = 6ECE46EE23638DA7007D8839 /* wordbreak.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		6EE0A44A2305C6D20061D4EB /* TypefaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */; };
+		7D18BE5A25ECFDEF00F4412B /* UIColor+FTColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D18BE5925ECFDEF00F4412B /* UIColor+FTColor.swift */; };
 		7D2CD32925E18EEA001E630F /* DataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2CD32825E18EEA001E630F /* DataTable.swift */; };
 		7D33A2FB25C188B400F9A02B /* GlyphImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D33A2FA25C188B400F9A02B /* GlyphImage.swift */; };
 		7D37B06225E27F9E0024750D /* SFNTTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D37B06125E27F9E0024750D /* SFNTTable.swift */; };
@@ -698,6 +699,7 @@
 		6ECE4B702363928E007D8839 /* ftcalc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ftcalc.c; sourceTree = "<group>"; };
 		6ECE4B712363928F007D8839 /* ftutil.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ftutil.c; sourceTree = "<group>"; };
 		6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypefaceManager.swift; sourceTree = "<group>"; };
+		7D18BE5925ECFDEF00F4412B /* UIColor+FTColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+FTColor.swift"; sourceTree = "<group>"; };
 		7D2CD32825E18EEA001E630F /* DataTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataTable.swift; sourceTree = "<group>"; };
 		7D33A2FA25C188B400F9A02B /* GlyphImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphImage.swift; sourceTree = "<group>"; };
 		7D37B06125E27F9E0024750D /* SFNTTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFNTTable.swift; sourceTree = "<group>"; };
@@ -768,6 +770,7 @@
 		6E9734AF22D4F0A9008863D0 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				7D18BE5925ECFDEF00F4412B /* UIColor+FTColor.swift */,
 				6E9734B022D4F0A9008863D0 /* FontFile.swift */,
 				7D4376C625E9315F006A3F25 /* FontStream.swift */,
 				6E9734B122D4F0A9008863D0 /* FreeType.swift */,
@@ -1802,6 +1805,7 @@
 				7D4376D025E93D80006A3F25 /* TypeWidth.swift in Sources */,
 				6ECE48F323638DA8007D8839 /* pcf.c in Sources */,
 				6ECE490023638DA8007D8839 /* pfr.c in Sources */,
+				7D18BE5A25ECFDEF00F4412B /* UIColor+FTColor.swift in Sources */,
 				6ECE491823638DA8007D8839 /* psaux.c in Sources */,
 				6ECE493E23638DA8007D8839 /* pshinter.c in Sources */,
 				6ECE494A23638DA8007D8839 /* psnames.c in Sources */,
