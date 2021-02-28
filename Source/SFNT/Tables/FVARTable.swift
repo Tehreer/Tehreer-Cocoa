@@ -38,6 +38,10 @@ extension FVAR {
             self.data = DataTable(data: data)
         }
 
+        init(data: Data) {
+            self.data = DataTable(data: data)
+        }
+
         var majorVersion: UInt16 {
             return data.readUInt16(at: Self.majorVersion);
         }
