@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,22 +19,30 @@ import FreeType
 
 /// Represents an OpenType `OS/2` table.
 public struct OS2Table {
-    private let typeface: Typeface
-    private let table: UnsafeMutablePointer<TT_OS2>
+    private var typeface: Typeface?
+    private var table: UnsafeMutablePointer<TT_OS2>!
 
     /// Creates a `OS/2` table representation from the specified typeface.
     ///
     /// - Parameter typeface: The typeface for accessing the data of the table.
     public init?(typeface: Typeface) {
-        let pointer = FT_Get_Sfnt_Table(typeface.ftFace, FT_SFNT_OS2)
-        guard let raw = pointer else {
+        guard let raw = FT_Get_Sfnt_Table(typeface.ftFace, FT_SFNT_OS2) else {
             return nil
         }
 
         self.typeface = typeface
         self.table = raw.assumingMemoryBound(to: TT_OS2.self)
     }
-    
+
+    init?(ftFace: FT_Face) {
+        guard let raw = FT_Get_Sfnt_Table(ftFace, FT_SFNT_OS2) else {
+            return nil
+        }
+
+        self.typeface = nil
+        self.table = raw.assumingMemoryBound(to: TT_OS2.self)
+    }
+
     public var version: UInt16 {
         return table.pointee.version
     }
