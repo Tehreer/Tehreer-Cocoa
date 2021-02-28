@@ -19,18 +19,25 @@ import FreeType
 
 /// Represents an OpenType `name` table.
 public struct NameTable {
-    private let typeface: Typeface
+    private let typeface: Typeface?
+    private let ftFace: FT_Face
 
     /// Creates a `name` table representation from the specified typeface.
     ///
     /// - Parameter typeface: The typeface for accessing the data of the table.
     public init?(typeface: Typeface) {
         self.typeface = typeface
+        self.ftFace = typeface.ftFace
+    }
+
+    init?(ftFace: FT_Face) {
+        self.typeface = nil
+        self.ftFace = ftFace
     }
 
     /// The number of name records in this table.
     public var recordCount: Int {
-        return Int(FT_Get_Sfnt_Name_Count(typeface.ftFace))
+        return Int(FT_Get_Sfnt_Name_Count(ftFace))
     }
 
     /// Retrieves a name record at a specified index.
@@ -42,7 +49,7 @@ public struct NameTable {
         precondition(index >= 0 && index < recordCount, String.indexOutOfRange)
 
         var sfntName = FT_SfntName()
-        FT_Get_Sfnt_Name(typeface.ftFace, FT_UInt(index), &sfntName)
+        FT_Get_Sfnt_Name(ftFace, FT_UInt(index), &sfntName)
 
         let buffer = UnsafeBufferPointer(start: sfntName.string, count: Int(sfntName.string_len))
 
