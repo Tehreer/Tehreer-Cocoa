@@ -80,4 +80,45 @@ extension GlyphKey {
             return super.equals(key)
         }
     }
+
+    final class Color: GlyphKey {
+        var foregroundColor: FT_Color = FT_Color(blue: 0, green: 0, red: 0, alpha: 0)
+
+        override init() { }
+
+        func set(from key: Data) {
+            super.set(from: key)
+        }
+
+        override func copy() -> Color {
+            let key = Color()
+            key.set(from: self)
+            key.foregroundColor = foregroundColor
+
+            return key
+        }
+
+        override func equals(_ key: GlyphKey) -> Bool {
+            if self === key {
+                return true
+            }
+            guard let key = key as? Color else {
+                return false
+            }
+
+            return super.equals(key)
+                && foregroundColor.blue == key.foregroundColor.blue
+                && foregroundColor.green == key.foregroundColor.green
+                && foregroundColor.red == key.foregroundColor.red
+                && foregroundColor.alpha == key.foregroundColor.alpha
+        }
+
+        override func hash(into hasher: inout Hasher) {
+            super.hash(into: &hasher)
+            hasher.combine(foregroundColor.blue)
+            hasher.combine(foregroundColor.green)
+            hasher.combine(foregroundColor.red)
+            hasher.combine(foregroundColor.alpha)
+        }
+    }
 }
