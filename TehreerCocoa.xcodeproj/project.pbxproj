@@ -118,6 +118,7 @@
 		7D4376D025E93D80006A3F25 /* TypeWidth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4376CF25E93D80006A3F25 /* TypeWidth.swift */; };
 		7D4376D425E93F07006A3F25 /* TypeSlope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4376D325E93F07006A3F25 /* TypeSlope.swift */; };
 		7D67F7AE25CAF09C00A712C1 /* TTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D67F7AD25CAF09C00A712C1 /* TTextView.swift */; };
+		7D68444D25EE3AEC00C1DE3B /* GlyphOutline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D68444C25EE3AEC00C1DE3B /* GlyphOutline.swift */; };
 		7D6C465125EBD336006997FB /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6C465025EBD335006997FB /* ColorPalette.swift */; };
 		7D6C465525EBD548006997FB /* CPALTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6C465425EBD548006997FB /* CPALTable.swift */; };
 		7D9CB6FE25E18E7300A7BEBE /* FVARTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9CB6FD25E18E7300A7BEBE /* FVARTable.swift */; };
@@ -713,6 +714,7 @@
 		7D4376CF25E93D80006A3F25 /* TypeWidth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeWidth.swift; sourceTree = "<group>"; };
 		7D4376D325E93F07006A3F25 /* TypeSlope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeSlope.swift; sourceTree = "<group>"; };
 		7D67F7AD25CAF09C00A712C1 /* TTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTextView.swift; sourceTree = "<group>"; };
+		7D68444C25EE3AEC00C1DE3B /* GlyphOutline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphOutline.swift; sourceTree = "<group>"; };
 		7D6C465025EBD335006997FB /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		7D6C465425EBD548006997FB /* CPALTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPALTable.swift; sourceTree = "<group>"; };
 		7D9CB6FD25E18E7300A7BEBE /* FVARTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVARTable.swift; sourceTree = "<group>"; };
@@ -784,6 +786,7 @@
 				6E9734B322D4F0A9008863D0 /* GlyphCache.swift */,
 				7D33A2FA25C188B400F9A02B /* GlyphImage.swift */,
 				6E9734B522D4F0A9008863D0 /* GlyphKey.swift */,
+				7D68444C25EE3AEC00C1DE3B /* GlyphOutline.swift */,
 				6E9734B422D4F0A9008863D0 /* GlyphRasterizer.swift */,
 				6E9734B622D4F0A9008863D0 /* Renderer.swift */,
 				6E9734B722D4F0A9008863D0 /* Typeface.swift */,
@@ -1814,6 +1817,7 @@
 				6ECE490023638DA8007D8839 /* pfr.c in Sources */,
 				7D18BE5A25ECFDEF00F4412B /* UIColor+FTColor.swift in Sources */,
 				6ECE491823638DA8007D8839 /* psaux.c in Sources */,
+				7D68444D25EE3AEC00C1DE3B /* GlyphOutline.swift in Sources */,
 				6ECE493E23638DA8007D8839 /* pshinter.c in Sources */,
 				6ECE494A23638DA8007D8839 /* psnames.c in Sources */,
 				6ECE495423638DA8007D8839 /* raster.c in Sources */,
