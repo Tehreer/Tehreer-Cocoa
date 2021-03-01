@@ -121,4 +121,51 @@ extension GlyphKey {
             hasher.combine(foregroundColor.alpha)
         }
     }
+
+    final class Stroke: GlyphKey {
+        var lineRadius: FT_Fixed = 0
+        var lineCap = FT_Stroker_LineCap(rawValue: 0)
+        var lineJoin = FT_Stroker_LineJoin(rawValue: 0)
+        var miterLimit: FT_Fixed = 0
+
+        override init() { }
+
+        func set(from key: Data) {
+            super.set(from: key)
+        }
+
+        override func copy() -> Stroke {
+            let key = Stroke()
+            key.set(from: self)
+            key.lineRadius = lineRadius
+            key.lineCap = lineCap
+            key.lineJoin = lineJoin
+            key.miterLimit = miterLimit
+
+            return key
+        }
+
+        override func equals(_ key: GlyphKey) -> Bool {
+            if self === key {
+                return true
+            }
+            guard let key = key as? Stroke else {
+                return false
+            }
+
+            return super.equals(key)
+                && lineRadius == key.lineRadius
+                && lineCap == key.lineCap
+                && lineJoin == key.lineJoin
+                && miterLimit == key.miterLimit
+        }
+
+        override func hash(into hasher: inout Hasher) {
+            super.hash(into: &hasher)
+            hasher.combine(lineRadius)
+            hasher.combine(lineCap.rawValue)
+            hasher.combine(lineJoin.rawValue)
+            hasher.combine(miterLimit)
+        }
+    }
 }
