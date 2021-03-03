@@ -199,6 +199,37 @@ class GlyphRasterizer {
         }
     }
 
+    func getType(forGlyph glyphID: GlyphID) -> GlyphType {
+        typeface.withFreeTypeFace { (face) -> GlyphType in
+            var iterator = FT_LayerIterator()
+            iterator.p = nil
+
+            var layerGlyphID: FT_UInt = 0
+            var colorIndex: FT_UInt = 0
+
+            var isColored = false
+            var hasMask = false
+
+            while FT_Get_Color_Glyph_Layer(face, FT_UInt(glyphID), &layerGlyphID, &colorIndex, &iterator) != 0 {
+                isColored = true
+
+                if colorIndex == 0xFFFF {
+                    hasMask = true
+                    break
+                }
+            }
+
+            if !isColored {
+                return .mask
+            }
+            if !hasMask {
+                return .color
+            }
+
+            return .mixed
+        }
+    }
+
     func makeImage(glyphID: GlyphID, foregroundColor: FT_Color = FT_Color(blue: 0, green: 0, red: 0, alpha: 0)) -> GlyphImage? {
         typeface.withFreeTypeFace { (face) in
             activate(face: face, colors: typeface.ftColors)
@@ -212,9 +243,8 @@ class GlyphRasterizer {
                 return nil
             }
 
-            let glyphSlot: FT_GlyphSlot! = face.pointee.glyph
-
-            guard let glyphLayer = makeLayer(bitmap: &glyphSlot.pointee.bitmap) else {
+            guard let glyphSlot = face.pointee.glyph,
+                  let glyphLayer = makeLayer(bitmap: &glyphSlot.pointee.bitmap) else {
                 return nil
             }
 
@@ -224,18 +254,55 @@ class GlyphRasterizer {
         }
     }
 
-    func makeOutline(glyphID: GlyphID) -> FT_Glyph? {
-        return typeface.withFreeTypeFace { (face) in
-            activate(face: face, colors: typeface.ftColors)
+    func makeStrokeImage(glyph: FT_Glyph, lineRadius: FT_Fixed, lineCap: FT_Stroker_LineCap,
+                         lineJoin: FT_Stroker_LineJoin, miterLimit: FT_Fixed) -> GlyphImage? {
+        var baseGlyph: FT_Glyph! = glyph
 
-            if FT_Load_Glyph(face, FT_UInt(glyphID), FT_Int32(FT_LOAD_NO_BITMAP)) == FT_Err_Ok {
-                var outline: FT_Glyph?
-                FT_Get_Glyph(face.pointee.glyph, &outline)
+        let error = typeface.withFreeTypeStroker { (stroker) -> FT_Error in
+            FT_Stroker_Set(stroker, lineRadius, lineCap, lineJoin, miterLimit)
 
-                return outline
+            return FT_Glyph_Stroke(&baseGlyph, stroker, 0)
+        }
+
+        if error == FT_Err_Ok {
+            FT_Glyph_To_Bitmap(&baseGlyph, FT_RENDER_MODE_NORMAL, nil, 1)
+
+            defer {
+                // Dispose the stroked / bitmap glyph.
+                FT_Done_Glyph(baseGlyph)
             }
 
-            return nil
+            let bitmapGlyph = UnsafeMutablePointer<FT_BitmapGlyphRec_>(OpaquePointer(baseGlyph))!
+
+            if let strokeLayer = makeLayer(bitmap: &bitmapGlyph.pointee.bitmap) {
+                return GlyphImage(layer: strokeLayer,
+                                  left: CGFloat(bitmapGlyph.pointee.left),
+                                  top: CGFloat(bitmapGlyph.pointee.top))
+            }
+        }
+
+        return nil
+    }
+
+    func makeOutline(glyphID: GlyphID) -> GlyphOutline? {
+        typeface.withFreeTypeFace { (face) in
+            activate(face: face, colors: typeface.ftColors)
+
+            let inputGlyph = FT_UInt(glyphID)
+            let loadFlags = FT_Int32(FT_LOAD_NO_BITMAP)
+
+            guard FT_Load_Glyph(face, inputGlyph, loadFlags) == FT_Err_Ok else {
+                return nil
+            }
+
+            var outline: FT_Glyph?
+            FT_Get_Glyph(face.pointee.glyph, &outline)
+
+            guard let glyph = outline else {
+                return nil
+            }
+
+            return GlyphOutline(glyph: glyph)
         }
     }
 
@@ -245,36 +312,5 @@ class GlyphRasterizer {
 
             return typeface.unsafeMakePath(glyphID: FT_UInt(glyphID))
         }
-    }
-
-    func makeStrokedGlyph(of glyph: Glyph, lineRadius: FT_Fixed, lineCap: FT_Stroker_LineCap,
-                          lineJoin: FT_Stroker_LineJoin, miterLimit: FT_Fixed) -> Glyph {
-        let result = Glyph(glyphID: glyph.glyphID)
-        var baseGlyph = glyph.outline
-
-        if baseGlyph != nil {
-            let error = typeface.withFreeTypeStroker { (stroker) -> FT_Error in
-                FT_Stroker_Set(stroker, lineRadius, lineCap, lineJoin, miterLimit)
-
-                return FT_Glyph_Stroke(&baseGlyph, stroker, 0)
-            }
-
-            if error == FT_Err_Ok {
-                FT_Glyph_To_Bitmap(&baseGlyph, FT_RENDER_MODE_NORMAL, nil, 1)
-
-                let bitmapGlyph = UnsafeMutablePointer<FT_BitmapGlyphRec_>(OpaquePointer(baseGlyph))!
-
-                if let strokeLayer = makeLayer(bitmap: &bitmapGlyph.pointee.bitmap) {
-                    result.own(image: GlyphImage(layer: strokeLayer,
-                                                 left: CGFloat(bitmapGlyph.pointee.left),
-                                                 top: CGFloat(bitmapGlyph.pointee.top)))
-                }
-
-                // Dispose the stroked / bitmap glyph.
-                FT_Done_Glyph(baseGlyph)
-            }
-        }
-
-        return result
     }
 }

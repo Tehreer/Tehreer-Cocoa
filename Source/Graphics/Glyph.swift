@@ -19,30 +19,20 @@ import Foundation
 import FreeType
 import UIKit
 
+enum GlyphType: Int {
+    case unknown = 0
+    case mask = 1
+    case color = 2
+    case mixed = 3
+}
+
 class Glyph {
-    let glyphID: GlyphID
+    var type: GlyphType?
+    var image: GlyphImage?
+    var outline: GlyphOutline?
+    var path: CGPath?
 
-    private(set) var image: GlyphImage?
-    private(set) var outline: FT_Glyph?
-    private(set) var path: CGPath?
-
-    init(glyphID: GlyphID) {
-        self.glyphID = glyphID
-    }
-
-    deinit {
-        FT_Done_Glyph(outline)
-    }
-
-    func own(image: GlyphImage?) {
-        self.image = image
-    }
-
-    func own(outline: FT_Glyph?) {
-        self.outline = outline
-    }
-
-    func own(path: CGPath?) {
-        self.path = path
+    var isLoaded: Bool {
+        return type != nil
     }
 }

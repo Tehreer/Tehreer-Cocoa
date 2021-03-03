@@ -54,18 +54,20 @@ public class Renderer {
         case round = 0
     }
 
-    private var glyphKey = GlyphKey.Data()
-    private var glyphLineRadius: Int = 32
-    private var glyphMiterLimit: Int = 0x10000
-    private var shouldRender: Bool = false
+    private let glyphAttributes = GlyphAttributes()
 
     /// Creates a renderer.
     public init() {
         updatePixelSizes()
+        updateTransform()
     }
 
     /// The fill color for glyphs. Its default value is `.black`.
-    public var fillColor: UIColor = .black
+    public var fillColor: UIColor = .black {
+        didSet {
+            glyphAttributes.setForegroundColor(fillColor.ftColor())
+        }
+    }
 
     /// The style, used for controlling how glyphs should appear while drawing. Its default value is
     /// `.fill`.
@@ -78,7 +80,7 @@ public class Renderer {
     /// The typeface, used for drawing glyphs.
     public var typeface: Typeface! = nil {
         didSet {
-            glyphKey.typeface = typeface
+            glyphAttributes.setTypeface(typeface)
         }
     }
 
@@ -127,22 +129,30 @@ public class Renderer {
     /// The width, in pixels, for stroking glyphs.
     public var strokeWidth: CGFloat = 1.0 {
         didSet {
-            glyphLineRadius = Int((strokeWidth * 64.0 / 2.0) + 0.5)
+            glyphAttributes.setLineRadius(strokeWidth / 2.0)
         }
     }
 
     /// The stroke cap style which controls how the start and end of stroked lines and paths are
     /// treated. Its default value is `.butt`.
-    public var strokeCap: StrokeCap = .butt
+    public var strokeCap: StrokeCap = .butt {
+        didSet {
+            glyphAttributes.setLineCap(FT_Stroker_LineCap(UInt32(strokeCap.rawValue)))
+        }
+    }
 
     /// The stroke join type. Its default value is `.round`.
-    public var strokeJoin: StrokeJoin = .round
+    public var strokeJoin: StrokeJoin = .round {
+        didSet {
+            glyphAttributes.setLineJoin(FT_Stroker_LineJoin(UInt32(strokeJoin.rawValue)))
+        }
+    }
 
     /// The stroke miter limit in pixels. This is used to control the behavior of miter joins when
     /// the joins angle is sharp.
     public var strokeMiter: CGFloat = 1.0 {
         didSet {
-            glyphMiterLimit = Int((strokeMiter * 0x10000) + 0.5)
+            glyphAttributes.setMiterLimit(strokeMiter)
         }
     }
 
@@ -160,21 +170,16 @@ public class Renderer {
     public var shadowColor: UIColor = .black
 
     private func updatePixelSizes() {
-        let pixelWidth = Int((typeSize * scaleX * renderScale * 64.0) + 0.5)
-        let pixelHeight = Int((typeSize * scaleY * renderScale * 64.0) + 0.5)
-
-        // Minimum size supported by Freetype is 64x64.
-        shouldRender = (pixelWidth >= 64 && pixelHeight >= 64)
-        glyphKey.pixelWidth = pixelWidth
-        glyphKey.pixelHeight = pixelHeight
+        glyphAttributes.setPixelWidth(typeSize * scaleX * renderScale)
+        glyphAttributes.setPixelHeight(typeSize * scaleY * renderScale)
     }
 
     private func updateTransform() {
-        glyphKey.skewX = Int((slantAngle * 0x10000) + 0.5)
+        glyphAttributes.setSkewX(slantAngle)
     }
 
     private func cachedPath(forGlyph glyphID: GlyphID) -> CGPath? {
-        return GlyphCache.instance.glyphPath(with: glyphKey, for: glyphID)
+        return GlyphCache.instance.path(forGlyph: glyphID, attributes: glyphAttributes)
     }
 
     /// Generates the path of specified glyph.
@@ -218,7 +223,7 @@ public class Renderer {
     }
 
     private func cachedBoundingBox(forGlyph glyphID: GlyphID) -> CGRect {
-        if let glyphImage = GlyphCache.instance.maskGlyph(with: glyphKey, for: glyphID).image {
+        if let glyphImage = GlyphCache.instance.defaultImage(forGlyph: glyphID, attributes: glyphAttributes) {
             return CGRect(x: glyphImage.left,
                           y: glyphImage.top,
                           width: glyphImage.width,
@@ -321,28 +326,17 @@ public class Renderer {
                 penX -= advance
             }
 
-            let maskGlyph: Glyph
+            let glyphImage = (!strokeMode
+                              ? cache.defaultImage(forGlyph: glyphID, attributes: glyphAttributes)
+                              : cache.strokeImage(forGlyph: glyphID, attributes: glyphAttributes))
 
-            if !strokeMode {
-                maskGlyph = cache.maskGlyph(with: glyphKey, for: glyphID)
-            } else {
-                maskGlyph = cache.maskGlyph(
-                    with: glyphKey,
-                    for: glyphID,
-                    lineRadius: glyphLineRadius,
-                    lineCap: FT_Stroker_LineCap(UInt32(strokeCap.rawValue)),
-                    lineJoin: FT_Stroker_LineJoin(UInt32(strokeJoin.rawValue)),
-                    miterLimit: glyphMiterLimit)
-            }
+            if let glyphImage = glyphImage {
+                let rect = CGRect(x: round(penX + offset.x + glyphImage.left),
+                                  y: round(-offset.y - glyphImage.top),
+                                  width: glyphImage.width,
+                                  height: glyphImage.height)
 
-            if let maskImage = maskGlyph.image {
-                let rect = CGRect(
-                    x: round(penX + offset.x + maskImage.left),
-                    y: round(-offset.y - maskImage.top),
-                    width: maskImage.width,
-                    height: maskImage.height)
-
-                context.draw(maskImage.layer, in: rect)
+                context.draw(glyphImage.layer, in: rect)
             }
 
             if !reverseMode {
@@ -362,7 +356,7 @@ public class Renderer {
         where GS: Sequence, GS.Element == GlyphID,
               OS: Sequence, OS.Element == CGPoint,
               AS: Sequence, AS.Element == CGFloat {
-        if shouldRender {
+        if glyphAttributes.isRenderable {
             context.setShadow(offset: CGSize(width: shadowDx, height: shadowDy),
                               blur: shadowRadius,
                               color: shadowColor.cgColor)

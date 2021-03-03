@@ -16,39 +16,39 @@
 
 import Foundation
 
-private class Node<Key, Value> where Key: Hashable {
-    let segment: LRUSegment<Key, Value>!
+private class Node<Key> where Key: Hashable {
+    let segment: LRUSegment<Key>!
     let key: Key
-    var value: Value
-    var next: Node<Key, Value>?
-    weak var previous: Node<Key, Value>?
+    var value: AnyObject
+    var next: Node<Key>?
+    weak var previous: Node<Key>?
 
-    init(segment: LRUSegment<Key, Value>, key: Key, value: Value) {
+    init(segment: LRUSegment<Key>, key: Key, value: AnyObject) {
         self.segment = segment
         self.key = key
         self.value = value
     }
 
-    init(key: Key, value: Value) {
+    init(key: Key, value: AnyObject) {
         self.segment = nil
         self.key = key
         self.value = value
     }
 }
 
-class LRUSegment<Key, Value> where Key: Hashable {
-    let cache: LRUCache<Key, Value>
-    private var data: [Key: Node<Key, Value>] = [:]
+class LRUSegment<Key> where Key: Hashable {
+    let cache: LRUCache<Key>
+    private var data: [Key: Node<Key>] = [:]
 
-    init(cache: LRUCache<Key, Value>) {
+    init(cache: LRUCache<Key>) {
         self.cache = cache
     }
 
-    func sizeOf(key: Key, value: Value) -> Int {
+    func sizeOf(key: Key, value: AnyObject) -> Int {
         return 1
     }
 
-    func value(forKey key: Key) -> Value? {
+    func value(forKey key: Key) -> AnyObject? {
         if let node = data[key] {
             cache.makeFirst(node: node)
             return node.value
@@ -57,7 +57,7 @@ class LRUSegment<Key, Value> where Key: Hashable {
         return nil
     }
 
-    func setValue(_ value: Value?, forKey key: Key) {
+    func setValue(_ value: AnyObject?, forKey key: Key) {
         guard let value = value else {
             removeValue(forKey: key)
             return
@@ -83,13 +83,13 @@ class LRUSegment<Key, Value> where Key: Hashable {
     }
 }
 
-class LRUCache<Key, Value> where Key: Hashable {
+class LRUCache<Key> where Key: Hashable {
     fileprivate(set) var capacity: Int
     fileprivate(set) var size: Int
 
-    private let head: Node<Key, Value>
+    private let head: Node<Key>
 
-    init(capacity: Int, dummyPair: (Key, Value)) {
+    init(capacity: Int, dummyPair: (Key, AnyObject)) {
         self.capacity = capacity
         self.size = 0
 
@@ -98,23 +98,23 @@ class LRUCache<Key, Value> where Key: Hashable {
         head.next = head
     }
 
-    private var lastNode: Node<Key, Value> {
+    private var lastNode: Node<Key> {
         return head.previous!
     }
 
-    fileprivate func makeFirst(node: Node<Key, Value>) {
+    fileprivate func makeFirst(node: Node<Key>) {
         remove(node: node)
         addFirst(node: node)
     }
 
-    fileprivate func addFirst(node: Node<Key, Value>) {
+    fileprivate func addFirst(node: Node<Key>) {
         node.previous = head
         node.next = head.next
         head.next!.previous = node
         head.next = node
     }
 
-    fileprivate func remove(node: Node<Key, Value>) {
+    fileprivate func remove(node: Node<Key>) {
         node.previous!.next = node.next
         node.next!.previous = node.previous
         node.previous = nil
