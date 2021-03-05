@@ -399,12 +399,12 @@ private class Instance {
     }
 
     func withFreeTypeStroker<Result>(_ body: (FT_Stroker) throws -> Result) rethrows -> Result {
-        if ftStroker == nil {
-            mutex.lock()
-            defer { mutex.unlock() }
+        mutex.lock()
+        defer { mutex.unlock() }
 
-            if ftStroker == nil {
-                FreeType.withLibrary { (library) -> Void in
+        if ftStroker == nil {
+            FreeType.withLibrary { (library) -> Void in
+                if ftStroker == nil {
                     FT_Stroker_New(library, &ftStroker)
                 }
             }
