@@ -123,6 +123,7 @@ private class Instance {
         setupDescription()
         setupVariation()
         setupAxes()
+        setupPalettes()
         setupNames()
     }
 
