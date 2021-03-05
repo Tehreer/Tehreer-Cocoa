@@ -442,4 +442,73 @@ open class TLabel: UIView {
             deferNeedsTextLayout()
         }
     }
+
+    /// The rendering style, used for controlling how text should appear while drawing. Its default value is
+    /// `.fill`.
+    open var renderingStyle: Renderer.RenderingStyle {
+        get {
+            return renderer.renderingStyle
+        }
+        set {
+            renderer.renderingStyle = newValue
+            setNeedsDisplay()
+        }
+    }
+
+    /// The stroke color for text. Its default value is `black`.
+    open var strokeColor: UIColor {
+        get {
+            return renderer.strokeColor
+        }
+        set {
+            renderer.strokeColor = newValue
+            setNeedsDisplay()
+        }
+    }
+
+    /// The stroke width for text.
+    open var strokeWidth: CGFloat {
+        get {
+            return renderer.strokeWidth
+        }
+        set {
+            renderer.strokeWidth = newValue
+            setNeedsDisplay()
+        }
+    }
+
+    /// The stroke cap style which controls how the start and end of stroked lines and paths are
+    /// treated. Its default value is `.butt`.
+    open var strokeCap: Renderer.StrokeCap {
+        get {
+            return renderer.strokeCap
+        }
+        set {
+            renderer.strokeCap = newValue
+            setNeedsDisplay()
+        }
+    }
+
+    /// The stroke join type. Its default value is `.round`.
+    open var strokeJoin: Renderer.StrokeJoin {
+        get {
+            return renderer.strokeJoin
+        }
+        set {
+            renderer.strokeJoin = newValue
+            setNeedsDisplay()
+        }
+    }
+
+    /// The stroke miter limit in pixels. This is used to control the behavior of miter joins when
+    /// the joins angle is sharp.
+    open var strokeMiter: CGFloat {
+        get {
+            return renderer.strokeMiter
+        }
+        set {
+            renderer.strokeMiter = newValue
+            setNeedsDisplay()
+        }
+    }
 }
