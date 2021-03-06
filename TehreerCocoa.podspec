@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
   spec.name                  = 'TehreerCocoa'
-  spec.version               = '2.3'
+  spec.version               = '2.4'
   spec.summary               = 'Standalone font / text engine for iOS'
 
   spec.homepage              = 'https://github.com/Tehreer/Tehreer-Cocoa'
   spec.source                = { :git => 'https://github.com/Tehreer/Tehreer-Cocoa.git',
-                                 :tag => 'v2.3',
+                                 :tag => 'v2.4',
                                  :submodules => true }
 
   spec.license               = { :type => 'Apache 2.0' }
