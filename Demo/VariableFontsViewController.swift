@@ -50,6 +50,7 @@ class VariationAxisCell: UITableViewCell {
 class VariableFontsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet private weak var typefaceField: UITextField!
     @IBOutlet private weak var instanceField: UITextField!
+    @IBOutlet private weak var paletteField: UITextField!
     @IBOutlet private weak var axisTableView: UITableView!
     @IBOutlet private weak var previewLabel: TLabel!
 
@@ -57,12 +58,17 @@ class VariableFontsViewController: UIViewController, UIPickerViewDataSource, UIP
     @IBOutlet private weak var typefaceToolbar: UIToolbar!
     @IBOutlet private weak var instancePicker: UIPickerView!
     @IBOutlet private weak var instanceToolbar: UIToolbar!
+    @IBOutlet private weak var paletteImageView: UIImageView!
+    @IBOutlet private weak var palettePicker: UIPickerView!
+    @IBOutlet private weak var paletteToolbar: UIToolbar!
 
     private var fileNames: [String] = []
     private var fontFiles: [FontFile] = []
     private var instances: [Typeface] = []
 
     private var typeface: Typeface?
+    private var paletteImages: [UIImage] = []
+    private var colorBox: UIImage?
     private var variationAxes: [VariationAxis] = []
     private var variationCoordinates: [CGFloat] = []
 
@@ -71,15 +77,59 @@ class VariableFontsViewController: UIViewController, UIPickerViewDataSource, UIP
 
         typefaceField.inputView = typefacePicker
         typefaceField.inputAccessoryView = typefaceToolbar
+
+        paletteField.inputView = palettePicker
+        paletteField.inputAccessoryView = paletteToolbar
+        paletteField.tintColor = .clear
+
         instanceField.inputView = instancePicker
         instanceField.inputAccessoryView = instanceToolbar
 
         previewLabel.text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"
-        previewLabel.textSize = 56.0
+        previewLabel.textSize = 48.0
         previewLabel.verticalAlignment = .middle
 
         loadFontFiles()
         setupFont(at: 0)
+    }
+
+    private func makePaletteImage(colors: [UIColor], length: CGFloat) -> UIImage? {
+        let boxSpacing: CGFloat = 8.0
+        let width = (CGFloat(colors.count) * length) + (boxSpacing * CGFloat(colors.count - 1))
+
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: length),
+                                               false, UIScreen.main.scale)
+
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return nil
+        }
+
+        for i in 0 ..< colors.count {
+            let x = (length + boxSpacing) * CGFloat(i)
+
+            colors[i].setFill()
+
+            context.addRect(CGRect(x: x, y: 0.0, width: length, height: length))
+            context.drawPath(using: .fill)
+        }
+
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+
+    private func loadPalettes(for typeface: Typeface) {
+        paletteImages.removeAll()
+
+        let palettes = typeface.predefinedPalettes
+        let length = paletteField.font?.lineHeight ?? 0
+
+        for palette in palettes {
+            let image = makePaletteImage(colors: palette.colors, length: length) ?? UIImage()
+            paletteImages.append(image)
+        }
+
+        if typeface.predefinedPalettes.isEmpty {
+            colorBox = makePaletteImage(colors: [.black], length: length)
+        }
     }
 
     private func loadFontFiles() {
@@ -120,15 +170,28 @@ class VariableFontsViewController: UIViewController, UIPickerViewDataSource, UIP
 
         typefaceField.text = fontName(at: index)
         instancePicker.reloadAllComponents()
+        instancePicker.selectRow(0, inComponent: 0, animated: false)
 
         setupTypeface(firstFace)
     }
 
     private func setupTypeface(_ face: Typeface) {
         typeface = face
+        loadPalettes(for: face)
         variationCoordinates = typeface?.variationCoordinates ?? []
 
         instanceField.text = typeface?.styleName
+
+        if let image = paletteImages.first {
+            paletteField.isUserInteractionEnabled = true
+            paletteImageView.image = image
+        } else {
+            paletteField.isUserInteractionEnabled = false
+            paletteImageView.image = colorBox
+        }
+
+        palettePicker.reloadAllComponents()
+        palettePicker.selectRow(0, inComponent: 0, animated: false)
         axisTableView.reloadData()
 
         updatePreview()
@@ -137,6 +200,15 @@ class VariableFontsViewController: UIViewController, UIPickerViewDataSource, UIP
     private func setupCoordinate(_ coordinate: CGFloat, forAxis axisIndex: Int) {
         variationCoordinates[axisIndex] = coordinate
         typeface = typeface?.variationInstance(forCoordinates: variationCoordinates)
+
+        updatePreview()
+    }
+
+    private func setupPalette(index: Int) {
+        paletteImageView.image = paletteImages[index]
+
+        let colors = typeface?.predefinedPalettes[index].colors ?? []
+        typeface = typeface?.colorInstance(forColors: colors)
 
         updatePreview()
     }
@@ -161,6 +233,9 @@ class VariableFontsViewController: UIViewController, UIPickerViewDataSource, UIP
         if pickerView === typefacePicker {
             return fileNames.count
         }
+        if pickerView === palettePicker {
+            return paletteImages.count
+        }
         if pickerView === instancePicker {
             return instances.count
         }
@@ -170,20 +245,42 @@ class VariableFontsViewController: UIViewController, UIPickerViewDataSource, UIP
 
     // MARK: - UIPickerViewDelegate
 
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         if pickerView === typefacePicker {
-            return fontName(at: row)
-        }
-        if pickerView === instancePicker {
-            return instances[row].styleName
+            let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: 320.0, height: 36.0))
+            label.textAlignment = .center
+            label.text = fontName(at: row)
+
+            return label
         }
 
-        return nil
+        if pickerView === palettePicker {
+            let image = paletteImages[row]
+            let view = UIImageView(frame: CGRect(x: 0.0, y: 0.0, width: image.size.width, height: 36.0))
+            view.image  = image
+            view.contentMode = .center
+
+            return view
+        }
+
+        if pickerView === instancePicker {
+            let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: 320.0, height: 36.0))
+            label.textAlignment = .center
+            label.text = instances[row].styleName
+
+            return label
+        }
+
+        return UIView()
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerView === typefacePicker {
             setupFont(at: row)
+            return
+        }
+        if pickerView === palettePicker {
+            setupPalette(index: row)
             return
         }
         if pickerView === instancePicker {
