@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,22 +30,24 @@ private enum Color {
 }
 
 class LabelViewController: UIViewController {
-    @IBOutlet private weak var label: TLabel!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var articleLabel: TLabel!
+    @IBOutlet private weak var referenceLabel: UILabel!
 
     let data = [
-        [Color.text, "اوپن ٹائپ دراصل کمپیوٹر فونٹس کے لیے ایک قابل میزان فارمیٹ کو کہا جاتا ہے جسے ابتداء میں "],
+        ["اوپن ٹائپ دراصل کمپیوٹر فونٹس کے لیے ایک قابل میزان فارمیٹ کو کہا جاتا ہے جسے ابتداء میں "],
         [Color.blue, Link.microsoft, "مائکروسافٹ"],
-        [Color.text, " نے تیار کیا تھا اور پھر بعد میں "],
+        [" نے تیار کیا تھا اور پھر بعد میں "],
         [Color.blue, Link.adobe, "ایڈوبی سسٹم"],
-        [Color.text, " بھی اس میں شامل ہو گیا۔ گو انکا اعلان 1996ء میں کیا گیا تھا پر انکی قابل ذکر تعداد میں ترسیل 2000ء تا 2001ء تک دیکھنے میں آئی۔ "],
+        [" بھی اس میں شامل ہو گیا۔ گو انکا اعلان 1996ء میں کیا گیا تھا پر انکی قابل ذکر تعداد میں ترسیل 2000ء تا 2001ء تک دیکھنے میں آئی۔ "],
         [Color.blue, Link.adobe, "ایڈوبی سسٹم"],
-        [Color.text, " نے اپنے فونٹس کے تمام تر کتب خانے کو اوپن ٹائپ میں تبدیل کرنے کا کام 2002ء تک مکمل کر لیا تھا۔ سن 2005ء کے آغاز تک 10،000 فونٹس اوپن ٹائپ میں دستیاب کرائے جاچکے تھے جن میں سے "],
+        [" نے اپنے فونٹس کے تمام تر کتب خانے کو اوپن ٹائپ میں تبدیل کرنے کا کام 2002ء تک مکمل کر لیا تھا۔ سن 2005ء کے آغاز تک 10،000 فونٹس اوپن ٹائپ میں دستیاب کرائے جاچکے تھے جن میں سے "],
         [Color.blue, Link.adobe, "ایڈوبی سسٹم"],
-        [Color.text, " کے کتب خانے کا ایک تہائی حصہ بنتا تھا۔\nیہ فونٹس ونڈوز ، لینکس اور میک آپریٹنگ سسٹمز پر کام کرتے ہیں۔ ان میں 65 ہزار سے زیادہ "],
+        [" کے کتب خانے کا ایک تہائی حصہ بنتا تھا۔\nیہ فونٹس ونڈوز ، لینکس اور میک آپریٹنگ سسٹمز پر کام کرتے ہیں۔ ان میں 65 ہزار سے زیادہ "],
         [Color.blue, Link.glyph, "منقوشات (glyphs)"],
-        [Color.text, " اور "],
+        [" اور "],
         [Color.blue, Link.unicode, "یونیکوڈ"],
-        [Color.text, "کی سہولت موجود ہے۔ ان میں لاطینیہ زبانوں کے ساتھ ساتھ غیرلاطینی ترسیمات و حروف رکھنے والی زبانوں کی تخطیط بھی کی جاسکتی ہے۔"]
+        ["کی سہولت موجود ہے۔ ان میں لاطینیہ زبانوں کے ساتھ ساتھ غیرلاطینی ترسیمات و حروف رکھنے والی زبانوں کی تخطیط بھی کی جاسکتی ہے۔"]
     ]
 
     override func viewDidLoad() {
@@ -69,9 +71,15 @@ class LabelViewController: UIViewController {
             }
         }
 
-        label.typeface = TypefaceManager.default.typeface(forTag: TypefaceTag.tajNastaleeq)
-        label.textColor = .text
-        label.textSize = 20
-        label.attributedText = text
+        titleLabel.textColor = Color.blue
+        referenceLabel.textColor = Color.blue
+
+        articleLabel.typeface = TypefaceManager.default.typeface(forTag: TypefaceTag.tajNastaleeq)
+        articleLabel.textColor = UIColor(red: 0.30, green: 0.60, blue: 0.15, alpha: 1.0)
+        articleLabel.textSize = 30.0
+        articleLabel.attributedText = text
+        articleLabel.renderingStyle = .fillStroke
+        articleLabel.strokeColor = UIColor(red: 1.0, green: 0.5, blue: 0.0, alpha: 1.0)
+        articleLabel.strokeWidth = 1.25
     }
 }
