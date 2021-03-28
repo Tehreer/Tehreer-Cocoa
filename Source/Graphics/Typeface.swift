@@ -20,22 +20,6 @@ import FreeType
 import HarfBuzz
 import UIKit
 
-private func toF26Dot6(_ value: CGFloat) -> FT_F26Dot6 {
-    return FT_F26Dot6((value * 64) + 0.5)
-}
-
-private func toF16Dot16(_ value: CGFloat) -> FT_Fixed {
-    return FT_Fixed((value * 0x10000) + 0.5)
-}
-
-private func f16Dot16ToFloat(_ value: FT_Fixed) -> CGFloat {
-    return CGFloat(value) / CGFloat(0x10000)
-}
-
-private func f26Dot6ToFloat(_ value: FT_Pos) -> CGFloat {
-    return CGFloat(value) / 64.0
-}
-
 /// An ID of a glyph in a font.
 public typealias GlyphID = UInt16
 
@@ -201,11 +185,11 @@ private class Instance {
                     break
 
                 case FT_ULong(SFNTTag(stringLiteral: "wdth").rawValue):
-                    width = Typeface.Width(wdth: f16Dot16ToFloat(fixedCoords[i]))
+                    width = Typeface.Width(wdth: CGFloat(f16Dot16: fixedCoords[i]))
                     break
 
                 case FT_ULong(SFNTTag(stringLiteral: "wght").rawValue):
-                    weight = Typeface.Weight(wght: f16Dot16ToFloat(fixedCoords[i]))
+                    weight = Typeface.Weight(wght: CGFloat(f16Dot16: fixedCoords[i]))
                     break
 
                 default:
@@ -423,7 +407,7 @@ private class Instance {
         let numCoords = min(coordinates.count, variationAxes.count)
 
         for i in 0 ..< numCoords {
-            fixedCoords[i] = toF16Dot16(coordinates[i])
+            fixedCoords[i] = coordinates[i].f16Dot16
         }
 
         FT_Set_Var_Design_Coordinates(ftFace, FT_UInt(variationAxes.count), &fixedCoords)
@@ -441,7 +425,7 @@ private class Instance {
 
         if FT_Get_Var_Design_Coordinates(ftFace, FT_UInt(variationAxes.count), &fixedCoords) == FT_Err_Ok {
             for i in 0 ..< variationAxes.count {
-                coordValues[i] = f16Dot16ToFloat(fixedCoords[i])
+                coordValues[i] = CGFloat(f16Dot16: fixedCoords[i])
             }
         }
 
@@ -739,7 +723,7 @@ public class Typeface {
     public func advance(forGlyph glyphID: GlyphID, typeSize: CGFloat, vertical: Bool) -> CGFloat {
         withFreeTypeFace { (face) in
             FT_Activate_Size(ftSize)
-            FT_Set_Char_Size(face, 0, toF26Dot6(typeSize), 0, 0)
+            FT_Set_Char_Size(face, 0, typeSize.f26Dot6, 0, 0)
             FT_Set_Transform(face, nil, nil)
 
             var loadFlags: FT_Int32 = FT_LOAD_DEFAULT
@@ -750,7 +734,7 @@ public class Typeface {
             var advance: FT_Fixed = 0
             FT_Get_Advance(face, FT_UInt(glyphID), loadFlags, &advance)
 
-            return f16Dot16ToFloat(advance)
+            return CGFloat(f16Dot16: advance)
         }
     }
 
@@ -764,8 +748,8 @@ public class Typeface {
             move_to: { (to, user) -> Int32 in
                 let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
                 let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: f26Dot6ToFloat(to!.pointee.x),
-                                    y: f26Dot6ToFloat(to!.pointee.y))
+                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
+                                    y: CGFloat(f26Dot6: to!.pointee.y))
                 path.move(to: point)
 
                 return 0
@@ -773,8 +757,8 @@ public class Typeface {
             line_to: { (to, user) -> Int32 in
                 let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
                 let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: f26Dot6ToFloat(to!.pointee.x),
-                                    y: f26Dot6ToFloat(to!.pointee.y))
+                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
+                                    y: CGFloat(f26Dot6: to!.pointee.y))
                 path.addLine(to: point)
 
                 return 0
@@ -782,10 +766,10 @@ public class Typeface {
             conic_to: { (control1, to, user) -> Int32 in
                 let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
                 let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: f26Dot6ToFloat(to!.pointee.x),
-                                    y: f26Dot6ToFloat(to!.pointee.y))
-                let first = CGPoint(x: f26Dot6ToFloat(control1!.pointee.x),
-                                    y: f26Dot6ToFloat(control1!.pointee.y))
+                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
+                                    y: CGFloat(f26Dot6: to!.pointee.y))
+                let first = CGPoint(x: CGFloat(f26Dot6: control1!.pointee.x),
+                                    y: CGFloat(f26Dot6: control1!.pointee.y))
                 path.addQuadCurve(to: point, control: first)
 
                 return 0
@@ -793,12 +777,12 @@ public class Typeface {
             cubic_to: { (control1, control2, to, user) -> Int32 in
                 let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
                 let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: f26Dot6ToFloat(to!.pointee.x),
-                                    y: f26Dot6ToFloat(to!.pointee.y))
-                let first = CGPoint(x: f26Dot6ToFloat(control1!.pointee.x),
-                                    y: f26Dot6ToFloat(control1!.pointee.y))
-                let second = CGPoint(x: f26Dot6ToFloat(control2!.pointee.x),
-                                     y: f26Dot6ToFloat(control2!.pointee.y))
+                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
+                                    y: CGFloat(f26Dot6: to!.pointee.y))
+                let first = CGPoint(x: CGFloat(f26Dot6: control1!.pointee.x),
+                                    y: CGFloat(f26Dot6: control1!.pointee.y))
+                let second = CGPoint(x: CGFloat(f26Dot6: control2!.pointee.x),
+                                     y: CGFloat(f26Dot6: control2!.pointee.y))
                 path.addCurve(to: point, control1: first, control2: second)
 
                 return 0
@@ -827,16 +811,16 @@ public class Typeface {
     /// - Returns: The path for the specified glyph.
     public func path(forGlyph glyphID: GlyphID, typeSize: CGFloat, transform: CGAffineTransform?) -> CGPath? {
         withFreeTypeFace { (face) -> CGPath? in
-            let fixedSize = toF26Dot6(typeSize)
+            let fixedSize = typeSize.f26Dot6
             var matrix = FT_Matrix(xx: 0x10000, xy: 0, yx: 0, yy: -0x10000)
             var delta = FT_Vector(x: 0, y: 0)
 
             if let transform = transform {
                 let flip = transform.concatenating(CGAffineTransform(scaleX: 1.0, y: -1.0))
 
-                matrix = FT_Matrix(xx: toF16Dot16(flip.a), xy: toF16Dot16(flip.b),
-                                   yx: toF16Dot16(flip.c), yy: toF16Dot16(flip.d))
-                delta = FT_Vector(x: toF16Dot16(transform.tx), y: toF16Dot16(transform.ty))
+                matrix = FT_Matrix(xx: flip.a.f16Dot16, xy: flip.b.f16Dot16,
+                                   yx: flip.c.f16Dot16, yy: flip.d.f16Dot16)
+                delta = FT_Vector(x: transform.tx.f16Dot16, y: transform.ty.f16Dot16)
             }
 
             FT_Activate_Size(ftSize)
