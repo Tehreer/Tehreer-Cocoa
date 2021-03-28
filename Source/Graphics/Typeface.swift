@@ -379,12 +379,6 @@ private class Instance {
         return try body(ftStroker)
     }
 
-    private func loadSFNTTable(tag: FT_ULong, buffer: UnsafeMutablePointer<FT_Byte>?, length: UnsafeMutablePointer<FT_ULong>?) {
-        withFreeTypeFace { (face) -> Void in
-            FT_Load_Sfnt_Table(face, tag, 0, buffer, length)
-        }
-    }
-
     func dataOfTable(_ tag: SFNTTag) -> Data? {
         withFreeTypeFace { (face) in
             let inputTag = FT_ULong(tag.rawValue)
@@ -415,20 +409,6 @@ private class Instance {
         }
 
         return GlyphID(glyphID)
-    }
-
-    func unscaledAdvance(forGlyph glyphID: FT_UInt, vertical: Bool) -> FT_Fixed {
-        withFreeTypeFace { (face) in
-            var loadFlags: FT_Int32 = FT_Int32(FT_LOAD_NO_SCALE)
-            if (vertical) {
-                loadFlags |= FT_Int32(FT_LOAD_VERTICAL_LAYOUT)
-            }
-
-            var advance: FT_Fixed = 0
-            FT_Get_Advance(face, glyphID, loadFlags, &advance)
-
-            return advance
-        }
     }
 
     func variationInstance(forCoordinates coordinates: [CGFloat]) -> Instance? {
