@@ -13,13 +13,15 @@ module FreeType [system][extern_c] {
     export *
 }
 
-module SheenBidi [system][extern_c] {
-    header "SheenBidi/Headers/SheenBidi.h"
+module HarfBuzz [system][extern_c] {
+    header "HarfBuzz/src/hb.h"
+    header "HarfBuzz/src/hb-ft.h"
+    header "HarfBuzz/src/hb-ot.h"
     export *
 }
 
-module SheenFigure [system][extern_c] {
-    header "SheenFigure/Headers/SheenFigure.h"
+module SheenBidi [system][extern_c] {
+    header "SheenBidi/Headers/SheenBidi.h"
     export *
 }
 

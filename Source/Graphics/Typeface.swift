@@ -17,7 +17,7 @@
 import CoreGraphics
 import Foundation
 import FreeType
-import SheenFigure
+import HarfBuzz
 import UIKit
 
 private func toF26Dot6(_ value: CGFloat) -> FT_F26Dot6 {
@@ -50,8 +50,7 @@ private class Instance {
     var ftSize: FT_Size!
     var ftStroker: FT_Stroker!
 
-    var sfFont: SFFontRef!
-    let patternCache = PatternCache()
+    var hbFont: OpaquePointer!
 
     struct NameIndexes {
         var family: Int?
@@ -88,40 +87,16 @@ private class Instance {
     }
 
     private func setup(fontStream: FontStream, ftFace: FT_Face) {
-        var fontProtocol = SFFontProtocol(
-            finalize: nil,
-            loadTable: { (object, tag, buffer, length) in
-                let unmanaged = Unmanaged<Instance>.fromOpaque(object!)
-                let instance = unmanaged.takeUnretainedValue()
-
-                instance.loadSFNTTable(tag: FT_ULong(tag), buffer: buffer, length: length)
-            },
-            getGlyphIDForCodepoint: { (object, codepoint) in
-                let unmanaged = Unmanaged<Instance>.fromOpaque(object!)
-                let instance = unmanaged.takeUnretainedValue()
-
-                return instance.glyphID(forCodePoint: codepoint)
-            },
-            getAdvanceForGlyph: { (object, layout, glyphID) in
-                let unmanaged = Unmanaged<Instance>.fromOpaque(object!)
-                let instance = unmanaged.takeUnretainedValue()
-                let advance = instance.unscaledAdvance(forGlyph: FT_UInt(glyphID),
-                                                       vertical: layout == SFFontLayoutVertical)
-
-                return SFInt32(advance)
-            }
-        )
-
         var size: FT_Size! = nil
         FT_New_Size(ftFace, &size)
 
         self.fontStream = fontStream
         self.ftFace = ftFace
         self.ftSize = size
-        self.sfFont = SFFontCreateWithProtocol(&fontProtocol, Unmanaged.passUnretained(self).toOpaque())
 
         setupDescription()
         setupVariation()
+        setupHarfBuzz()
         setupAxes()
         setupPalettes()
         setupNames()
@@ -179,20 +154,6 @@ private class Instance {
 
         let numCoords = variation.pointee.num_axis
         var fixedCoords = Array<FT_Fixed>(repeating: 0, count: Int(numCoords))
-
-        if FT_Get_Var_Blend_Coordinates(ftFace, numCoords, &fixedCoords) == FT_Err_Ok {
-            let normalFont = sfFont
-            var coordArray = Array<SFInt16>(repeating: 0, count: Int(numCoords))
-
-            // Convert the FreeType's F16DOT16 coordinates to standard normalized F2DOT14 format.
-            for i in 0 ..< Int(numCoords) {
-                coordArray[i] = SFInt16(fixedCoords[i] >> 2)
-            }
-
-            // Derive the variable font of SheenFigure.
-            sfFont = SFFontCreateWithVariationCoordinates(normalFont, Unmanaged.passUnretained(self).toOpaque(), &coordArray, SFUInteger(numCoords))
-            SFFontRelease(normalFont)
-        }
 
         if FT_Get_Var_Design_Coordinates(ftFace, numCoords, &fixedCoords) == FT_Err_Ok {
             let nameTable = NameTable(ftFace: ftFace)
@@ -252,6 +213,11 @@ private class Instance {
                 }
             }
         }
+    }
+
+    private func setupHarfBuzz() {
+        FT_Set_Char_Size(ftFace, 0, Int(ftFace.pointee.units_per_EM), 0, 0)
+        hbFont = hb_ft_font_create(ftFace, nil)
     }
 
     private func setupAxes() {
@@ -376,9 +342,9 @@ private class Instance {
     }
 
     deinit {
-        SFFontRelease(sfFont)
+        hb_font_destroy(hbFont)
 
-        mutex.synchronized {
+        withFreeTypeFace { _ -> Void in
             FT_Done_Size(ftSize)
         }
 
@@ -595,12 +561,8 @@ public class Typeface {
         return instance.ftSize
     }
 
-    var sfFont: SFFontRef {
-        return instance.sfFont
-    }
-
-    var patternCache: PatternCache {
-        return instance.patternCache
+    var hbFont: OpaquePointer {
+        return instance.hbFont
     }
 
     var ftColors: [FT_Color] {

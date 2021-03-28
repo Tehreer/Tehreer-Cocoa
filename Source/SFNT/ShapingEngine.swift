@@ -16,33 +16,27 @@
 
 import CoreGraphics
 import Foundation
-import SheenFigure
+import HarfBuzz
 
 /// The `ShapingEngine` class represents text shaping engine.
 public class ShapingEngine {
-    let sfArtist: SFArtistRef
-    let sfScheme: SFSchemeRef
-
-    private var featureTags: [SFUInt32] = []
-    private var featureValues: [SFUInt16] = []
-
     /// Creates a shaping engine.
-    public init() {
-        sfArtist = SFArtistCreate()
-        sfScheme = SFSchemeCreate()
-    }
-
-    deinit {
-        SFArtistRelease(sfArtist)
-        SFSchemeRelease(sfScheme)
-    }
+    public init() { }
 
     /// Returns the default writing direction of a script.
     ///
     /// - Parameter scriptTag: The tag of the script whose default direction is returned.
     /// - Returns: The default writing direction of the script identified by `scriptTag`.
     public static func defaultDirectionForScript(_ scriptTag: SFNTTag) -> WritingDirection {
-        return WritingDirection(rawValue: Int(SFScriptGetDefaultDirection(scriptTag.rawValue))) ?? .leftToRight
+        let script = hb_ot_tag_to_script(scriptTag.rawValue)
+        let direction = hb_script_get_horizontal_direction(script)
+
+        switch direction {
+        case HB_DIRECTION_RTL:
+            return .rightToLeft
+        default:
+            return .leftToRight
+        }
     }
 
     /// The typeface which this shaping engine will use for shaping text.
@@ -65,12 +59,7 @@ public class ShapingEngine {
     /// required feature of the chosen script. If the value of a feature is greater than zero, it
     /// would be enabled. In case of an alternate feature, this value would be used to pick the
     /// alternate glyph at this position.
-    public var openTypeFeatures: [SFNTTag: Int] = [:] {
-        didSet {
-            featureTags = openTypeFeatures.keys.map { SFUInt32($0.rawValue) }
-            featureValues = openTypeFeatures.values.map { SFUInt16($0) }
-        }
-    }
+    public var openTypeFeatures: [SFNTTag: Int] = [:]
 
     /// The direction in which this shaping engine will place the resultant glyphs. Its default
     /// value is `.leftToRight`.
@@ -79,11 +68,7 @@ public class ShapingEngine {
     /// cursive and mark glyphs are placed at appropriate locations. It should not be confused with
     /// the direction of a bidirectional run as that may not reflect the script direction if
     /// overridden explicitly.
-    public var writingDirection = WritingDirection.leftToRight {
-        didSet {
-            SFArtistSetTextDirection(sfArtist, SFTextDirection(writingDirection.rawValue))
-        }
-    }
+    public var writingDirection = WritingDirection.leftToRight
 
     /// The order in which this shaping engine will process the text. Its default value is
     /// `.forward`.
@@ -92,10 +77,14 @@ public class ShapingEngine {
     /// opposite to that of script. For example, if the direction of a run, 'car' is explicitly set
     /// as right-to-left, backward order will automatically read it as 'rac' without reordering the
     /// original text.
-    public var shapingOrder = ShapingOrder.forward {
-        didSet {
-            SFArtistSetTextMode(sfArtist, SFTextMode(shapingOrder.rawValue))
+    public var shapingOrder = ShapingOrder.forward
+
+    private func isRTL() -> Bool {
+        if (shapingOrder == .backward) {
+            return writingDirection != .rightToLeft
         }
+
+        return writingDirection == .rightToLeft
     }
 
     /// Shapes the specified UTF-16 range of text into glyphs.
@@ -116,39 +105,48 @@ public class ShapingEngine {
 
         let shapingResult = ShapingResult()
 
-        let cache = typeface.patternCache
-        let key = PatternKey(scriptTag: scriptTag, languageTag: languageTag,
-                             featureTags: featureTags, featureValues: featureValues)
-        var pattern = cache[key]
+        let script = hb_ot_tag_to_script(scriptTag.rawValue)
+        let language = hb_ot_tag_to_language(languageTag.rawValue)
+        let direction: hb_direction_t
 
-        if pattern == nil {
-            SFSchemeSetFont(sfScheme, typeface.sfFont)
-            SFSchemeSetScriptTag(sfScheme, scriptTag.rawValue)
-            SFSchemeSetLanguageTag(sfScheme, languageTag.rawValue)
-            SFSchemeSetFeatureValues(sfScheme, &featureTags, &featureValues, SFUInteger(featureTags.count))
+        switch (writingDirection) {
+        case .leftToRight:
+            direction = HB_DIRECTION_LTR
 
-            pattern = SFSchemeBuildPattern(sfScheme)
-            cache[key] = pattern
-
-            SFPatternRelease(pattern)
+        case .rightToLeft:
+            direction = HB_DIRECTION_RTL
         }
+
+        let buffer = shapingResult.hbBuffer
+        hb_buffer_clear_contents(buffer)
+        hb_buffer_set_script(buffer, script)
+        hb_buffer_set_language(buffer, language)
+        hb_buffer_set_direction(buffer, direction)
 
         let characterRange = string.characterRange(forUTF16Range: codeUnitRange)
         var codeUnits = Array(string[characterRange].utf16)
-        let length = SFUInteger(codeUnits.count)
+        let length = codeUnits.count
 
         codeUnits.withUnsafeMutableBufferPointer { (pointer) -> Void in
-            let encoding = SFStringEncoding(SFStringEncodingUTF16)
-            let buffer = UnsafeMutableRawPointer(pointer.baseAddress!)
+            hb_buffer_add_utf16(buffer, pointer.baseAddress, Int32(length), 0, Int32(length))
+        }
 
-            SFArtistSetPattern(sfArtist, pattern)
-            SFArtistSetString(sfArtist, encoding, buffer, length)
-            SFArtistFillAlbum(sfArtist, shapingResult.sfAlbum)
+        let features = openTypeFeatures.map { (key, value) in
+            hb_feature_t(tag: key.rawValue, value: UInt32(value), start: 0, end: UInt32(length))
+        }
+
+        typeface.withFreeTypeFace { (ftFace) in
+            FT_Set_Char_Size(ftFace, 0, typeface.unitsPerEm, 0, 0)
+
+            features.withUnsafeBufferPointer { (pointer) in
+                hb_shape(typeface.hbFont, buffer, pointer.baseAddress, UInt32(pointer.count))
+            }
         }
 
         shapingResult.setup(string: string,
                             codeUnitRange: codeUnitRange,
                             isBackward: shapingOrder == .backward,
+                            isRTL: isRTL(),
                             sizeByEm: typeSize / CGFloat(typeface.unitsPerEm))
 
         return shapingResult
