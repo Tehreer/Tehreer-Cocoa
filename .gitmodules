@@ -1,4 +1,0 @@
-[submodule "Libraries/UniBreak"]
-	path = Libraries/UniBreak
-	url = git://github.com/adah1972/libunibreak.git
-	branch = master

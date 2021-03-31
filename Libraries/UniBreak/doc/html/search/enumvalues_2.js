@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['gbp_5fcontrol_307',['GBP_Control',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572a6187106e817267fe5bed3d9771a2f05d',1,'graphemebreakdef.h']]],
+  ['gbp_5fcr_308',['GBP_CR',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572aea288561917a020567bd27b9a051be5f',1,'graphemebreakdef.h']]],
+  ['gbp_5fextend_309',['GBP_Extend',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572acf57bc529dd646d5c5bffc9240f72ac2',1,'graphemebreakdef.h']]],
+  ['gbp_5fl_310',['GBP_L',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572a7ade12c6bcbe71bd59e793fb3936698d',1,'graphemebreakdef.h']]],
+  ['gbp_5flf_311',['GBP_LF',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572abb269c143f8a4a421aec5cb7fdd59e0d',1,'graphemebreakdef.h']]],
+  ['gbp_5flinkingconsonant_312',['GBP_LinkingConsonant',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572a49805ed0c294e1d5ccd7a6ba7cbe97d0',1,'graphemebreakdef.h']]],
+  ['gbp_5flv_313',['GBP_LV',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572a5e4e99f8b7956492c848a3200b6e161e',1,'graphemebreakdef.h']]],
+  ['gbp_5flvt_314',['GBP_LVT',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572a89aa83f220240faa87db9c92b24d8c99',1,'graphemebreakdef.h']]],
+  ['gbp_5fother_315',['GBP_Other',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572ad1af27de9cfee2d9185d0cb43d187173',1,'graphemebreakdef.h']]],
+  ['gbp_5fprepend_316',['GBP_Prepend',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572a3aea19c21fe9dd6f0e5512eddf74bc5c',1,'graphemebreakdef.h']]],
+  ['gbp_5fregional_5findicator_317',['GBP_Regional_Indicator',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572a6f0666d1d5aebef2f2519c222e71bb75',1,'graphemebreakdef.h']]],
+  ['gbp_5fspacingmark_318',['GBP_SpacingMark',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572a47e649745fc79929c1d0bf840ede5279',1,'graphemebreakdef.h']]],
+  ['gbp_5ft_319',['GBP_T',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572a382b9bbd78ee0e0e66fc74977e05c63c',1,'graphemebreakdef.h']]],
+  ['gbp_5fundefined_320',['GBP_Undefined',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572afb029c07581bdabfccfa870b5a7df411',1,'graphemebreakdef.h']]],
+  ['gbp_5fv_321',['GBP_V',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572a13292ffad18a589b6cb4d408856f442b',1,'graphemebreakdef.h']]],
+  ['gbp_5fvirama_322',['GBP_Virama',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572abbed640800ab428f98babeafb0633e92',1,'graphemebreakdef.h']]],
+  ['gbp_5fzwj_323',['GBP_ZWJ',['../graphemebreakdef_8h.html#a4c0f322eac82dad01db647692da3e572a15e2a7b83819dbd79dfff407216f8ee6',1,'graphemebreakdef.h']]]
+];

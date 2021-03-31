@@ -1,0 +1,6 @@
+<map id="emojidef.h" name="emojidef.h">
+<area shape="rect" id="node1" title=" " alt="" coords="132,5,215,32"/>
+<area shape="rect" id="node2" href="$emojidef_8c.html" title=" " alt="" coords="5,80,88,107"/>
+<area shape="rect" id="node3" href="$graphemebreak_8c.html" title=" " alt="" coords="112,80,235,107"/>
+<area shape="rect" id="node4" href="$wordbreak_8c.html" title=" " alt="" coords="259,80,352,107"/>
+</map>

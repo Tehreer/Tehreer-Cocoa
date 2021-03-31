@@ -1,0 +1,4 @@
+<map id="LineBreakContext" name="LineBreakContext">
+<area shape="rect" id="node1" title="Context representing internal state of the line breaking algorithm." alt="" coords="11,95,138,121"/>
+<area shape="rect" id="node2" href="$structLineBreakProperties.html" title="Struct for entries of line break properties." alt="" coords="5,5,144,32"/>
+</map>
