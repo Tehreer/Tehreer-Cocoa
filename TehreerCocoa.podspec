@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
   spec.name                  = 'TehreerCocoa'
-  spec.version               = '2.4'
+  spec.version               = '2.5'
   spec.summary               = 'Standalone font / text engine for iOS'
 
   spec.homepage              = 'https://github.com/Tehreer/Tehreer-Cocoa'
   spec.source                = { :git => 'https://github.com/Tehreer/Tehreer-Cocoa.git',
-                                 :tag => 'v2.4',
+                                 :tag => 'v2.5',
                                  :submodules => true }
 
   spec.license               = { :type => 'Apache 2.0' }
@@ -46,9 +46,9 @@ Pod::Spec.new do |spec|
                                'Libraries/FreeType/src/type1/type1.c',
                                'Libraries/FreeType/src/type42/type42.c',
                                'Libraries/FreeType/src/winfonts/winfnt.c',
+                               'Libraries/HarfBuzz/src/harfbuzz.cc',
                                'Libraries/Patch/*.c',
                                'Libraries/SheenBidi/Source/SheenBidi.c',
-                               'Libraries/SheenFigure/Source/SheenFigure.c',
                                'Libraries/UniBreak/src/emojidef.c',
                                'Libraries/UniBreak/src/graphemebreak.c',
                                'Libraries/UniBreak/src/linebreak.c',
@@ -59,32 +59,32 @@ Pod::Spec.new do |spec|
                                'Libraries/UniBreak/src/wordbreak.c'
   spec.preserve_paths        = 'Libraries/FreeType/include/**/*.h',
                                'Libraries/FreeType/src/**/*.{h,c}',
+                               'Libraries/HarfBuzz/src/*.{h,hh,cc}',
                                'Libraries/Patch/*.{h,c}',
                                'Libraries/SheenBidi/Headers/*.h',
                                'Libraries/SheenBidi/Source/**/*.{h,c}',
-                               'Libraries/SheenFigure/Headers/*.h',
-                               'Libraries/SheenFigure/Source/**/*.{h,c}',
                                'Libraries/UniBreak/src/*.{h,c}',
                                'Libraries/module.modulemap'
 
   spec.pod_target_xcconfig   = {
     'GCC_PREPROCESSOR_DEFINITIONS' => [
       'FT2_BUILD_LIBRARY',
+      'HAVE_FREETYPE',
+      'HAVE_FT_GET_VAR_BLEND_COORDINATES',
+      'HAVE_FT_DONE_MM_VAR',
       'SB_CONFIG_UNITY',
-      'SF_CONFIG_UNITY',
     ],
     'HEADER_SEARCH_PATHS' => [
       '"${PODS_TARGET_SRCROOT}/Libraries/FreeType/include"',
+      '"${PODS_TARGET_SRCROOT}/Libraries/HarfBuzz/src"',
       '"${PODS_TARGET_SRCROOT}/Libraries/SheenBidi/Headers"',
-      '"${PODS_TARGET_SRCROOT}/Libraries/SheenFigure/Headers"',
-      '"${PODS_TARGET_SRCROOT}/Libraries/SheenFigure/Source"',
       '"${PODS_TARGET_SRCROOT}/Libraries/UniBreak/src"'
     ],
     'SWIFT_INCLUDE_PATHS' => [
       '"$(PODS_TARGET_SRCROOT)/Libraries"',
       '"${PODS_TARGET_SRCROOT}/Libraries/FreeType/include"',
+      '"${PODS_TARGET_SRCROOT}/Libraries/HarfBuzz/src"',
       '"${PODS_TARGET_SRCROOT}/Libraries/SheenBidi/Headers"',
-      '"${PODS_TARGET_SRCROOT}/Libraries/SheenFigure/Headers"',
       '"${PODS_TARGET_SRCROOT}/Libraries/UniBreak/src"'
     ]
   }
