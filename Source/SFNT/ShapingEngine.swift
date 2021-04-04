@@ -136,6 +136,7 @@ public class ShapingEngine {
         }
 
         typeface.withFreeTypeFace { (ftFace) in
+            FT_Activate_Size(typeface.ftSize)
             FT_Set_Char_Size(ftFace, 0, typeface.unitsPerEm, 0, 0)
 
             features.withUnsafeBufferPointer { (pointer) in
