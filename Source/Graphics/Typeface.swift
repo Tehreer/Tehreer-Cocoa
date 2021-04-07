@@ -36,24 +36,30 @@ private class Instance {
 
     var hbFont: OpaquePointer!
 
-    struct NameIndexes {
-        var family: Int?
-        var style: Int?
-        var full: Int?
-    }
-    var nameIndexes = NameIndexes()
-    var variationAxes: [VariationAxis] = []
+    private struct Description {
+        var familyIndex: Int?
+        var styleIndex: Int?
+        var fullIndex: Int?
 
-    var paletteEntryNames: [String] = []
-    var predefinedPalettes: [ColorPalette] = []
+        var weight: Typeface.Weight = .regular
+        var width: Typeface.Width = .normal
+        var slope: Typeface.Slope = .plain
+    }
+
+    private struct DefaultProperties {
+        var description = Description()
+
+        var variationAxes: [VariationAxis] = []
+        var paletteEntryNames: [String] = []
+        var predefinedPalettes: [ColorPalette] = []
+    }
+
+    private var defaults = DefaultProperties()
+    private var description = Description()
 
     var familyName = ""
     var styleName = ""
     var fullName = ""
-
-    var weight: Typeface.Weight = .regular
-    var width: Typeface.Width = .normal
-    var slope: Typeface.Slope = .plain
 
     var strikeoutPosition: Int = 0
     var strikeoutThickness: Int = 0
@@ -63,66 +69,114 @@ private class Instance {
             return nil
         }
 
-        setup(fontStream: fontStream, ftFace: ftFace)
+        setupFull(fontStream: fontStream, ftFace: ftFace)
     }
 
     init(fontStream: FontStream, ftFace: FT_Face) {
-        setup(fontStream: fontStream, ftFace: ftFace)
+        setupFull(fontStream: fontStream, ftFace: ftFace)
     }
 
-    private func setup(fontStream: FontStream, ftFace: FT_Face) {
-        var size: FT_Size! = nil
-        FT_New_Size(ftFace, &size)
+    init?(parent: Instance, coordinates: [CGFloat]) {
+        guard parent.isVariable,
+              let fontStream = parent.fontStream,
+              let faceIndex = parent.ftFace?.pointee.face_index,
+              let ftFace = fontStream.makeFTFace(faceIndex: faceIndex, instanceIndex: 0) else {
+            return nil
+        }
 
+        let variationAxes = parent.variationAxes
+
+        var fixedCoords = Array<FT_Fixed>(repeating: 0, count: variationAxes.count)
+        let numCoords = min(coordinates.count, variationAxes.count)
+
+        for i in 0 ..< numCoords {
+            fixedCoords[i] = coordinates[i].f16Dot16
+        }
+
+        FT_Set_Var_Design_Coordinates(ftFace, FT_UInt(variationAxes.count), &fixedCoords)
+
+        setupDerived(parent: parent, ftFace: ftFace)
+    }
+
+    private func setupFull(fontStream: FontStream, ftFace: FT_Face) {
         self.fontStream = fontStream
         self.ftFace = ftFace
-        self.ftSize = size
 
-        setupDescription()
-        setupVariation()
-        setupHarfBuzz()
-        setupAxes()
-        setupPalettes()
-        setupNames()
-    }
-
-    private func setupDescription() {
         let headTable = HeadTable(ftFace: ftFace)
         let os2Table = OS2Table(ftFace: ftFace)
         let nameTable = NameTable(ftFace: ftFace)
 
-        nameIndexes.family = nameTable?.indexOfFamilyName(considering: os2Table)
-        nameIndexes.style = nameTable?.indexOfStyleName(considering: os2Table)
-        nameIndexes.full = nameTable?.indexOfEnglishName(for: NameTable.NameID.full)
+        setupSize()
+        setupDescription(headTable: headTable, os2Table: os2Table, nameTable: nameTable)
+        setupStrikeout(os2Table: os2Table)
+        setupVariation()
+        setupHarfBuzz()
+        setupAxes(nameTable: nameTable)
+        setupPalettes(nameTable: nameTable)
+        setupNames(nameTable: nameTable)
+    }
+
+    private func setupDerived(parent: Instance, ftFace: FT_Face) {
+        self.fontStream = parent.fontStream
+        self.ftFace = ftFace
+        self.defaults = parent.defaults
+
+        let os2Table = OS2Table(ftFace: ftFace)
+        let nameTable = NameTable(ftFace: ftFace)
+
+        setupSize()
+        setupStrikeout(os2Table: os2Table)
+        setupVariation()
+        setupHarfBuzz()
+        setupNames(nameTable: nameTable)
+    }
+
+    private func setupSize() {
+        FT_New_Size(ftFace, &ftSize)
+    }
+
+    private func setupDescription(headTable: HeadTable?, os2Table: OS2Table?, nameTable: NameTable?) {
+        var description = Description()
+        description.familyIndex = nameTable?.indexOfFamilyName(considering: os2Table)
+        description.styleIndex = nameTable?.indexOfStyleName(considering: os2Table)
+        description.fullIndex = nameTable?.indexOfEnglishName(for: NameTable.NameID.full)
+
+        defer {
+            defaults.description = description
+        }
 
         if let os2Table = os2Table {
-            weight = Typeface.Weight(value: os2Table.usWeightClass)
-            width = Typeface.Width(value: os2Table.usWidthClass)
+            description.weight = Typeface.Weight(value: os2Table.usWeightClass)
+            description.width = Typeface.Width(value: os2Table.usWidthClass)
 
             if (os2Table.fsSelection & OS2Table.FSSelection.oblique) != 0 {
-                slope = .oblique
+                description.slope = .oblique
             } else if (os2Table.fsSelection & OS2Table.FSSelection.italic) != 0 {
-                slope = .italic
+                description.slope = .italic
             }
-
-            strikeoutPosition = Int(os2Table.yStrikeoutPosition)
-            strikeoutThickness = Int(os2Table.yStrikeoutSize)
         } else if let headTable = headTable {
             let macStyle = headTable.macStyle
 
             if (macStyle & OS2Table.MacStyle.bold) != 0 {
-                weight = .bold
+                description.weight = .bold
             }
 
             if (macStyle & OS2Table.MacStyle.condensed) != 0 {
-                width = .condensed
+                description.width = .condensed
             } else if (macStyle & OS2Table.MacStyle.extended) != 0 {
-                width = .expanded
+                description.width = .expanded
             }
 
             if (macStyle & OS2Table.MacStyle.italic) != 0 {
-                slope = .italic
+                description.slope = .italic
             }
+        }
+    }
+
+    private func setupStrikeout(os2Table: OS2Table?) {
+        if let os2Table = os2Table {
+            strikeoutPosition = Int(os2Table.yStrikeoutPosition)
+            strikeoutThickness = Int(os2Table.yStrikeoutSize)
         }
     }
 
@@ -136,6 +190,9 @@ private class Instance {
             }
         }
 
+        var description = defaults.description
+        defer { self.description = description }
+
         let numCoords = variation.pointee.num_axis
         var fixedCoords = Array<FT_Fixed>(repeating: 0, count: Int(numCoords))
 
@@ -143,8 +200,8 @@ private class Instance {
             let nameTable = NameTable(ftFace: ftFace)
 
             // Reset the style name and the full name.
-            nameIndexes.style = nil
-            nameIndexes.full = nil
+            description.styleIndex = nil
+            description.fullIndex = nil
 
             // Get the style name of this instance.
             for i in 0 ..< Int(variation.pointee.num_namedstyles) {
@@ -166,7 +223,7 @@ private class Instance {
                 }
 
                 if areEqual {
-                    nameIndexes.style = nameTable?.indexOfEnglishName(for: UInt16(namedStyle.strid))
+                    description.styleIndex = nameTable?.indexOfEnglishName(for: UInt16(namedStyle.strid))
                     break
                 }
             }
@@ -177,19 +234,19 @@ private class Instance {
 
                 switch axis.tag {
                 case FT_ULong(SFNTTag(stringLiteral: "ital").rawValue):
-                    slope = Typeface.Slope(ital: fixedCoords[i])
+                    description.slope = Typeface.Slope(ital: fixedCoords[i])
                     break
 
                 case FT_ULong(SFNTTag(stringLiteral: "slnt").rawValue):
-                    slope = Typeface.Slope(slnt: fixedCoords[i])
+                    description.slope = Typeface.Slope(slnt: fixedCoords[i])
                     break
 
                 case FT_ULong(SFNTTag(stringLiteral: "wdth").rawValue):
-                    width = Typeface.Width(wdth: CGFloat(f16Dot16: fixedCoords[i]))
+                    description.width = Typeface.Width(wdth: CGFloat(f16Dot16: fixedCoords[i]))
                     break
 
                 case FT_ULong(SFNTTag(stringLiteral: "wght").rawValue):
-                    weight = Typeface.Weight(wght: CGFloat(f16Dot16: fixedCoords[i]))
+                    description.weight = Typeface.Weight(wght: CGFloat(f16Dot16: fixedCoords[i]))
                     break
 
                 default:
@@ -200,17 +257,26 @@ private class Instance {
     }
 
     private func setupHarfBuzz() {
+        FT_Activate_Size(ftSize)
         FT_Set_Char_Size(ftFace, 0, Int(ftFace.pointee.units_per_EM), 0, 0)
+
         hbFont = hb_ft_font_create(ftFace, nil)
     }
 
-    private func setupAxes() {
+    private func setupAxes(nameTable: NameTable?) {
         guard let fvarData = dataOfTable("fvar") else { return }
 
         let fvarTable = FVAR.Table(data: fvarData)
-        let nameTable = NameTable(ftFace: ftFace)
+        let axisRecords = fvarTable.axisRecords
 
-        for axisRecord in fvarTable.axisRecords {
+        var variationAxes: [VariationAxis] = []
+        variationAxes.reserveCapacity(axisRecords.count)
+
+        defer {
+            defaults.variationAxes = variationAxes
+        }
+
+        for axisRecord in axisRecords {
             let axisTag: SFNTTag! = SFNTTag(rawValue: axisRecord.axisTag)
             let minValue = CGFloat(axisRecord.minValue)
             let defaultValue = CGFloat(axisRecord.defaultValue)
@@ -232,11 +298,10 @@ private class Instance {
         }
     }
 
-    private func setupPalettes() {
+    private func setupPalettes(nameTable: NameTable?) {
         guard let cpalData = dataOfTable("CPAL") else { return }
 
         let cpalTable = CPAL.Table(data: cpalData)
-        let nameTable = NameTable(ftFace: ftFace)
 
         let numPaletteEntries = Int(cpalTable.numPaletteEntries)
         let numPalettes = Int(cpalTable.numPalettes)
@@ -246,7 +311,12 @@ private class Instance {
         let paletteLabels = cpalTable.paletteLabels
         let paletteEntryLabels = cpalTable.paletteEntryLabels
 
+        var predefinedPalettes: [ColorPalette] = []
         predefinedPalettes.reserveCapacity(numPalettes)
+
+        defer {
+            defaults.predefinedPalettes = predefinedPalettes
+        }
 
         /* Populate predefined palettes. */
         for i in 0 ..< numPalettes {
@@ -281,7 +351,12 @@ private class Instance {
             predefinedPalettes.append(ColorPalette(name: name, flags: flags, colors: colors))
         }
 
+        var paletteEntryNames: [String] = []
         paletteEntryNames.reserveCapacity(numPaletteEntries)
+
+        defer {
+            defaults.paletteEntryNames = paletteEntryNames
+        }
 
         // Populate palette entry names.
         if let paletteEntryLabels = paletteEntryLabels {
@@ -304,16 +379,16 @@ private class Instance {
         }
     }
 
-    private func setupNames() {
-        guard let nameTable = NameTable(ftFace: ftFace) else { return }
+    private func setupNames(nameTable: NameTable?) {
+        guard let nameTable = nameTable else { return }
 
-        if let index = nameIndexes.family {
+        if let index = description.familyIndex {
             familyName = nameTable.record(at: index).string ?? ""
         }
-        if let index = nameIndexes.style {
+        if let index = description.styleIndex {
             styleName = nameTable.record(at: index).string ?? ""
         }
-        if let index = nameIndexes.full {
+        if let index = description.fullIndex {
             fullName = nameTable.record(at: index).string ?? ""
         } else {
             if !familyName.isEmpty {
@@ -363,6 +438,30 @@ private class Instance {
         return try body(ftStroker)
     }
 
+    var variationAxes: [VariationAxis] {
+        return defaults.variationAxes
+    }
+
+    var paletteEntryNames: [String] {
+        return defaults.paletteEntryNames
+    }
+
+    var predefinedPalettes: [ColorPalette] {
+        return defaults.predefinedPalettes
+    }
+
+    var weight: Typeface.Weight {
+        return description.weight
+    }
+
+    var width: Typeface.Width {
+        return description.width
+    }
+
+    var slope: Typeface.Slope {
+        return description.slope
+    }
+
     func dataOfTable(_ tag: SFNTTag) -> Data? {
         withFreeTypeFace { (face) in
             let inputTag = FT_ULong(tag.rawValue)
@@ -395,24 +494,12 @@ private class Instance {
         return GlyphID(glyphID)
     }
 
+    var isVariable: Bool {
+        return !variationAxes.isEmpty
+    }
+
     func variationInstance(forCoordinates coordinates: [CGFloat]) -> Instance? {
-        guard !variationAxes.isEmpty else {
-            return nil
-        }
-        guard let ftFace = fontStream.makeFTFace(faceIndex: ftFace.pointee.face_index, instanceIndex: 0) else {
-            return nil
-        }
-
-        var fixedCoords = Array<FT_Fixed>(repeating: 0, count: variationAxes.count)
-        let numCoords = min(coordinates.count, variationAxes.count)
-
-        for i in 0 ..< numCoords {
-            fixedCoords[i] = coordinates[i].f16Dot16
-        }
-
-        FT_Set_Var_Design_Coordinates(ftFace, FT_UInt(variationAxes.count), &fixedCoords)
-
-        return Instance(fontStream: fontStream, ftFace: ftFace)
+        return Instance(parent: self, coordinates: coordinates)
     }
 
     var variationCoordinates: [CGFloat] {
