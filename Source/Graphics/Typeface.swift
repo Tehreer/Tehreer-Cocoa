@@ -30,7 +30,7 @@ private class Instance {
     private let mutex = Mutex()
     private var fontStream: FontStream!
 
-    var ftFace: FT_Face!
+    var renderableFace: RenderableFace!
     var ftSize: FT_Size!
     var ftStroker: FT_Stroker!
 
@@ -65,22 +65,22 @@ private class Instance {
     var strikeoutThickness: Int = 0
 
     init?(fontStream: FontStream, faceIndex: Int, instanceIndex: Int) {
-        guard let ftFace = fontStream.makeFTFace(faceIndex: faceIndex, instanceIndex: instanceIndex) else {
+        guard let renderableFace = fontStream.makeRenderableFace(faceIndex: faceIndex, instanceIndex: instanceIndex) else {
             return nil
         }
 
-        setupFull(fontStream: fontStream, ftFace: ftFace)
+        setupFull(fontStream: fontStream, renderableFace: renderableFace)
     }
 
-    init(fontStream: FontStream, ftFace: FT_Face) {
-        setupFull(fontStream: fontStream, ftFace: ftFace)
+    init(fontStream: FontStream, renderableFace: RenderableFace) {
+        setupFull(fontStream: fontStream, renderableFace: renderableFace)
     }
 
     init?(parent: Instance, coordinates: [CGFloat]) {
         guard parent.isVariable,
               let fontStream = parent.fontStream,
-              let faceIndex = parent.ftFace?.pointee.face_index,
-              let ftFace = fontStream.makeFTFace(faceIndex: faceIndex, instanceIndex: 0) else {
+              let faceIndex = parent.renderableFace?.ftFace.pointee.face_index,
+              let renderableFace = fontStream.makeRenderableFace(faceIndex: faceIndex, instanceIndex: 0) else {
             return nil
         }
 
@@ -93,15 +93,16 @@ private class Instance {
             fixedCoords[i] = coordinates[i].f16Dot16
         }
 
-        FT_Set_Var_Design_Coordinates(ftFace, FT_UInt(variationAxes.count), &fixedCoords)
+        FT_Set_Var_Design_Coordinates(renderableFace.ftFace, FT_UInt(variationAxes.count), &fixedCoords)
 
-        setupDerived(parent: parent, ftFace: ftFace)
+        setupDerived(parent: parent, renderableFace: renderableFace)
     }
 
-    private func setupFull(fontStream: FontStream, ftFace: FT_Face) {
+    private func setupFull(fontStream: FontStream, renderableFace: RenderableFace) {
         self.fontStream = fontStream
-        self.ftFace = ftFace
+        self.renderableFace = renderableFace
 
+        let ftFace = renderableFace.ftFace
         let headTable = HeadTable(ftFace: ftFace)
         let os2Table = OS2Table(ftFace: ftFace)
         let nameTable = NameTable(ftFace: ftFace)
@@ -116,11 +117,12 @@ private class Instance {
         setupNames(nameTable: nameTable)
     }
 
-    private func setupDerived(parent: Instance, ftFace: FT_Face) {
+    private func setupDerived(parent: Instance, renderableFace: RenderableFace) {
         self.fontStream = parent.fontStream
-        self.ftFace = ftFace
+        self.renderableFace = renderableFace
         self.defaults = parent.defaults
 
+        let ftFace = renderableFace.ftFace
         let os2Table = OS2Table(ftFace: ftFace)
         let nameTable = NameTable(ftFace: ftFace)
 
@@ -132,7 +134,7 @@ private class Instance {
     }
 
     private func setupSize() {
-        FT_New_Size(ftFace, &ftSize)
+        FT_New_Size(renderableFace.ftFace, &ftSize)
     }
 
     private func setupDescription(headTable: HeadTable?, os2Table: OS2Table?, nameTable: NameTable?) {
@@ -181,7 +183,9 @@ private class Instance {
     }
 
     private func setupVariation() {
+        let ftFace = renderableFace.ftFace
         var variation: UnsafeMutablePointer<FT_MM_Var>!
+
         guard FT_Get_MM_Var(ftFace, &variation) == FT_Err_Ok else { return }
 
         defer {
@@ -257,10 +261,12 @@ private class Instance {
     }
 
     private func setupHarfBuzz() {
-        FT_Activate_Size(ftSize)
-        FT_Set_Char_Size(ftFace, 0, Int(ftFace.pointee.units_per_EM), 0, 0)
+        let rawFace = renderableFace.ftFace
 
-        hbFont = hb_ft_font_create(ftFace, nil)
+        FT_Activate_Size(ftSize)
+        FT_Set_Char_Size(rawFace, 0, Int(rawFace.pointee.units_per_EM), 0, 0)
+
+        hbFont = hb_ft_font_create(rawFace, nil)
     }
 
     private func setupAxes(nameTable: NameTable?) {
@@ -407,20 +413,13 @@ private class Instance {
             FT_Done_Size(ftSize)
         }
 
-        FreeType.withLibrary { _ -> Void in
-            if ftStroker != nil {
-                FT_Stroker_Done(ftStroker)
-            }
-
-            FT_Done_Face(ftFace)
+        if ftStroker != nil {
+            FT_Stroker_Done(ftStroker)
         }
     }
 
     func withFreeTypeFace<Result>(_ body: (FT_Face) throws -> Result) rethrows -> Result {
-        mutex.lock()
-        defer { mutex.unlock() }
-
-        return try body(ftFace)
+        return try renderableFace.withRawFace(body)
     }
 
     func withFreeTypeStroker<Result>(_ body: (FT_Stroker) throws -> Result) rethrows -> Result {
@@ -507,10 +506,11 @@ private class Instance {
             return []
         }
 
+        let rawFace = renderableFace.ftFace
         var fixedCoords = Array<FT_Fixed>(repeating: 0, count: variationAxes.count)
         var coordValues = Array<CGFloat>(repeating: 0, count: variationAxes.count)
 
-        if FT_Get_Var_Design_Coordinates(ftFace, FT_UInt(variationAxes.count), &fixedCoords) == FT_Err_Ok {
+        if FT_Get_Var_Design_Coordinates(rawFace, FT_UInt(variationAxes.count), &fixedCoords) == FT_Err_Ok {
             for i in 0 ..< variationAxes.count {
                 coordValues[i] = CGFloat(f16Dot16: fixedCoords[i])
             }
@@ -535,11 +535,11 @@ public class Typeface {
     /// - Parameter path: The path of the font file.
     public init?(path: String) {
         guard let fontStream = FontStream(path: path),
-              let ftFace = fontStream.makeFTFace(faceIndex: 0, instanceIndex: 0) else {
+              let renderableFace = fontStream.makeRenderableFace(faceIndex: 0, instanceIndex: 0) else {
             return nil
         }
 
-        self.instance = Instance(fontStream: fontStream, ftFace: ftFace)
+        self.instance = Instance(fontStream: fontStream, renderableFace: renderableFace)
         setup()
     }
 
@@ -548,11 +548,11 @@ public class Typeface {
     /// - Parameter data: The data of the font.
     public init?(data: Data) {
         guard let fontStream = FontStream(data: data),
-              let ftFace = fontStream.makeFTFace(faceIndex: 0, instanceIndex: 0) else {
+              let renderableFace = fontStream.makeRenderableFace(faceIndex: 0, instanceIndex: 0) else {
             return nil
         }
 
-        self.instance = Instance(fontStream: fontStream, ftFace: ftFace)
+        self.instance = Instance(fontStream: fontStream, renderableFace: renderableFace)
         setup()
     }
 
@@ -562,20 +562,20 @@ public class Typeface {
     /// - Parameter stream: The input stream that contains the data of the font.
     public init?(stream: InputStream) {
         guard let fontStream = FontStream(stream: stream),
-              let ftFace = fontStream.makeFTFace(faceIndex: 0, instanceIndex: 0) else {
+              let renderableFace = fontStream.makeRenderableFace(faceIndex: 0, instanceIndex: 0) else {
             return nil
         }
 
-        self.instance = Instance(fontStream: fontStream, ftFace: ftFace)
+        self.instance = Instance(fontStream: fontStream, renderableFace: renderableFace)
         setup()
     }
 
     init?(fontStream: FontStream, faceIndex: Int, instanceIndex: Int) {
-        guard let ftFace = fontStream.makeFTFace(faceIndex: faceIndex, instanceIndex: instanceIndex) else {
+        guard let renderableFace = fontStream.makeRenderableFace(faceIndex: faceIndex, instanceIndex: instanceIndex) else {
             return nil
         }
 
-        self.instance = Instance(fontStream: fontStream, ftFace: ftFace)
+        self.instance = Instance(fontStream: fontStream, renderableFace: renderableFace)
         setup()
     }
 
@@ -605,7 +605,7 @@ public class Typeface {
     }
 
     var ftFace: FT_Face {
-        return instance.ftFace
+        return instance.renderableFace.ftFace
     }
 
     var ftSize: FT_Size {

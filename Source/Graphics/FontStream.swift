@@ -88,7 +88,7 @@ class FontStream {
         let numFaces = FreeType.withLibrary { (library) -> FT_Long in
             var face: FT_Face!
 
-            if FT_Open_Face(library, &arguments, 0, &face) == FT_Err_Ok {
+            if FT_Open_Face(library, &arguments, -1, &face) == FT_Err_Ok {
                 let numFaces = face.pointee.num_faces
                 FT_Done_Face(face)
 
@@ -122,19 +122,19 @@ class FontStream {
         }
     }
 
-    func makeFTFace(faceIndex: Int, instanceIndex: Int) -> FT_Face? {
+    func makeRenderableFace(faceIndex: Int, instanceIndex: Int) -> RenderableFace? {
         FreeType.withLibrary { (library) in
             let id: FT_Long = (instanceIndex << 16) + faceIndex
-            var face: FT_Face!
+            var ftFace: FT_Face!
 
-            if FT_Open_Face(library, &arguments, id, &face) == FT_Err_Ok {
-                if (face.pointee.face_flags & FT_FACE_FLAG_SCALABLE) == 0 {
-                    FT_Done_Face(face)
-                    face = nil
+            if FT_Open_Face(library, &arguments, id, &ftFace) == FT_Err_Ok {
+                if (ftFace.pointee.face_flags & FT_FACE_FLAG_SCALABLE) == 0 {
+                    FT_Done_Face(ftFace)
+                    ftFace = nil
                 }
             }
 
-            return face
+            return RenderableFace(ftFace: ftFace)
         }
     }
 }
