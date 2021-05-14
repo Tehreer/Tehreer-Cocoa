@@ -270,9 +270,8 @@ private class Instance {
     }
 
     private func setupAxes(nameTable: NameTable?) {
-        guard let fvarData = dataOfTable("fvar") else { return }
+        guard let fvarTable = renderableFace.fvarTable() else { return }
 
-        let fvarTable = FVAR.Table(data: fvarData)
         let axisRecords = fvarTable.axisRecords
 
         var variationAxes: [VariationAxis] = []
@@ -305,9 +304,7 @@ private class Instance {
     }
 
     private func setupPalettes(nameTable: NameTable?) {
-        guard let cpalData = dataOfTable("CPAL") else { return }
-
-        let cpalTable = CPAL.Table(data: cpalData)
+        guard let cpalTable = renderableFace.cpalTable() else { return }
 
         let numPaletteEntries = Int(cpalTable.numPaletteEntries)
         let numPalettes = Int(cpalTable.numPalettes)
@@ -459,25 +456,6 @@ private class Instance {
 
     var slope: Typeface.Slope {
         return description.slope
-    }
-
-    func dataOfTable(_ tag: SFNTTag) -> Data? {
-        withFreeTypeFace { (face) in
-            let inputTag = FT_ULong(tag.rawValue)
-            var length: FT_ULong = 0
-
-            FT_Load_Sfnt_Table(face, inputTag, 0, nil, &length)
-
-            guard length > 0 else {
-                return nil
-            }
-
-            let count = Int(length)
-            let bytes = UnsafeMutablePointer<FT_Byte>.allocate(capacity: count)
-            FT_Load_Sfnt_Table(face, inputTag, 0, bytes, nil)
-
-            return Data(bytesNoCopy: bytes, count: count, deallocator: .free)
-        }
     }
 
     func glyphID(forCodePoint codePoint: UTF32Char) -> GlyphID {
@@ -789,7 +767,7 @@ public class Typeface {
     /// - Parameter tag: The tag of the table.
     /// - Returns: The data of the intended table, or `nil` if no such table exists.
     public func dataOfTable(_ tag: SFNTTag) -> Data? {
-        return instance.dataOfTable(tag)
+        return instance.renderableFace.dataOfTable(tag)
     }
 
     /// Returns the glyph id for the specified code point.

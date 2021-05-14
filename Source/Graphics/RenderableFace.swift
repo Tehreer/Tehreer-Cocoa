@@ -38,4 +38,39 @@ class RenderableFace {
 
         return try body(ftFace)
     }
+
+    func dataOfTable(_ tag: SFNTTag) -> Data? {
+        withRawFace { (ftFace) in
+            let inputTag = FT_ULong(tag.rawValue)
+            var length: FT_ULong = 0
+
+            FT_Load_Sfnt_Table(ftFace, inputTag, 0, nil, &length)
+
+            guard length > 0 else {
+                return nil
+            }
+
+            let count = Int(length)
+            let bytes = UnsafeMutablePointer<FT_Byte>.allocate(capacity: count)
+            FT_Load_Sfnt_Table(ftFace, inputTag, 0, bytes, nil)
+
+            return Data(bytesNoCopy: bytes, count: count, deallocator: .free)
+        }
+    }
+
+    func cpalTable() -> CPAL.Table? {
+        guard let cpalData = dataOfTable("CPAL") else {
+            return nil
+        }
+
+        return CPAL.Table(data: cpalData)
+    }
+
+    func fvarTable() -> FVAR.Table? {
+        guard let fvarData = dataOfTable("fvar") else {
+            return nil
+        }
+
+        return FVAR.Table(data: fvarData)
+    }
 }
