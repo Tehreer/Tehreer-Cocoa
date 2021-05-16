@@ -135,13 +135,13 @@ public class ShapingEngine {
             hb_feature_t(tag: key.rawValue, value: UInt32(value), start: 0, end: UInt32(length))
         }
 
-        typeface.withFreeTypeFace { (ftFace) in
-            FT_Activate_Size(typeface.ftSize)
-            FT_Set_Char_Size(ftFace, 0, typeface.unitsPerEm, 0, 0)
+        features.withUnsafeBufferPointer { (pointer) in
+            let hbFont = hb_font_create_sub_font(typeface.hbFont)
+            hb_font_set_ppem(hbFont, UInt32(typeSize + 0.5), UInt32(typeSize + 0.5))
 
-            features.withUnsafeBufferPointer { (pointer) in
-                hb_shape(typeface.hbFont, buffer, pointer.baseAddress, UInt32(pointer.count))
-            }
+            hb_shape(hbFont, buffer, pointer.baseAddress, UInt32(pointer.count))
+
+            hb_font_destroy(hbFont)
         }
 
         shapingResult.setup(string: string,
