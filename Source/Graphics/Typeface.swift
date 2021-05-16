@@ -129,7 +129,7 @@ private class Instance {
         setupSize()
         setupStrikeout(os2Table: os2Table)
         setupVariation()
-        setupHarfBuzz()
+        setupHarfBuzz(parent: parent)
         setupNames(nameTable: nameTable)
     }
 
@@ -260,8 +260,12 @@ private class Instance {
         }
     }
 
-    private func setupHarfBuzz() {
-        shapableFace = ShapableFace(renderableFace: renderableFace)
+    private func setupHarfBuzz(parent: Instance? = nil) {
+        if let parent = parent {
+            shapableFace = ShapableFace(parent: parent.shapableFace, renderableFace: renderableFace)
+        } else {
+            shapableFace = ShapableFace(renderableFace: renderableFace)
+        }
     }
 
     private func setupAxes(nameTable: NameTable?) {
