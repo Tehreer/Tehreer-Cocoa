@@ -60,7 +60,7 @@ public class FontFile {
         defaultTypefaces = []
 
         for i in 0 ..< fontStream.faceCount {
-            guard let firstFace = IntrinsicFace(fontStream: fontStream, faceIndex: i, instanceIndex: 0) else {
+            guard let firstFace = IntrinsicFace(fontStream: fontStream, faceIndex: i) else {
                 continue
             }
 

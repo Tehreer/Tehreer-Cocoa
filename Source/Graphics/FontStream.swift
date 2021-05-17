@@ -122,9 +122,9 @@ class FontStream {
         }
     }
 
-    func makeRenderableFace(faceIndex: Int, instanceIndex: Int) -> RenderableFace? {
+    func makeRenderableFace(faceIndex: Int) -> RenderableFace? {
         FreeType.withLibrary { (library) in
-            let id: FT_Long = (instanceIndex << 16) + faceIndex
+            let id: FT_Long = faceIndex
             var ftFace: FT_Face!
 
             if FT_Open_Face(library, &arguments, id, &ftFace) == FT_Err_Ok {

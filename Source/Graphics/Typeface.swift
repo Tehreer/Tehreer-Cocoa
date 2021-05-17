@@ -43,7 +43,7 @@ public class Typeface {
     /// - Parameter path: The path of the font file.
     public init?(path: String) {
         guard let fontStream = FontStream(path: path),
-              let renderableFace = fontStream.makeRenderableFace(faceIndex: 0, instanceIndex: 0) else {
+              let renderableFace = fontStream.makeRenderableFace(faceIndex: 0) else {
             return nil
         }
 
@@ -56,7 +56,7 @@ public class Typeface {
     /// - Parameter data: The data of the font.
     public init?(data: Data) {
         guard let fontStream = FontStream(data: data),
-              let renderableFace = fontStream.makeRenderableFace(faceIndex: 0, instanceIndex: 0) else {
+              let renderableFace = fontStream.makeRenderableFace(faceIndex: 0) else {
             return nil
         }
 
@@ -70,7 +70,7 @@ public class Typeface {
     /// - Parameter stream: The input stream that contains the data of the font.
     public init?(stream: InputStream) {
         guard let fontStream = FontStream(stream: stream),
-              let renderableFace = fontStream.makeRenderableFace(faceIndex: 0, instanceIndex: 0) else {
+              let renderableFace = fontStream.makeRenderableFace(faceIndex: 0) else {
             return nil
         }
 
@@ -79,7 +79,7 @@ public class Typeface {
     }
 
     init?(fontStream: FontStream, faceIndex: Int, instanceIndex: Int) {
-        guard let renderableFace = fontStream.makeRenderableFace(faceIndex: faceIndex, instanceIndex: instanceIndex) else {
+        guard let renderableFace = fontStream.makeRenderableFace(faceIndex: faceIndex) else {
             return nil
         }
 

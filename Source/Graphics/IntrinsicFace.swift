@@ -57,8 +57,8 @@ class IntrinsicFace {
     var strikeoutPosition: Int = 0
     var strikeoutThickness: Int = 0
 
-    init?(fontStream: FontStream, faceIndex: Int, instanceIndex: Int) {
-        guard let renderableFace = fontStream.makeRenderableFace(faceIndex: faceIndex, instanceIndex: instanceIndex) else {
+    init?(fontStream: FontStream, faceIndex: Int) {
+        guard let renderableFace = fontStream.makeRenderableFace(faceIndex: faceIndex) else {
             return nil
         }
 
@@ -73,7 +73,7 @@ class IntrinsicFace {
         guard parent.isVariable,
               let fontStream = parent.fontStream,
               let faceIndex = parent.renderableFace?.ftFace.pointee.face_index,
-              let renderableFace = fontStream.makeRenderableFace(faceIndex: faceIndex, instanceIndex: 0) else {
+              let renderableFace = fontStream.makeRenderableFace(faceIndex: faceIndex) else {
             return nil
         }
 
