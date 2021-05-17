@@ -23,7 +23,7 @@ class ShapableFace {
     private static let fontFuncs = makeFontFuncs()
 
     private let renderableFace: RenderableFace
-    private var rootFont: OpaquePointer!
+    private var rootFace: ShapableFace!
 
     var hbFont: OpaquePointer!
 
@@ -173,28 +173,25 @@ class ShapableFace {
         hb_face_set_index(hbFace, UInt32(ftFace.pointee.face_index))
         hb_face_set_upem(hbFace, UInt32(ftFace.pointee.units_per_EM))
 
-        rootFont = hb_font_create(hbFace)
-        hb_font_set_funcs(rootFont, Self.fontFuncs, object, nil)
+        hbFont = hb_font_create(hbFace)
+        hb_font_set_funcs(hbFont, Self.fontFuncs, object, nil)
 
         hb_face_destroy(hbFace)
 
-        setupRepresentingFont()
         setupCoordinates()
     }
 
     init(parent: ShapableFace, renderableFace: RenderableFace) {
         self.renderableFace = renderableFace
-        self.rootFont = hb_font_reference(parent.rootFont)
+        self.rootFace = parent.rootFace ?? parent
 
-        setupRepresentingFont()
-        setupCoordinates()
-    }
-
-    private func setupRepresentingFont() {
         let object = Unmanaged.passUnretained(self).toOpaque()
+        let rootFont = rootFace.hbFont
 
         hbFont = hb_font_create_sub_font(rootFont)
         hb_font_set_funcs(hbFont, Self.fontFuncs, object, nil)
+
+        setupCoordinates()
     }
 
     private func setupCoordinates() {
@@ -225,7 +222,6 @@ class ShapableFace {
     }
 
     deinit {
-        hb_font_destroy(rootFont)
         hb_font_destroy(hbFont)
     }
 

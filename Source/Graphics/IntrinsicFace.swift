@@ -69,7 +69,7 @@ class IntrinsicFace {
         setupFull(fontStream: fontStream, renderableFace: renderableFace)
     }
 
-    init?(parent: IntrinsicFace, coordinates: [CGFloat]) {
+    init?(parent: IntrinsicFace, coordinates: UnsafeMutablePointer<FT_Fixed>) {
         guard parent.isVariable,
               let fontStream = parent.fontStream,
               let faceIndex = parent.renderableFace?.ftFace.pointee.face_index,
@@ -77,6 +77,15 @@ class IntrinsicFace {
             return nil
         }
 
+        let variationAxes = parent.variationAxes
+        let ftFace = renderableFace.ftFace
+
+        FT_Set_Var_Design_Coordinates(ftFace, FT_UInt(variationAxes.count), coordinates)
+
+        setupDerived(parent: parent, renderableFace: renderableFace)
+    }
+
+    convenience init?(parent: IntrinsicFace, coordinates: [CGFloat]) {
         let variationAxes = parent.variationAxes
 
         var fixedCoords = Array<FT_Fixed>(repeating: 0, count: variationAxes.count)
@@ -86,9 +95,7 @@ class IntrinsicFace {
             fixedCoords[i] = coordinates[i].f16Dot16
         }
 
-        FT_Set_Var_Design_Coordinates(renderableFace.ftFace, FT_UInt(variationAxes.count), &fixedCoords)
-
-        setupDerived(parent: parent, renderableFace: renderableFace)
+        self.init(parent: parent, coordinates: &fixedCoords)
     }
 
     private func setupFull(fontStream: FontStream, renderableFace: RenderableFace) {

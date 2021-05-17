@@ -87,7 +87,7 @@ public class Typeface {
         setup()
     }
 
-    private init(instance: IntrinsicFace) {
+    init(instance: IntrinsicFace) {
         self.instance = instance
         setup()
     }

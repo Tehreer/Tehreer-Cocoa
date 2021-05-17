@@ -60,33 +60,32 @@ public class FontFile {
         defaultTypefaces = []
 
         for i in 0 ..< fontStream.faceCount {
-            guard let firstTypeface = Typeface(fontStream: fontStream, faceIndex: i, instanceIndex: i) else {
+            guard let firstFace = IntrinsicFace(fontStream: fontStream, faceIndex: i, instanceIndex: 0) else {
                 continue
             }
 
-            let instanceStart = defaultTypefaces.count;
-            let instanceCount = max(1, firstTypeface.ftFace.pointee.style_flags >> 16)
+            let ftFace = firstFace.renderableFace.ftFace
+            var variation: UnsafeMutablePointer<FT_MM_Var>!
 
-            defaultTypefaces.append(firstTypeface)
-
-            for j in 1 ..< instanceCount {
-                guard let instanceTypeface = Typeface(fontStream: fontStream, faceIndex: i, instanceIndex: j) else {
-                    continue
-                }
-
-                let instanceCoords = instanceTypeface.variationCoordinates
-                if !instanceCoords.isEmpty {
-                    // Remove existing duplicate instances.
-                    for k in (instanceStart ..< defaultTypefaces.count).reversed() {
-                        let referenceCoords = defaultTypefaces[k].variationCoordinates
-
-                        if instanceCoords == referenceCoords {
-                            defaultTypefaces.remove(at: k)
-                        }
+            if FT_Get_MM_Var(ftFace, &variation) == FT_Err_Ok {
+                defer {
+                    FreeType.withLibrary { (library) -> Void in
+                        FT_Done_MM_Var(library, variation)
                     }
                 }
 
-                defaultTypefaces.append(instanceTypeface)
+                let numNamedStyles = variation.pointee.num_namedstyles
+                var namedStyle = variation.pointee.namedstyle!
+
+                for _ in 0 ..< numNamedStyles {
+                    if let namedFace = IntrinsicFace(parent: firstFace, coordinates: namedStyle.pointee.coords) {
+                        defaultTypefaces.append(Typeface(instance: namedFace))
+                    }
+
+                    namedStyle = namedStyle.advanced(by: 1)
+                }
+            } else {
+                defaultTypefaces.append(Typeface(instance: firstFace))
             }
         }
     }
