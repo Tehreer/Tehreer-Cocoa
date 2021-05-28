@@ -14,22 +14,46 @@
 // limitations under the License.
 //
 
+import CoreGraphics
 import Foundation
 import FreeType
 
 class RenderableFace {
     private let mutex = Mutex()
 
+    let fontStream: FontStream
     let ftFace: FT_Face
+    
+    private(set) var coordinates: [CGFloat] = []
 
-    init(ftFace: FT_Face) {
+    init(fontStream: FontStream, ftFace: FT_Face) {
+        self.fontStream = fontStream
         self.ftFace = ftFace
+    }
+
+    func setupCoordinates(_ coordinates: [CGFloat]) {
+        self.coordinates = coordinates
+
+        var fixedCoords = coordinates.map { $0.f16Dot16 }
+        FT_Set_Var_Design_Coordinates(ftFace, FT_UInt(coordinates.count), &fixedCoords)
     }
 
     deinit {
         FreeType.withLibrary { _ -> Void in
             FT_Done_Face(ftFace)
         }
+    }
+
+    func variationInstance(forCoordinates coordinates: [CGFloat]) -> RenderableFace? {
+        let faceIndex = ftFace.pointee.face_index
+
+        guard let derivedFace = fontStream.makeRenderableFace(faceIndex: faceIndex) else {
+            return nil
+        }
+
+        derivedFace.setupCoordinates(coordinates)
+
+        return derivedFace
     }
 
     func withRawFace<Result>(_ body: (FT_Face) throws -> Result) rethrows -> Result {

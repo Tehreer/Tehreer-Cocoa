@@ -26,8 +26,6 @@ public typealias GlyphID = UInt16
 /// A tag of a typeface.
 public typealias TypefaceTag = AnyHashable
 
-
-
 /// The `Typeface` class specifies the typeface and intrinsic style of a font. This is used in the
 /// renderer, along with optionally `Renderer` settings like `typeSize`, `slantAngle`, `scaleX`, to
 /// specify how text appears when drawn (and measured).
@@ -47,7 +45,7 @@ public class Typeface {
             return nil
         }
 
-        self.instance = IntrinsicFace(fontStream: fontStream, renderableFace: renderableFace)
+        self.instance = IntrinsicFace(renderableFace: renderableFace)
         setup()
     }
 
@@ -60,7 +58,7 @@ public class Typeface {
             return nil
         }
 
-        self.instance = IntrinsicFace(fontStream: fontStream, renderableFace: renderableFace)
+        self.instance = IntrinsicFace(renderableFace: renderableFace)
         setup()
     }
 
@@ -74,7 +72,7 @@ public class Typeface {
             return nil
         }
 
-        self.instance = IntrinsicFace(fontStream: fontStream, renderableFace: renderableFace)
+        self.instance = IntrinsicFace(renderableFace: renderableFace)
         setup()
     }
 
@@ -83,7 +81,7 @@ public class Typeface {
             return nil
         }
 
-        self.instance = IntrinsicFace(fontStream: fontStream, renderableFace: renderableFace)
+        self.instance = IntrinsicFace(renderableFace: renderableFace)
         setup()
     }
 

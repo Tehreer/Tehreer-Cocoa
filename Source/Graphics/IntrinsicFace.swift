@@ -21,7 +21,6 @@ import UIKit
 
 class IntrinsicFace {
     private let mutex = Mutex()
-    private var fontStream: FontStream!
 
     var renderableFace: RenderableFace!
     var ftSize: FT_Size!
@@ -62,44 +61,18 @@ class IntrinsicFace {
             return nil
         }
 
-        setupFull(fontStream: fontStream, renderableFace: renderableFace)
+        setupFull(renderableFace: renderableFace)
     }
 
-    init(fontStream: FontStream, renderableFace: RenderableFace) {
-        setupFull(fontStream: fontStream, renderableFace: renderableFace)
+    init(renderableFace: RenderableFace) {
+        setupFull(renderableFace: renderableFace)
     }
 
-    init?(parent: IntrinsicFace, coordinates: UnsafeMutablePointer<FT_Fixed>) {
-        guard parent.isVariable,
-              let fontStream = parent.fontStream,
-              let faceIndex = parent.renderableFace?.ftFace.pointee.face_index,
-              let renderableFace = fontStream.makeRenderableFace(faceIndex: faceIndex) else {
-            return nil
-        }
-
-        let variationAxes = parent.variationAxes
-        let ftFace = renderableFace.ftFace
-
-        FT_Set_Var_Design_Coordinates(ftFace, FT_UInt(variationAxes.count), coordinates)
-
+    private init?(parent: IntrinsicFace, renderableFace: RenderableFace) {
         setupDerived(parent: parent, renderableFace: renderableFace)
     }
 
-    convenience init?(parent: IntrinsicFace, coordinates: [CGFloat]) {
-        let variationAxes = parent.variationAxes
-
-        var fixedCoords = Array<FT_Fixed>(repeating: 0, count: variationAxes.count)
-        let numCoords = min(coordinates.count, variationAxes.count)
-
-        for i in 0 ..< numCoords {
-            fixedCoords[i] = coordinates[i].f16Dot16
-        }
-
-        self.init(parent: parent, coordinates: &fixedCoords)
-    }
-
-    private func setupFull(fontStream: FontStream, renderableFace: RenderableFace) {
-        self.fontStream = fontStream
+    private func setupFull(renderableFace: RenderableFace) {
         self.renderableFace = renderableFace
 
         let ftFace = renderableFace.ftFace
@@ -107,18 +80,18 @@ class IntrinsicFace {
         let os2Table = OS2Table(ftFace: ftFace)
         let nameTable = NameTable(ftFace: ftFace)
 
+        setupAxes(nameTable: nameTable)
+        setupCoordinates()
+        setupPalettes(nameTable: nameTable)
         setupSize()
         setupDescription(headTable: headTable, os2Table: os2Table, nameTable: nameTable)
         setupStrikeout(os2Table: os2Table)
         setupVariation()
         setupHarfBuzz()
-        setupAxes(nameTable: nameTable)
-        setupPalettes(nameTable: nameTable)
         setupNames(nameTable: nameTable)
     }
 
     private func setupDerived(parent: IntrinsicFace, renderableFace: RenderableFace) {
-        self.fontStream = parent.fontStream
         self.renderableFace = renderableFace
         self.defaults = parent.defaults
 
@@ -145,6 +118,7 @@ class IntrinsicFace {
 
         defer {
             defaults.description = description
+            self.description = description
         }
 
         if let os2Table = os2Table {
@@ -299,6 +273,12 @@ class IntrinsicFace {
                                               minValue: minValue, maxValue: maxValue)
 
             variationAxes.append(variationAxis)
+        }
+    }
+
+    private func setupCoordinates() {
+        if !variationAxes.isEmpty {
+            renderableFace.setupCoordinates(variationAxes.map { $0.defaultValue })
         }
     }
 
@@ -473,24 +453,25 @@ class IntrinsicFace {
     }
 
     func variationInstance(forCoordinates coordinates: [CGFloat]) -> IntrinsicFace? {
-        return IntrinsicFace(parent: self, coordinates: coordinates)
+        guard isVariable else {
+            return nil
+        }
+
+        var coordArray = Array<CGFloat>(repeating: 0, count: variationAxes.count)
+        let coordCount = min(coordinates.count, variationAxes.count)
+
+        for i in 0 ..< coordCount {
+            coordArray[i] = coordinates[i]
+        }
+
+        guard let derivedFace = renderableFace.variationInstance(forCoordinates: coordArray) else {
+            return nil
+        }
+
+        return IntrinsicFace(parent: self, renderableFace: derivedFace)
     }
 
     var variationCoordinates: [CGFloat] {
-        guard variationAxes.count > 0 else {
-            return []
-        }
-
-        let rawFace = renderableFace.ftFace
-        var fixedCoords = Array<FT_Fixed>(repeating: 0, count: variationAxes.count)
-        var coordValues = Array<CGFloat>(repeating: 0, count: variationAxes.count)
-
-        if FT_Get_Var_Design_Coordinates(rawFace, FT_UInt(variationAxes.count), &fixedCoords) == FT_Err_Ok {
-            for i in 0 ..< variationAxes.count {
-                coordValues[i] = CGFloat(f16Dot16: fixedCoords[i])
-            }
-        }
-
-        return coordValues
+        return renderableFace.coordinates
     }
 }

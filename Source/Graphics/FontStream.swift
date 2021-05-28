@@ -134,7 +134,7 @@ class FontStream {
                 }
             }
 
-            return RenderableFace(ftFace: ftFace)
+            return RenderableFace(fontStream: self, ftFace: ftFace)
         }
     }
 }

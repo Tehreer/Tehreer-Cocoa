@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import CoreGraphics
 import Foundation
 import FreeType
 
@@ -78,7 +79,13 @@ public class FontFile {
                 var namedStyle = variation.pointee.namedstyle!
 
                 for _ in 0 ..< numNamedStyles {
-                    if let namedFace = IntrinsicFace(parent: firstFace, coordinates: namedStyle.pointee.coords) {
+                    var coordinates: [CGFloat] = []
+
+                    for i in 0 ..< variation.pointee.num_axis {
+                        coordinates.append(CGFloat(f16Dot16: namedStyle.pointee.coords[Int(i)]))
+                    }
+
+                    if let namedFace = firstFace.variationInstance(forCoordinates: coordinates) {
                         defaultTypefaces.append(Typeface(instance: namedFace))
                     }
 
