@@ -195,29 +195,10 @@ class ShapableFace {
     }
 
     private func setupCoordinates() {
-        let ftFace = renderableFace.ftFace
-        var variation: UnsafeMutablePointer<FT_MM_Var>!
+        var coordinates = renderableFace.coordinates.map { Float($0) }
 
-        guard FT_Get_MM_Var(ftFace, &variation) == FT_Err_Ok else { return }
-
-        defer {
-            FreeType.withLibrary { (library) -> Void in
-                FT_Done_MM_Var(library, variation)
-            }
-        }
-
-        let numCoords = variation.pointee.num_axis
-        var ftCoords = Array<FT_Fixed>(repeating: 0, count: Int(numCoords))
-
-        if FT_Get_Var_Blend_Coordinates(ftFace, numCoords, &ftCoords) == FT_Err_Ok {
-            var coordArray = Array<Int32>(repeating: 0, count: Int(numCoords))
-
-            // Convert the FreeType's F16DOT16 coordinates to normalized format.
-            for i in 0 ..< Int(numCoords) {
-                coordArray[i] = Int32(ftCoords[i] >> 2)
-            }
-
-            hb_font_set_var_coords_normalized(hbFont, coordArray, numCoords)
+        if !coordinates.isEmpty {
+            hb_font_set_var_coords_design(hbFont, &coordinates, UInt32(coordinates.count))
         }
     }
 
