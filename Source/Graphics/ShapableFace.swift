@@ -22,8 +22,10 @@ import HarfBuzz
 class ShapableFace {
     private static let fontFuncs = makeFontFuncs()
 
-    private let renderableFace: RenderableFace
     private var rootFace: ShapableFace!
+
+    private let renderableFace: RenderableFace
+    private let advanceCache = AdvanceCache()
 
     var hbFont: OpaquePointer!
 
@@ -43,7 +45,6 @@ class ShapableFace {
                 }
 
                 glyph?.initialize(to: hb_codepoint_t(glyphID))
-
                 return 1
             }
         }, nil, nil)
@@ -91,7 +92,6 @@ class ShapableFace {
                 }
 
                 glyph?.initialize(to: hb_codepoint_t(glyphID))
-
                 return 1
             }
         }, nil, nil)
@@ -99,12 +99,20 @@ class ShapableFace {
         hb_font_funcs_set_glyph_h_advance_func(funcs, { (font, object, glyph, userData) -> hb_position_t in
             let unmanaged = Unmanaged<ShapableFace>.fromOpaque(object!)
             let instance = unmanaged.takeUnretainedValue()
+            let cache = instance.advanceCache
 
             return instance.withFreeTypeFace { (ftFace) in
+                let glyphID = GlyphID(glyph)
+
+                if let advance = cache[glyphID] {
+                    return advance
+                }
+
                 let loadFlags = FT_Int32(FT_LOAD_NO_SCALE)
                 var advance: FT_Fixed = 0
 
-                FT_Get_Advance(ftFace, FT_UInt(glyph), loadFlags, &advance)
+                FT_Get_Advance(ftFace, FT_UInt(glyphID), loadFlags, &advance)
+                cache[glyphID] = Int32(advance)
 
                 return hb_position_t(advance)
             }
@@ -113,6 +121,7 @@ class ShapableFace {
         hb_font_funcs_set_glyph_h_advances_func(funcs, { (font, object, count, firstGlyph, glyphStride, firstAdvance, advanceStride, userData) in
             let unmanaged = Unmanaged<ShapableFace>.fromOpaque(object!)
             let instance = unmanaged.takeUnretainedValue()
+            let cache = instance.advanceCache
 
             instance.withFreeTypeFace { (ftFace) in
                 var glyphPtr = UnsafeRawPointer(firstGlyph)!
@@ -125,9 +134,15 @@ class ShapableFace {
                     let glyphRef = glyphPtr.assumingMemoryBound(to: hb_codepoint_t.self)
                     let advanceRef = advancePtr.assumingMemoryBound(to: hb_position_t.self)
 
-                    let glyph = FT_UInt(glyphRef.pointee)
+                    let glyphID = GlyphID(glyphRef.pointee)
 
-                    FT_Get_Advance(ftFace, glyph, loadFlags, &advance)
+                    if let value = cache[glyphID] {
+                        advance = FT_Fixed(value)
+                    } else {
+                        FT_Get_Advance(ftFace, FT_UInt(glyphID), loadFlags, &advance)
+                        cache[glyphID] = Int32(advance)
+                    }
+
                     advanceRef.initialize(to: hb_position_t(advance))
 
                     glyphPtr = glyphPtr.advanced(by: Int(glyphStride))
