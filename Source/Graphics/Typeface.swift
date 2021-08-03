@@ -314,84 +314,11 @@ public class Typeface {
     ///   - vertical: The flag which indicates the type of advance, either horizontal or vertical.
     /// - Returns: The advance for the specified glyph.
     public func advance(forGlyph glyphID: GlyphID, typeSize: CGFloat, vertical: Bool) -> CGFloat {
-        withFreeTypeFace { (face) in
-            FT_Activate_Size(ftSize)
-            FT_Set_Char_Size(face, 0, typeSize.f26Dot6, 0, 0)
-            FT_Set_Transform(face, nil, nil)
-
-            var loadFlags: FT_Int32 = FT_LOAD_DEFAULT
-            if (vertical) {
-                loadFlags |= FT_Int32(FT_LOAD_VERTICAL_LAYOUT)
-            }
-
-            var advance: FT_Fixed = 0
-            FT_Get_Advance(face, FT_UInt(glyphID), loadFlags, &advance)
-
-            return CGFloat(f16Dot16: advance)
-        }
+        return instance.advance(forGlyph: glyphID, typeSize: typeSize, vertical: vertical)
     }
 
     func unsafeMakePath(glyphID: FT_UInt) -> CGPath? {
-        guard FT_Load_Glyph(ftFace, glyphID, FT_Int32(FT_LOAD_NO_BITMAP)) == FT_Err_Ok else {
-            return nil
-        }
-
-        var outline = ftFace.pointee.glyph.pointee.outline
-        var funcs = FT_Outline_Funcs(
-            move_to: { (to, user) -> Int32 in
-                let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
-                let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
-                                    y: CGFloat(f26Dot6: to!.pointee.y))
-                path.move(to: point)
-
-                return 0
-            },
-            line_to: { (to, user) -> Int32 in
-                let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
-                let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
-                                    y: CGFloat(f26Dot6: to!.pointee.y))
-                path.addLine(to: point)
-
-                return 0
-            },
-            conic_to: { (control1, to, user) -> Int32 in
-                let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
-                let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
-                                    y: CGFloat(f26Dot6: to!.pointee.y))
-                let first = CGPoint(x: CGFloat(f26Dot6: control1!.pointee.x),
-                                    y: CGFloat(f26Dot6: control1!.pointee.y))
-                path.addQuadCurve(to: point, control: first)
-
-                return 0
-            },
-            cubic_to: { (control1, control2, to, user) -> Int32 in
-                let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
-                let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
-                                    y: CGFloat(f26Dot6: to!.pointee.y))
-                let first = CGPoint(x: CGFloat(f26Dot6: control1!.pointee.x),
-                                    y: CGFloat(f26Dot6: control1!.pointee.y))
-                let second = CGPoint(x: CGFloat(f26Dot6: control2!.pointee.x),
-                                     y: CGFloat(f26Dot6: control2!.pointee.y))
-                path.addCurve(to: point, control1: first, control2: second)
-
-                return 0
-            },
-            shift: 0,
-            delta: 0
-        )
-
-        let path = CGMutablePath()
-        let user = Unmanaged.passUnretained(path).toOpaque()
-
-        guard FT_Outline_Decompose(&outline, &funcs, user) == FT_Err_Ok else {
-            return nil
-        }
-
-        return path
+        return instance.unsafeMakePath(glyphID: glyphID)
     }
 
     /// Generates the path for the specified glyph.
@@ -403,24 +330,6 @@ public class Typeface {
     ///                required.
     /// - Returns: The path for the specified glyph.
     public func path(forGlyph glyphID: GlyphID, typeSize: CGFloat, transform: CGAffineTransform?) -> CGPath? {
-        withFreeTypeFace { (face) -> CGPath? in
-            let fixedSize = typeSize.f26Dot6
-            var matrix = FT_Matrix(xx: 0x10000, xy: 0, yx: 0, yy: -0x10000)
-            var delta = FT_Vector(x: 0, y: 0)
-
-            if let transform = transform {
-                let flip = transform.concatenating(CGAffineTransform(scaleX: 1.0, y: -1.0))
-
-                matrix = FT_Matrix(xx: flip.a.f16Dot16, xy: flip.b.f16Dot16,
-                                   yx: flip.c.f16Dot16, yy: flip.d.f16Dot16)
-                delta = FT_Vector(x: transform.tx.f16Dot16, y: transform.ty.f16Dot16)
-            }
-
-            FT_Activate_Size(ftSize)
-            FT_Set_Char_Size(face, 0, fixedSize, 0, 0)
-            FT_Set_Transform(face, &matrix, &delta)
-
-            return unsafeMakePath(glyphID: FT_UInt(glyphID))
-        }
+        return instance.path(forGlyph: glyphID, typeSize: typeSize, transform: transform)
     }
 }

@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2021 Muhammad Tayyab Akram
+// Copyright (C) 2021 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -473,5 +473,110 @@ class IntrinsicFace {
 
     var variationCoordinates: [CGFloat] {
         return renderableFace.coordinates
+    }
+
+    func advance(forGlyph glyphID: GlyphID, typeSize: CGFloat, vertical: Bool) -> CGFloat {
+        withFreeTypeFace { (face) in
+            FT_Activate_Size(ftSize)
+            FT_Set_Char_Size(face, 0, typeSize.f26Dot6, 0, 0)
+            FT_Set_Transform(face, nil, nil)
+
+            var loadFlags: FT_Int32 = FT_LOAD_DEFAULT
+            if (vertical) {
+                loadFlags |= FT_Int32(FT_LOAD_VERTICAL_LAYOUT)
+            }
+
+            var advance: FT_Fixed = 0
+            FT_Get_Advance(face, FT_UInt(glyphID), loadFlags, &advance)
+
+            return CGFloat(f16Dot16: advance)
+        }
+    }
+
+    func unsafeMakePath(glyphID: FT_UInt) -> CGPath? {
+        let ftFace = renderableFace.ftFace
+        let loadFlags = FT_Int32(FT_LOAD_NO_BITMAP)
+
+        guard FT_Load_Glyph(ftFace, glyphID, loadFlags) == FT_Err_Ok else {
+            return nil
+        }
+
+        var outline = ftFace.pointee.glyph.pointee.outline
+        var funcs = FT_Outline_Funcs(
+            move_to: { (to, user) -> Int32 in
+                let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
+                let path = unmanaged.takeUnretainedValue()
+                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
+                                    y: CGFloat(f26Dot6: to!.pointee.y))
+                path.move(to: point)
+
+                return 0
+            },
+            line_to: { (to, user) -> Int32 in
+                let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
+                let path = unmanaged.takeUnretainedValue()
+                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
+                                    y: CGFloat(f26Dot6: to!.pointee.y))
+                path.addLine(to: point)
+
+                return 0
+            },
+            conic_to: { (control1, to, user) -> Int32 in
+                let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
+                let path = unmanaged.takeUnretainedValue()
+                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
+                                    y: CGFloat(f26Dot6: to!.pointee.y))
+                let first = CGPoint(x: CGFloat(f26Dot6: control1!.pointee.x),
+                                    y: CGFloat(f26Dot6: control1!.pointee.y))
+                path.addQuadCurve(to: point, control: first)
+
+                return 0
+            },
+            cubic_to: { (control1, control2, to, user) -> Int32 in
+                let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
+                let path = unmanaged.takeUnretainedValue()
+                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
+                                    y: CGFloat(f26Dot6: to!.pointee.y))
+                let first = CGPoint(x: CGFloat(f26Dot6: control1!.pointee.x),
+                                    y: CGFloat(f26Dot6: control1!.pointee.y))
+                let second = CGPoint(x: CGFloat(f26Dot6: control2!.pointee.x),
+                                     y: CGFloat(f26Dot6: control2!.pointee.y))
+                path.addCurve(to: point, control1: first, control2: second)
+
+                return 0
+            },
+            shift: 0,
+            delta: 0
+        )
+
+        let path = CGMutablePath()
+        let user = Unmanaged.passUnretained(path).toOpaque()
+
+        guard FT_Outline_Decompose(&outline, &funcs, user) == FT_Err_Ok else {
+            return nil
+        }
+
+        return path
+    }
+
+    func path(forGlyph glyphID: GlyphID, typeSize: CGFloat, transform: CGAffineTransform?) -> CGPath? {
+        withFreeTypeFace { (face) -> CGPath? in
+            var matrix = FT_Matrix(xx: 0x10000, xy: 0, yx: 0, yy: -0x10000)
+            var delta = FT_Vector(x: 0, y: 0)
+
+            if let transform = transform {
+                let flip = transform.concatenating(CGAffineTransform(scaleX: 1.0, y: -1.0))
+
+                matrix = FT_Matrix(xx: flip.a.f16Dot16, xy: flip.b.f16Dot16,
+                                   yx: flip.c.f16Dot16, yy: flip.d.f16Dot16)
+                delta = FT_Vector(x: transform.tx.f16Dot16, y: transform.ty.f16Dot16)
+            }
+
+            FT_Activate_Size(ftSize)
+            FT_Set_Char_Size(face, 0, typeSize.f26Dot6, 0, 0)
+            FT_Set_Transform(face, &matrix, &delta)
+
+            return unsafeMakePath(glyphID: FT_UInt(glyphID))
+        }
     }
 }
