@@ -232,52 +232,43 @@ public class Typeface {
 
     /// The number of font units per EM square for this typeface.
     public var unitsPerEm: Int {
-        return Int(ftFace.pointee.units_per_EM)
+        return instance.unitsPerEm
     }
 
     /// The typographic ascender of this typeface expressed in font units.
     public var ascent: Int {
-        return Int(ftFace.pointee.ascender)
+        return instance.ascent
     }
 
     /// The typographic descender of this typeface expressed in font units.
     public var descent: Int {
-        return Int(-ftFace.pointee.descender)
+        return instance.descent
     }
 
     /// The typographic leading of this typeface expressed in font units.
     public var leading: Int {
-        let ascender = ftFace.pointee.ascender
-        let descender = ftFace.pointee.descender
-        let height = ftFace.pointee.height
-
-        return Int(height - (ascender - descender))
+        return instance.leading
     }
 
     /// The number of glyphs in this typeface.
     public var glyphCount: Int {
-        return ftFace.pointee.num_glyphs
+        return instance.glyphCount
     }
 
     /// The font bounding box expressed in font units. The box is large enough to contain any glyph
     /// from the font.
     public var boundingBox: CGRect {
-        let bbox: FT_BBox = ftFace.pointee.bbox
-
-        return CGRect(x: bbox.xMin,
-                      y: bbox.yMin,
-                      width: bbox.xMax - bbox.xMin,
-                      height: bbox.yMax - bbox.yMin)
+        return instance.boundingBox
     }
 
     /// The position, in font units, of the underline for this typeface.
     public var underlinePosition: Int {
-        return Int(ftFace.pointee.underline_position)
+        return instance.underlinePosition
     }
 
     /// The thickness, in font units, of the underline for this typeface.
     public var underlineThickness: Int {
-        return Int(ftFace.pointee.underline_thickness)
+        return instance.underlineThickness
     }
 
     /// The position, in font units, of the strikeout for this typeface.

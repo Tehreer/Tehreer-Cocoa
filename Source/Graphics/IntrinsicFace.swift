@@ -411,6 +411,10 @@ class IntrinsicFace {
         return try body(ftStroker)
     }
 
+    private var ftFace: FT_Face {
+        return renderableFace.ftFace
+    }
+
     var variationAxes: [VariationAxis] {
         return defaults.variationAxes
     }
@@ -433,6 +437,47 @@ class IntrinsicFace {
 
     var slope: Typeface.Slope {
         return description.slope
+    }
+
+    var unitsPerEm: Int {
+        return Int(ftFace.pointee.units_per_EM)
+    }
+
+    var ascent: Int {
+        return Int(ftFace.pointee.ascender)
+    }
+
+    var descent: Int {
+        return Int(-ftFace.pointee.descender)
+    }
+
+    var leading: Int {
+        let ascender = ftFace.pointee.ascender
+        let descender = ftFace.pointee.descender
+        let height = ftFace.pointee.height
+
+        return Int(height - (ascender - descender))
+    }
+
+    var glyphCount: Int {
+        return ftFace.pointee.num_glyphs
+    }
+
+    var boundingBox: CGRect {
+        let bbox: FT_BBox = ftFace.pointee.bbox
+
+        return CGRect(x: bbox.xMin,
+                      y: bbox.yMin,
+                      width: bbox.xMax - bbox.xMin,
+                      height: bbox.yMax - bbox.yMin)
+    }
+
+    var underlinePosition: Int {
+        return Int(ftFace.pointee.underline_position)
+    }
+
+    var underlineThickness: Int {
+        return Int(ftFace.pointee.underline_thickness)
     }
 
     func glyphID(forCodePoint codePoint: UTF32Char) -> GlyphID {
