@@ -107,6 +107,7 @@
 		7D15817B2608EAFF00D2472D /* harfbuzz.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7D1581272608E91100D2472D /* harfbuzz.cc */; };
 		7D18BE5A25ECFDEF00F4412B /* UIColor+FTColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D18BE5925ECFDEF00F4412B /* UIColor+FTColor.swift */; };
 		7D18BE6225ED2D0200F4412B /* GlyphAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D18BE6125ED2D0100F4412B /* GlyphAttributes.swift */; };
+		7D1E9B1D2652CA3F00AE6BAF /* AdvanceCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1E9B1C2652CA3F00AE6BAF /* AdvanceCache.swift */; };
 		7D2CD32925E18EEA001E630F /* DataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2CD32825E18EEA001E630F /* DataTable.swift */; };
 		7D33A2FB25C188B400F9A02B /* GlyphImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D33A2FA25C188B400F9A02B /* GlyphImage.swift */; };
 		7D37B06225E27F9E0024750D /* SFNTTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D37B06125E27F9E0024750D /* SFNTTable.swift */; };
@@ -120,6 +121,8 @@
 		7D68444D25EE3AEC00C1DE3B /* GlyphOutline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D68444C25EE3AEC00C1DE3B /* GlyphOutline.swift */; };
 		7D6C465125EBD336006997FB /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6C465025EBD335006997FB /* ColorPalette.swift */; };
 		7D6C465525EBD548006997FB /* CPALTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6C465425EBD548006997FB /* CPALTable.swift */; };
+		7D77CE932651624100E22DBE /* ShapableFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D77CE922651624100E22DBE /* ShapableFace.swift */; };
+		7D77CE972651882200E22DBE /* IntrinsicFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D77CE962651882200E22DBE /* IntrinsicFace.swift */; };
 		7D8A5E85263AD4420092D50F /* RenderableFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8A5E84263AD4420092D50F /* RenderableFace.swift */; };
 		7D9CB6FE25E18E7300A7BEBE /* FVARTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9CB6FD25E18E7300A7BEBE /* FVARTable.swift */; };
 		7DA9C1C725E25901007A6677 /* VariationAxis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA9C1C625E25900007A6677 /* VariationAxis.swift */; };
@@ -846,6 +849,7 @@
 		7D1581792608E91100D2472D /* hb-shaper-impl.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-shaper-impl.hh"; sourceTree = "<group>"; };
 		7D18BE5925ECFDEF00F4412B /* UIColor+FTColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+FTColor.swift"; sourceTree = "<group>"; };
 		7D18BE6125ED2D0100F4412B /* GlyphAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphAttributes.swift; sourceTree = "<group>"; };
+		7D1E9B1C2652CA3F00AE6BAF /* AdvanceCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvanceCache.swift; sourceTree = "<group>"; };
 		7D2CD32825E18EEA001E630F /* DataTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataTable.swift; sourceTree = "<group>"; };
 		7D33A2FA25C188B400F9A02B /* GlyphImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphImage.swift; sourceTree = "<group>"; };
 		7D37B06125E27F9E0024750D /* SFNTTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFNTTable.swift; sourceTree = "<group>"; };
@@ -859,6 +863,8 @@
 		7D68444C25EE3AEC00C1DE3B /* GlyphOutline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphOutline.swift; sourceTree = "<group>"; };
 		7D6C465025EBD335006997FB /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		7D6C465425EBD548006997FB /* CPALTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPALTable.swift; sourceTree = "<group>"; };
+		7D77CE922651624100E22DBE /* ShapableFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapableFace.swift; sourceTree = "<group>"; };
+		7D77CE962651882200E22DBE /* IntrinsicFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrinsicFace.swift; sourceTree = "<group>"; };
 		7D8A5E84263AD4420092D50F /* RenderableFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderableFace.swift; sourceTree = "<group>"; };
 		7D9CB6FD25E18E7300A7BEBE /* FVARTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVARTable.swift; sourceTree = "<group>"; };
 		7DA3207026173B6200BAF525 /* ScriptStack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScriptStack.h; sourceTree = "<group>"; };
@@ -947,6 +953,7 @@
 			children = (
 				7DAEC8C12610CC6B00593D66 /* CGFloat+Fixed.swift */,
 				7D18BE5925ECFDEF00F4412B /* UIColor+FTColor.swift */,
+				7D1E9B1C2652CA3F00AE6BAF /* AdvanceCache.swift */,
 				7D6C465025EBD335006997FB /* ColorPalette.swift */,
 				6E9734B022D4F0A9008863D0 /* FontFile.swift */,
 				7D4376C625E9315F006A3F25 /* FontStream.swift */,
@@ -958,8 +965,10 @@
 				6E9734B522D4F0A9008863D0 /* GlyphKey.swift */,
 				7D68444C25EE3AEC00C1DE3B /* GlyphOutline.swift */,
 				6E9734B422D4F0A9008863D0 /* GlyphRasterizer.swift */,
+				7D77CE962651882200E22DBE /* IntrinsicFace.swift */,
 				7D8A5E84263AD4420092D50F /* RenderableFace.swift */,
 				6E9734B622D4F0A9008863D0 /* Renderer.swift */,
+				7D77CE922651624100E22DBE /* ShapableFace.swift */,
 				6E9734B722D4F0A9008863D0 /* Typeface.swift */,
 				6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */,
 				7D4376D325E93F07006A3F25 /* TypeSlope.swift */,
@@ -2213,6 +2222,7 @@
 				6E97351C22D4F0AA008863D0 /* WritingDirection.swift in Sources */,
 				6E97351D22D4F0AA008863D0 /* BidiAlgorithm.swift in Sources */,
 				6E97351E22D4F0AA008863D0 /* BidiBuffer.swift in Sources */,
+				7D77CE972651882200E22DBE /* IntrinsicFace.swift in Sources */,
 				7D4376D425E93F07006A3F25 /* TypeSlope.swift in Sources */,
 				6E97351F22D4F0AA008863D0 /* BidiLine.swift in Sources */,
 				7D37B06625E27F9F0024750D /* SubTable.swift in Sources */,
@@ -2221,8 +2231,10 @@
 				7D4376CB25E93B4E006A3F25 /* TypeWeight.swift in Sources */,
 				7DAEC8C22610CC6B00593D66 /* CGFloat+Fixed.swift in Sources */,
 				6E97352222D4F0AA008863D0 /* BreakClassifier.swift in Sources */,
+				7D77CE932651624100E22DBE /* ShapableFace.swift in Sources */,
 				6E97352322D4F0AA008863D0 /* Script.swift in Sources */,
 				6E97352422D4F0AA008863D0 /* ScriptClassifier.swift in Sources */,
+				7D1E9B1D2652CA3F00AE6BAF /* AdvanceCache.swift in Sources */,
 				6E97352522D4F0AA008863D0 /* ScriptRun.swift in Sources */,
 				6E97350E22D4F0AA008863D0 /* Clusters.swift in Sources */,
 				6E97351022D4F0AA008863D0 /* LRUCache.swift in Sources */,
