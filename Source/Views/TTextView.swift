@@ -456,11 +456,7 @@ open class TTextView: UIScrollView {
                     lineViews.append(lineView)
                 }
 
-                let renderer = lineView.renderer
-                renderer.typeface = typeface
-                renderer.typeSize = textSize
-                renderer.fillColor = textColor
-                renderer.renderScale = renderScale
+                updateRenderer(lineView.renderer)
 
                 lineView.line = textLine
                 lineView.frame = lineBoxes[index]
@@ -476,11 +472,22 @@ open class TTextView: UIScrollView {
         }
     }
 
+    private func updateRenderer(_ renderer: Renderer) {
+        renderer.fillColor = textColor
+        renderer.renderingStyle = renderingStyle
+        renderer.typeface = typeface
+        renderer.typeSize = textSize
+        renderer.renderScale = renderScale
+        renderer.strokeColor = strokeColor
+        renderer.strokeWidth = strokeWidth
+        renderer.strokeCap = strokeCap
+        renderer.strokeJoin = strokeJoin
+        renderer.strokeMiter = strokeMiter
+    }
+
     private func updateLineColors() {
         for lineView in lineViews {
-            let renderer = lineView.renderer
-            renderer.fillColor = textColor
-
+            updateRenderer(lineView.renderer)
             lineView.setNeedsDisplay()
         }
     }
@@ -651,6 +658,51 @@ open class TTextView: UIScrollView {
     open var lineHeightMultiplier: CGFloat = 1.0 {
         didSet {
             setNeedsUpdateTextFrame()
+        }
+    }
+
+    /// The rendering style, used for controlling how text should appear while drawing. Its default value is
+    /// `.fill`.
+    open var renderingStyle: Renderer.RenderingStyle = .fill {
+        didSet {
+            updateLineColors()
+        }
+    }
+
+    /// The stroke color for text. Its default value is `black`.
+    open var strokeColor: UIColor = .black {
+        didSet {
+            updateLineColors()
+        }
+    }
+
+    /// The stroke width for text.
+    open var strokeWidth: CGFloat = 1.0 {
+        didSet {
+            updateLineColors()
+        }
+    }
+
+    /// The stroke cap style which controls how the start and end of stroked lines and paths are
+    /// treated. Its default value is `.butt`.
+    open var strokeCap: Renderer.StrokeCap = .butt {
+        didSet {
+            updateLineColors()
+        }
+    }
+
+    /// The stroke join type. Its default value is `.round`.
+    open var strokeJoin: Renderer.StrokeJoin = .round {
+        didSet {
+            updateLineColors()
+        }
+    }
+
+    /// The stroke miter limit in pixels. This is used to control the behavior of miter joins when
+    /// the joins angle is sharp.
+    open var strokeMiter: CGFloat = 1.0 {
+        didSet {
+            updateLineColors()
         }
     }
 }
