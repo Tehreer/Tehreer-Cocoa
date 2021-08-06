@@ -169,10 +169,10 @@ public class Typeface {
         return array
     }
 
-    /// Returns a variation instance of this typeface with the specified design coordinates.
+    /// Returns a color instance of this typeface with the specified colors array.
     ///
-    /// - Parameter coordinates: The variation design coordinates.
-    /// - Returns: A variation instance of this typeface with the specified design coordinates.
+    /// - Parameter colors: The colors array.
+    /// - Returns: A color instance of this typeface with the specified colors array.
     public func colorInstance(forColors colors: [UIColor]) -> Typeface? {
         guard !paletteEntryNames.isEmpty else {
             return nil
