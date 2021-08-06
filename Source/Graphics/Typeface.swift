@@ -76,15 +76,6 @@ public class Typeface {
         setup()
     }
 
-    init?(fontStream: FontStream, faceIndex: Int, instanceIndex: Int) {
-        guard let renderableFace = fontStream.makeRenderableFace(faceIndex: faceIndex) else {
-            return nil
-        }
-
-        self.instance = IntrinsicFace(renderableFace: renderableFace)
-        setup()
-    }
-
     init(instance: IntrinsicFace) {
         self.instance = instance
         setup()
