@@ -18,6 +18,7 @@ import CoreGraphics
 import Foundation
 import FreeType
 
+/// Holds FreeType face with locking support.
 class RenderableFace {
     private let mutex = Mutex()
 

@@ -19,6 +19,7 @@ import Foundation
 import FreeType
 import UIKit
 
+/// Internal typeface with variation support.
 class IntrinsicFace {
     private let mutex = Mutex()
 

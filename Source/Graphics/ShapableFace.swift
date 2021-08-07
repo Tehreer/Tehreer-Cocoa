@@ -19,6 +19,7 @@ import Foundation
 import FreeType
 import HarfBuzz
 
+/// Provides HarfBuzz font having custom implementation by using FreeType face.
 class ShapableFace {
     private static let fontFuncs = makeFontFuncs()
 
