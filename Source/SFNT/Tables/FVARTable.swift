@@ -181,12 +181,12 @@ extension FVAR {
             return coordinates
         }
 
-        var postScriptNameID: Int32? {
+        var postScriptNameID: UInt16? {
             guard let offset = postScriptNameIDOffset else {
                 return nil
             }
 
-            return data.readInt32(at: offset)
+            return data.readUInt16(at: offset)
         }
     }
 }
