@@ -43,6 +43,8 @@ class IntrinsicFace {
         var description = Description()
 
         var variationAxes: [VariationAxis] = []
+        var namedStyles: [NamedStyle] = []
+
         var paletteEntryNames: [String] = []
         var predefinedPalettes: [ColorPalette] = []
     }
@@ -247,6 +249,7 @@ class IntrinsicFace {
         guard let fvarTable = renderableFace.fvarTable() else { return }
 
         let axisRecords = fvarTable.axisRecords
+        let instanceRecords = fvarTable.instanceRecords
 
         var variationAxes: [VariationAxis] = []
         variationAxes.reserveCapacity(axisRecords.count)
@@ -274,6 +277,38 @@ class IntrinsicFace {
                                               minValue: minValue, maxValue: maxValue)
 
             variationAxes.append(variationAxis)
+        }
+
+        var namedStyles: [NamedStyle] = []
+        namedStyles.reserveCapacity(instanceRecords.count)
+
+        defer {
+            defaults.namedStyles = namedStyles
+        }
+
+        for instanceRecord in instanceRecords {
+            let styleNameID = instanceRecord.subfamilyNameID
+            let coordinates = instanceRecord.coordinates.map { CGFloat($0) }
+            let postScriptNameID = instanceRecord.postScriptNameID
+
+            var styleName = ""
+            var postScriptName: String? = nil
+
+            if let index = nameTable?.indexOfEnglishName(for: styleNameID) {
+                styleName = nameTable?.record(at: index).string ?? ""
+            }
+
+            if let postScriptNameID = postScriptNameID {
+                if let index = nameTable?.indexOfEnglishName(for: postScriptNameID) {
+                    postScriptName = nameTable?.record(at: index).string
+                }
+            }
+
+            let namedStyle = NamedStyle(styleName: styleName,
+                                        coordinates: coordinates,
+                                        postScriptName: postScriptName)
+
+            namedStyles.append(namedStyle)
         }
     }
 
