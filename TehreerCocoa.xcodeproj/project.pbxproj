@@ -108,6 +108,7 @@
 		7D18BE5A25ECFDEF00F4412B /* UIColor+FTColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D18BE5925ECFDEF00F4412B /* UIColor+FTColor.swift */; };
 		7D18BE6225ED2D0200F4412B /* GlyphAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D18BE6125ED2D0100F4412B /* GlyphAttributes.swift */; };
 		7D1E9B1D2652CA3F00AE6BAF /* AdvanceCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1E9B1C2652CA3F00AE6BAF /* AdvanceCache.swift */; };
+		7D22D7FD26C4147500AA2790 /* NamedStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D22D7FC26C4147500AA2790 /* NamedStyle.swift */; };
 		7D2CD32925E18EEA001E630F /* DataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2CD32825E18EEA001E630F /* DataTable.swift */; };
 		7D33A2FB25C188B400F9A02B /* GlyphImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D33A2FA25C188B400F9A02B /* GlyphImage.swift */; };
 		7D37B06225E27F9E0024750D /* SFNTTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D37B06125E27F9E0024750D /* SFNTTable.swift */; };
@@ -850,6 +851,7 @@
 		7D18BE5925ECFDEF00F4412B /* UIColor+FTColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+FTColor.swift"; sourceTree = "<group>"; };
 		7D18BE6125ED2D0100F4412B /* GlyphAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphAttributes.swift; sourceTree = "<group>"; };
 		7D1E9B1C2652CA3F00AE6BAF /* AdvanceCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvanceCache.swift; sourceTree = "<group>"; };
+		7D22D7FC26C4147500AA2790 /* NamedStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedStyle.swift; sourceTree = "<group>"; };
 		7D2CD32825E18EEA001E630F /* DataTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataTable.swift; sourceTree = "<group>"; };
 		7D33A2FA25C188B400F9A02B /* GlyphImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphImage.swift; sourceTree = "<group>"; };
 		7D37B06125E27F9E0024750D /* SFNTTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFNTTable.swift; sourceTree = "<group>"; };
@@ -966,6 +968,7 @@
 				7D68444C25EE3AEC00C1DE3B /* GlyphOutline.swift */,
 				6E9734B422D4F0A9008863D0 /* GlyphRasterizer.swift */,
 				7D77CE962651882200E22DBE /* IntrinsicFace.swift */,
+				7D22D7FC26C4147500AA2790 /* NamedStyle.swift */,
 				7D8A5E84263AD4420092D50F /* RenderableFace.swift */,
 				6E9734B622D4F0A9008863D0 /* Renderer.swift */,
 				7D77CE922651624100E22DBE /* ShapableFace.swift */,
@@ -2143,6 +2146,7 @@
 				6E969D1223639B3E00377297 /* ftgzip.c in Sources */,
 				6ECE48DB23638DA8007D8839 /* ftlzw.c in Sources */,
 				7D6C465525EBD548006997FB /* CPALTable.swift in Sources */,
+				7D22D7FD26C4147500AA2790 /* NamedStyle.swift in Sources */,
 				7D4376D025E93D80006A3F25 /* TypeWidth.swift in Sources */,
 				6ECE48F323638DA8007D8839 /* pcf.c in Sources */,
 				6ECE490023638DA8007D8839 /* pfr.c in Sources */,
