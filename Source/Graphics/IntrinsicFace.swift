@@ -160,79 +160,71 @@ class IntrinsicFace {
     }
 
     private func setupVariation() {
-        let ftFace = renderableFace.ftFace
-        var variation: UnsafeMutablePointer<FT_MM_Var>!
-
-        guard FT_Get_MM_Var(ftFace, &variation) == FT_Err_Ok else { return }
-
-        defer {
-            FreeType.withLibrary { (library) -> Void in
-                FT_Done_MM_Var(library, variation)
-            }
+        let coordinates = variationCoordinates
+        if coordinates.isEmpty {
+            return
         }
 
-        var description = defaults.description
-        defer { self.description = description }
-
-        let numCoords = variation.pointee.num_axis
-        var fixedCoords = Array<FT_Fixed>(repeating: 0, count: Int(numCoords))
-
-        if FT_Get_Var_Design_Coordinates(ftFace, numCoords, &fixedCoords) == FT_Err_Ok {
-            let nameTable = NameTable(ftFace: ftFace)
-
+        if !namedStyles.isEmpty {
             // Reset the style name and the full name.
-            description.styleIndex = nil
-            description.fullIndex = nil
+            styleName = ""
+            fullName = ""
+
+            let coordCount = coordinates.count
+            let minValue = 1.0 / CGFloat(0x10000)
 
             // Get the style name of this instance.
-            for i in 0 ..< Int(variation.pointee.num_namedstyles) {
-                let namedStyle = variation.pointee.namedstyle[i]
-                guard let namedCoords = namedStyle.coords else {
+            for instance in namedStyles {
+                let name = instance.styleName
+                if name.isEmpty {
                     continue
                 }
 
-                let areEqual = fixedCoords.withUnsafeBufferPointer { (pointer) -> Bool in
-                    guard let baseAddress = pointer.baseAddress else {
-                        return false
+                let namedCoords = instance.coordinates
+                var matched = true
+
+                for i in 0 ..< coordCount {
+                    if abs(coordinates[i] - namedCoords[i]) >= minValue {
+                        matched = false
+                        break
                     }
-
-                    let lhs = UnsafeRawPointer(namedCoords)
-                    let rhs = UnsafeRawPointer(baseAddress)
-                    let size = MemoryLayout<FT_Fixed>.size * Int(numCoords)
-
-                    return memcmp(lhs, rhs, size) == 0
                 }
 
-                if areEqual {
-                    description.styleIndex = nameTable?.indexOfEnglishName(for: UInt16(namedStyle.strid))
-                    break
+                if matched {
+                    styleName = instance.styleName
+                    // FIXME: Generate Full Name.
                 }
             }
+        }
 
-            // Get the values of variation axes.
-            for i in 0 ..< Int(numCoords) {
-                let axis = variation.pointee.axis[i]
+        // Get the values of variation axes.
+        for i in 0 ..< variationAxes.count {
+            let axis = variationAxes[i]
 
-                switch axis.tag {
-                case FT_ULong(SFNTTag(stringLiteral: "ital").rawValue):
-                    description.slope = Typeface.Slope(ital: fixedCoords[i])
-                    break
+            let ital: SFNTTag = "ital"
+            let slnt: SFNTTag = "slnt"
+            let wdth: SFNTTag = "wdth"
+            let wght: SFNTTag = "wght"
 
-                case FT_ULong(SFNTTag(stringLiteral: "slnt").rawValue):
-                    description.slope = Typeface.Slope(slnt: fixedCoords[i])
-                    break
+            switch axis.tag {
+            case ital:
+                description.slope = Typeface.Slope(ital: coordinates[i])
+                break
 
-                case FT_ULong(SFNTTag(stringLiteral: "wdth").rawValue):
-                    description.width = Typeface.Width(wdth: CGFloat(f16Dot16: fixedCoords[i]))
-                    break
+            case slnt:
+                description.slope = Typeface.Slope(slnt: coordinates[i])
+                break
 
-                case FT_ULong(SFNTTag(stringLiteral: "wght").rawValue):
-                    description.weight = Typeface.Weight(wght: CGFloat(f16Dot16: fixedCoords[i]))
-                    break
+            case wdth:
+                description.width = Typeface.Width(wdth: coordinates[i])
+                break
 
-                default:
-                    break
-                }
+            case wght:
+                description.weight = Typeface.Weight(wght: coordinates[i])
+                break
+
+            default:
+                break
             }
         }
     }
