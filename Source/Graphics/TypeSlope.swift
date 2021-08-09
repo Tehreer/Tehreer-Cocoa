@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import CoreGraphics
 import Foundation
 import FreeType
 
@@ -31,8 +32,16 @@ extension Typeface {
             self = ital >= 0x10000 ? .italic : .plain
         }
 
+        init(ital: CGFloat) {
+            self = ital >= 1.0 ? .italic : .plain
+        }
+
         init(slnt: FT_Fixed) {
             self = slnt != 0 ? .oblique : .plain
+        }
+
+        init(slnt: CGFloat) {
+            self = slnt != 0.0 ? .oblique : .plain
         }
     }
 }
