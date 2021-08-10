@@ -83,20 +83,21 @@ class IntrinsicFace {
         let os2Table = OS2Table(ftFace: ftFace)
         let nameTable = NameTable(ftFace: ftFace)
 
-        setupAxes(nameTable: nameTable)
-        setupCoordinates()
-        setupPalettes(nameTable: nameTable)
         setupSize()
         setupDescription(headTable: headTable, os2Table: os2Table, nameTable: nameTable)
         setupStrikeout(os2Table: os2Table)
-        setupVariation()
         setupHarfBuzz()
+        setupVariations(nameTable: nameTable)
+        setupPalettes(nameTable: nameTable)
         setupNames(nameTable: nameTable)
+        setupDefaultCoordinates()
+        setupVariableDescription()
     }
 
     private func setupDerived(parent: IntrinsicFace, renderableFace: RenderableFace) {
         self.renderableFace = renderableFace
         self.defaults = parent.defaults
+        self.description = defaults.description
 
         let ftFace = renderableFace.ftFace
         let os2Table = OS2Table(ftFace: ftFace)
@@ -104,9 +105,9 @@ class IntrinsicFace {
 
         setupSize()
         setupStrikeout(os2Table: os2Table)
-        setupVariation()
         setupHarfBuzz(parent: parent)
         setupNames(nameTable: nameTable)
+        setupVariableDescription()
     }
 
     private func setupSize() {
@@ -159,7 +160,7 @@ class IntrinsicFace {
         }
     }
 
-    private func setupVariation() {
+    private func setupVariableDescription() {
         let coordinates = variationCoordinates
         if coordinates.isEmpty {
             return
@@ -192,7 +193,7 @@ class IntrinsicFace {
 
                 if matched {
                     styleName = instance.styleName
-                    // FIXME: Generate Full Name.
+                    generateFullName()
                 }
             }
         }
@@ -237,7 +238,7 @@ class IntrinsicFace {
         }
     }
 
-    private func setupAxes(nameTable: NameTable?) {
+    private func setupVariations(nameTable: NameTable?) {
         guard let fvarTable = renderableFace.fvarTable() else { return }
 
         let axisRecords = fvarTable.axisRecords
@@ -304,7 +305,7 @@ class IntrinsicFace {
         }
     }
 
-    private func setupCoordinates() {
+    private func setupDefaultCoordinates() {
         if !variationAxes.isEmpty {
             renderableFace.setupCoordinates(variationAxes.map { $0.defaultValue })
         }
@@ -401,12 +402,18 @@ class IntrinsicFace {
         if let index = description.fullIndex {
             fullName = nameTable.record(at: index).string ?? ""
         } else {
-            if !familyName.isEmpty {
-                fullName = familyName
-                if !styleName.isEmpty {
-                    fullName += " " + styleName
-                }
+            generateFullName()
+        }
+    }
+
+    private func generateFullName() {
+        if !familyName.isEmpty {
+            fullName = familyName
+            if !styleName.isEmpty {
+                fullName += " " + styleName
             }
+        } else {
+            fullName = styleName
         }
     }
 
@@ -445,6 +452,10 @@ class IntrinsicFace {
 
     var variationAxes: [VariationAxis] {
         return defaults.variationAxes
+    }
+
+    var namedStyles: [NamedStyle] {
+        return defaults.namedStyles
     }
 
     var paletteEntryNames: [String] {
