@@ -65,34 +65,18 @@ public class FontFile {
                 continue
             }
 
-            let ftFace = firstFace.renderableFace.ftFace
-            var variation: UnsafeMutablePointer<FT_MM_Var>!
+            let namedStyles = firstFace.namedStyles
 
-            if FT_Get_MM_Var(ftFace, &variation) == FT_Err_Ok {
-                defer {
-                    FreeType.withLibrary { (library) -> Void in
-                        FT_Done_MM_Var(library, variation)
-                    }
-                }
-
-                let numNamedStyles = variation.pointee.num_namedstyles
-                var namedStyle = variation.pointee.namedstyle!
-
-                for _ in 0 ..< numNamedStyles {
-                    var coordinates: [CGFloat] = []
-
-                    for i in 0 ..< variation.pointee.num_axis {
-                        coordinates.append(CGFloat(f16Dot16: namedStyle.pointee.coords[Int(i)]))
-                    }
-
-                    if let namedFace = firstFace.variationInstance(forCoordinates: coordinates) {
-                        defaultTypefaces.append(Typeface(instance: namedFace))
-                    }
-
-                    namedStyle = namedStyle.advanced(by: 1)
-                }
-            } else {
+            if namedStyles.isEmpty {
                 defaultTypefaces.append(Typeface(instance: firstFace))
+            } else {
+                for namedStyle in namedStyles {
+                    let coordinates = namedStyle.coordinates
+
+                    if let instance = firstFace.variationInstance(forCoordinates: coordinates) {
+                        defaultTypefaces.append(Typeface(instance: instance))
+                    }
+                }
             }
         }
     }
