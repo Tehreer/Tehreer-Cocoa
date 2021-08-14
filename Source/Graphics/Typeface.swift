@@ -139,6 +139,11 @@ public class Typeface {
         return instance.variationAxes
     }
 
+    /// The named instance records of this typeface.
+    public var namedStyles: [NamedStyle] {
+        return instance.namedStyles
+    }
+
     /// The design variation coordinates of this typeface.
     public var variationCoordinates: [CGFloat] {
         return instance.variationCoordinates
