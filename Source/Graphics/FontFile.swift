@@ -61,20 +61,20 @@ public class FontFile {
         defaultTypefaces = []
 
         for i in 0 ..< fontStream.faceCount {
-            guard let firstFace = IntrinsicFace(fontStream: fontStream, faceIndex: i) else {
+            guard let firstFace = Typeface(fontStream: fontStream, faceIndex: i) else {
                 continue
             }
 
             let namedStyles = firstFace.namedStyles
 
             if namedStyles.isEmpty {
-                defaultTypefaces.append(Typeface(instance: firstFace))
+                defaultTypefaces.append(firstFace)
             } else {
                 for namedStyle in namedStyles {
                     let coordinates = namedStyle.coordinates
 
                     if let instance = firstFace.variationInstance(forCoordinates: coordinates) {
-                        defaultTypefaces.append(Typeface(instance: instance))
+                        defaultTypefaces.append(instance)
                     }
                 }
             }
