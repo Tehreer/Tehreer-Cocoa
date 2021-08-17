@@ -342,6 +342,8 @@ public class Typeface {
             defaults.namedStyles = namedStyles
         }
 
+        var hasDefaultInstance = false
+
         for instanceRecord in instanceRecords {
             let styleNameID = instanceRecord.subfamilyNameID
             let coordinates = instanceRecord.coordinates.map { CGFloat($0) }
@@ -360,11 +362,43 @@ public class Typeface {
                 }
             }
 
+            if !hasDefaultInstance {
+                let minValue = 1.0 / CGFloat(0x10000)
+                var matched = true
+
+                // Check if this is the default instance.
+                for i in 0 ..< variationAxes.count {
+                    if abs(coordinates[i] - variationAxes[i].defaultValue) >= minValue {
+                        matched = false
+                        break
+                    }
+                }
+
+                if matched {
+                    hasDefaultInstance = true
+                }
+            }
+
             let namedStyle = NamedStyle(styleName: styleName,
                                         coordinates: coordinates,
                                         postScriptName: postScriptName)
 
             namedStyles.append(namedStyle)
+        }
+
+        if !hasDefaultInstance {
+            let coordinates = variationAxes.map { $0.defaultValue }
+            var styleName = ""
+
+            if let index = defaults.description.styleIndex {
+                styleName = nameTable?.record(at: index).string ?? ""
+            }
+
+            let defaultStyle = NamedStyle(styleName: styleName,
+                                          coordinates: coordinates,
+                                          postScriptName: nil)
+
+            namedStyles.insert(defaultStyle, at: 0)
         }
     }
 
