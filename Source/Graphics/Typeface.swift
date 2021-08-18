@@ -59,8 +59,15 @@ public class Typeface {
         var predefinedPalettes: [ColorPalette] = []
     }
 
+    private struct Names {
+        var family: String = ""
+        var style: String = ""
+        var full: String = ""
+    }
+
     private var defaults = DefaultProperties()
     private var description = Description()
+    private var names = Names()
 
     private var colors: [FT_Color] = []
 
@@ -232,8 +239,8 @@ public class Typeface {
 
         if !namedStyles.isEmpty {
             // Reset the style name and the full name.
-            styleName = ""
-            fullName = ""
+            names.style = ""
+            names.full = ""
 
             let coordCount = coordinates.count
             let minValue = 1.0 / CGFloat(0x10000)
@@ -256,7 +263,7 @@ public class Typeface {
                 }
 
                 if matched {
-                    styleName = instance.styleName
+                    names.style = instance.styleName
                     generateFullName()
                 }
             }
@@ -499,13 +506,13 @@ public class Typeface {
         guard let nameTable = nameTable else { return }
 
         if let index = description.familyIndex {
-            familyName = nameTable.record(at: index).string ?? ""
+            names.family = nameTable.record(at: index).string ?? ""
         }
         if let index = description.styleIndex {
-            styleName = nameTable.record(at: index).string ?? ""
+            names.style = nameTable.record(at: index).string ?? ""
         }
         if let index = description.fullIndex {
-            fullName = nameTable.record(at: index).string ?? ""
+            names.full = nameTable.record(at: index).string ?? ""
         } else {
             generateFullName()
         }
@@ -513,12 +520,12 @@ public class Typeface {
 
     private func generateFullName() {
         if !familyName.isEmpty {
-            fullName = familyName
+            names.full = familyName
             if !styleName.isEmpty {
-                fullName += " " + styleName
+                names.full += " " + styleName
             }
         } else {
-            fullName = styleName
+            names.full = styleName
         }
     }
 
@@ -651,13 +658,19 @@ public class Typeface {
     }
 
     /// The family name of this typeface.
-    public private(set) var familyName = ""
+    public var familyName: String {
+        return names.family
+    }
 
     /// The style name of this typeface.
-    public private(set) var styleName = ""
+    public var styleName: String {
+        return names.style
+    }
 
     /// The full name of this typeface.
-    public private(set) var fullName = ""
+    public var fullName: String {
+        return names.full
+    }
 
     /// The typographic weight of this typeface. The weight value determines the thickness
     /// associated with a given character in a typeface.
