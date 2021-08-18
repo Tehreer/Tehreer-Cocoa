@@ -59,6 +59,11 @@ public class Typeface {
         var predefinedPalettes: [ColorPalette] = []
     }
 
+    private struct Strikeout {
+        var position: Int = 0
+        var thickness: Int = 0
+    }
+
     private struct Names {
         var family: String = ""
         var style: String = ""
@@ -67,6 +72,7 @@ public class Typeface {
 
     private var defaults = DefaultProperties()
     private var description = Description()
+    private var strikeout = Strikeout()
     private var names = Names()
 
     private var colors: [FT_Color] = []
@@ -171,12 +177,9 @@ public class Typeface {
         self.shapableFace = parent.shapableFace
         self.defaults = parent.defaults
         self.description = parent.description
+        self.strikeout = parent.strikeout
+        self.names = parent.names
         self.colors = colors
-        self.strikeoutPosition = parent.strikeoutPosition
-        self.strikeoutThickness = parent.strikeoutThickness
-        self.familyName = parent.familyName
-        self.styleName = parent.styleName
-        self.fullName = parent.fullName
 
         setupSize()
     }
@@ -226,8 +229,8 @@ public class Typeface {
 
     private func setupStrikeout(os2Table: OS2Table?) {
         if let os2Table = os2Table {
-            strikeoutPosition = Int(os2Table.yStrikeoutPosition)
-            strikeoutThickness = Int(os2Table.yStrikeoutSize)
+            strikeout.position = Int(os2Table.yStrikeoutPosition)
+            strikeout.thickness = Int(os2Table.yStrikeoutSize)
         }
     }
 
@@ -741,10 +744,14 @@ public class Typeface {
     }
 
     /// The position, in font units, of the strikeout for this typeface.
-    public private(set) var strikeoutPosition: Int = 0
+    public var strikeoutPosition: Int {
+        return strikeout.position
+    }
 
     /// The thickness, in font units, of the strikeout for this typeface.
-    public private(set) var strikeoutThickness: Int = 0
+    public var strikeoutThickness: Int {
+        return strikeout.thickness
+    }
 
     /// Returns the data of the table specified by the tag.
     ///
