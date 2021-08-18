@@ -33,10 +33,11 @@ public class Typeface {
 
     var tag: TypefaceTag?
 
-    var renderableFace: RenderableFace!
-    var ftStroker: FT_Stroker!
+    private var renderableFace: RenderableFace!
+    private var ftSize: FT_Size!
+    private var ftStroker: FT_Stroker!
 
-    var shapableFace: ShapableFace!
+    private var shapableFace: ShapableFace!
 
     private struct Description {
         var familyIndex: Int?
@@ -553,8 +554,6 @@ public class Typeface {
     var ftFace: FT_Face {
         return renderableFace.ftFace
     }
-
-    private(set) var ftSize: FT_Size!
 
     var hbFont: OpaquePointer {
         return shapableFace.hbFont
