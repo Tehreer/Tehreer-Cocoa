@@ -50,7 +50,7 @@ public class Typeface {
     }
 
     private struct DefaultProperties {
-        var description = Description()
+        var description: Description!
 
         var variationAxes: [VariationAxis] = []
         var namedStyles: [NamedStyle] = []
@@ -70,10 +70,10 @@ public class Typeface {
         var full: String = ""
     }
 
-    private var defaults = DefaultProperties()
-    private var description = Description()
-    private var strikeout = Strikeout()
-    private var names = Names()
+    private var description: Description!
+    private var defaults: DefaultProperties!
+    private var strikeout: Strikeout!
+    private var names: Names!
 
     private var colors: [FT_Color] = []
 
@@ -137,6 +137,14 @@ public class Typeface {
 
     private func setupFull(renderableFace: RenderableFace) {
         self.renderableFace = renderableFace
+        self.ftSize = nil
+        self.ftStroker = nil
+        self.shapableFace = nil
+        self.description = nil
+        self.defaults = nil
+        self.strikeout = nil
+        self.names = nil
+        self.colors = []
 
         let ftFace = renderableFace.ftFace
         let headTable = HeadTable(ftFace: ftFace)
@@ -144,21 +152,25 @@ public class Typeface {
         let nameTable = NameTable(ftFace: ftFace)
 
         setupSize()
-        setupDescription(headTable: headTable, os2Table: os2Table, nameTable: nameTable)
-        setupStrikeout(os2Table: os2Table)
         setupHarfBuzz()
-        setupVariations(nameTable: nameTable)
-        setupPalettes(nameTable: nameTable)
-        setupNames(nameTable: nameTable)
+        setupDescription(headTable: headTable, os2Table: os2Table, nameTable: nameTable)
+        setupDefaults(nameTable: nameTable)
         setupDefaultCoordinates()
+        setupStrikeout(os2Table: os2Table)
+        setupNames(nameTable: nameTable)
         setupVariableDescription()
         setupColors()
     }
 
     private func setupDerived(parent: Typeface, renderableFace: RenderableFace) {
         self.renderableFace = renderableFace
+        self.ftSize = nil
+        self.ftStroker = nil
+        self.shapableFace = nil
         self.defaults = parent.defaults
         self.description = defaults.description
+        self.strikeout = nil
+        self.names = nil
         self.colors = parent.colors
 
         let ftFace = renderableFace.ftFace
@@ -166,14 +178,20 @@ public class Typeface {
         let nameTable = NameTable(ftFace: ftFace)
 
         setupSize()
-        setupStrikeout(os2Table: os2Table)
         setupHarfBuzz(parent: parent)
+        setupStrikeout(os2Table: os2Table)
+
+        // Setup names again, as style name and full name of parent might be different due to
+        // variation.
         setupNames(nameTable: nameTable)
+        // Setup the variable description reflecting current coordinate values.
         setupVariableDescription()
     }
 
     private func setupDerived(parent: Typeface, colors: [FT_Color]) {
         self.renderableFace = parent.renderableFace
+        self.ftSize = nil
+        self.ftStroker = nil
         self.shapableFace = parent.shapableFace
         self.defaults = parent.defaults
         self.description = parent.description
@@ -195,7 +213,6 @@ public class Typeface {
         description.fullIndex = nameTable?.indexOfEnglishName(for: NameTable.NameID.full)
 
         defer {
-            defaults.description = description
             self.description = description
         }
 
@@ -227,7 +244,17 @@ public class Typeface {
         }
     }
 
+    private func setupDefaults(nameTable: NameTable?) {
+        defaults = DefaultProperties()
+        defaults.description = description
+
+        setupVariations(nameTable: nameTable)
+        setupPalettes(nameTable: nameTable)
+    }
+
     private func setupStrikeout(os2Table: OS2Table?) {
+        strikeout = Strikeout()
+
         if let os2Table = os2Table {
             strikeout.position = Int(os2Table.yStrikeoutPosition)
             strikeout.thickness = Int(os2Table.yStrikeoutSize)
@@ -506,6 +533,8 @@ public class Typeface {
     }
 
     private func setupNames(nameTable: NameTable?) {
+        names = Names()
+
         guard let nameTable = nameTable else { return }
 
         if let index = description.familyIndex {
