@@ -208,6 +208,14 @@ public class Typeface {
         FT_New_Size(renderableFace.ftFace, &ftSize)
     }
 
+    private func setupHarfBuzz(parent: Typeface? = nil) {
+        if let parent = parent {
+            shapableFace = ShapableFace(parent: parent.shapableFace, renderableFace: renderableFace)
+        } else {
+            shapableFace = ShapableFace(renderableFace: renderableFace)
+        }
+    }
+
     private func setupDescription(headTable: HeadTable?, os2Table: OS2Table?, nameTable: NameTable?) {
         var description = Description()
         description.familyIndex = nameTable?.indexOfFamilyName(considering: os2Table)
@@ -252,93 +260,6 @@ public class Typeface {
 
         setupVariations(fvarTable: fvarTable, nameTable: nameTable)
         setupPalettes(cpalTable: cpalTable, nameTable: nameTable)
-    }
-
-    private func setupStrikeout(os2Table: OS2Table?) {
-        strikeout = Strikeout()
-
-        if let os2Table = os2Table {
-            strikeout.position = Int(os2Table.yStrikeoutPosition)
-            strikeout.thickness = Int(os2Table.yStrikeoutSize)
-        }
-    }
-
-    private func setupVariableDescription() {
-        let coordinates = variationCoordinates
-        if coordinates.isEmpty {
-            return
-        }
-
-        if !namedStyles.isEmpty {
-            // Reset the style name and the full name.
-            names.style = ""
-            names.full = ""
-
-            let coordCount = coordinates.count
-            let minValue = 1.0 / CGFloat(0x10000)
-
-            // Get the style name of this instance.
-            for instance in namedStyles {
-                let name = instance.styleName
-                if name.isEmpty {
-                    continue
-                }
-
-                let namedCoords = instance.coordinates
-                var matched = true
-
-                for i in 0 ..< coordCount {
-                    if abs(coordinates[i] - namedCoords[i]) >= minValue {
-                        matched = false
-                        break
-                    }
-                }
-
-                if matched {
-                    names.style = instance.styleName
-                    generateFullName()
-                }
-            }
-        }
-
-        // Get the values of variation axes.
-        for i in 0 ..< variationAxes.count {
-            let axis = variationAxes[i]
-
-            let ital: SFNTTag = "ital"
-            let slnt: SFNTTag = "slnt"
-            let wdth: SFNTTag = "wdth"
-            let wght: SFNTTag = "wght"
-
-            switch axis.tag {
-            case ital:
-                description.slope = Typeface.Slope(ital: coordinates[i])
-                break
-
-            case slnt:
-                description.slope = Typeface.Slope(slnt: coordinates[i])
-                break
-
-            case wdth:
-                description.width = Typeface.Width(wdth: coordinates[i])
-                break
-
-            case wght:
-                description.weight = Typeface.Weight(wght: coordinates[i])
-                break
-
-            default:
-                break
-            }
-        }
-    }
-
-    private func setupHarfBuzz(parent: Typeface? = nil) {
-        if let parent = parent {
-            shapableFace = ShapableFace(parent: parent.shapableFace, renderableFace: renderableFace)
-        } else {
-            shapableFace = ShapableFace(renderableFace: renderableFace)
-        }
     }
 
     private func setupVariations(fvarTable: FVAR.Table?, nameTable: NameTable?) {
@@ -442,12 +363,6 @@ public class Typeface {
         }
     }
 
-    private func setupDefaultCoordinates() {
-        if !variationAxes.isEmpty {
-            renderableFace.setupCoordinates(variationAxes.map { $0.defaultValue })
-        }
-    }
-
     private func setupPalettes(cpalTable: CPAL.Table?, nameTable: NameTable?) {
         guard let cpalTable = cpalTable else { return }
 
@@ -527,10 +442,18 @@ public class Typeface {
         }
     }
 
-    private func setupColors() {
-        // Select first pallete by default.
-        if let colors = predefinedPalettes.first?.colors {
-            self.colors = colors.map { $0.ftColor() }
+    private func setupDefaultCoordinates() {
+        if !variationAxes.isEmpty {
+            renderableFace.setupCoordinates(variationAxes.map { $0.defaultValue })
+        }
+    }
+
+    private func setupStrikeout(os2Table: OS2Table?) {
+        strikeout = Strikeout()
+
+        if let os2Table = os2Table {
+            strikeout.position = Int(os2Table.yStrikeoutPosition)
+            strikeout.thickness = Int(os2Table.yStrikeoutSize)
         }
     }
 
@@ -560,6 +483,83 @@ public class Typeface {
             }
         } else {
             names.full = styleName
+        }
+    }
+
+    private func setupVariableDescription() {
+        let coordinates = variationCoordinates
+        if coordinates.isEmpty {
+            return
+        }
+
+        if !namedStyles.isEmpty {
+            // Reset the style name and the full name.
+            names.style = ""
+            names.full = ""
+
+            let coordCount = coordinates.count
+            let minValue = 1.0 / CGFloat(0x10000)
+
+            // Get the style name of this instance.
+            for instance in namedStyles {
+                let name = instance.styleName
+                if name.isEmpty {
+                    continue
+                }
+
+                let namedCoords = instance.coordinates
+                var matched = true
+
+                for i in 0 ..< coordCount {
+                    if abs(coordinates[i] - namedCoords[i]) >= minValue {
+                        matched = false
+                        break
+                    }
+                }
+
+                if matched {
+                    names.style = instance.styleName
+                    generateFullName()
+                }
+            }
+        }
+
+        // Get the values of variation axes.
+        for i in 0 ..< variationAxes.count {
+            let axis = variationAxes[i]
+
+            let ital: SFNTTag = "ital"
+            let slnt: SFNTTag = "slnt"
+            let wdth: SFNTTag = "wdth"
+            let wght: SFNTTag = "wght"
+
+            switch axis.tag {
+            case ital:
+                description.slope = Typeface.Slope(ital: coordinates[i])
+                break
+
+            case slnt:
+                description.slope = Typeface.Slope(slnt: coordinates[i])
+                break
+
+            case wdth:
+                description.width = Typeface.Width(wdth: coordinates[i])
+                break
+
+            case wght:
+                description.weight = Typeface.Weight(wght: coordinates[i])
+                break
+
+            default:
+                break
+            }
+        }
+    }
+
+    private func setupColors() {
+        // Select first pallete by default.
+        if let colors = predefinedPalettes.first?.colors {
+            self.colors = colors.map { $0.ftColor() }
         }
     }
 
