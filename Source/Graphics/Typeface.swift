@@ -150,11 +150,13 @@ public class Typeface {
         let headTable = HeadTable(ftFace: ftFace)
         let os2Table = OS2Table(ftFace: ftFace)
         let nameTable = NameTable(ftFace: ftFace)
+        let fvarTable = renderableFace.fvarTable()
+        let cpalTable = renderableFace.cpalTable()
 
         setupSize()
         setupHarfBuzz()
         setupDescription(headTable: headTable, os2Table: os2Table, nameTable: nameTable)
-        setupDefaults(nameTable: nameTable)
+        setupDefaults(fvarTable: fvarTable, cpalTable: cpalTable, nameTable: nameTable)
         setupDefaultCoordinates()
         setupStrikeout(os2Table: os2Table)
         setupNames(nameTable: nameTable)
@@ -244,12 +246,12 @@ public class Typeface {
         }
     }
 
-    private func setupDefaults(nameTable: NameTable?) {
+    private func setupDefaults(fvarTable: FVAR.Table?, cpalTable: CPAL.Table?, nameTable: NameTable?) {
         defaults = DefaultProperties()
         defaults.description = description
 
-        setupVariations(nameTable: nameTable)
-        setupPalettes(nameTable: nameTable)
+        setupVariations(fvarTable: fvarTable, nameTable: nameTable)
+        setupPalettes(cpalTable: cpalTable, nameTable: nameTable)
     }
 
     private func setupStrikeout(os2Table: OS2Table?) {
@@ -339,8 +341,8 @@ public class Typeface {
         }
     }
 
-    private func setupVariations(nameTable: NameTable?) {
-        guard let fvarTable = renderableFace.fvarTable() else { return }
+    private func setupVariations(fvarTable: FVAR.Table?, nameTable: NameTable?) {
+        guard let fvarTable = fvarTable else { return }
 
         let axisRecords = fvarTable.axisRecords
         let instanceRecords = fvarTable.instanceRecords
@@ -446,8 +448,8 @@ public class Typeface {
         }
     }
 
-    private func setupPalettes(nameTable: NameTable?) {
-        guard let cpalTable = renderableFace.cpalTable() else { return }
+    private func setupPalettes(cpalTable: CPAL.Table?, nameTable: NameTable?) {
+        guard let cpalTable = cpalTable else { return }
 
         let numPaletteEntries = Int(cpalTable.numPaletteEntries)
         let numPalettes = Int(cpalTable.numPalettes)
