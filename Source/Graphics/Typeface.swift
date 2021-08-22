@@ -70,12 +70,15 @@ public class Typeface {
         var full: String = ""
     }
 
+    private struct Palette {
+        var colors: [FT_Color] = []
+    }
+
     private var description: Description!
     private var defaults: DefaultProperties!
     private var strikeout: Strikeout!
     private var names: Names!
-
-    private var colors: [FT_Color] = []
+    private var palette: Palette!
 
     /// Creates a typeface from the specified file. The data for the font is directly read from the
     /// file when needed.
@@ -127,7 +130,7 @@ public class Typeface {
         setupFull(renderableFace: renderableFace)
     }
 
-    private init?(parent: Typeface, renderableFace: RenderableFace) {
+    private init(parent: Typeface, renderableFace: RenderableFace) {
         setupDerived(parent: parent, renderableFace: renderableFace)
     }
 
@@ -144,7 +147,7 @@ public class Typeface {
         self.defaults = nil
         self.strikeout = nil
         self.names = nil
-        self.colors = []
+        self.palette = nil
 
         let ftFace = renderableFace.ftFace
         let headTable = HeadTable(ftFace: ftFace)
@@ -161,7 +164,7 @@ public class Typeface {
         setupStrikeout(os2Table: os2Table)
         setupNames(nameTable: nameTable)
         setupVariableDescription()
-        setupColors()
+        setupDefaultPalette()
     }
 
     private func setupDerived(parent: Typeface, renderableFace: RenderableFace) {
@@ -173,7 +176,7 @@ public class Typeface {
         self.description = defaults.description
         self.strikeout = nil
         self.names = nil
-        self.colors = parent.colors
+        self.palette = parent.palette
 
         let ftFace = renderableFace.ftFace
         let os2Table = OS2Table(ftFace: ftFace)
@@ -199,7 +202,7 @@ public class Typeface {
         self.description = parent.description
         self.strikeout = parent.strikeout
         self.names = parent.names
-        self.colors = colors
+        self.palette = Palette(colors: colors)
 
         setupSize()
     }
@@ -556,10 +559,12 @@ public class Typeface {
         }
     }
 
-    private func setupColors() {
+    private func setupDefaultPalette() {
+        palette = Palette()
+
         // Select first pallete by default.
         if let colors = predefinedPalettes.first?.colors {
-            self.colors = colors.map { $0.ftColor() }
+            palette.colors = colors.map { $0.ftColor() }
         }
     }
 
@@ -601,7 +606,7 @@ public class Typeface {
     }
 
     var ftColors: [FT_Color] {
-        return colors
+        return palette.colors
     }
 
     /// A Boolean value that indicates whether the typeface supports OpenType font variations.
@@ -659,6 +664,8 @@ public class Typeface {
 
     /// The colors associated with this typeface if it supports OpenType color palettes.
     public var associatedColors: [UIColor] {
+        let colors = palette.colors
+
         var array: [UIColor] = []
         array.reserveCapacity(colors.count)
 
