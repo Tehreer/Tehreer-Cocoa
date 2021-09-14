@@ -39,18 +39,15 @@ public class Typeface {
 
     private var shapableFace: ShapableFace!
 
-    private struct Description {
-        var familyIndex: Int?
-        var styleIndex: Int?
-        var fullIndex: Int?
-
+    private struct DesignCharacteristics {
         var weight: Typeface.Weight = .regular
         var width: Typeface.Width = .normal
         var slope: Typeface.Slope = .plain
     }
 
     private struct DefaultProperties {
-        var description: Description!
+        var names: Names!
+        var design: DesignCharacteristics!
 
         var variationAxes: [VariationAxis] = []
         var namedStyles: [NamedStyle] = []
@@ -74,8 +71,8 @@ public class Typeface {
         var colors: [FT_Color] = []
     }
 
-    private var description: Description!
     private var defaults: DefaultProperties!
+    private var design: DesignCharacteristics!
     private var strikeout: Strikeout!
     private var names: Names!
     private var palette: Palette!
@@ -143,8 +140,8 @@ public class Typeface {
         self.ftSize = nil
         self.ftStroker = nil
         self.shapableFace = nil
-        self.description = nil
         self.defaults = nil
+        self.design = nil
         self.strikeout = nil
         self.names = nil
         self.palette = nil
@@ -158,8 +155,9 @@ public class Typeface {
 
         setupSize()
         setupHarfBuzz()
-        setupDescription(headTable: headTable, os2Table: os2Table, nameTable: nameTable)
-        setupDefaults(fvarTable: fvarTable, cpalTable: cpalTable, nameTable: nameTable)
+        setupDefaultProperties(headTable: headTable, os2Table: os2Table, nameTable: nameTable,
+                               fvarTable: fvarTable, cpalTable: cpalTable)
+        setupDesignCharacteristics()
         setupDefaultCoordinates()
         setupStrikeout(os2Table: os2Table)
         setupNames(nameTable: nameTable)
@@ -173,7 +171,7 @@ public class Typeface {
         self.ftStroker = nil
         self.shapableFace = nil
         self.defaults = parent.defaults
-        self.description = defaults.description
+        self.design = nil
         self.strikeout = nil
         self.names = nil
         self.palette = parent.palette
@@ -184,12 +182,9 @@ public class Typeface {
 
         setupSize()
         setupHarfBuzz(parent: parent)
+        setupDesignCharacteristics()
         setupStrikeout(os2Table: os2Table)
-
-        // Setup names again, as style name and full name of parent might be different due to
-        // variation.
         setupNames(nameTable: nameTable)
-        // Setup the variable description reflecting current coordinate values.
         setupVariableDescription()
     }
 
@@ -199,7 +194,7 @@ public class Typeface {
         self.ftStroker = nil
         self.shapableFace = parent.shapableFace
         self.defaults = parent.defaults
-        self.description = parent.description
+        self.design = parent.design
         self.strikeout = parent.strikeout
         self.names = parent.names
         self.palette = Palette(colors: colors)
@@ -219,50 +214,61 @@ public class Typeface {
         }
     }
 
-    private func setupDescription(headTable: HeadTable?, os2Table: OS2Table?, nameTable: NameTable?) {
-        var description = Description()
-        description.familyIndex = nameTable?.indexOfFamilyName(considering: os2Table)
-        description.styleIndex = nameTable?.indexOfStyleName(considering: os2Table)
-        description.fullIndex = nameTable?.indexOfEnglishName(for: NameTable.NameID.full)
+    private func setupDefaultProperties(headTable: HeadTable?, os2Table: OS2Table?,
+                                        nameTable: NameTable?,
+                                        fvarTable: FVAR.Table?, cpalTable: CPAL.Table?) {
+        defaults = DefaultProperties()
 
-        defer {
-            self.description = description
+        setupDefaultDescription(headTable: headTable, os2Table: os2Table, nameTable: nameTable)
+        setupVariations(fvarTable: fvarTable, nameTable: nameTable)
+        setupPalettes(cpalTable: cpalTable, nameTable: nameTable)
+    }
+
+    private func setupDefaultDescription(headTable: HeadTable?, os2Table: OS2Table?, nameTable: NameTable?) {
+        var names = Names()
+        defer { defaults.names = names }
+
+        if let nameTable = nameTable {
+            if let nameIndex = nameTable.indexOfFamilyName(considering: os2Table) {
+                names.family = nameTable.record(at: nameIndex).string ?? ""
+            }
+            if let nameIndex = nameTable.indexOfStyleName(considering: os2Table) {
+                names.style = nameTable.record(at: nameIndex).string ?? ""
+            }
+            if let nameIndex = nameTable.indexOfEnglishName(for: NameTable.NameID.full) {
+                names.full = nameTable.record(at: nameIndex).string ?? ""
+            }
         }
 
+        var design = DesignCharacteristics()
+        defer { defaults.design = design }
+
         if let os2Table = os2Table {
-            description.weight = Typeface.Weight(value: os2Table.usWeightClass)
-            description.width = Typeface.Width(value: os2Table.usWidthClass)
+            design.weight = Typeface.Weight(value: os2Table.usWeightClass)
+            design.width = Typeface.Width(value: os2Table.usWidthClass)
 
             if (os2Table.fsSelection & OS2Table.FSSelection.oblique) != 0 {
-                description.slope = .oblique
+                design.slope = .oblique
             } else if (os2Table.fsSelection & OS2Table.FSSelection.italic) != 0 {
-                description.slope = .italic
+                design.slope = .italic
             }
         } else if let headTable = headTable {
             let macStyle = headTable.macStyle
 
             if (macStyle & OS2Table.MacStyle.bold) != 0 {
-                description.weight = .bold
+                design.weight = .bold
             }
 
             if (macStyle & OS2Table.MacStyle.condensed) != 0 {
-                description.width = .condensed
+                design.width = .condensed
             } else if (macStyle & OS2Table.MacStyle.extended) != 0 {
-                description.width = .expanded
+                design.width = .expanded
             }
 
             if (macStyle & OS2Table.MacStyle.italic) != 0 {
-                description.slope = .italic
+                design.slope = .italic
             }
         }
-    }
-
-    private func setupDefaults(fvarTable: FVAR.Table?, cpalTable: CPAL.Table?, nameTable: NameTable?) {
-        defaults = DefaultProperties()
-        defaults.description = description
-
-        setupVariations(fvarTable: fvarTable, nameTable: nameTable)
-        setupPalettes(cpalTable: cpalTable, nameTable: nameTable)
     }
 
     private func setupVariations(fvarTable: FVAR.Table?, nameTable: NameTable?) {
@@ -351,15 +357,8 @@ public class Typeface {
         }
 
         if !hasDefaultInstance {
-            let coordinates = variationAxes.map { $0.defaultValue }
-            var styleName = ""
-
-            if let index = defaults.description.styleIndex {
-                styleName = nameTable?.record(at: index).string ?? ""
-            }
-
-            let defaultStyle = NamedStyle(styleName: styleName,
-                                          coordinates: coordinates,
+            let defaultStyle = NamedStyle(styleName: defaults.names.style,
+                                          coordinates: variationAxes.map { $0.defaultValue },
                                           postScriptName: nil)
 
             namedStyles.insert(defaultStyle, at: 0)
@@ -451,6 +450,10 @@ public class Typeface {
         }
     }
 
+    private func setupDesignCharacteristics() {
+        design = defaults.design
+    }
+
     private func setupStrikeout(os2Table: OS2Table?) {
         strikeout = Strikeout()
 
@@ -461,19 +464,9 @@ public class Typeface {
     }
 
     private func setupNames(nameTable: NameTable?) {
-        names = Names()
+        names = defaults.names
 
-        guard let nameTable = nameTable else { return }
-
-        if let index = description.familyIndex {
-            names.family = nameTable.record(at: index).string ?? ""
-        }
-        if let index = description.styleIndex {
-            names.style = nameTable.record(at: index).string ?? ""
-        }
-        if let index = description.fullIndex {
-            names.full = nameTable.record(at: index).string ?? ""
-        } else {
+        if fullName.isEmpty {
             generateFullName()
         }
     }
@@ -527,34 +520,28 @@ public class Typeface {
             }
         }
 
-        // Get the values of variation axes.
-        for i in 0 ..< variationAxes.count {
-            let axis = variationAxes[i]
-
+        if !variationAxes.isEmpty {
             let ital: SFNTTag = "ital"
             let slnt: SFNTTag = "slnt"
             let wdth: SFNTTag = "wdth"
             let wght: SFNTTag = "wght"
 
-            switch axis.tag {
-            case ital:
-                description.slope = Typeface.Slope(ital: coordinates[i])
-                break
+            // Get the values of variation axes.
+            for i in 0 ..< variationAxes.count {
+                let axis = variationAxes[i]
 
-            case slnt:
-                description.slope = Typeface.Slope(slnt: coordinates[i])
-                break
-
-            case wdth:
-                description.width = Typeface.Width(wdth: coordinates[i])
-                break
-
-            case wght:
-                description.weight = Typeface.Weight(wght: coordinates[i])
-                break
-
-            default:
-                break
+                switch axis.tag {
+                case ital:
+                    design.slope = Typeface.Slope(ital: coordinates[i])
+                case slnt:
+                    design.slope = Typeface.Slope(slnt: coordinates[i])
+                case wdth:
+                    design.width = Typeface.Width(wdth: coordinates[i])
+                case wght:
+                    design.weight = Typeface.Weight(wght: coordinates[i])
+                default:
+                    break
+                }
             }
         }
     }
@@ -716,19 +703,19 @@ public class Typeface {
     /// The typographic weight of this typeface. The weight value determines the thickness
     /// associated with a given character in a typeface.
     public var weight: Weight {
-        return description.weight
+        return design.weight
     }
 
     /// The typographic width of this typeface. The width value determines whether a typeface is
     /// expanded or condensed when it is displayed.
     public var width: Width {
-        return description.width
+        return design.width
     }
 
     /// The typographic slope of this typeface. The slope value determines whether a typeface is
     /// plain or slanted when it is displayed.
     public var slope: Slope {
-        return description.slope
+        return design.slope
     }
 
     /// The number of font units per EM square for this typeface.
