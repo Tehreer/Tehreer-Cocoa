@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2023 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -50,42 +50,38 @@ extension RandomAccessCollection
     }
 
     func forEachLineRun(in codeUnitRange: Range<Int>, body: (BidiRun) -> Void) {
-        var paragraphIndex = binarySearchIndex(forCodeUnitAt: codeUnitRange.lowerBound)
+        let lineStart = codeUnitRange.lowerBound
+        let lineEnd = codeUnitRange.upperBound
+
+        var paragraphIndex = binarySearchIndex(forCodeUnitAt: lineStart)
+        let directionalParagraph = self[paragraphIndex]
+        let isRTL = directionalParagraph.baseLevel & 1 == 1
+
+        if (isRTL) {
+            let paragraphEnd = directionalParagraph.codeUnitRange.upperBound
+            if (paragraphEnd < lineEnd) {
+                paragraphIndex = binarySearchIndex(forCodeUnitAt: lineEnd - 1)
+            }
+        }
+
+        let next = isRTL ? -1 : 1
         var feasibleStart: Int
         var feasibleEnd: Int
 
-        var isRTL: Bool!
-        var allLines: [BidiLine] = []
-
         repeat {
             let bidiParagraph = self[paragraphIndex]
-            if isRTL == nil {
-                isRTL = bidiParagraph.baseLevel & 1 == 1
-            }
-
             let paragraphRange = bidiParagraph.codeUnitRange
-            feasibleStart = Swift.max(paragraphRange.lowerBound, codeUnitRange.lowerBound)
-            feasibleEnd = Swift.min(paragraphRange.upperBound, codeUnitRange.upperBound)
+
+            feasibleStart = Swift.max(paragraphRange.lowerBound, lineStart)
+            feasibleEnd = Swift.min(paragraphRange.upperBound, lineEnd)
 
             if let bidiLine = bidiParagraph.makeLine(codeUnitRange: feasibleStart ..< feasibleEnd) {
-                allLines.append(bidiLine)
-            }
-
-            paragraphIndex += 1
-        } while feasibleEnd != codeUnitRange.upperBound
-
-        if isRTL {
-            for bidiLine in allLines.reversed() {
                 for bidiRun in bidiLine.visualRuns {
                     body(bidiRun)
                 }
             }
-        } else {
-            for bidiLine in allLines {
-                for bidiRun in bidiLine.visualRuns {
-                    body(bidiRun)
-                }
-            }
-        }
+
+            paragraphIndex += next
+        } while isRTL ? feasibleStart != lineStart : feasibleEnd != lineEnd
     }
 }
