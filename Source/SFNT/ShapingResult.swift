@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2021 Muhammad Tayyab Akram
+// Copyright (C) 2019-2023 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -136,73 +136,6 @@ public class ShapingResult {
         return array
     }
 
-    private func makeCaretAdvances(caretStops: [Bool]!) -> [CGFloat] {
-        let codeUnitCount = codeUnitRange.count
-        var caretAdvances = Array<CGFloat>(repeating: .zero, count: codeUnitCount + 1)
-
-        var glyphIndex = clusterMap[0] + 1
-        var refIndex = glyphIndex
-        var totalStops = 0
-        var clusterStart = 0
-
-        for codeUnitIndex in 1 ... codeUnitCount {
-            let oldIndex = glyphIndex
-
-            if codeUnitIndex != codeUnitCount {
-                glyphIndex = clusterMap[codeUnitIndex] + 1
-
-                if caretStops != nil && !caretStops[codeUnitIndex - 1] {
-                    continue
-                }
-
-                totalStops += 1
-            } else {
-                totalStops += 1
-                glyphIndex = (isBackward ? 0 : glyphCount + 1)
-            }
-
-            if glyphIndex != oldIndex {
-                var clusterAdvance: CGFloat = 0
-                var distance: CGFloat = 0
-                var counter = 1
-
-                /* Find the advance of current cluster. */
-                if isBackward {
-                    while refIndex > glyphIndex {
-                        clusterAdvance += glyphAdvances[refIndex - 1]
-                        refIndex -= 1
-                    }
-                } else {
-                    while refIndex < glyphIndex {
-                        clusterAdvance += glyphAdvances[refIndex - 1]
-                        refIndex += 1
-                    }
-                }
-
-                /* Divide the advance evenly between cluster length. */
-                while clusterStart < codeUnitIndex {
-                    var advance: CGFloat = 0
-
-                    if caretStops == nil || caretStops[clusterStart] || clusterStart == codeUnitCount - 1 {
-                        let steps = totalStops
-                        let previous = distance
-
-                        distance = (clusterAdvance * CGFloat(counter)) / CGFloat(steps)
-                        advance = distance - previous
-                        counter += 1
-                    }
-
-                    caretAdvances[clusterStart] = advance
-                    clusterStart += 1
-                }
-
-                totalStops = 0
-            }
-        }
-
-        return caretAdvances
-    }
-
     /// Creates an array of caret edges.
     ///
     /// - Parameter caretStops: An array for caret stops of the UTF-16 code units represented by
@@ -213,38 +146,15 @@ public class ShapingResult {
             precondition(caretStops.count >= codeUnitRange.count)
         }
 
-        let codeUnitCount = codeUnitRange.count
+        let caretEdgesBuilder = CaretEdgesBuilder(
+            isBackward: isBackward,
+            isRTL: isRTL,
+            glyphAdvances: glyphAdvances,
+            clusterMap: clusterMap,
+            caretStops: caretStops
+        )
 
-        var caretEdges = makeCaretAdvances(caretStops: caretStops)
-        var distance: CGFloat = 0
-
-        if isRTL {
-            var index = codeUnitCount - 1
-
-            /* Last edge should be zero. */
-            caretEdges[codeUnitCount] = 0;
-
-            /* Iterate in reverse direction. */
-            while index >= 0 {
-                distance += caretEdges[index]
-                caretEdges[index] = distance
-                index -= 1
-            }
-        } else {
-            var advance = caretEdges[0];
-
-            /* First edge should be zero. */
-            caretEdges[0] = 0;
-
-            /* Iterate in forward direction. */
-            for i in 1 ... codeUnitCount {
-                distance += advance
-                advance = caretEdges[i]
-                caretEdges[i] = distance
-            }
-        }
-
-        return caretEdges
+        return caretEdgesBuilder.build()
     }
 
     func setup(string: String, codeUnitRange: Range<Int>,
