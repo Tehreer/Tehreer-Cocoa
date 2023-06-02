@@ -72,7 +72,7 @@ extension RandomAccessCollection
             repeat {
                 let intrinsicRun = self[runIndex]
                 let segmentEnd = Swift.min(endIndex, intrinsicRun.codeUnitRange.upperBound)
-                extent += intrinsicRun.measureCharacters(in: startIndex ..< segmentEnd)
+                extent += intrinsicRun.distance(forCodeUnitRange: startIndex ..< segmentEnd)
 
                 startIndex = segmentEnd
                 runIndex += 1

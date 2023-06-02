@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2023 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import Foundation
 import CoreGraphics
 
-class IntrinsicRun {
+final class IntrinsicRun: TextRun {
     let string: String
     let codeUnitRange: Range<Int>
     let isBackward: Bool
@@ -28,17 +28,18 @@ class IntrinsicRun {
     let ascent: CGFloat
     let descent: CGFloat
     let leading: CGFloat
-    let glyphIDs: [GlyphID]
-    let glyphOffsets: [CGPoint]
-    let glyphAdvances: [CGFloat]
-    let clusterMap: [Int]
-    let caretEdges: [CGFloat]
+    let glyphIDs: GlyphIDs
+    let glyphOffsets: GlyphOffsets
+    let glyphAdvances: GlyphAdvances
+    let clusterMap: ClusterMap
+    let caretEdges: CaretEdges
 
     init(string: String, codeUnitRange: Range<Int>, isBackward: Bool,
-         bidiLevel: UInt8, writingDirection: WritingDirection, typeface: Typeface,
-         typeSize: CGFloat, ascent: CGFloat, descent: CGFloat, leading: CGFloat,
-         glyphIDs: [GlyphID], glyphOffsets: [CGPoint], glyphAdvances: [CGFloat],
-         clusterMap: [Int], caretEdges: [CGFloat]) {
+         bidiLevel: UInt8, writingDirection: WritingDirection,
+         typeface: Typeface, typeSize: CGFloat,
+         ascent: CGFloat, descent: CGFloat, leading: CGFloat,
+         glyphIDs: GlyphIDs, glyphOffsets: GlyphOffsets, glyphAdvances: GlyphAdvances,
+         clusterMap: ClusterMap, caretEdges: CaretEdges) {
         self.string = string
         self.codeUnitRange = codeUnitRange
         self.isBackward = isBackward
@@ -56,31 +57,101 @@ class IntrinsicRun {
         self.caretEdges = caretEdges
     }
 
-    var startIndex: String.Index {
-        return string.characterIndex(forUTF16Index: codeUnitRange.lowerBound)
-    }
+    var attributes: [Any] { [] }
 
-    var endIndex: String.Index {
-        return string.characterIndex(forUTF16Index: codeUnitRange.upperBound)
-    }
+    var startExtraLength: Int { 0 }
+    var endExtraLength: Int { 0 }
 
-    var isRTL: Bool {
-        return (bidiLevel & 1) == 1
-    }
+    var glyphCount: Int { glyphIDs.count }
 
-    var glyphCount: Int {
-        return glyphIDs.count
-    }
-
-    func glyphRange(forUTF16Range range: Range<Int>) -> Range<Int> {
+    func clusterStart(forCodeUnitAt index: Int) -> Int {
         let runStart = codeUnitRange.lowerBound
-        let lowerBound = range.lowerBound - runStart
-        let upperBound = range.upperBound - runStart
+        let mappingIndex = index - runStart
+        let common = clusterMap[mappingIndex]
 
-        return Clusters.glyphRange(in: clusterMap,
-                                   for: lowerBound ..< upperBound,
-                                   isBackward: isBackward,
-                                   glyphCount: glyphCount)
+        for i in stride(from: mappingIndex - 1, through: 0, by: -1) {
+            if clusterMap[i] != common {
+                return (i + 1) + runStart
+            }
+        }
+
+        return runStart
+    }
+
+    func clusterEnd(forCodeUnitAt index: Int) -> Int {
+        let runStart = codeUnitRange.lowerBound
+        let mappingIndex = index - runStart
+        let common = clusterMap[mappingIndex]
+        let length = clusterMap.count
+
+        for i in (index + 1) ..< length {
+            if clusterMap[i] != common {
+                return i + runStart
+            }
+        }
+
+        return length + runStart
+    }
+
+    private func forwardGlyphIndex(for mappingIndex: Int) -> Int {
+        let common = clusterMap[mappingIndex]
+        let length = clusterMap.count
+
+        for i in (mappingIndex + 1) ..< length {
+            let mapping = clusterMap[i]
+            if mapping != common {
+                return mapping - 1
+            }
+        }
+
+        return glyphCount - 1
+    }
+
+    private func backwardGlyphIndex(for mappingIndex: Int) -> Int {
+        let common = clusterMap[mappingIndex]
+
+        for i in stride(from: mappingIndex - 1, through: 0, by: -1) {
+            let mapping = clusterMap[i]
+            if mapping != common {
+                return mapping - 1
+            }
+        }
+
+        return glyphCount - 1
+    }
+
+    func glyphRange(forCodeUnitRange range: Range<Int>) -> Range<Int> {
+        let runStart = codeUnitRange.lowerBound
+        let firstIndex = range.lowerBound - runStart
+        let lastIndex = range.upperBound - 1 - runStart
+
+        if isBackward {
+            return clusterMap[lastIndex] ..< backwardGlyphIndex(for: firstIndex) + 1
+        }
+
+        return clusterMap[firstIndex] ..< forwardGlyphIndex(for: lastIndex) + 1
+    }
+
+    func leadingGlyphIndex(forCodeUnitAt index: Int) -> Int {
+        let runStart = codeUnitRange.lowerBound
+        let mappingIndex = index - runStart
+
+        if (isBackward) {
+            return backwardGlyphIndex(for: mappingIndex)
+        }
+
+        return clusterMap[mappingIndex]
+    }
+
+    func trailingGlyphIndex(forCodeUnitAt index: Int) -> Int {
+        let runStart = codeUnitRange.lowerBound
+        let mappingIndex = index - runStart
+
+        if (isBackward) {
+            return clusterMap[mappingIndex]
+        }
+
+        return forwardGlyphIndex(for: mappingIndex)
     }
 
     func clusterRange(forUTF16Range range: Range<Int>) -> Range<Int> {
@@ -94,13 +165,7 @@ class IntrinsicRun {
         return (clusterStart + runStart) ..< (clusterEnd + runStart)
     }
 
-    func measureCharacters(in chunkRange: Range<Int>) -> CGFloat {
-        let collection = CaretEdgeCollection(allEdges: caretEdges)
-
-        let runStart = codeUnitRange.lowerBound
-        let lowerBound = chunkRange.lowerBound - runStart
-        let upperBound = chunkRange.upperBound - runStart
-
-        return collection.distance(of: lowerBound ..< upperBound, isRTL: isRTL)
+    func draw(with renderer: Renderer, in context: CGContext) {
+        fatalError()
     }
 }

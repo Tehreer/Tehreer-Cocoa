@@ -23,7 +23,7 @@ func makeGlyphRun(intrinsicRun: IntrinsicRun,
     let string = intrinsicRun.string
     let runOffset = intrinsicRun.codeUnitRange.lowerBound
     let clusterRange = intrinsicRun.clusterRange(forUTF16Range: codeUnitRange)
-    let glyphRange = intrinsicRun.glyphRange(forUTF16Range: codeUnitRange)
+    let glyphRange = intrinsicRun.glyphRange(forCodeUnitRange: codeUnitRange)
 
     let startExtraLength = codeUnitRange.lowerBound - clusterRange.lowerBound
     let endExtraLength = clusterRange.upperBound - codeUnitRange.upperBound

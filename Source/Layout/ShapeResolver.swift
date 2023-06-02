@@ -127,11 +127,12 @@ struct ShapeResolver {
                 ascent: ascent,
                 descent: descent,
                 leading: leading,
-                glyphIDs: glyphIDs,
-                glyphOffsets: glyphOffsets,
-                glyphAdvances: glyphAdvances,
-                clusterMap: clusterMap,
-                caretEdges: caretEdges)
+                glyphIDs: PrimitiveCollection(glyphIDs),
+                glyphOffsets: PrimitiveCollection(glyphOffsets),
+                glyphAdvances: PrimitiveCollection(glyphAdvances),
+                clusterMap: PrimitiveCollection(clusterMap),
+                caretEdges: PrimitiveCollection(caretEdges)
+            )
 
             runs.append(intrinsicRun)
         }
