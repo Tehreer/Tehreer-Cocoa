@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2021 Muhammad Tayyab Akram
+// Copyright (C) 2019-2023 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-private struct ClusterRange {
+struct ClusterRange {
     var actualStart: Int
     var actualEnd: Int
     var glyphStart: Int

@@ -30,7 +30,7 @@ protocol TextRun {
 
     var isBackward: Bool { get }
     var bidiLevel: UInt8 { get }
-    var attributes: [Any] { get }
+    var attributes: [NSAttributedString.Key: Any] { get }
 
     var startExtraLength: Int { get }
     var endExtraLength: Int { get }

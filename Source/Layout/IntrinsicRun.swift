@@ -57,7 +57,7 @@ final class IntrinsicRun: TextRun {
         self.caretEdges = caretEdges
     }
 
-    var attributes: [Any] { [] }
+    var attributes: [NSAttributedString.Key: Any] { [:] }
 
     var startExtraLength: Int { 0 }
     var endExtraLength: Int { 0 }
