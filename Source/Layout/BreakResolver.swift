@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2023 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ struct BreakResolver {
     }
 
     func findBackwardBreak(for extent: CGFloat, in codeUnitRange: Range<Int>, with breakMode: BreakMode) -> Int {
-        let paragraph = paragraphs.paragraph(forCodeUnitAt: codeUnitRange.lowerBound)
+        let paragraph = paragraphs.paragraph(forCodeUnitAt: codeUnitRange.upperBound - 1)
         let minIndex = min(codeUnitRange.lowerBound, paragraph.codeUnitRange.lowerBound)
         let clampedRange = minIndex ..< codeUnitRange.upperBound
 
