@@ -159,6 +159,14 @@ extension TextRun {
         return string.characterIndex(forUTF16Index: actualIndex)
     }
 
+    func leadingGlyphIndex(forCharacterAt index: String.Index) -> Int {
+        return leadingGlyphIndex(forCodeUnitAt: string.utf16Index(forCharacterAt: index))
+    }
+
+    func trailingGlyphIndex(forCharacterAt index: String.Index) -> Int {
+        return trailingGlyphIndex(forCodeUnitAt: string.utf16Index(forCharacterAt: index))
+    }
+
     func caretEdge(forCodeUnitAt index: Int, caretBoundary: CGFloat) -> CGFloat {
         let actualStart = clusterStart(forCodeUnitAt: codeUnitRange.lowerBound)
         return caretEdges[index - actualStart] - caretBoundary

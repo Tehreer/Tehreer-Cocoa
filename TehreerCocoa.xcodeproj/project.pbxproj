@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		6E0C83E123938412000F9401 /* NSTextAlignment+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0C83E023938412000F9401 /* NSTextAlignment+Additions.swift */; };
+		6E0DC24D2A28E502005DF90E /* CaretEdgesBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC24C2A28E502005DF90E /* CaretEdgesBuilder.swift */; };
+		6E0DC24F2A2A0435005DF90E /* TextRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC24E2A2A0435005DF90E /* TextRun.swift */; };
+		6E0DC2512A2A0E0A005DF90E /* CaretUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC2502A2A0E0A005DF90E /* CaretUtils.swift */; };
+		6E0DC2532A2A5F54005DF90E /* TextRunDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC2522A2A5F54005DF90E /* TextRunDrawing.swift */; };
+		6E0DC2552A2BC129005DF90E /* IntrinsicRunSlice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC2542A2BC129005DF90E /* IntrinsicRunSlice.swift */; };
 		6E10F26823A515C4008B6145 /* Patch.c in Sources */ = {isa = PBXBuildFile; fileRef = 6E10F26723A515C4008B6145 /* Patch.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		6E35D87423C3542A00716706 /* TruncationPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E35D87323C3542A00716706 /* TruncationPlace.swift */; };
 		6E35D87623C3576300716706 /* TokenResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E35D87523C3576300716706 /* TokenResolver.swift */; };
@@ -131,6 +136,11 @@
 
 /* Begin PBXFileReference section */
 		6E0C83E023938412000F9401 /* NSTextAlignment+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextAlignment+Additions.swift"; sourceTree = "<group>"; };
+		6E0DC24C2A28E502005DF90E /* CaretEdgesBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaretEdgesBuilder.swift; sourceTree = "<group>"; };
+		6E0DC24E2A2A0435005DF90E /* TextRun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRun.swift; sourceTree = "<group>"; };
+		6E0DC2502A2A0E0A005DF90E /* CaretUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaretUtils.swift; sourceTree = "<group>"; };
+		6E0DC2522A2A5F54005DF90E /* TextRunDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRunDrawing.swift; sourceTree = "<group>"; };
+		6E0DC2542A2BC129005DF90E /* IntrinsicRunSlice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrinsicRunSlice.swift; sourceTree = "<group>"; };
 		6E10F26723A515C4008B6145 /* Patch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Patch.c; sourceTree = "<group>"; };
 		6E35D87323C3542A00716706 /* TruncationPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruncationPlace.swift; sourceTree = "<group>"; };
 		6E35D87523C3576300716706 /* TokenResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResolver.swift; sourceTree = "<group>"; };
@@ -251,7 +261,6 @@
 		6ECE439823638DA2007D8839 /* ftstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ftstream.h; sourceTree = "<group>"; };
 		6ECE439923638DA2007D8839 /* fttrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fttrace.h; sourceTree = "<group>"; };
 		6ECE439A23638DA2007D8839 /* ftvalid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ftvalid.h; sourceTree = "<group>"; };
-		6ECE439B23638DA2007D8839 /* internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = internal.h; sourceTree = "<group>"; };
 		6ECE439C23638DA2007D8839 /* psaux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = psaux.h; sourceTree = "<group>"; };
 		6ECE439D23638DA2007D8839 /* pshints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pshints.h; sourceTree = "<group>"; };
 		6ECE439F23638DA2007D8839 /* svbdf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = svbdf.h; sourceTree = "<group>"; };
@@ -969,6 +978,7 @@
 				7D8A5E84263AD4420092D50F /* RenderableFace.swift */,
 				6E9734B622D4F0A9008863D0 /* Renderer.swift */,
 				7D77CE922651624100E22DBE /* ShapableFace.swift */,
+				6E0DC2522A2A5F54005DF90E /* TextRunDrawing.swift */,
 				6E9734B722D4F0A9008863D0 /* Typeface.swift */,
 				6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */,
 				7D4376D325E93F07006A3F25 /* TypeSlope.swift */,
@@ -989,16 +999,20 @@
 				6E9734C822D4F0AA008863D0 /* RandomAccessCollection+IntrinsicRun.swift */,
 				6E9734BC22D4F0AA008863D0 /* BreakMode.swift */,
 				6E9734BD22D4F0AA008863D0 /* BreakResolver.swift */,
+				6E0DC24C2A28E502005DF90E /* CaretEdgesBuilder.swift */,
 				6E9734BE22D4F0AA008863D0 /* CaretEdgeCollection.swift */,
+				6E0DC2502A2A0E0A005DF90E /* CaretUtils.swift */,
 				6E9734C022D4F0AA008863D0 /* ComposedFrame.swift */,
 				6E9734C122D4F0AA008863D0 /* ComposedLine.swift */,
 				6E9734C222D4F0AA008863D0 /* FrameResolver.swift */,
 				6E9734C322D4F0AA008863D0 /* GlyphRun.swift */,
 				6E9734C422D4F0AA008863D0 /* IntrinsicRun.swift */,
+				6E0DC2542A2BC129005DF90E /* IntrinsicRunSlice.swift */,
 				6E9734C522D4F0AA008863D0 /* LineResolver.swift */,
 				6E9734C922D4F0AA008863D0 /* ShapeResolver.swift */,
 				6E9734CA22D4F0AA008863D0 /* ShapingRunLocator.swift */,
 				6E9734CB22D4F0AA008863D0 /* TextAlignment.swift */,
+				6E0DC24E2A2A0435005DF90E /* TextRun.swift */,
 				6E35D87523C3576300716706 /* TokenResolver.swift */,
 				6E35D87323C3542A00716706 /* TruncationPlace.swift */,
 				6E9734CC22D4F0AA008863D0 /* Typesetter.swift */,
@@ -1206,7 +1220,6 @@
 				6ECE439823638DA2007D8839 /* ftstream.h */,
 				6ECE439923638DA2007D8839 /* fttrace.h */,
 				6ECE439A23638DA2007D8839 /* ftvalid.h */,
-				6ECE439B23638DA2007D8839 /* internal.h */,
 				6ECE439C23638DA2007D8839 /* psaux.h */,
 				6ECE439D23638DA2007D8839 /* pshints.h */,
 				6ECE439E23638DA2007D8839 /* services */,
@@ -2082,6 +2095,7 @@
 		6E97349922D4F03C008863D0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = Tehreer;
 				TargetAttributes = {
@@ -2138,19 +2152,12 @@
 				6ECE485923638DA8007D8839 /* ftsystem.c in Sources */,
 				6ECE486323638DA8007D8839 /* bdf.c in Sources */,
 				6ECE488323638DA8007D8839 /* cff.c in Sources */,
-				7D18BE6225ED2D0200F4412B /* GlyphAttributes.swift in Sources */,
 				6ECE48A423638DA8007D8839 /* type1cid.c in Sources */,
 				6E969D1223639B3E00377297 /* ftgzip.c in Sources */,
 				6ECE48DB23638DA8007D8839 /* ftlzw.c in Sources */,
-				7D6C465525EBD548006997FB /* CPALTable.swift in Sources */,
-				7D22D7FD26C4147500AA2790 /* NamedStyle.swift in Sources */,
-				7D4376D025E93D80006A3F25 /* TypeWidth.swift in Sources */,
 				6ECE48F323638DA8007D8839 /* pcf.c in Sources */,
 				6ECE490023638DA8007D8839 /* pfr.c in Sources */,
-				7D18BE5A25ECFDEF00F4412B /* UIColor+FTColor.swift in Sources */,
 				6ECE491823638DA8007D8839 /* psaux.c in Sources */,
-				7D8A5E85263AD4420092D50F /* RenderableFace.swift in Sources */,
-				7D68444D25EE3AEC00C1DE3B /* GlyphOutline.swift in Sources */,
 				6ECE493E23638DA8007D8839 /* pshinter.c in Sources */,
 				6ECE494A23638DA8007D8839 /* psnames.c in Sources */,
 				6ECE495423638DA8007D8839 /* raster.c in Sources */,
@@ -2162,7 +2169,6 @@
 				6ECE49C423638DA8007D8839 /* winfnt.c in Sources */,
 				6E10F26823A515C4008B6145 /* Patch.c in Sources */,
 				6ECE4A0523638DA8007D8839 /* SheenBidi.c in Sources */,
-				7D2CD32925E18EEA001E630F /* DataTable.swift in Sources */,
 				6ECE4AE323638DA9007D8839 /* emojidef.c in Sources */,
 				6ECE4AE623638DA9007D8839 /* graphemebreak.c in Sources */,
 				6ECE4AEC23638DA9007D8839 /* linebreak.c in Sources */,
@@ -2177,65 +2183,78 @@
 				6E0C83E123938412000F9401 /* NSTextAlignment+Additions.swift in Sources */,
 				6E97350622D4F0AA008863D0 /* RandomAccessCollection+BidiParagraph.swift in Sources */,
 				6E97350722D4F0AA008863D0 /* RandomAccessCollection+IntrinsicRun.swift in Sources */,
-				7D9CB6FE25E18E7300A7BEBE /* FVARTable.swift in Sources */,
-				6E97351122D4F0AA008863D0 /* String+Additions.swift in Sources */,
 				6E97352622D4F0AA008863D0 /* IntrinsicCollection.swift in Sources */,
 				6E97352722D4F0AA008863D0 /* PrimitiveCollection.swift in Sources */,
+				7DAEC8C22610CC6B00593D66 /* CGFloat+Fixed.swift in Sources */,
+				7D18BE5A25ECFDEF00F4412B /* UIColor+FTColor.swift in Sources */,
+				7D1E9B1D2652CA3F00AE6BAF /* AdvanceCache.swift in Sources */,
+				7D6C465125EBD336006997FB /* ColorPalette.swift in Sources */,
 				6E9734F022D4F0AA008863D0 /* FontFile.swift in Sources */,
+				7D4376C725E93160006A3F25 /* FontStream.swift in Sources */,
 				6E9734F122D4F0AA008863D0 /* FreeType.swift in Sources */,
 				6E9734F222D4F0AA008863D0 /* Glyph.swift in Sources */,
+				7D18BE6225ED2D0200F4412B /* GlyphAttributes.swift in Sources */,
 				6E9734F322D4F0AA008863D0 /* GlyphCache.swift in Sources */,
 				7D33A2FB25C188B400F9A02B /* GlyphImage.swift in Sources */,
+				6E0DC24F2A2A0435005DF90E /* TextRun.swift in Sources */,
 				6E9734F522D4F0AA008863D0 /* GlyphKey.swift in Sources */,
+				7D68444D25EE3AEC00C1DE3B /* GlyphOutline.swift in Sources */,
 				6E9734F422D4F0AA008863D0 /* GlyphRasterizer.swift in Sources */,
+				7D22D7FD26C4147500AA2790 /* NamedStyle.swift in Sources */,
+				7D8A5E85263AD4420092D50F /* RenderableFace.swift in Sources */,
 				6E9734F622D4F0AA008863D0 /* Renderer.swift in Sources */,
+				7D77CE932651624100E22DBE /* ShapableFace.swift in Sources */,
 				6E9734F722D4F0AA008863D0 /* Typeface.swift in Sources */,
 				6EE0A44A2305C6D20061D4EB /* TypefaceManager.swift in Sources */,
+				7D4376D425E93F07006A3F25 /* TypeSlope.swift in Sources */,
+				7D4376CB25E93B4E006A3F25 /* TypeWeight.swift in Sources */,
+				7D4376D025E93D80006A3F25 /* TypeWidth.swift in Sources */,
+				7DA9C1C725E25901007A6677 /* VariationAxis.swift in Sources */,
 				6E9734FB22D4F0AA008863D0 /* BreakMode.swift in Sources */,
-				7D37B06225E27F9E0024750D /* SFNTTable.swift in Sources */,
 				6E9734FC22D4F0AA008863D0 /* BreakResolver.swift in Sources */,
 				6E9734FD22D4F0AA008863D0 /* CaretEdgeCollection.swift in Sources */,
 				6E9734FF22D4F0AA008863D0 /* ComposedFrame.swift in Sources */,
 				6E97350022D4F0AA008863D0 /* ComposedLine.swift in Sources */,
-				7D4376C725E93160006A3F25 /* FontStream.swift in Sources */,
 				6E97350122D4F0AA008863D0 /* FrameResolver.swift in Sources */,
 				6E97350222D4F0AA008863D0 /* GlyphRun.swift in Sources */,
 				6E97350322D4F0AA008863D0 /* IntrinsicRun.swift in Sources */,
 				6E97350422D4F0AA008863D0 /* LineResolver.swift in Sources */,
 				6E97350822D4F0AA008863D0 /* ShapeResolver.swift in Sources */,
 				6E97350922D4F0AA008863D0 /* ShapingRunLocator.swift in Sources */,
+				6E0DC2532A2A5F54005DF90E /* TextRunDrawing.swift in Sources */,
 				6E97350A22D4F0AA008863D0 /* TextAlignment.swift in Sources */,
 				6E35D87623C3576300716706 /* TokenResolver.swift in Sources */,
-				7DA9C1C725E25901007A6677 /* VariationAxis.swift in Sources */,
 				6E35D87423C3542A00716706 /* TruncationPlace.swift in Sources */,
 				6E97350B22D4F0AA008863D0 /* Typesetter.swift in Sources */,
 				6E97350C22D4F0AA008863D0 /* VerticalAlignment.swift in Sources */,
+				7D2CD32925E18EEA001E630F /* DataTable.swift in Sources */,
+				7D37B06225E27F9E0024750D /* SFNTTable.swift in Sources */,
+				6E97351322D4F0AA008863D0 /* SFNTTag.swift in Sources */,
+				7D37B06625E27F9F0024750D /* SubTable.swift in Sources */,
+				6E97351422D4F0AA008863D0 /* ShapingEngine.swift in Sources */,
+				6E97351522D4F0AA008863D0 /* ShapingOrder.swift in Sources */,
+				6E97351622D4F0AA008863D0 /* ShapingResult.swift in Sources */,
+				6E97351C22D4F0AA008863D0 /* WritingDirection.swift in Sources */,
+				7D6C465525EBD548006997FB /* CPALTable.swift in Sources */,
+				7D9CB6FE25E18E7300A7BEBE /* FVARTable.swift in Sources */,
 				6E97351722D4F0AA008863D0 /* HeadTable.swift in Sources */,
 				6E97351822D4F0AA008863D0 /* HHEATable.swift in Sources */,
+				6E0DC24D2A28E502005DF90E /* CaretEdgesBuilder.swift in Sources */,
 				6E97351922D4F0AA008863D0 /* NameRecord.swift in Sources */,
 				6E97351A22D4F0AA008863D0 /* NameTable.swift in Sources */,
 				6E97351B22D4F0AA008863D0 /* OS2Table.swift in Sources */,
-				6E97351322D4F0AA008863D0 /* SFNTTag.swift in Sources */,
-				6E97351422D4F0AA008863D0 /* ShapingEngine.swift in Sources */,
-				6E97351522D4F0AA008863D0 /* ShapingOrder.swift in Sources */,
-				7D6C465125EBD336006997FB /* ColorPalette.swift in Sources */,
-				6E97351622D4F0AA008863D0 /* ShapingResult.swift in Sources */,
-				6E97351C22D4F0AA008863D0 /* WritingDirection.swift in Sources */,
+				6E0DC2512A2A0E0A005DF90E /* CaretUtils.swift in Sources */,
+				6E0DC2552A2BC129005DF90E /* IntrinsicRunSlice.swift in Sources */,
 				6E97351D22D4F0AA008863D0 /* BidiAlgorithm.swift in Sources */,
 				6E97351E22D4F0AA008863D0 /* BidiBuffer.swift in Sources */,
-				7D4376D425E93F07006A3F25 /* TypeSlope.swift in Sources */,
 				6E97351F22D4F0AA008863D0 /* BidiLine.swift in Sources */,
-				7D37B06625E27F9F0024750D /* SubTable.swift in Sources */,
 				6E97352022D4F0AA008863D0 /* BidiParagraph.swift in Sources */,
 				6E97352122D4F0AA008863D0 /* BidiRun.swift in Sources */,
-				7D4376CB25E93B4E006A3F25 /* TypeWeight.swift in Sources */,
-				7DAEC8C22610CC6B00593D66 /* CGFloat+Fixed.swift in Sources */,
 				6E97352222D4F0AA008863D0 /* BreakClassifier.swift in Sources */,
-				7D77CE932651624100E22DBE /* ShapableFace.swift in Sources */,
 				6E97352322D4F0AA008863D0 /* Script.swift in Sources */,
 				6E97352422D4F0AA008863D0 /* ScriptClassifier.swift in Sources */,
-				7D1E9B1D2652CA3F00AE6BAF /* AdvanceCache.swift in Sources */,
 				6E97352522D4F0AA008863D0 /* ScriptRun.swift in Sources */,
+				6E97351122D4F0AA008863D0 /* String+Additions.swift in Sources */,
 				6E97350E22D4F0AA008863D0 /* Clusters.swift in Sources */,
 				6E97351022D4F0AA008863D0 /* LRUCache.swift in Sources */,
 				6EB1B0082337ACB200548553 /* Mutex.swift in Sources */,

@@ -17,51 +17,20 @@
 import CoreGraphics
 import Foundation
 
-func makeGlyphRun(intrinsicRun: IntrinsicRun,
+func makeGlyphRun(textRun: TextRun,
                   codeUnitRange: Range<Int>,
                   attributes: [NSAttributedString.Key: Any]) -> GlyphRun {
-    let string = intrinsicRun.string
-    let runOffset = intrinsicRun.codeUnitRange.lowerBound
-    let clusterRange = intrinsicRun.clusterRange(forUTF16Range: codeUnitRange)
-    let glyphRange = intrinsicRun.glyphRange(forCodeUnitRange: codeUnitRange)
+    var innerRun = textRun
 
-    let startExtraLength = codeUnitRange.lowerBound - clusterRange.lowerBound
-    let endExtraLength = clusterRange.upperBound - codeUnitRange.upperBound
+    if let intrinsicRun = textRun as? IntrinsicRun {
+        innerRun = IntrinsicRunSlice(
+            intrinsicRun: intrinsicRun,
+            codeUnitRange: codeUnitRange,
+            attributes: attributes
+        )
+    }
 
-    let chunkOffset = clusterRange.lowerBound - runOffset
-    let chunkLength = clusterRange.count
-    let chunkRange = chunkOffset ..< (chunkOffset + chunkLength)
-
-    let clusterMap = IntrinsicWrapCollection(base: intrinsicRun.clusterMap)
-        .map({ $0 - glyphRange.lowerBound })
-
-    let caretEdges = CaretEdgeCollection(
-        allEdges: intrinsicRun.caretEdges,
-        chunkOffset: chunkOffset,
-        chunkLength: chunkLength,
-        startExtra: startExtraLength,
-        endExtra: endExtraLength,
-        isRTL: intrinsicRun.isRTL)
-
-    return GlyphRun(
-        string: string,
-        codeUnitRange: codeUnitRange,
-        startExtraLength: startExtraLength,
-        endExtraLength: endExtraLength,
-        attributes: attributes,
-        isBackward: intrinsicRun.isBackward,
-        bidiLevel: intrinsicRun.bidiLevel,
-        writingDirection: intrinsicRun.writingDirection,
-        typeface: intrinsicRun.typeface,
-        typeSize: intrinsicRun.typeSize,
-        ascent: intrinsicRun.ascent,
-        descent: intrinsicRun.descent,
-        leading: intrinsicRun.leading,
-        glyphIDs: PrimitiveCollection(intrinsicRun.glyphIDs, range: glyphRange),
-        glyphOffsets: PrimitiveCollection(intrinsicRun.glyphOffsets, range: glyphRange),
-        glyphAdvances: PrimitiveCollection(intrinsicRun.glyphAdvances, range: glyphRange),
-        clusterMap: PrimitiveCollection(clusterMap, range: chunkRange),
-        caretEdges: PrimitiveCollection(caretEdges))
+    return GlyphRun(textRun: innerRun)
 }
 
 func makeComposedLine(string: String,
@@ -375,7 +344,7 @@ struct LineResolver {
                 }
 
                 let codeUnitRange = spanRange.location ..< spanRange.location + spanRange.length
-                let glyphRun = makeGlyphRun(intrinsicRun: intrinsicRun,
+                let glyphRun = makeGlyphRun(textRun: intrinsicRun,
                                             codeUnitRange: codeUnitRange,
                                             attributes: allAttributes)
                 runArray.insert(glyphRun, at: insertIndex)

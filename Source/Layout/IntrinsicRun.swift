@@ -84,7 +84,7 @@ final class IntrinsicRun: TextRun {
         let common = clusterMap[mappingIndex]
         let length = clusterMap.count
 
-        for i in (index + 1) ..< length {
+        for i in stride(from: mappingIndex + 1, to: length, by: 1) {
             if clusterMap[i] != common {
                 return i + runStart
             }
@@ -97,7 +97,7 @@ final class IntrinsicRun: TextRun {
         let common = clusterMap[mappingIndex]
         let length = clusterMap.count
 
-        for i in (mappingIndex + 1) ..< length {
+        for i in stride(from: mappingIndex + 1, to: length, by: 1) {
             let mapping = clusterMap[i]
             if mapping != common {
                 return mapping - 1
