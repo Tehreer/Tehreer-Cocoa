@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2023 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -211,5 +211,52 @@ public class Typesetter {
 
         return makeTruncatedLine(codeUnitRange: codeUnitRange, extent: extent, breakMode: breakMode,
                                  truncationPlace: truncationPlace, tokenLine: tokenLine)
+    }
+
+    /// Creates a justified line of specified UTF-16 range.
+    ///
+    /// - Parameters:
+    ///   - codeUnitRange: The UTF-16 range of the line in source string.
+    ///   - justificationFactor: The factor that specifies the full or partial justification. When
+    ///                          set to 1.0 or greater, full justification is performed. If this
+    ///                          parameter is set to less than 1.0, varying degrees of partial
+    ///                          justification are performed. If it is set to 0 or less, no
+    ///                          justification is performed.
+    ///   - justificationExtent: The extent at which the line should be justified. If it is less
+    ///                          than the actual width of the line, then negative justification is
+    ///                          performed (that is, words are squeezed together).
+    /// - Returns: The new justified line.
+    public func makeJustifiedLine(codeUnitRange: Range<Int>,
+                                  justificationFactor: CGFloat,
+                                  justificationExtent: CGFloat) -> ComposedLine {
+        let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes,
+                                        paragraphs: paragraphs, runs: runs)
+
+        return lineResolver.makeJustifiedLine(codeUnitRange: codeUnitRange,
+                                              justificationFactor: justificationFactor,
+                                              justificationExtent: justificationExtent)
+    }
+
+    /// Creates a justified line of specified character range.
+    ///
+    /// - Parameters:
+    ///   - characterRange: The character range of the line in source string.
+    ///   - justificationFactor: The factor that specifies the full or partial justification. When
+    ///                          set to 1.0 or greater, full justification is performed. If this
+    ///                          parameter is set to less than 1.0, varying degrees of partial
+    ///                          justification are performed. If it is set to 0 or less, no
+    ///                          justification is performed.
+    ///   - justificationExtent: The extent at which the line should be justified. If it is less
+    ///                          than the actual width of the line, then negative justification is
+    ///                          performed (that is, words are squeezed together).
+    /// - Returns: The new justified line.
+    public func makeJustifiedLine(characterRange: Range<String.Index>,
+                                  justificationFactor: CGFloat,
+                                  justificationExtent: CGFloat) -> ComposedLine {
+        let codeUnitRange: Range<Int> = text.string.utf16Range(forCharacterRange: characterRange)
+
+        return makeJustifiedLine(codeUnitRange: codeUnitRange,
+                                 justificationFactor: justificationFactor,
+                                 justificationExtent: justificationExtent)
     }
 }

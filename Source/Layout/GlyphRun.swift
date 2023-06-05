@@ -18,16 +18,9 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-struct ClusterRange {
-    var actualStart: Int
-    var actualEnd: Int
-    var glyphStart: Int
-    var glyphEnd: Int
-}
-
 /// A glyph run is a collection of consecutive glyphs sharing the same attributes and direction.
 public class GlyphRun {
-    private let textRun: TextRun
+    var textRun: TextRun
 
     init(textRun: TextRun) {
         self.textRun = textRun

@@ -113,7 +113,7 @@ final class IntrinsicRunSlice: TextRun {
         let actualEnd = codeUnitRange.upperBound + endExtraLength
 
         let offset = actualStart - intrinsicRun.codeUnitRange.lowerBound
-        let size = actualEnd - actualStart + 1
+        let size = actualEnd - actualStart
 
         let baseMap = intrinsicRun.clusterMap.base
         let mapSlice = ClusterMapSlice(

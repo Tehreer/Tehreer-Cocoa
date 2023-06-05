@@ -13,6 +13,7 @@
 		6E0DC2512A2A0E0A005DF90E /* CaretUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC2502A2A0E0A005DF90E /* CaretUtils.swift */; };
 		6E0DC2532A2A5F54005DF90E /* TextRunDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC2522A2A5F54005DF90E /* TextRunDrawing.swift */; };
 		6E0DC2552A2BC129005DF90E /* IntrinsicRunSlice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC2542A2BC129005DF90E /* IntrinsicRunSlice.swift */; };
+		6E0DC2572A2DE6C8005DF90E /* JustifiedRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC2562A2DE6C8005DF90E /* JustifiedRun.swift */; };
 		6E10F26823A515C4008B6145 /* Patch.c in Sources */ = {isa = PBXBuildFile; fileRef = 6E10F26723A515C4008B6145 /* Patch.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		6E35D87423C3542A00716706 /* TruncationPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E35D87323C3542A00716706 /* TruncationPlace.swift */; };
 		6E35D87623C3576300716706 /* TokenResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E35D87523C3576300716706 /* TokenResolver.swift */; };
@@ -141,6 +142,7 @@
 		6E0DC2502A2A0E0A005DF90E /* CaretUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaretUtils.swift; sourceTree = "<group>"; };
 		6E0DC2522A2A5F54005DF90E /* TextRunDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRunDrawing.swift; sourceTree = "<group>"; };
 		6E0DC2542A2BC129005DF90E /* IntrinsicRunSlice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrinsicRunSlice.swift; sourceTree = "<group>"; };
+		6E0DC2562A2DE6C8005DF90E /* JustifiedRun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JustifiedRun.swift; sourceTree = "<group>"; };
 		6E10F26723A515C4008B6145 /* Patch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Patch.c; sourceTree = "<group>"; };
 		6E35D87323C3542A00716706 /* TruncationPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruncationPlace.swift; sourceTree = "<group>"; };
 		6E35D87523C3576300716706 /* TokenResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResolver.swift; sourceTree = "<group>"; };
@@ -1008,6 +1010,7 @@
 				6E9734C322D4F0AA008863D0 /* GlyphRun.swift */,
 				6E9734C422D4F0AA008863D0 /* IntrinsicRun.swift */,
 				6E0DC2542A2BC129005DF90E /* IntrinsicRunSlice.swift */,
+				6E0DC2562A2DE6C8005DF90E /* JustifiedRun.swift */,
 				6E9734C522D4F0AA008863D0 /* LineResolver.swift */,
 				6E9734C922D4F0AA008863D0 /* ShapeResolver.swift */,
 				6E9734CA22D4F0AA008863D0 /* ShapingRunLocator.swift */,
@@ -2163,6 +2166,7 @@
 				6ECE495423638DA8007D8839 /* raster.c in Sources */,
 				6ECE495F23638DA8007D8839 /* sfnt.c in Sources */,
 				6ECE497F23638DA8007D8839 /* smooth.c in Sources */,
+				6E0DC2572A2DE6C8005DF90E /* JustifiedRun.swift in Sources */,
 				6ECE499223638DA8007D8839 /* truetype.c in Sources */,
 				6ECE49B323638DA8007D8839 /* type1.c in Sources */,
 				6ECE49BF23638DA8007D8839 /* type42.c in Sources */,

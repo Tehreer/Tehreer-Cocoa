@@ -22,6 +22,13 @@ protocol TextRunDrawing {
     func draw(with renderer: Renderer, in context: CGContext)
 }
 
+private struct ClusterRange {
+    var actualStart: Int
+    var actualEnd: Int
+    var glyphStart: Int
+    var glyphEnd: Int
+}
+
 struct DefaultTextRunDrawing: TextRunDrawing {
     let textRun: TextRun
 

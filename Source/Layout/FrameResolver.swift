@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2023 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -92,6 +92,14 @@ public class FrameResolver {
     /// is `nil`.
     public var truncationPlace: TruncationPlace? = nil
 
+    /// A boolean value that indicates whether or not to justify the lines in a frame. Its default
+    /// value is `false`.
+    public var isJustificationEnabled: Bool = false
+
+    /// The justification level which can range from `0.0` to `1.0`. A lower value increases the
+    /// tightness between words while a higher value decreases it. Its default value is `1.0`.
+    public var justificationLevel: CGFloat = 1.0
+
     /// The maximum number of lines that a frame should consist of.
     public var maxLines: Int? = nil
 
@@ -148,6 +156,7 @@ public class FrameResolver {
 
         resolveTruncation(context: &context, frameEnd: codeUnitRange.upperBound)
         resolveAlignments(context: &context)
+        resolveJustification(context: &context)
 
         let textFrame = ComposedFrame(string: typesetter.text.string,
                                       codeUnitRange: codeUnitRange.lowerBound ..< context.endIndex,
@@ -309,6 +318,7 @@ public class FrameResolver {
 
         // Update the properties of current line.
         textLine.origin = CGPoint(x: originX, y: originY)
+        textLine.intrinsicMargin = context.layoutWidth - context.lineExtent
         textLine.flushFactor = context.flushFactor
     }
 
@@ -434,6 +444,56 @@ public class FrameResolver {
 
             // Update the layout width to occupied width.
             context.layoutWidth = context.occupiedWidth
+        }
+    }
+
+    private func resolveJustification(context: inout FrameContext) {
+        guard isJustificationEnabled else { return }
+
+        let string = typesetter.text.string
+        let textLines = context.textLines
+        let lineCount = textLines.count
+
+        for i in 0 ..< lineCount {
+            let textLine = textLines[i]
+            let lineRange = textLine.codeUnitRange
+
+            // Skip the last line of paragraph if it's smaller in width.
+            if textLine.endIndex == string.endIndex || string[string.index(before: textLine.endIndex)] == "\n" {
+                continue
+            }
+
+            let justifiedLine = typesetter.makeJustifiedLine(
+                codeUnitRange: lineRange,
+                justificationFactor: 1.0,
+                justificationExtent: context.layoutWidth
+            )
+
+            let intrinsicMargin = textLine.intrinsicMargin
+            let flushFactor = textLine.flushFactor
+            let availableWidth = context.layoutWidth - intrinsicMargin
+            let alignedLeft = justifiedLine.penOffset(
+                forFlushFactor: flushFactor,
+                flushExtent: availableWidth
+            )
+            var marginalLeft: CGFloat = 0.0
+
+            let paragraphLevel = justifiedLine.paragraphLevel
+            if (paragraphLevel & 1) == 0 {
+                marginalLeft = intrinsicMargin
+            }
+
+            justifiedLine.origin.x = marginalLeft + alignedLeft
+            justifiedLine.origin.y = textLine.origin.y
+            justifiedLine.intrinsicMargin = textLine.intrinsicMargin
+            justifiedLine.flushFactor = textLine.flushFactor
+
+            // Setup the line metrics.
+            justifiedLine.ascent = textLine.ascent
+            justifiedLine.descent = textLine.descent
+            justifiedLine.leading = textLine.leading
+
+            context.textLines[i] = justifiedLine
         }
     }
 }

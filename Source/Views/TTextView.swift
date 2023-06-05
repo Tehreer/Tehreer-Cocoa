@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021 Muhammad Tayyab Akram
+// Copyright (C) 2021-2023 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ private class TextContext {
     var textColor: UIColor = .black
     var extraLineSpacing: CGFloat = .zero
     var lineHeightMultiplier: CGFloat = 1.0
+    var isJustificationEnabled: Bool = false
+    var justificationLevel: CGFloat = 1.0
 
     var typesetter: Typesetter?
     var textFrame: ComposedFrame?
@@ -101,6 +103,8 @@ private class FrameResolvingOperation: Operation {
         resolver.textAlignment = context.textAlignment
         resolver.extraLineSpacing = context.extraLineSpacing
         resolver.lineHeightMultiplier = context.lineHeightMultiplier
+        resolver.isJustificationEnabled = context.isJustificationEnabled
+        resolver.justificationLevel = context.justificationLevel
 
         return resolver
     }
@@ -331,6 +335,8 @@ open class TTextView: UIScrollView {
         context.textColor = textColor
         context.extraLineSpacing = extraLineSpacing
         context.lineHeightMultiplier = lineHeightMultiplier
+        context.isJustificationEnabled = isJustificationEnabled
+        context.justificationLevel = justificationLevel
         context.typesetter = typesetter
 
         var operations: [Operation] = []
@@ -656,6 +662,22 @@ open class TTextView: UIScrollView {
     /// The additional spacing is adjusted in such a way that text remains in the middle of the
     /// line.
     open var lineHeightMultiplier: CGFloat = 1.0 {
+        didSet {
+            setNeedsUpdateTextFrame()
+        }
+    }
+
+    /// A boolean value that indicates whether or not to justify the text lines. Its default value
+    /// is `false`.
+    open var isJustificationEnabled: Bool = false {
+        didSet {
+            setNeedsUpdateTextFrame()
+        }
+    }
+
+    /// The justification level which can range from `0.0` to `1.0`. A lower value increases the
+    /// tightness between words while a higher value decreases it. Its default value is `1.0`.
+    open var justificationLevel: CGFloat = 1.0 {
         didSet {
             setNeedsUpdateTextFrame()
         }

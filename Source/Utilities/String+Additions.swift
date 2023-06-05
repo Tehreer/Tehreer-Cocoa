@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2023 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -58,6 +58,25 @@ extension String {
         }
 
         return range.lowerBound
+    }
+
+    func nextSpace(in codeUnitRange: Range<Int>) -> Int {
+        let index = nextSpace(in: characterRange(forUTF16Range: codeUnitRange))
+        return utf16Index(forCharacterAt: index)
+    }
+
+    func nextSpace(in range: Range<String.Index>) -> String.Index {
+        var index = range.lowerBound
+
+        while index < range.upperBound {
+            if self[index].isWhitespace {
+                return index
+            }
+
+            index = self.index(after: index)
+        }
+
+        return range.upperBound
     }
 
     @inlinable

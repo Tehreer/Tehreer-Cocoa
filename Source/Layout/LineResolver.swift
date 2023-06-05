@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2023 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -322,7 +322,6 @@ struct LineResolver {
                 }
             }
 
-            let string = text.string
             let attrString = text as CFAttributedString
             let effectiveRange = CFRange(location: feasibleStart, length: feasibleEnd - feasibleStart)
             var spanRange = CFRange(location: feasibleStart, length: 0)
@@ -357,5 +356,93 @@ struct LineResolver {
             previousRun = intrinsicRun
             visualStart = feasibleEnd
         } while visualStart < visualEnd
+    }
+
+    func makeJustifiedLine(
+        codeUnitRange: Range<Int>,
+        justificationFactor: CGFloat,
+        justificationExtent: CGFloat
+    ) -> ComposedLine {
+        let string = text.string
+        let wordStart = string.leadingWhitespaceEnd(in: codeUnitRange)
+        let wordEnd = string.trailingWhitespaceStart(in: codeUnitRange)
+
+        let actualWidth = runs.measureCharacters(in: codeUnitRange)
+        let extraWidth = justificationExtent - actualWidth
+        let availableWidth = extraWidth * justificationFactor
+
+        let innerSpaceCount = computeSpaceCount(in: wordStart ..< wordEnd)
+        let spaceAddition = availableWidth / CGFloat(innerSpaceCount)
+
+        var lineRuns: [GlyphRun] = []
+        paragraphs.forEachLineRun(in: codeUnitRange) { bidiRun in
+            let runRange = bidiRun.codeUnitRange
+            appendVisualRuns(from: runRange.lowerBound, to: runRange.upperBound, in: &lineRuns)
+        }
+
+        for i in 0 ..< lineRuns.count {
+            let glyphRun = lineRuns[i]
+            let runRange = glyphRun.codeUnitRange
+            let textRun = glyphRun.textRun
+
+            var glyphAdvances = Array(glyphRun.glyphAdvances)
+
+            let runStart = max(wordStart, runRange.lowerBound)
+            let runEnd = min(wordEnd, runRange.upperBound)
+
+            var j = runStart
+            while j < runEnd {
+                let spaceStart = string.nextSpace(in: j ..< runEnd)
+                let spaceEnd = string.leadingWhitespaceEnd(in: spaceStart ..< runEnd)
+
+                j = spaceEnd
+
+                if spaceStart == spaceEnd {
+                    continue
+                }
+
+                let glyphRange = textRun.glyphRange(forCodeUnitRange: spaceStart ..< spaceEnd)
+                let glyphCount = glyphRange.count
+
+                let spaceCount = spaceEnd - spaceStart
+
+                let distribution = CGFloat(spaceCount) / CGFloat(glyphCount)
+                let advanceAddition = spaceAddition * distribution
+
+                for k in glyphRange {
+                    glyphAdvances[k] += advanceAddition
+                }
+            }
+
+            let justifiedAdvances = PrimitiveCollection(glyphAdvances)
+            let justifiedRun = JustifiedRun(textRun: textRun, justifiedAdvances: justifiedAdvances)
+
+            glyphRun.textRun = justifiedRun
+        }
+
+        let paragraphLevel = paragraphs.baseLevel(forCodeUnitAt: codeUnitRange.lowerBound)
+
+        return makeComposedLine(
+            string: string,
+            codeUnitRange: codeUnitRange,
+            visualRuns: lineRuns,
+            paragraphLevel: paragraphLevel
+        )
+    }
+
+    private func computeSpaceCount(in codeUnitRange: Range<Int>) -> Int {
+        let string = text.string
+        var spaceCount = 0
+
+        var i = codeUnitRange.lowerBound
+        while i < codeUnitRange.upperBound {
+            let spaceStart = string.nextSpace(in: i ..< codeUnitRange.upperBound)
+            let spaceEnd = string.leadingWhitespaceEnd(in: spaceStart ..< codeUnitRange.upperBound)
+
+            spaceCount += spaceEnd - spaceStart
+            i = spaceEnd + 1
+        }
+
+        return spaceCount
     }
 }
