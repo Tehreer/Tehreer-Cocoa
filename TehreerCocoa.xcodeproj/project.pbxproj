@@ -14,6 +14,7 @@
 		6E0DC2532A2A5F54005DF90E /* TextRunDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC2522A2A5F54005DF90E /* TextRunDrawing.swift */; };
 		6E0DC2552A2BC129005DF90E /* IntrinsicRunSlice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC2542A2BC129005DF90E /* IntrinsicRunSlice.swift */; };
 		6E0DC2572A2DE6C8005DF90E /* JustifiedRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC2562A2DE6C8005DF90E /* JustifiedRun.swift */; };
+		6E0DC2592A2F799F005DF90E /* Character+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC2582A2F799F005DF90E /* Character+Additions.swift */; };
 		6E10F26823A515C4008B6145 /* Patch.c in Sources */ = {isa = PBXBuildFile; fileRef = 6E10F26723A515C4008B6145 /* Patch.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		6E35D87423C3542A00716706 /* TruncationPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E35D87323C3542A00716706 /* TruncationPlace.swift */; };
 		6E35D87623C3576300716706 /* TokenResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E35D87523C3576300716706 /* TokenResolver.swift */; };
@@ -143,6 +144,7 @@
 		6E0DC2522A2A5F54005DF90E /* TextRunDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRunDrawing.swift; sourceTree = "<group>"; };
 		6E0DC2542A2BC129005DF90E /* IntrinsicRunSlice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrinsicRunSlice.swift; sourceTree = "<group>"; };
 		6E0DC2562A2DE6C8005DF90E /* JustifiedRun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JustifiedRun.swift; sourceTree = "<group>"; };
+		6E0DC2582A2F799F005DF90E /* Character+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Character+Additions.swift"; sourceTree = "<group>"; };
 		6E10F26723A515C4008B6145 /* Patch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Patch.c; sourceTree = "<group>"; };
 		6E35D87323C3542A00716706 /* TruncationPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruncationPlace.swift; sourceTree = "<group>"; };
 		6E35D87523C3576300716706 /* TokenResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResolver.swift; sourceTree = "<group>"; };
@@ -1038,6 +1040,7 @@
 			isa = PBXGroup;
 			children = (
 				6E9734D222D4F0AA008863D0 /* CodeUnitView+Additions.swift */,
+				6E0DC2582A2F799F005DF90E /* Character+Additions.swift */,
 				6E9734D422D4F0AA008863D0 /* String+Additions.swift */,
 				6E9734D122D4F0AA008863D0 /* Clusters.swift */,
 				6E9734D322D4F0AA008863D0 /* LRUCache.swift */,
@@ -2251,6 +2254,7 @@
 				6E0DC2552A2BC129005DF90E /* IntrinsicRunSlice.swift in Sources */,
 				6E97351D22D4F0AA008863D0 /* BidiAlgorithm.swift in Sources */,
 				6E97351E22D4F0AA008863D0 /* BidiBuffer.swift in Sources */,
+				6E0DC2592A2F799F005DF90E /* Character+Additions.swift in Sources */,
 				6E97351F22D4F0AA008863D0 /* BidiLine.swift in Sources */,
 				6E97352022D4F0AA008863D0 /* BidiParagraph.swift in Sources */,
 				6E97352122D4F0AA008863D0 /* BidiRun.swift in Sources */,

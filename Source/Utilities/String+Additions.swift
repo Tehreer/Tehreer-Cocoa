@@ -29,7 +29,7 @@ extension String {
         var index = range.lowerBound
 
         while index < range.upperBound {
-            if !self[index].isWhitespace {
+            if !self[index].isSingleWhitespace {
                 return index
             }
 
@@ -52,7 +52,7 @@ extension String {
             let next = index
             index = self.index(before: next)
 
-            if !self[index].isWhitespace {
+            if !self[index].isSingleWhitespace {
                 return next
             }
         }
@@ -69,7 +69,7 @@ extension String {
         var index = range.lowerBound
 
         while index < range.upperBound {
-            if self[index].isWhitespace {
+            if self[index].isSingleWhitespace {
                 return index
             }
 
