@@ -627,24 +627,18 @@
 		6ECE4B702363928E007D8839 /* ftcalc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ftcalc.c; sourceTree = "<group>"; };
 		6ECE4B712363928F007D8839 /* ftutil.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ftutil.c; sourceTree = "<group>"; };
 		6EE0A4492305C6D20061D4EB /* TypefaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypefaceManager.swift; sourceTree = "<group>"; };
-		7D15805D2608E91000D2472D /* hb-ot-shape-complex-arabic-joining-list.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-arabic-joining-list.hh"; sourceTree = "<group>"; };
 		7D15805E2608E91000D2472D /* hb-buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-buffer.h"; sourceTree = "<group>"; };
 		7D15805F2608E91000D2472D /* hb-ot-var-gvar-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-var-gvar-table.hh"; sourceTree = "<group>"; };
 		7D1580602608E91000D2472D /* hb-ot-post-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-post-table.hh"; sourceTree = "<group>"; };
-		7D1580622608E91000D2472D /* hb-ot-shape-complex-indic-machine.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-indic-machine.hh"; sourceTree = "<group>"; };
 		7D1580632608E91000D2472D /* hb-open-type.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-open-type.hh"; sourceTree = "<group>"; };
 		7D1580642608E91000D2472D /* hb-subset-plan.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-subset-plan.cc"; sourceTree = "<group>"; };
 		7D1580652608E91000D2472D /* hb-ucd.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ucd.cc"; sourceTree = "<group>"; };
 		7D1580662608E91000D2472D /* hb-aat-layout-common.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-aat-layout-common.hh"; sourceTree = "<group>"; };
-		7D1580672608E91000D2472D /* hb-ot-shape-complex-use-machine.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-use-machine.hh"; sourceTree = "<group>"; };
 		7D1580682608E91000D2472D /* hb-ot-layout-base-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-layout-base-table.hh"; sourceTree = "<group>"; };
 		7D1580692608E91000D2472D /* hb-ot-head-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-head-table.hh"; sourceTree = "<group>"; };
 		7D15806A2608E91000D2472D /* hb-set.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-set.h"; sourceTree = "<group>"; };
-		7D15806C2608E91000D2472D /* hb-ot-shape-complex-arabic-win1256.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-arabic-win1256.hh"; sourceTree = "<group>"; };
-		7D15806D2608E91000D2472D /* hb-ot-shape-complex-khmer.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-shape-complex-khmer.cc"; sourceTree = "<group>"; };
 		7D15806E2608E91000D2472D /* hb-shaper-list.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-shaper-list.hh"; sourceTree = "<group>"; };
 		7D15806F2608E91000D2472D /* hb-face.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-face.h"; sourceTree = "<group>"; };
-		7D1580702608E91000D2472D /* hb-ot-shape-complex-syllabic.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-syllabic.hh"; sourceTree = "<group>"; };
 		7D1580722608E91000D2472D /* hb-buffer.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-buffer.hh"; sourceTree = "<group>"; };
 		7D1580732608E91000D2472D /* hb-ot-var.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-var.cc"; sourceTree = "<group>"; };
 		7D1580742608E91000D2472D /* hb-cff-interp-common.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-cff-interp-common.hh"; sourceTree = "<group>"; };
@@ -673,24 +667,19 @@
 		7D1580942608E91100D2472D /* hb-cff-interp-cs-common.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-cff-interp-cs-common.hh"; sourceTree = "<group>"; };
 		7D1580952608E91100D2472D /* hb-kern.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-kern.hh"; sourceTree = "<group>"; };
 		7D1580962608E91100D2472D /* hb-subset-cff-common.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-subset-cff-common.hh"; sourceTree = "<group>"; };
-		7D1580982608E91100D2472D /* hb-ot-shape-complex-default.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-shape-complex-default.cc"; sourceTree = "<group>"; };
 		7D1580992608E91100D2472D /* hb-face.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-face.cc"; sourceTree = "<group>"; };
 		7D15809A2608E91100D2472D /* hb-coretext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-coretext.h"; sourceTree = "<group>"; };
 		7D15809B2608E91100D2472D /* hb-ot-cff1-table.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-cff1-table.cc"; sourceTree = "<group>"; };
 		7D15809C2608E91100D2472D /* hb-aat-layout-just-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-aat-layout-just-table.hh"; sourceTree = "<group>"; };
-		7D15809D2608E91100D2472D /* hb-ot-shape-complex-khmer-machine.rl */ = {isa = PBXFileReference; lastKnownFileType = text; path = "hb-ot-shape-complex-khmer-machine.rl"; sourceTree = "<group>"; };
-		7D15809E2608E91100D2472D /* hb-ot-color-colr-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-color-colr-table.hh"; sourceTree = "<group>"; };
 		7D15809F2608E91100D2472D /* hb-serialize.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-serialize.hh"; sourceTree = "<group>"; };
 		7D1580A02608E91100D2472D /* hb-deprecated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-deprecated.h"; sourceTree = "<group>"; };
 		7D1580A12608E91100D2472D /* hb-subset-cff1.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-subset-cff1.cc"; sourceTree = "<group>"; };
-		7D1580A22608E91100D2472D /* hb-ot-shape-complex-arabic-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-arabic-table.hh"; sourceTree = "<group>"; };
 		7D1580A52608E91100D2472D /* hb-draw.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-draw.hh"; sourceTree = "<group>"; };
 		7D1580A62608E91100D2472D /* hb-aat-layout-kerx-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-aat-layout-kerx-table.hh"; sourceTree = "<group>"; };
 		7D1580A72608E91100D2472D /* hb-ot-vorg-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-vorg-table.hh"; sourceTree = "<group>"; };
 		7D1580A82608E91100D2472D /* hb-blob.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-blob.hh"; sourceTree = "<group>"; };
 		7D1580A92608E91100D2472D /* hb-ot-font.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-font.cc"; sourceTree = "<group>"; };
 		7D1580AB2608E91100D2472D /* hb-unicode.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-unicode.hh"; sourceTree = "<group>"; };
-		7D1580AC2608E91100D2472D /* hb-ot-shape-complex-indic-table.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-shape-complex-indic-table.cc"; sourceTree = "<group>"; };
 		7D1580AE2608E91100D2472D /* hb-ot-kern-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-kern-table.hh"; sourceTree = "<group>"; };
 		7D1580AF2608E91100D2472D /* hb-subset.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-subset.cc"; sourceTree = "<group>"; };
 		7D1580B02608E91100D2472D /* hb-ot-shape-normalize.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-normalize.hh"; sourceTree = "<group>"; };
@@ -718,10 +707,8 @@
 		7D1580CF2608E91100D2472D /* hb-static.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-static.cc"; sourceTree = "<group>"; };
 		7D1580D02608E91100D2472D /* hb-aat-layout-morx-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-aat-layout-morx-table.hh"; sourceTree = "<group>"; };
 		7D1580D22608E91100D2472D /* hb-cff2-interp-cs.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-cff2-interp-cs.hh"; sourceTree = "<group>"; };
-		7D1580D32608E91100D2472D /* hb-ot-shape-complex-khmer-machine.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-khmer-machine.hh"; sourceTree = "<group>"; };
 		7D1580D42608E91100D2472D /* hb-ot-name.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-ot-name.h"; sourceTree = "<group>"; };
 		7D1580D52608E91100D2472D /* hb-algs.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-algs.hh"; sourceTree = "<group>"; };
-		7D1580D62608E91100D2472D /* hb-ot-shape-complex-thai.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-shape-complex-thai.cc"; sourceTree = "<group>"; };
 		7D1580D72608E91100D2472D /* hb-ot-hhea-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-hhea-table.hh"; sourceTree = "<group>"; };
 		7D1580D92608E91100D2472D /* hb-ot-var-mvar-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-var-mvar-table.hh"; sourceTree = "<group>"; };
 		7D1580DB2608E91100D2472D /* hb-style.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-style.cc"; sourceTree = "<group>"; };
@@ -732,9 +719,7 @@
 		7D1580E02608E91100D2472D /* hb-aat-layout-opbd-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-aat-layout-opbd-table.hh"; sourceTree = "<group>"; };
 		7D1580E12608E91100D2472D /* hb-ot-os2-unicode-ranges.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-os2-unicode-ranges.hh"; sourceTree = "<group>"; };
 		7D1580E32608E91100D2472D /* hb-pool.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-pool.hh"; sourceTree = "<group>"; };
-		7D1580E42608E91100D2472D /* hb-ot-shape-complex-syllabic.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-shape-complex-syllabic.cc"; sourceTree = "<group>"; };
 		7D1580E62608E91100D2472D /* hb-ot-hdmx-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-hdmx-table.hh"; sourceTree = "<group>"; };
-		7D1580E72608E91100D2472D /* hb-ot-shape-complex-khmer.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-khmer.hh"; sourceTree = "<group>"; };
 		7D1580E82608E91100D2472D /* hb-ft.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ft.cc"; sourceTree = "<group>"; };
 		7D1580E92608E91100D2472D /* hb-ot-cff-common.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-cff-common.hh"; sourceTree = "<group>"; };
 		7D1580EA2608E91100D2472D /* hb-ot-layout-gdef-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-layout-gdef-table.hh"; sourceTree = "<group>"; };
@@ -753,27 +738,18 @@
 		7D1580FD2608E91100D2472D /* hb-ot-meta.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-ot-meta.h"; sourceTree = "<group>"; };
 		7D1580FF2608E91100D2472D /* hb-ot-font.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-ot-font.h"; sourceTree = "<group>"; };
 		7D1581002608E91100D2472D /* hb-ot-face-table-list.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-face-table-list.hh"; sourceTree = "<group>"; };
-		7D1581012608E91100D2472D /* hb-ot-shape-complex-use.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-shape-complex-use.cc"; sourceTree = "<group>"; };
-		7D1581032608E91100D2472D /* hb-ot-color-sbix-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-color-sbix-table.hh"; sourceTree = "<group>"; };
-		7D1581042608E91100D2472D /* hb-ot-shape-complex-indic.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-indic.hh"; sourceTree = "<group>"; };
 		7D1581052608E91100D2472D /* hb-ot-metrics.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-metrics.cc"; sourceTree = "<group>"; };
 		7D1581062608E91100D2472D /* hb-unicode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-unicode.h"; sourceTree = "<group>"; };
 		7D1581072608E91100D2472D /* hb-unicode-emoji-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-unicode-emoji-table.hh"; sourceTree = "<group>"; };
 		7D1581092608E91100D2472D /* hb-aat-layout-feat-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-aat-layout-feat-table.hh"; sourceTree = "<group>"; };
 		7D15810A2608E91100D2472D /* hb-object.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-object.hh"; sourceTree = "<group>"; };
-		7D15810B2608E91100D2472D /* hb-ot-shape-complex-myanmar.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-myanmar.hh"; sourceTree = "<group>"; };
 		7D15810C2608E91100D2472D /* hb-ot-gasp-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-gasp-table.hh"; sourceTree = "<group>"; };
-		7D15810D2608E91100D2472D /* hb-ot-shape-complex-use-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-use-table.hh"; sourceTree = "<group>"; };
-		7D15810E2608E91100D2472D /* hb-ot-shape-complex-arabic.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-shape-complex-arabic.cc"; sourceTree = "<group>"; };
 		7D1581102608E91100D2472D /* hb-buffer-deserialize-json.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-buffer-deserialize-json.hh"; sourceTree = "<group>"; };
 		7D1581112608E91100D2472D /* hb-ot-shape.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-ot-shape.h"; sourceTree = "<group>"; };
 		7D1581122608E91100D2472D /* hb-vector.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-vector.hh"; sourceTree = "<group>"; };
-		7D1581132608E91100D2472D /* hb-ot-shape-complex-myanmar-machine.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-myanmar-machine.hh"; sourceTree = "<group>"; };
-		7D1581142608E91100D2472D /* hb-ot-shape-complex-arabic-fallback.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-arabic-fallback.hh"; sourceTree = "<group>"; };
 		7D1581152608E91100D2472D /* hb-debug.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-debug.hh"; sourceTree = "<group>"; };
 		7D1581162608E91100D2472D /* hb-config.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-config.hh"; sourceTree = "<group>"; };
 		7D1581172608E91100D2472D /* hb-ot-tag-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-tag-table.hh"; sourceTree = "<group>"; };
-		7D1581182608E91100D2472D /* hb-ot-shape-complex-vowel-constraints.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-vowel-constraints.hh"; sourceTree = "<group>"; };
 		7D15811A2608E91100D2472D /* hb-shaper.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-shaper.hh"; sourceTree = "<group>"; };
 		7D15811B2608E91100D2472D /* hb-aat-layout.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-aat-layout.hh"; sourceTree = "<group>"; };
 		7D15811C2608E91100D2472D /* hb-iter.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-iter.hh"; sourceTree = "<group>"; };
@@ -792,11 +768,8 @@
 		7D15812B2608E91100D2472D /* hb-ot-layout-common.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-layout-common.hh"; sourceTree = "<group>"; };
 		7D15812C2608E91100D2472D /* hb-version.h.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = "hb-version.h.in"; sourceTree = "<group>"; };
 		7D15812D2608E91100D2472D /* hb-subset-input.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-subset-input.hh"; sourceTree = "<group>"; };
-		7D15812E2608E91100D2472D /* hb-ot-color-cbdt-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-color-cbdt-table.hh"; sourceTree = "<group>"; };
-		7D15812F2608E91100D2472D /* hb-ot-color-cpal-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-color-cpal-table.hh"; sourceTree = "<group>"; };
 		7D1581302608E91100D2472D /* hb-subset-cff2.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-subset-cff2.hh"; sourceTree = "<group>"; };
 		7D1581312608E91100D2472D /* hb-utf.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-utf.hh"; sourceTree = "<group>"; };
-		7D1581322608E91100D2472D /* hb-ot-shape-complex-hebrew.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-shape-complex-hebrew.cc"; sourceTree = "<group>"; };
 		7D1581332608E91100D2472D /* hb-map.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-map.cc"; sourceTree = "<group>"; };
 		7D1581342608E91100D2472D /* hb-ot-var-fvar-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-var-fvar-table.hh"; sourceTree = "<group>"; };
 		7D1581362608E91100D2472D /* hb-font.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-font.cc"; sourceTree = "<group>"; };
@@ -807,7 +780,6 @@
 		7D15813B2608E91100D2472D /* hb-shaper.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-shaper.cc"; sourceTree = "<group>"; };
 		7D15813C2608E91100D2472D /* hb-ot-layout-jstf-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-layout-jstf-table.hh"; sourceTree = "<group>"; };
 		7D15813D2608E91100D2472D /* hb-aat-layout.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-aat-layout.cc"; sourceTree = "<group>"; };
-		7D15813E2608E91100D2472D /* hb-ot-shape-complex-myanmar-machine.rl */ = {isa = PBXFileReference; lastKnownFileType = text; path = "hb-ot-shape-complex-myanmar-machine.rl"; sourceTree = "<group>"; };
 		7D1581402608E91100D2472D /* hb-mutex.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-mutex.hh"; sourceTree = "<group>"; };
 		7D1581412608E91100D2472D /* hb-ot-os2-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-os2-table.hh"; sourceTree = "<group>"; };
 		7D1581422608E91100D2472D /* hb-buffer-deserialize-json.rl */ = {isa = PBXFileReference; lastKnownFileType = text; path = "hb-buffer-deserialize-json.rl"; sourceTree = "<group>"; };
@@ -825,7 +797,6 @@
 		7D1581502608E91100D2472D /* hb-gdi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-gdi.h"; sourceTree = "<group>"; };
 		7D1581532608E91100D2472D /* hb-font.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-font.hh"; sourceTree = "<group>"; };
 		7D1581542608E91100D2472D /* hb-ot-maxp-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-maxp-table.hh"; sourceTree = "<group>"; };
-		7D1581552608E91100D2472D /* hb-buffer-deserialize-text.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-buffer-deserialize-text.hh"; sourceTree = "<group>"; };
 		7D1581562608E91100D2472D /* hb-map.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-map.hh"; sourceTree = "<group>"; };
 		7D1581572608E91100D2472D /* hb-subset-cff2.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-subset-cff2.cc"; sourceTree = "<group>"; };
 		7D1581582608E91100D2472D /* hb-array.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-array.hh"; sourceTree = "<group>"; };
@@ -833,22 +804,17 @@
 		7D15815A2608E91100D2472D /* hb-set.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-set.cc"; sourceTree = "<group>"; };
 		7D15815B2608E91100D2472D /* hb-shape-plan.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-shape-plan.hh"; sourceTree = "<group>"; };
 		7D15815C2608E91100D2472D /* hb-shape.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-shape.cc"; sourceTree = "<group>"; };
-		7D15815D2608E91100D2472D /* hb-ot-shape-complex-hangul.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-shape-complex-hangul.cc"; sourceTree = "<group>"; };
 		7D15815E2608E91100D2472D /* hb-null.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-null.hh"; sourceTree = "<group>"; };
 		7D15815F2608E91100D2472D /* hb-ot-meta-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-meta-table.hh"; sourceTree = "<group>"; };
 		7D1581602608E91100D2472D /* hb-ot-cff2-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-cff2-table.hh"; sourceTree = "<group>"; };
 		7D1581612608E91100D2472D /* hb-ot-name.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-name.cc"; sourceTree = "<group>"; };
-		7D1581632608E91100D2472D /* hb-ot-shape-complex.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex.hh"; sourceTree = "<group>"; };
 		7D1581642608E91100D2472D /* hb-number.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-number.hh"; sourceTree = "<group>"; };
 		7D1581652608E91100D2472D /* hb-graphite2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-graphite2.h"; sourceTree = "<group>"; };
 		7D1581662608E91100D2472D /* hb-set-digest.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-set-digest.hh"; sourceTree = "<group>"; };
 		7D1581672608E91100D2472D /* hb-ot-metrics.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-metrics.hh"; sourceTree = "<group>"; };
-		7D1581682608E91100D2472D /* hb-ot-shape-complex-indic.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-shape-complex-indic.cc"; sourceTree = "<group>"; };
 		7D1581692608E91100D2472D /* hb-open-file.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-open-file.hh"; sourceTree = "<group>"; };
 		7D15816A2608E91100D2472D /* hb-machinery.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-machinery.hh"; sourceTree = "<group>"; };
-		7D15816B2608E91100D2472D /* hb-ot-shape-complex-myanmar.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-shape-complex-myanmar.cc"; sourceTree = "<group>"; };
 		7D15816C2608E91100D2472D /* hb-subset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-subset.h"; sourceTree = "<group>"; };
-		7D15816D2608E91100D2472D /* hb-ot-color-svg-table.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-color-svg-table.hh"; sourceTree = "<group>"; };
 		7D15816E2608E91100D2472D /* hb-gobject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-gobject.h"; sourceTree = "<group>"; };
 		7D15816F2608E91100D2472D /* hb-ot-name-language-static.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-name-language-static.hh"; sourceTree = "<group>"; };
 		7D1581702608E91100D2472D /* hb-sanitize.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-sanitize.hh"; sourceTree = "<group>"; };
@@ -857,8 +823,6 @@
 		7D1581732608E91100D2472D /* hb-ot-math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-ot-math.h"; sourceTree = "<group>"; };
 		7D1581752608E91100D2472D /* hb-ot-math.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-math.cc"; sourceTree = "<group>"; };
 		7D1581762608E91100D2472D /* hb-ft.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hb-ft.h"; sourceTree = "<group>"; };
-		7D1581772608E91100D2472D /* hb-ot-shape-complex-arabic.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-ot-shape-complex-arabic.hh"; sourceTree = "<group>"; };
-		7D1581782608E91100D2472D /* hb-ot-shape-complex-vowel-constraints.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "hb-ot-shape-complex-vowel-constraints.cc"; sourceTree = "<group>"; };
 		7D1581792608E91100D2472D /* hb-shaper-impl.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "hb-shaper-impl.hh"; sourceTree = "<group>"; };
 		7D18BE5925ECFDEF00F4412B /* UIColor+FTColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+FTColor.swift"; sourceTree = "<group>"; };
 		7D18BE6125ED2D0100F4412B /* GlyphAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphAttributes.swift; sourceTree = "<group>"; };
@@ -1853,7 +1817,6 @@
 				7D1580A82608E91100D2472D /* hb-blob.hh */,
 				7D1581102608E91100D2472D /* hb-buffer-deserialize-json.hh */,
 				7D1581422608E91100D2472D /* hb-buffer-deserialize-json.rl */,
-				7D1581552608E91100D2472D /* hb-buffer-deserialize-text.hh */,
 				7D1580B22608E91100D2472D /* hb-buffer-serialize.cc */,
 				7D1580F12608E91100D2472D /* hb-buffer.cc */,
 				7D15805E2608E91000D2472D /* hb-buffer.h */,
@@ -1915,11 +1878,6 @@
 				7D1580FA2608E91100D2472D /* hb-ot-cff2-table.cc */,
 				7D1581602608E91100D2472D /* hb-ot-cff2-table.hh */,
 				7D15814B2608E91100D2472D /* hb-ot-cmap-table.hh */,
-				7D15812E2608E91100D2472D /* hb-ot-color-cbdt-table.hh */,
-				7D15809E2608E91100D2472D /* hb-ot-color-colr-table.hh */,
-				7D15812F2608E91100D2472D /* hb-ot-color-cpal-table.hh */,
-				7D1581032608E91100D2472D /* hb-ot-color-sbix-table.hh */,
-				7D15816D2608E91100D2472D /* hb-ot-color-svg-table.hh */,
 				7D1580902608E91100D2472D /* hb-ot-color.cc */,
 				7D1580F92608E91100D2472D /* hb-ot-color.h */,
 				7D15807C2608E91100D2472D /* hb-ot-deprecated.h */,
@@ -1966,36 +1924,6 @@
 				7D1580E12608E91100D2472D /* hb-ot-os2-unicode-ranges.hh */,
 				7D1580772608E91000D2472D /* hb-ot-post-macroman.hh */,
 				7D1580602608E91000D2472D /* hb-ot-post-table.hh */,
-				7D1581142608E91100D2472D /* hb-ot-shape-complex-arabic-fallback.hh */,
-				7D15805D2608E91000D2472D /* hb-ot-shape-complex-arabic-joining-list.hh */,
-				7D1580A22608E91100D2472D /* hb-ot-shape-complex-arabic-table.hh */,
-				7D15806C2608E91000D2472D /* hb-ot-shape-complex-arabic-win1256.hh */,
-				7D15810E2608E91100D2472D /* hb-ot-shape-complex-arabic.cc */,
-				7D1581772608E91100D2472D /* hb-ot-shape-complex-arabic.hh */,
-				7D1580982608E91100D2472D /* hb-ot-shape-complex-default.cc */,
-				7D15815D2608E91100D2472D /* hb-ot-shape-complex-hangul.cc */,
-				7D1581322608E91100D2472D /* hb-ot-shape-complex-hebrew.cc */,
-				7D1580622608E91000D2472D /* hb-ot-shape-complex-indic-machine.hh */,
-				7D1580AC2608E91100D2472D /* hb-ot-shape-complex-indic-table.cc */,
-				7D1581682608E91100D2472D /* hb-ot-shape-complex-indic.cc */,
-				7D1581042608E91100D2472D /* hb-ot-shape-complex-indic.hh */,
-				7D1580D32608E91100D2472D /* hb-ot-shape-complex-khmer-machine.hh */,
-				7D15809D2608E91100D2472D /* hb-ot-shape-complex-khmer-machine.rl */,
-				7D15806D2608E91000D2472D /* hb-ot-shape-complex-khmer.cc */,
-				7D1580E72608E91100D2472D /* hb-ot-shape-complex-khmer.hh */,
-				7D1581132608E91100D2472D /* hb-ot-shape-complex-myanmar-machine.hh */,
-				7D15813E2608E91100D2472D /* hb-ot-shape-complex-myanmar-machine.rl */,
-				7D15816B2608E91100D2472D /* hb-ot-shape-complex-myanmar.cc */,
-				7D15810B2608E91100D2472D /* hb-ot-shape-complex-myanmar.hh */,
-				7D1580E42608E91100D2472D /* hb-ot-shape-complex-syllabic.cc */,
-				7D1580702608E91000D2472D /* hb-ot-shape-complex-syllabic.hh */,
-				7D1580D62608E91100D2472D /* hb-ot-shape-complex-thai.cc */,
-				7D1580672608E91000D2472D /* hb-ot-shape-complex-use-machine.hh */,
-				7D15810D2608E91100D2472D /* hb-ot-shape-complex-use-table.hh */,
-				7D1581012608E91100D2472D /* hb-ot-shape-complex-use.cc */,
-				7D1581782608E91100D2472D /* hb-ot-shape-complex-vowel-constraints.cc */,
-				7D1581182608E91100D2472D /* hb-ot-shape-complex-vowel-constraints.hh */,
-				7D1581632608E91100D2472D /* hb-ot-shape-complex.hh */,
 				7D1580EF2608E91100D2472D /* hb-ot-shape-fallback.cc */,
 				7D15807A2608E91100D2472D /* hb-ot-shape-fallback.hh */,
 				7D1580832608E91100D2472D /* hb-ot-shape-normalize.cc */,
