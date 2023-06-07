@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021 Muhammad Tayyab Akram
+// Copyright (C) 2021-2023 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ private struct Attribute: Codable {
 }
 
 class TextViewController: UIViewController {
-    @IBOutlet private weak var textView: TTextView!
+    @IBOutlet private weak var textView: QuranTextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +39,10 @@ class TextViewController: UIViewController {
         textView.textSize = 36.0
         textView.textAlignment = .center
         textView.attributedText = parseSurah()
-        textView.lineHeightMultiplier = 0.75
+        textView.lineHeightMultiplier = 0.9
+        textView.isJustificationEnabled = true
+        textView.separatorColor = .gray
+        textView.highlightingColor = .highlight
         textView.contentInset = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
     }
 
@@ -52,6 +55,7 @@ class TextViewController: UIViewController {
         var bismillah = true
 
         for ayah in ayahs {
+            let ayahStart = surah.length
             let text = NSMutableAttributedString(string: ayah.text)
 
             for attr in ayah.attributes {
@@ -62,7 +66,12 @@ class TextViewController: UIViewController {
             }
 
             surah.append(text)
-            surah.mutableString.append(bismillah ? "\n" : "      ")
+            let ayahEnd = surah.length
+
+            surah.mutableString.append(bismillah ? "\n" : "  ")
+
+            let ayahRange = NSMakeRange(ayahStart, ayahEnd - ayahStart)
+            surah.addAttribute(.ayah, value: true, range: ayahRange)
 
             bismillah = false
         }
