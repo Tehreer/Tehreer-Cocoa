@@ -30,7 +30,7 @@ private class TextContext {
     var lineHeightMultiplier: CGFloat = 1.0
     var isJustificationEnabled: Bool = false
     var justificationLevel: CGFloat = 1.0
-
+    var separatorColor: UIColor?
     var typesetter: Typesetter?
     var textFrame: ComposedFrame?
 }
@@ -177,6 +177,15 @@ private class LineBoxesOperation: Operation {
 
             var boundingBox = textLine.computeBoundingBox(with: renderer)
             boundingBox = boundingBox.offsetBy(dx: textLine.origin.x, dy: textLine.origin.y)
+
+            boundingBox = boundingBox.union(
+                CGRect(
+                    x: 0.0,
+                    y: textLine.origin.y - textLine.ascent,
+                    width: context.layoutWidth,
+                    height: textLine.height
+                )
+            )
 
             lineBoxes.append(boundingBox)
 
@@ -337,6 +346,7 @@ open class TTextView: UIScrollView {
         context.lineHeightMultiplier = lineHeightMultiplier
         context.isJustificationEnabled = isJustificationEnabled
         context.justificationLevel = justificationLevel
+        context.separatorColor = separatorColor
         context.typesetter = typesetter
 
         var operations: [Operation] = []
@@ -467,6 +477,9 @@ open class TTextView: UIScrollView {
                 lineView.line = textLine
                 lineView.frame = lineBoxes[index]
             }
+
+            lineView.layoutWidth = layoutWidth
+            lineView.separatorColor = separatorColor
 
             if let previousView = previousView {
                 insertSubview(lineView, aboveSubview: previousView)
@@ -723,6 +736,14 @@ open class TTextView: UIScrollView {
     /// The stroke miter limit in pixels. This is used to control the behavior of miter joins when
     /// the joins angle is sharp.
     open var strokeMiter: CGFloat = 1.0 {
+        didSet {
+            updateLineColors()
+        }
+    }
+
+    /// The color to display a separator line below each rendered text line. Its default value is
+    /// `nil`.
+    open var separatorColor: UIColor? {
         didSet {
             updateLineColors()
         }
