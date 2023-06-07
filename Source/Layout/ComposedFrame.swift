@@ -128,7 +128,7 @@ public class ComposedFrame {
         let selectionPath = CGMutablePath()
 
         let firstIndex = indexOfLine(forCodeUnitAt: codeUnitRange.lowerBound)
-        let lastIndex = indexOfLine(forCodeUnitAt: codeUnitRange.upperBound)
+        let lastIndex = indexOfLine(forCodeUnitAt: codeUnitRange.upperBound - 1)
 
         let firstLine = lines[firstIndex]
         let lastLine = lines[lastIndex]
