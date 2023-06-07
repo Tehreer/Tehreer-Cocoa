@@ -114,7 +114,9 @@ extension TextRun {
         let lastIndex = range.upperBound - offset
 
         let caretUtils = CaretUtils(caretEdges: caretEdges, isRTL: isRTL)
-        return caretUtils.indexOfElement(at: distance, inRange: firstIndex ... lastIndex)
+        let elementIndex = caretUtils.indexOfElement(at: distance,inRange: firstIndex ... lastIndex)
+
+        return elementIndex + codeUnitRange.lowerBound
     }
 
     func computeBoundingBox(forGlyphRange glyphRange: Range<Int>, with renderer: Renderer) -> CGRect {
