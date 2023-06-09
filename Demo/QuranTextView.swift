@@ -92,20 +92,24 @@ class QuranTextView: TTextView {
     }
 
     private func ayah(at codeUnitIndex: Int) -> Ayah? {
-        guard let attrText = attributedText else {
+        guard let attributedText = attributedText else {
             return nil
         }
 
-        var spanRange = NSRange(location: 0, length: 0)
-        let attribute = attrText.attribute(.ayah, at: codeUnitIndex,
-                                           longestEffectiveRange: &spanRange,
-                                           in: NSRange(location: 0, length: attrText.length))
+        var attributeRange = NSRange(location: 0, length: 0)
+        let attributeValue = attributedText.attribute(
+            .ayah,
+            at: codeUnitIndex,
+            longestEffectiveRange: &attributeRange,
+            in: NSRange(location: 0, length: attributedText.length)
+        )
 
-        if let range = Range<String.Index>(spanRange, in: attrText.string) {
-            return Ayah(range: range)
+        guard attributeValue != nil,
+              let range = Range(attributeRange, in: attributedText.string) else {
+            return nil
         }
 
-        return nil
+        return Ayah(range: range)
     }
 
     private func ayah(at position: CGPoint) -> Ayah? {
