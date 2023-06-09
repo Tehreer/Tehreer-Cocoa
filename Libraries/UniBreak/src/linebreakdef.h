@@ -49,6 +49,9 @@
  * @author  Petr Filipsky
  */
 
+#ifndef LINEBREAKDEF_H
+#define LINEBREAKDEF_H
+
 #include "unibreakdef.h"
 
 /**
@@ -111,6 +114,12 @@ enum LineBreakClass
     LBP_XX          /**< Unknown */
 };
 
+enum BreakOutputType
+{
+    LBOT_PER_CODE_UNIT,
+    LBOT_PER_CODE_POINT
+};
+
 /**
  * Struct for entries of line break properties.  The array of the
  * entries \e must be sorted.
@@ -152,7 +161,9 @@ struct LineBreakContext
 };
 
 /* Declarations */
-extern const struct LineBreakProperties lb_prop_default[];
+extern const struct LineBreakProperties lb_prop_supplementary[];
+extern const unsigned int lb_prop_supplementary_len;
+extern const char lb_prop_bmp[];
 extern const struct LineBreakPropertiesLang lb_prop_lang_map[];
 
 /* Function Prototype */
@@ -163,9 +174,12 @@ void lb_init_break_context(
 int lb_process_next_char(
         struct LineBreakContext *lbpCtx,
         utf32_t ch);
-void set_linebreaks(
+size_t set_linebreaks(
         const void *s,
         size_t len,
         const char *lang,
+        enum BreakOutputType outputType,
         char *brks,
         get_next_char_t get_next_char);
+
+#endif /* LINEBREAKDEF_H */

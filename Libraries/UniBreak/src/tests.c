@@ -180,27 +180,22 @@ int main(int argc, char *argv[])
 
         testsTotal++;
 
-        int linePrinted = 0;
         for (i = 0; i <= len; i++)
         {
             if ((testType == TEST_TYPE_LINE) &&
-                (breaksActual[i] == LINEBREAK_ALLOWBREAK))
+                (breaksActual[i] == LINEBREAK_ALLOWBREAK ||
+                 breaksActual[i] == LINEBREAK_INDETERMINATE))
             {
                 /* The Unicode test data doesn't differentiate between
-                 * the two, so neither should we. */
+                 * these states, so neither should we. */
                 breaksActual[i] = LINEBREAK_MUSTBREAK;
             }
 
             if (breaksActual[i] != breaksDesired[i])
             {
-                if (!linePrinted)
-                {
-                    testsFailed++;
-                    printf("Issues in line %d:\n", linenumber);
-                    printf("\t%s", line);
-                }
-                printf("\tPosition %d: expected %d got %d\n", i,
-                       breaksDesired[i], breaksActual[i]);
+                testsFailed++;
+                printf("Issues in line %d:\n\t%s\tPosition %d: expected %d got %d\n",
+                       linenumber, line, i, breaksDesired[i], breaksActual[i]);
             }
         }
     }
