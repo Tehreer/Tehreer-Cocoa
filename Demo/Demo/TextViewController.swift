@@ -28,11 +28,19 @@ private struct Attribute: Codable {
     let color: String
 }
 
+private enum TextSize {
+    static let minimum: CGFloat = 20.0
+    static let maximum: CGFloat = 56.0
+}
+
 class TextViewController: UIViewController {
+    @IBOutlet private weak var textSizeSlider: UISlider!
     @IBOutlet private weak var textView: QuranTextView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        updateTextSize()
 
         textView.typeface = TypefaceManager.default.typeface(forTag: TypefaceTag.noorehuda)
         textView.textColor = .text
@@ -87,5 +95,23 @@ class TextViewController: UIViewController {
                        green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
                        blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
                        alpha: 1.0)
+    }
+
+    private func updateTextSize() {
+        let ratio = CGFloat(textSizeSlider.value / textSizeSlider.maximumValue)
+        let multiplier = TextSize.maximum - TextSize.minimum
+        let px = (ratio * multiplier) + TextSize.minimum
+
+        textView.textSize = px
+    }
+
+    @IBAction
+    private func textSizeSliderTouched(_ sender: Any) {
+        textView.clearAyahHighlighting()
+    }
+
+    @IBAction
+    private func textSizeSliderValueChanged(_ sender: Any) {
+        updateTextSize()
     }
 }
