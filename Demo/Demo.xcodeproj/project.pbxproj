@@ -3,18 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6E0B69BC2385A85F001C231F /* TehreerCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EE0A4472305C6080061D4EB /* TehreerCocoa.framework */; };
-		6E0B69BD2385A85F001C231F /* TehreerCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6EE0A4472305C6080061D4EB /* TehreerCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E0B69C02385B0E8001C231F /* UIColor+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0B69BF2385B0E8001C231F /* UIColor+Additions.swift */; };
 		6E0DC25B2A30BD0B005DF90E /* QuranTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DC25A2A30BD0B005DF90E /* QuranTextView.swift */; };
 		6E16908323819B59000A032B /* TypefaceInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E16908223819B58000A032B /* TypefaceInfoViewController.swift */; };
 		6E4FC87D23D367A900833695 /* LinkableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4FC87C23D367A900833695 /* LinkableLabel.swift */; };
 		6E987FF823313A06009E721B /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E987FF723313A06009E721B /* UIViewController+Alert.swift */; };
 		6E987FFA23313F06009E721B /* OpenTypeInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E987FF923313F06009E721B /* OpenTypeInfoViewController.swift */; };
+		6E9E99572A345F2C005D46B3 /* TehreerCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9E99562A345F2C005D46B3 /* TehreerCocoa */; };
 		6EA98E6A232D368400E582E8 /* MehrNastaliq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EA98E67232D368400E582E8 /* MehrNastaliq.ttf */; };
 		6EA98E6B232D368400E582E8 /* NafeesWeb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EA98E68232D368400E582E8 /* NafeesWeb.ttf */; };
 		6EA98E6C232D368400E582E8 /* TajNastaleeq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EA98E69232D368400E582E8 /* TajNastaleeq.ttf */; };
@@ -43,7 +42,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6E0B69BD2385A85F001C231F /* TehreerCocoa.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -57,6 +55,7 @@
 		6E4FC87C23D367A900833695 /* LinkableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkableLabel.swift; sourceTree = "<group>"; };
 		6E987FF723313A06009E721B /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		6E987FF923313F06009E721B /* OpenTypeInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenTypeInfoViewController.swift; sourceTree = "<group>"; };
+		6E9E99552A345F18005D46B3 /* Tehreer-Cocoa */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "Tehreer-Cocoa"; path = ..; sourceTree = "<group>"; };
 		6EA98E67232D368400E582E8 /* MehrNastaliq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MehrNastaliq.ttf; sourceTree = "<group>"; };
 		6EA98E68232D368400E582E8 /* NafeesWeb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NafeesWeb.ttf; sourceTree = "<group>"; };
 		6EA98E69232D368400E582E8 /* TajNastaleeq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = TajNastaleeq.ttf; sourceTree = "<group>"; };
@@ -71,7 +70,6 @@
 		6EE0A43A2305C5760061D4EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6EE0A43D2305C5760061D4EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6EE0A43F2305C5760061D4EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6EE0A4472305C6080061D4EB /* TehreerCocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TehreerCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EE775C7235219A200919591 /* BidiAlgorithmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BidiAlgorithmViewController.swift; sourceTree = "<group>"; };
 		6EE775C923521D2600919591 /* BidiInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BidiInfoViewController.swift; sourceTree = "<group>"; };
 		7DB535E225D5A84A0066A9AD /* TextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewController.swift; sourceTree = "<group>"; };
@@ -86,7 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E0B69BC2385A85F001C231F /* TehreerCocoa.framework in Frameworks */,
+				6E9E99572A345F2C005D46B3 /* TehreerCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +98,14 @@
 				6E987FF723313A06009E721B /* UIViewController+Alert.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		6E9E99542A345F18005D46B3 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				6E9E99552A345F18005D46B3 /* Tehreer-Cocoa */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 		6EA98E66232D368400E582E8 /* Fonts */ = {
@@ -118,6 +124,7 @@
 		6EE0A4272305C56C0061D4EB = {
 			isa = PBXGroup;
 			children = (
+				6E9E99542A345F18005D46B3 /* Packages */,
 				6EE0A4322305C56C0061D4EB /* Demo */,
 				6EA98E66232D368400E582E8 /* Fonts */,
 				6EE0A4312305C56C0061D4EB /* Products */,
@@ -163,7 +170,6 @@
 		6EE0A4462305C6080061D4EB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6EE0A4472305C6080061D4EB /* TehreerCocoa.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -185,6 +191,9 @@
 			dependencies = (
 			);
 			name = Demo;
+			packageProductDependencies = (
+				6E9E99562A345F2C005D46B3 /* TehreerCocoa */,
+			);
 			productName = Demo;
 			productReference = 6EE0A4302305C56C0061D4EB /* Demo.app */;
 			productType = "com.apple.product-type.application";
@@ -290,10 +299,8 @@
 		6EE0A4402305C5760061D4EB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -324,7 +331,6 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -338,7 +344,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -351,10 +357,8 @@
 		6EE0A4412305C5760061D4EB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -385,7 +389,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -393,7 +396,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -409,10 +412,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Demo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tehreer.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -426,10 +425,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Demo/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tehreer.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -459,6 +454,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6E9E99562A345F2C005D46B3 /* TehreerCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TehreerCocoa;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6EE0A4282305C56C0061D4EB /* Project object */;
 }
