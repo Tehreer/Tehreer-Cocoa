@@ -1,18 +1,18 @@
 Pod::Spec.new do |spec|
   spec.name                  = 'TehreerCocoa'
-  spec.version               = '2.5'
-  spec.summary               = 'Standalone font / text engine for iOS'
+  spec.version               = '3.0'
+  spec.summary               = 'Standalone text engine for iOS aimed to be free from platform limitations'
 
   spec.homepage              = 'https://github.com/Tehreer/Tehreer-Cocoa'
   spec.source                = { :git => 'https://github.com/Tehreer/Tehreer-Cocoa.git',
-                                 :tag => 'v2.5',
+                                 :tag => 'v3.0',
                                  :submodules => true }
 
   spec.license               = { :type => 'Apache 2.0' }
   spec.authors               = { 'Muhammad Tayyab Akram' => 'dear_tayyab@yahoo.com' }
   
   spec.platform              = :ios
-  spec.ios.deployment_target = '8.0'
+  spec.ios.deployment_target = '11.0'
   spec.swift_version         = '5.0'
 
   spec.source_files          = 'Source/**/*.swift',
@@ -40,8 +40,10 @@ Pod::Spec.new do |spec|
                                'Libraries/FreeType/src/pshinter/pshinter.c',
                                'Libraries/FreeType/src/psnames/psnames.c',
                                'Libraries/FreeType/src/raster/raster.c',
+                               'Libraries/FreeType/src/sdf/sdf.c',
                                'Libraries/FreeType/src/sfnt/sfnt.c',
                                'Libraries/FreeType/src/smooth/smooth.c',
+                               'Libraries/FreeType/src/svg/svg.c',
                                'Libraries/FreeType/src/truetype/truetype.c',
                                'Libraries/FreeType/src/type1/type1.c',
                                'Libraries/FreeType/src/type42/type42.c',
