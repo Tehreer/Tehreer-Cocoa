@@ -213,10 +213,6 @@ final class IntrinsicRunSlice: TextRun {
         return intrinsicRun.trailingGlyphIndex(forCodeUnitAt: index) - glyphRange.lowerBound
     }
 
-    func caretBoundary(forCodeUnitRange range: Range<Int>) -> CGFloat {
-        return intrinsicRun.caretBoundary(forCodeUnitRange: range) - caretBoundary
-    }
-
     func caretEdge(forCodeUnitAt index: Int) -> CGFloat {
         return intrinsicRun.caretEdge(forCodeUnitAt: index) - caretBoundary
     }

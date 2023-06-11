@@ -34,9 +34,20 @@ final class JustifiedRun: TextRun {
         )
         let caretEdgesArray = caretEdgesBuilder.build()
 
+        let runRange = textRun.codeUnitRange
+        let firstIndex = textRun.startExtraLength
+        let lastIndex = firstIndex + runRange.count
+
+        let caretUtils = CaretUtils(caretEdges: caretEdgesArray, isRTL: isRTL)
+        let caretBoundary = caretUtils.leftMargin(inRange: firstIndex ... lastIndex)
+        let intrinsicCaretEdges = IntrinsicCaretEdges(
+            base: caretEdgesArray,
+            boundary: caretBoundary
+        )
+
         self.textRun = textRun
         self.justifiedAdvances = justifiedAdvances
-        self.justifiedCaretEdges = PrimitiveCollection(caretEdgesArray)
+        self.justifiedCaretEdges = PrimitiveCollection(intrinsicCaretEdges)
     }
 
     var string: String {
@@ -93,6 +104,24 @@ final class JustifiedRun: TextRun {
 
     var clusterMap: ClusterMap {
         return textRun.clusterMap
+    }
+
+    final class IntrinsicCaretEdges: IntrinsicCollection<CGFloat> {
+        let base: [CGFloat]
+        let boundary: CGFloat
+
+        init(base: [CGFloat], boundary: CGFloat) {
+            self.base = base
+            self.boundary = boundary
+        }
+
+        override var count: Int {
+            return base.count
+        }
+
+        override func item(at index: Int) -> CGFloat {
+            return base[index] - boundary
+        }
     }
 
     var caretEdges: CaretEdges {

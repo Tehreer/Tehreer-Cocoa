@@ -165,6 +165,15 @@ final class IntrinsicRun: TextRun {
         return (clusterStart + runStart) ..< (clusterEnd + runStart)
     }
 
+    func caretBoundary(forCodeUnitRange range: Range<Int>) -> CGFloat {
+        let runStart = codeUnitRange.lowerBound
+        let firstIndex = range.lowerBound - runStart
+        let lastIndex = range.upperBound - runStart
+
+        let caretUtils = CaretUtils(caretEdges: caretEdges, isRTL: isRTL)
+        return caretUtils.leftMargin(inRange: firstIndex ... lastIndex)
+    }
+    
     func draw(with renderer: Renderer, in context: CGContext) {
         fatalError()
     }

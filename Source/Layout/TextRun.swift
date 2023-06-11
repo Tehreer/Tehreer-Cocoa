@@ -60,7 +60,6 @@ protocol TextRun {
     func leadingGlyphIndex(forCodeUnitAt index: Int) -> Int
     func trailingGlyphIndex(forCodeUnitAt index: Int) -> Int
 
-    func caretBoundary(forCodeUnitRange range: Range<Int>) -> CGFloat
     func caretEdge(forCodeUnitAt index: Int) -> CGFloat
 
     func distance(forCodeUnitRange range: Range<Int>) -> CGFloat
@@ -82,23 +81,15 @@ extension TextRun {
         return ascent + descent + leading
     }
 
-    func caretBoundary(forCodeUnitRange range: Range<Int>) -> CGFloat {
-        let offset = codeUnitRange.lowerBound
-        let firstIndex = range.lowerBound - offset
-        let lastIndex = range.upperBound - offset
-
-        let caretUtils = CaretUtils(caretEdges: caretEdges, isRTL: isRTL)
-        return caretUtils.leftMargin(inRange: firstIndex ... lastIndex)
-    }
-
     func caretEdge(forCodeUnitAt index: Int) -> CGFloat {
-        return caretEdge(forCodeUnitAt: index, caretBoundary: .zero)
+        let actualStart = codeUnitRange.lowerBound - startExtraLength
+        return caretEdges[index - actualStart]
     }
 
     func distance(forCodeUnitRange range: Range<Int>) -> CGFloat {
-        let offset = codeUnitRange.lowerBound
-        let firstIndex = range.lowerBound - offset
-        let lastIndex = range.upperBound - offset
+        let actualStart = codeUnitRange.lowerBound - startExtraLength
+        let firstIndex = range.lowerBound - actualStart
+        let lastIndex = range.upperBound - actualStart
 
         let caretUtils = CaretUtils(caretEdges: caretEdges, isRTL: isRTL)
         return caretUtils.distance(forRange: firstIndex ... lastIndex)
@@ -167,15 +158,6 @@ extension TextRun {
 
     func trailingGlyphIndex(forCharacterAt index: String.Index) -> Int {
         return trailingGlyphIndex(forCodeUnitAt: string.utf16Index(forCharacterAt: index))
-    }
-
-    func caretEdge(forCodeUnitAt index: Int, caretBoundary: CGFloat) -> CGFloat {
-        let actualStart = clusterStart(forCodeUnitAt: codeUnitRange.lowerBound)
-        return caretEdges[index - actualStart] - caretBoundary
-    }
-
-    func caretBoundary(forCharacterRange range: Range<String.Index>) -> CGFloat {
-        return caretBoundary(forCodeUnitRange: string.utf16Range(forCharacterRange: range))
     }
 
     func caretEdge(forCharacterAt index: String.Index) -> CGFloat {
