@@ -54,7 +54,7 @@ func makeComposedLine(string: String,
 
         if wsStart < wsEnd {
             let wsRange = Range(uncheckedBounds: (wsStart, wsEnd))
-            trailingWhitespaceExtent = glyphRun.distance(forCodeUnitRange: wsRange)
+            trailingWhitespaceExtent += glyphRun.distance(forCodeUnitRange: wsRange)
         }
 
         lineAscent = max(lineAscent, glyphRun.ascent)
@@ -72,7 +72,8 @@ func makeComposedLine(string: String,
         leading: lineLeading,
         extent: lineExtent,
         trailingWhitespaceExtent: trailingWhitespaceExtent,
-        visualRuns: visualRuns)
+        visualRuns: visualRuns
+    )
 }
 
 struct LineResolver {
