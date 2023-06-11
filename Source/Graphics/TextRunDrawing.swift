@@ -85,19 +85,24 @@ struct DefaultTextRunDrawing: TextRunDrawing {
         let clipLeft: CGFloat
         let clipRight: CGFloat
 
-        let isBackward = textRun.isBackward
-        let isRTL = textRun.isRTL
-
-        if !isRTL {
-            clipLeft = (startClipped ? textRun.caretEdge(forCodeUnitAt: codeUnitRange.lowerBound) : bbox.minX)
-            clipRight = (endClipped ? textRun.caretEdge(forCodeUnitAt: codeUnitRange.upperBound) : bbox.maxX)
+        if !textRun.isRTL {
+            clipLeft = (startClipped ? textRun.caretEdge(forCodeUnitAt: runStart) : bbox.minX)
+            clipRight = (endClipped ? textRun.caretEdge(forCodeUnitAt: runEnd) : bbox.maxX)
         } else {
-            clipRight = (startClipped ? textRun.caretEdge(forCodeUnitAt: codeUnitRange.lowerBound) : bbox.maxX)
-            clipLeft = (endClipped ? textRun.caretEdge(forCodeUnitAt: codeUnitRange.upperBound) : bbox.minX)
+            clipRight = (startClipped ? textRun.caretEdge(forCodeUnitAt: runStart) : bbox.maxX)
+            clipLeft = (endClipped ? textRun.caretEdge(forCodeUnitAt: runEnd) : bbox.minX)
         }
 
         context.saveGState()
-        context.clip(to: CGRect(x: clipLeft, y: bbox.minY, width: clipRight - clipLeft, height: bbox.height))
+
+        context.clip(
+            to: CGRect(
+                x: clipLeft,
+                y: bbox.minY,
+                width: clipRight - clipLeft,
+                height: bbox.height
+            )
+        )
         context.translateBy(
             x: leadingEdge(from: cluster.actualStart, to: cluster.actualEnd),
             y: 0.0
@@ -156,7 +161,6 @@ struct DefaultTextRunDrawing: TextRunDrawing {
         }
 
         let isBackward = textRun.isBackward
-        let caretBoundary = textRun.caretBoundary(forCodeUnitRange: codeUnitRange)
 
         var glyphStart: Int = 0
         var glyphEnd = textRun.glyphIDs.count
