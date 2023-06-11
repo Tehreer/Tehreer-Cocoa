@@ -365,10 +365,12 @@ struct LineResolver {
         justificationExtent: CGFloat
     ) -> ComposedLine {
         let string = text.string
+        let lineStart = codeUnitRange.lowerBound
+
         let wordStart = string.leadingWhitespaceEnd(in: codeUnitRange)
         let wordEnd = string.trailingWhitespaceStart(in: codeUnitRange)
 
-        let actualWidth = runs.measureCharacters(in: codeUnitRange)
+        let actualWidth = runs.measureCharacters(in: lineStart ..< wordEnd)
         let extraWidth = justificationExtent - actualWidth
         let availableWidth = extraWidth * justificationFactor
 
