@@ -1103,7 +1103,7 @@
                                                                 </constraints>
                                                             </view>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="e4m-MC-XhZ">
-                                                                <rect key="frame" x="198" y="11" width="69" height="14"/>
+                                                                <rect key="frame" x="198" y="0.0" width="69" height="36"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -1126,7 +1126,7 @@
                                                             <constraint firstItem="e4m-MC-XhZ" firstAttribute="leading" secondItem="E0s-rr-05D" secondAttribute="trailing" constant="4" id="N6i-tz-pWc"/>
                                                             <constraint firstAttribute="trailing" secondItem="e4m-MC-XhZ" secondAttribute="trailing" constant="3" id="NTa-L7-EVE"/>
                                                             <constraint firstItem="kin-fc-KY5" firstAttribute="top" secondItem="woV-3T-Wnf" secondAttribute="top" id="OcP-EW-xAJ"/>
-                                                            <constraint firstItem="e4m-MC-XhZ" firstAttribute="bottom" secondItem="woV-3T-Wnf" secondAttribute="bottomMargin" id="TjW-ui-ToB"/>
+                                                            <constraint firstItem="e4m-MC-XhZ" firstAttribute="bottom" secondItem="woV-3T-Wnf" secondAttribute="bottom" id="TjW-ui-ToB"/>
                                                             <constraint firstItem="edN-xf-Yll" firstAttribute="leading" secondItem="woV-3T-Wnf" secondAttribute="leading" constant="4" id="YKA-5Q-Og7"/>
                                                             <constraint firstItem="kin-fc-KY5" firstAttribute="leading" secondItem="edN-xf-Yll" secondAttribute="trailing" constant="3" id="aAR-Ut-yIP"/>
                                                             <constraint firstItem="E0s-rr-05D" firstAttribute="leading" secondItem="nEe-6F-FTj" secondAttribute="trailing" constant="3" id="cny-dp-wTN"/>
@@ -1135,7 +1135,7 @@
                                                             <constraint firstItem="nEe-6F-FTj" firstAttribute="top" secondItem="woV-3T-Wnf" secondAttribute="top" id="fd7-Iy-h9m"/>
                                                             <constraint firstItem="edN-xf-Yll" firstAttribute="top" secondItem="woV-3T-Wnf" secondAttribute="top" id="gJN-ok-anM"/>
                                                             <constraint firstAttribute="bottom" secondItem="KfK-CU-Fj0" secondAttribute="bottom" id="iik-QT-gFJ"/>
-                                                            <constraint firstItem="e4m-MC-XhZ" firstAttribute="top" secondItem="woV-3T-Wnf" secondAttribute="topMargin" id="kh5-4K-9fl"/>
+                                                            <constraint firstItem="e4m-MC-XhZ" firstAttribute="top" secondItem="woV-3T-Wnf" secondAttribute="top" id="kh5-4K-9fl"/>
                                                             <constraint firstAttribute="trailing" secondItem="KfK-CU-Fj0" secondAttribute="trailing" id="ofw-BC-DR2"/>
                                                             <constraint firstItem="edN-xf-Yll" firstAttribute="width" secondItem="woV-3T-Wnf" secondAttribute="width" multiplier="0.29" id="zMy-aU-6id"/>
                                                         </constraints>
@@ -1270,20 +1270,20 @@
                             <rect key="frame" x="96" y="9" width="270" height="47"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Glyph ID" textAlignment="center" lineBreakMode="middleTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="KDz-fc-f5S">
-                                    <rect key="frame" x="4" y="0.0" width="78.5" height="47"/>
+                                    <rect key="frame" x="4" y="0.0" width="78.333333333333329" height="47"/>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lLn-5i-IDY" userLabel="Separator">
-                                    <rect key="frame" x="85.5" y="0.0" width="1" height="47"/>
+                                    <rect key="frame" x="85.333333333333343" y="0.0" width="1" height="47"/>
                                     <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="1" id="WTd-LK-mhV"/>
                                     </constraints>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Glyph Offset" textAlignment="center" lineBreakMode="middleTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Ots-4R-QCN">
-                                    <rect key="frame" x="90.5" y="0.0" width="100" height="47"/>
+                                    <rect key="frame" x="90.333333333333343" y="0.0" width="100" height="47"/>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -1296,7 +1296,7 @@
                                     </constraints>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Glyph Advance" textAlignment="center" lineBreakMode="middleTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="s0s-fj-0gs">
-                                    <rect key="frame" x="198.5" y="0.0" width="68.5" height="47"/>
+                                    <rect key="frame" x="198.33333333333331" y="0.0" width="68.666666666666686" height="47"/>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
