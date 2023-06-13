@@ -154,17 +154,6 @@ final class IntrinsicRun: TextRun {
         return forwardGlyphIndex(for: mappingIndex)
     }
 
-    func clusterRange(forUTF16Range range: Range<Int>) -> Range<Int> {
-        let runStart = codeUnitRange.lowerBound
-        let lowerBound = range.lowerBound - runStart
-        let upperBound = range.upperBound - runStart - 1
-
-        let clusterStart = Clusters.actualClusterStart(in: clusterMap, for: lowerBound)
-        let clusterEnd = Clusters.actualClusterEnd(in: clusterMap, for: upperBound)
-
-        return (clusterStart + runStart) ..< (clusterEnd + runStart)
-    }
-
     func caretBoundary(forCodeUnitRange range: Range<Int>) -> CGFloat {
         let runStart = codeUnitRange.lowerBound
         let firstIndex = range.lowerBound - runStart
