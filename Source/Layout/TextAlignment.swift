@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2023 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ public enum TextAlignment: Int {
     /// Aligns the text to the center of the line.
     case right = 2
     /// Aligns the text to the left side of the line if its paragraph level is even.
-    case intrinsic = 3
+    case leading = 3
     /// Aligns the text to the right side of the line if its paragraph level is even.
-    case extrinsic = 4
+    case trailing = 4
 
     func flushFactor(for paragraphLevel: UInt8) -> CGFloat {
         let isRTL = (paragraphLevel & 1) == 1
@@ -40,9 +40,9 @@ public enum TextAlignment: Int {
             return 0.5
         case .right:
             return 1.0
-        case .intrinsic:
+        case .leading:
             return isRTL ? 1.0 : 0.0
-        case .extrinsic:
+        case .trailing:
             return isRTL ? 0.0 : 1.0
         }
     }

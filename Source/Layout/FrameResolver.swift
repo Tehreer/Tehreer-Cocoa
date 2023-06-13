@@ -78,8 +78,8 @@ public class FrameResolver {
     /// the lines of specified text. Its default value is `false`.
     public var fitsVertically: Bool = false
 
-    /// The text alignment to apply on each line of a frame. Its default value is `.intrinsic`.
-    public var textAlignment: TextAlignment = .intrinsic
+    /// The text alignment to apply on each line of a frame. Its default value is `.leading`.
+    public var textAlignment: TextAlignment = .leading
 
     /// The vertical alignment to apply on the contents of a frame. Its default value is `.top`.
     public var verticalAlignment: VerticalAlignment = .top

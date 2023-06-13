@@ -24,7 +24,7 @@ private class TextContext {
     var text: String!
     var attributedText: NSAttributedString!
     var textSize: CGFloat = 16.0
-    var textAlignment: TextAlignment = .intrinsic
+    var textAlignment: TextAlignment = .leading
     var textColor: UIColor = .black
     var extraLineSpacing: CGFloat = .zero
     var lineHeightMultiplier: CGFloat = 1.0
@@ -575,8 +575,8 @@ open class TTextView: UIScrollView {
         return isTextFrameResolved ? _textFrame : nil
     }
 
-    /// The text alignment to apply on each line. Its default value is `.intrinsic`.
-    open var textAlignment: TextAlignment = .intrinsic {
+    /// The text alignment to apply on each line. Its default value is `.leading`.
+    open var textAlignment: TextAlignment = .leading {
         didSet {
             setNeedsUpdateTextFrame()
         }
