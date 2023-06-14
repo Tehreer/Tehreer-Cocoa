@@ -12,7 +12,7 @@ Tehreer is a library which gives full control over following text related techno
 It is a wrapper over C libraries, [FreeType](https://www.freetype.org), [UniBreak](https://github.com/adah1972/libunibreak), [SheenBidi](https://github.com/mta452/SheenBidi) and [HarfBuzz](https://github.com/harfbuzz/harfbuzz).
 
 ## Screenshots
-<img src="https://user-images.githubusercontent.com/2664112/69436389-17c60c00-0d63-11ea-98a5-5e4394ad3b3d.png" width="170"> <img src="https://user-images.githubusercontent.com/2664112/69436391-185ea280-0d63-11ea-9db2-2be6b6489101.png" width="170"> <img src="https://user-images.githubusercontent.com/2664112/69436393-185ea280-0d63-11ea-8845-9bec5e4acaf7.png" width="170"> <img src="https://user-images.githubusercontent.com/2664112/110199690-72617980-7e7b-11eb-9902-2eb0376d742c.png" width="170"> <img src="https://user-images.githubusercontent.com/2664112/109377840-ab37a680-78ef-11eb-8821-ac8a58318dd4.png" width="170"> <img src="https://user-images.githubusercontent.com/2664112/110199703-81e0c280-7e7b-11eb-917b-d7aaede1f1ab.png" width="170"> <img src="https://user-images.githubusercontent.com/2664112/110199704-8311ef80-7e7b-11eb-8857-9b24c4c69a4c.png" width="170">
+<img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/954439bd-0da5-4df0-9920-cba823e20e6b" width="170"> <img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/bb1190c7-8dc0-4d2b-8984-0e5f55c67d92" width="170"> <img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/5cf335a1-b894-4f03-801b-bb498b8b358f" width="170"> <img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/63fa1274-3a49-4ead-96fb-63441213e2d7" width="170"> <img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/639e5b77-b568-4049-84cb-63b6b9069815" width="170"> <img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/46cbfff8-915b-407a-8df1-91475b9a2c85" width="170"> <img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/7d5b3f16-62a1-47a3-a7d4-55ed0eab288e" width="170">
 
 ## API Reference
 The [Apidocs](https://tehreer.github.io/Tehreer-Cocoa/apidocs/) are available for online browsing.
@@ -22,7 +22,7 @@ The [Apidocs](https://tehreer.github.io/Tehreer-Cocoa/apidocs/) are available fo
 
 ## License
 ```
-Copyright (C) 2019-2021 Muhammad Tayyab Akram
+Copyright (C) 2019-2023 Muhammad Tayyab Akram
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
