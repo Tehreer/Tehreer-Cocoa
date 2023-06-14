@@ -8,19 +8,29 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/GlyphRun" class="dashAnchor"></a>
     <a title="GlyphRun Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">Tehreer-Cocoa</a> (84% documented)</p>
+        <p><a href="../index.html">TehreerCocoa 3.0 Docs</a> (86% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tehreer/Tehreer-Cocoa"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftehreer.github.io%2FTehreer-Cocoa%2Fapidocs%2Fdocsets%2FTehreerCocoa.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html">TehreerCocoa Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         GlyphRun Class Reference
       </p>
     </div>
@@ -62,6 +72,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FontFile.html">FontFile</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/FrameResolver.html">FrameResolver</a>
@@ -115,16 +128,19 @@
                 <a href="../Classes/TLabel.html">TLabel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/TTextView.html">TTextView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Weight.html">– Weight</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Width.html">– Width</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
@@ -172,6 +188,9 @@
               <li class="nav-group-task">
                 <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/String">String</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -184,6 +203,12 @@
                 <a href="../Structs/BidiRun.html">BidiRun</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/ColorPalette.html">ColorPalette</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ColorPalette/Flags.html">– Flags</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/HHEATable.html">HHEATable</a>
               </li>
               <li class="nav-group-task">
@@ -194,6 +219,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NamedStyle.html">NamedStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OS2Table.html">OS2Table</a>
@@ -209,6 +237,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis.html">VariationAxis</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis/Flags.html">– Flags</a>
               </li>
             </ul>
           </li>
@@ -231,16 +265,50 @@
             <h1>GlyphRun</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">GlyphRun</span></code></pre>
 
                 </div>
               </div>
             <p>A glyph run is a collection of consecutive glyphs sharing the same attributes and direction.</p>
 
+              <div class="slightly-smaller">
+                <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L22-L330">Show on GitHub</a>
+              </div>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
               <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8GlyphRunC13codeUnitRangeSnySiGvp"></a>
+                    <a name="//apple_ref/swift/Property/codeUnitRange" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC13codeUnitRangeSnySiGvp">codeUnitRange</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The UTF-16 range of this run in source string.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L36-L38">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -261,9 +329,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">startIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">startIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L41-L43">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -288,9 +359,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">endIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">endIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L46-L48">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -324,9 +398,12 @@ two parts would be clipped.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">startExtraLength</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">startExtraLength</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L60-L62">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -360,9 +437,12 @@ two parts would be clipped.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">endExtraLength</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">endExtraLength</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L74-L76">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -387,9 +467,12 @@ two parts would be clipped.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">bidiLevel</span><span class="p">:</span> <span class="kt">UInt8</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">bidiLevel</span><span class="p">:</span> <span class="kt">UInt8</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L79-L81">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -414,9 +497,12 @@ two parts would be clipped.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">writingDirection</span><span class="p">:</span> <span class="kt"><a href="../Enums/WritingDirection.html">WritingDirection</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">writingDirection</span><span class="p">:</span> <span class="kt"><a href="../Enums/WritingDirection.html">WritingDirection</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L84-L86">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -441,9 +527,12 @@ two parts would be clipped.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">typeface</span><span class="p">:</span> <span class="kt"><a href="../Classes/Typeface.html">Typeface</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">typeface</span><span class="p">:</span> <span class="kt"><a href="../Classes/Typeface.html">Typeface</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L89-L91">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -451,9 +540,9 @@ two parts would be clipped.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8GlyphRunC8typeSize12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8GlyphRunC8typeSize14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/typeSize" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC8typeSize12CoreGraphics7CGFloatVvp">typeSize</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC8typeSize14CoreFoundation7CGFloatVvp">typeSize</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -468,9 +557,12 @@ two parts would be clipped.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">typeSize</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">typeSize</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L94-L96">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -478,9 +570,9 @@ two parts would be clipped.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8GlyphRunC6ascent12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8GlyphRunC6ascent14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/ascent" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC6ascent12CoreGraphics7CGFloatVvp">ascent</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC6ascent14CoreFoundation7CGFloatVvp">ascent</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -496,9 +588,12 @@ always either positive or zero.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">ascent</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">ascent</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L100-L102">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -506,9 +601,9 @@ always either positive or zero.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8GlyphRunC7descent12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8GlyphRunC7descent14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/descent" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC7descent12CoreGraphics7CGFloatVvp">descent</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC7descent14CoreFoundation7CGFloatVvp">descent</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -524,9 +619,12 @@ It is always either positive or zero.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">descent</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">descent</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L106-L108">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -534,9 +632,9 @@ It is always either positive or zero.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8GlyphRunC7leading12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8GlyphRunC7leading14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/leading" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC7leading12CoreGraphics7CGFloatVvp">leading</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC7leading14CoreFoundation7CGFloatVvp">leading</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -551,9 +649,12 @@ It is always either positive or zero.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">leading</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">leading</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L111-L113">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -578,9 +679,12 @@ It is always either positive or zero.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">origin</span><span class="p">:</span> <span class="kt">CGPoint</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">origin</span><span class="p">:</span> <span class="kt">CGPoint</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L116">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -588,9 +692,9 @@ It is always either positive or zero.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8GlyphRunC5width12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8GlyphRunC5width14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/width" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC5width12CoreGraphics7CGFloatVvp">width</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC5width14CoreFoundation7CGFloatVvp">width</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -609,15 +713,18 @@ It is always either positive or zero.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L119-L121">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8GlyphRunC6height12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8GlyphRunC6height14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/height" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC6height12CoreGraphics7CGFloatVvp">height</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC6height14CoreFoundation7CGFloatVvp">height</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -635,6 +742,9 @@ It is always either positive or zero.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">height</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L124-L126">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -659,9 +769,12 @@ It is always either positive or zero.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">glyphIDs</span><span class="p">:</span> <span class="kt"><a href="../Structs/PrimitiveCollection.html">PrimitiveCollection</a></span><span class="o">&lt;</span><span class="kt"><a href="../Typealiases.html#/s:12TehreerCocoa7GlyphIDa">GlyphID</a></span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">glyphIDs</span><span class="p">:</span> <span class="kt"><a href="../Structs/PrimitiveCollection.html">PrimitiveCollection</a></span><span class="o">&lt;</span><span class="kt"><a href="../Typealiases.html#/s:12TehreerCocoa7GlyphIDa">GlyphID</a></span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L129-L131">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -686,9 +799,12 @@ It is always either positive or zero.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">glyphOffsets</span><span class="p">:</span> <span class="kt"><a href="../Structs/PrimitiveCollection.html">PrimitiveCollection</a></span><span class="o">&lt;</span><span class="kt">CGPoint</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">glyphOffsets</span><span class="p">:</span> <span class="kt"><a href="../Structs/PrimitiveCollection.html">PrimitiveCollection</a></span><span class="o">&lt;</span><span class="kt">CGPoint</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L134-L136">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -696,9 +812,9 @@ It is always either positive or zero.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8GlyphRunC13glyphAdvancesAA19PrimitiveCollectionVy12CoreGraphics7CGFloatVGvp"></a>
+                    <a name="/s:12TehreerCocoa8GlyphRunC13glyphAdvancesAA19PrimitiveCollectionVy14CoreFoundation7CGFloatVGvp"></a>
                     <a name="//apple_ref/swift/Property/glyphAdvances" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC13glyphAdvancesAA19PrimitiveCollectionVy12CoreGraphics7CGFloatVGvp">glyphAdvances</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC13glyphAdvancesAA19PrimitiveCollectionVy14CoreFoundation7CGFloatVGvp">glyphAdvances</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -713,9 +829,12 @@ It is always either positive or zero.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">glyphAdvances</span><span class="p">:</span> <span class="kt"><a href="../Structs/PrimitiveCollection.html">PrimitiveCollection</a></span><span class="o">&lt;</span><span class="kt">CGFloat</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">glyphAdvances</span><span class="p">:</span> <span class="kt"><a href="../Structs/PrimitiveCollection.html">PrimitiveCollection</a></span><span class="o">&lt;</span><span class="kt">CGFloat</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L139-L141">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -740,9 +859,68 @@ It is always either positive or zero.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clusterMap</span><span class="p">:</span> <span class="kt"><a href="../Structs/PrimitiveCollection.html">PrimitiveCollection</a></span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">clusterMap</span><span class="p">:</span> <span class="kt"><a href="../Structs/PrimitiveCollection.html">PrimitiveCollection</a></span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L144-L146">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8GlyphRunC12clusterStart13forCodeUnitAtS2i_tF"></a>
+                    <a name="//apple_ref/swift/Method/clusterStart(forCodeUnitAt:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC12clusterStart13forCodeUnitAtS2i_tF">clusterStart(forCodeUnitAt:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the index to the first UTF-16 code unit of specified cluster in source string. In
+most cases, it would be the same index as the specified one. But if the code unit occurs
+within a cluster, then a previous index would be returned; whether the run logically flows
+forward or backward.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">clusterStart</span><span class="p">(</span><span class="n">forCodeUnitAt</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of a code unit in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The index to the first code unit of specified cluster in source string.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L155-L159">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -752,7 +930,7 @@ It is always either positive or zero.</p>
                     <code>
                     <a name="/s:12TehreerCocoa8GlyphRunC12clusterStart14forCharacterAtSS5IndexVAG_tF"></a>
                     <a name="//apple_ref/swift/Method/clusterStart(forCharacterAt:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC12clusterStart14forCharacterAtSS5IndexVAG_tF">clusterStart(forCharacterAt:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC12clusterStart14forCharacterAtSS5IndexVAG_tF">clusterStart(forCharacterAt:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -797,6 +975,65 @@ or backward.</p>
                         <h4>Return Value</h4>
                         <p>The index to the first character of specified cluster in source string.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L168-L172">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8GlyphRunC10clusterEnd13forCodeUnitAtS2i_tF"></a>
+                    <a name="//apple_ref/swift/Method/clusterEnd(forCodeUnitAt:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC10clusterEnd13forCodeUnitAtS2i_tF">clusterEnd(forCodeUnitAt:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the index after the last UTF-16 code unit of specified cluster in source string. In
+most cases, it would be an index after the specified one. But if the code unit occurs within
+a cluster, then a farther index would be returned; whether the run logically flows forward
+or backward.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">clusterEnd</span><span class="p">(</span><span class="n">forCodeUnitAt</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of a code unit in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The index after the last code unit of specified cluster in source string.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L181-L185">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -805,7 +1042,7 @@ or backward.</p>
                     <code>
                     <a name="/s:12TehreerCocoa8GlyphRunC10clusterEnd14forCharacterAtSS5IndexVAG_tF"></a>
                     <a name="//apple_ref/swift/Method/clusterEnd(forCharacterAt:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC10clusterEnd14forCharacterAtSS5IndexVAG_tF">clusterEnd(forCharacterAt:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC10clusterEnd14forCharacterAtSS5IndexVAG_tF">clusterEnd(forCharacterAt:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -850,6 +1087,63 @@ backward.</p>
                         <h4>Return Value</h4>
                         <p>The index after the last character of specified cluster in source string.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L194-L198">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8GlyphRunC07leadingC5Index13forCodeUnitAtS2i_tF"></a>
+                    <a name="//apple_ref/swift/Method/leadingGlyphIndex(forCodeUnitAt:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC07leadingC5Index13forCodeUnitAtS2i_tF">leadingGlyphIndex(forCodeUnitAt:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the index of leading glyph related to the specified cluster. It will come after the
+trailing glyph, if the characters of this run logically flow backward.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">leadingGlyphIndex</span><span class="p">(</span><span class="n">forCodeUnitAt</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of a UTF-16 code unit in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The index of leading glyph related to the specified cluster.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L205-L209">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -858,7 +1152,7 @@ backward.</p>
                     <code>
                     <a name="/s:12TehreerCocoa8GlyphRunC07leadingC5Index14forCharacterAtSiSS0F0V_tF"></a>
                     <a name="//apple_ref/swift/Method/leadingGlyphIndex(forCharacterAt:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC07leadingC5Index14forCharacterAtSiSS0F0V_tF">leadingGlyphIndex(forCharacterAt:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC07leadingC5Index14forCharacterAtSiSS0F0V_tF">leadingGlyphIndex(forCharacterAt:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -901,6 +1195,63 @@ trailing glyph, if the characters of this run logically flow backward.</p>
                         <h4>Return Value</h4>
                         <p>The index of leading glyph related to the specified cluster.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L216-L220">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8GlyphRunC08trailingC5Index13forCodeUnitAtS2i_tF"></a>
+                    <a name="//apple_ref/swift/Method/trailingGlyphIndex(forCodeUnitAt:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC08trailingC5Index13forCodeUnitAtS2i_tF">trailingGlyphIndex(forCodeUnitAt:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the index of trailing glyph related to the specified cluster. It will come before
+the leading glyph, if the characters of this run logically flow backward.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">trailingGlyphIndex</span><span class="p">(</span><span class="n">forCodeUnitAt</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of a UTF-16 code unit in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The index of trailing glyph related to the specified cluster.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L227-L231">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -909,7 +1260,7 @@ trailing glyph, if the characters of this run logically flow backward.</p>
                     <code>
                     <a name="/s:12TehreerCocoa8GlyphRunC08trailingC5Index14forCharacterAtSiSS0F0V_tF"></a>
                     <a name="//apple_ref/swift/Method/trailingGlyphIndex(forCharacterAt:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC08trailingC5Index14forCharacterAtSiSS0F0V_tF">trailingGlyphIndex(forCharacterAt:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC08trailingC5Index14forCharacterAtSiSS0F0V_tF">trailingGlyphIndex(forCharacterAt:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -952,15 +1303,71 @@ the leading glyph, if the characters of this run logically flow backward.</p>
                         <h4>Return Value</h4>
                         <p>The index of trailing glyph related to the specified cluster.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L238-L242">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8GlyphRunC8distance14forCharacterAt12CoreGraphics7CGFloatVSS5IndexV_tF"></a>
+                    <a name="/s:12TehreerCocoa8GlyphRunC8distance13forCodeUnitAt14CoreFoundation7CGFloatVSi_tF"></a>
+                    <a name="//apple_ref/swift/Method/distance(forCodeUnitAt:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC8distance13forCodeUnitAt14CoreFoundation7CGFloatVSi_tF">distance(forCodeUnitAt:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the distance of specified character from the start of the run assumed at zero.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">distance</span><span class="p">(</span><span class="n">forCodeUnitAt</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of a UTF-16 code unit in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The distance of specified character from the start of the run assumed at zero.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L248-L252">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8GlyphRunC8distance14forCharacterAt14CoreFoundation7CGFloatVSS5IndexV_tF"></a>
                     <a name="//apple_ref/swift/Method/distance(forCharacterAt:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC8distance14forCharacterAt12CoreGraphics7CGFloatVSS5IndexV_tF">distance(forCharacterAt:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC8distance14forCharacterAt14CoreFoundation7CGFloatVSS5IndexV_tF">distance(forCharacterAt:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1002,15 +1409,82 @@ the leading glyph, if the characters of this run logically flow backward.</p>
                         <h4>Return Value</h4>
                         <p>The distance of specified character from the start of the run assumed at zero.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L258-L262">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8GlyphRunC16indexOfCharacter2atSS5IndexV12CoreGraphics7CGFloatV_tF"></a>
+                    <a name="/s:12TehreerCocoa8GlyphRunC15indexOfCodeUnit2atSi14CoreFoundation7CGFloatV_tF"></a>
+                    <a name="//apple_ref/swift/Method/indexOfCodeUnit(at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC15indexOfCodeUnit2atSi14CoreFoundation7CGFloatV_tF">indexOfCodeUnit(at:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determines the index of a UTF-16 code unit nearest to the specified distance.</p>
+
+<p>The process involves iterating over the clusters of the glyph run. If a cluster consists of
+multiple characters, its total advance is evenly distributed among the number of characters
+it contains. The advance of each character is added to track the covered distance. This way
+leading and trailing characters are determined close to the specified distance. Afterwards,
+the index of nearer character is returned.</p>
+
+<p>If <code>distance</code> is negative, then run&rsquo;s starting index is returned. If it is beyond run&rsquo;s
+extent, then ending index is returned. The indices will be reversed in case of right-to-left
+run.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">indexOfCodeUnit</span><span class="p">(</span><span class="n">at</span> <span class="nv">distance</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>distance</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The distance for which to determine the UTF-16 code unit index. It should be offset
+      from zero origin.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The index of UTF-16 code unit in source string, nearest to the specified distance.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L284-L286">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8GlyphRunC16indexOfCharacter2atSS5IndexV14CoreFoundation7CGFloatV_tF"></a>
                     <a name="//apple_ref/swift/Method/indexOfCharacter(at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC16indexOfCharacter2atSS5IndexV12CoreGraphics7CGFloatV_tF">indexOfCharacter(at:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC16indexOfCharacter2atSS5IndexV14CoreFoundation7CGFloatV_tF">indexOfCharacter(at:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1063,6 +1537,9 @@ run.</p>
                         <h4>Return Value</h4>
                         <p>The index of character in source string, nearest to the specified distance.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L304-L306">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1071,7 +1548,7 @@ run.</p>
                     <code>
                     <a name="/s:12TehreerCocoa8GlyphRunC18computeBoundingBox03forC5Range4withSo6CGRectVSnySiG_AA8RendererCtF"></a>
                     <a name="//apple_ref/swift/Method/computeBoundingBox(forGlyphRange:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC18computeBoundingBox03forC5Range4withSo6CGRectVSnySiG_AA8RendererCtF">computeBoundingBox(forGlyphRange:with:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC18computeBoundingBox03forC5Range4withSo6CGRectVSnySiG_AA8RendererCtF">computeBoundingBox(forGlyphRange:<wbr>with:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1114,56 +1591,8 @@ rectangle that encloses the paths of glyphs, as tightly as possible.</p>
                         <h4>Return Value</h4>
                         <p>A rectangle that tightly encloses the paths of glyphs in the specified range.</p>
                       </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12TehreerCocoa8GlyphRunC17typographicExtent03forC5Range12CoreGraphics7CGFloatVSnySiG_tF"></a>
-                    <a name="//apple_ref/swift/Method/typographicExtent(forGlyphRange:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC17typographicExtent03forC5Range12CoreGraphics7CGFloatVSnySiG_tF">typographicExtent(forGlyphRange:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Calculates the typographic extent for the given glyph range in this run. The typographic
-extent is equal to the sum of advances of glyphs.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">typographicExtent</span><span class="p">(</span><span class="n">forGlyphRange</span> <span class="nv">glyphRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>glyphRange</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The range of glyphs to be measured.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>The typographic extent for the specified glyph range in the run.</p>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L318-L320">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1173,7 +1602,7 @@ extent is equal to the sum of advances of glyphs.</p>
                     <code>
                     <a name="/s:12TehreerCocoa8GlyphRunC4draw4with2inyAA8RendererC_So12CGContextRefatF"></a>
                     <a name="//apple_ref/swift/Method/draw(with:in:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC4draw4with2inyAA8RendererC_So12CGContextRefatF">draw(with:in:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8GlyphRunC4draw4with2inyAA8RendererC_So12CGContextRefatF">draw(with:<wbr>in:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1223,6 +1652,9 @@ extent is equal to the sum of advances of glyphs.</p>
                           </tbody>
                         </table>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/GlyphRun.swift#L327-L329">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1231,11 +1663,10 @@ extent is equal to the sum of advances of glyphs.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external noopener">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2023-06-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

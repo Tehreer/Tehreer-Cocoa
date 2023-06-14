@@ -8,19 +8,29 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Enum/BaseDirection" class="dashAnchor"></a>
     <a title="BaseDirection Enumeration Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">Tehreer-Cocoa</a> (84% documented)</p>
+        <p><a href="../index.html">TehreerCocoa 3.0 Docs</a> (86% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tehreer/Tehreer-Cocoa"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftehreer.github.io%2FTehreer-Cocoa%2Fapidocs%2Fdocsets%2FTehreerCocoa.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html">TehreerCocoa Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         BaseDirection Enumeration Reference
       </p>
     </div>
@@ -62,6 +72,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FontFile.html">FontFile</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/FrameResolver.html">FrameResolver</a>
@@ -115,16 +128,19 @@
                 <a href="../Classes/TLabel.html">TLabel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/TTextView.html">TTextView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Weight.html">– Weight</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Width.html">– Width</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
@@ -172,6 +188,9 @@
               <li class="nav-group-task">
                 <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/String">String</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -184,6 +203,12 @@
                 <a href="../Structs/BidiRun.html">BidiRun</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/ColorPalette.html">ColorPalette</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ColorPalette/Flags.html">– Flags</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/HHEATable.html">HHEATable</a>
               </li>
               <li class="nav-group-task">
@@ -194,6 +219,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NamedStyle.html">NamedStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OS2Table.html">OS2Table</a>
@@ -209,6 +237,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis.html">VariationAxis</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis/Flags.html">– Flags</a>
               </li>
             </ul>
           </li>
@@ -231,12 +265,16 @@
             <h1>BaseDirection</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">BaseDirection</span> <span class="p">:</span> <span class="kt">UInt8</span></code></pre>
 
                 </div>
               </div>
             <p>Specifies the base direction of a paragraph.</p>
 
+              <div class="slightly-smaller">
+                <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/BidiAlgorithm.swift#L21-L34">Show on GitHub</a>
+              </div>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -265,6 +303,9 @@
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/BidiAlgorithm.swift#L23">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -291,6 +332,9 @@
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">rightToLeft</span> <span class="o">=</span> <span class="mi">1</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/BidiAlgorithm.swift#L25">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -321,6 +365,9 @@ direction is left-to-right.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/BidiAlgorithm.swift#L29">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -350,6 +397,9 @@ direction is right-to-left.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/BidiAlgorithm.swift#L33">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -358,11 +408,10 @@ direction is right-to-left.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external noopener">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2023-06-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

@@ -8,18 +8,28 @@
     <script src="js/jquery.min.js" defer></script>
     <script src="js/jazzy.js" defer></script>
     
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a title="TehreerCocoa  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">Tehreer-Cocoa</a> (84% documented)</p>
+        <p><a href="index.html">TehreerCocoa 3.0 Docs</a> (86% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tehreer/Tehreer-Cocoa"><img src="img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftehreer.github.io%2FTehreer-Cocoa%2Fapidocs%2Fdocsets%2FTehreerCocoa.xml"><img src="img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="index.html">TehreerCocoa Reference</a>
-        <img id="carat" src="img/carat.png" />
+        <img id="carat" src="img/carat.png" alt=""/>
         TehreerCocoa  Reference
       </p>
     </div>
@@ -61,6 +71,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/FontFile.html">FontFile</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/FrameResolver.html">FrameResolver</a>
@@ -114,16 +127,19 @@
                 <a href="Classes/TLabel.html">TLabel</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/TTextView.html">TTextView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Typeface/Weight.html">– Weight</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Typeface/Width.html">– Width</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/TypefaceManager.html">TypefaceManager</a>
@@ -171,6 +187,9 @@
               <li class="nav-group-task">
                 <a href="Extensions/NSAttributedString/Key.html">– Key</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Extensions.html#/String">String</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -183,6 +202,12 @@
                 <a href="Structs/BidiRun.html">BidiRun</a>
               </li>
               <li class="nav-group-task">
+                <a href="Structs/ColorPalette.html">ColorPalette</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/ColorPalette/Flags.html">– Flags</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/HHEATable.html">HHEATable</a>
               </li>
               <li class="nav-group-task">
@@ -193,6 +218,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/NamedStyle.html">NamedStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/OS2Table.html">OS2Table</a>
@@ -208,6 +236,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/VariationAxis.html">VariationAxis</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/VariationAxis/Flags.html">– Flags</a>
               </li>
             </ul>
           </li>
@@ -242,10 +276,10 @@
 <li>Text / Glyph Rendering</li>
 </ul>
 
-<p>It is a wrapper over mature C libraries, <a href="https://www.freetype.org">FreeType</a>, <a href="https://github.com/adah1972/libunibreak">UniBreak</a>, <a href="https://github.com/mta452/SheenBidi">SheenBidi</a> and <a href="https://github.com/mta452/SheenFigure">SheenFigure</a>.</p>
+<p>It is a wrapper over C libraries, <a href="https://www.freetype.org">FreeType</a>, <a href="https://github.com/adah1972/libunibreak">UniBreak</a>, <a href="https://github.com/mta452/SheenBidi">SheenBidi</a> and <a href="https://github.com/harfbuzz/harfbuzz">HarfBuzz</a>.</p>
 <h2 id='screenshots' class='heading'>Screenshots</h2>
 
-<p><img src="https://user-images.githubusercontent.com/2664112/69436389-17c60c00-0d63-11ea-98a5-5e4394ad3b3d.png" width="180"> <img src="https://user-images.githubusercontent.com/2664112/69436391-185ea280-0d63-11ea-9db2-2be6b6489101.png" width="180"> <img src="https://user-images.githubusercontent.com/2664112/69436393-185ea280-0d63-11ea-8845-9bec5e4acaf7.png" width="180"> <img src="https://user-images.githubusercontent.com/2664112/69436395-185ea280-0d63-11ea-8f69-35605e5c8b62.png" width="180"></p>
+<p><img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/954439bd-0da5-4df0-9920-cba823e20e6b" width="170"> <img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/bb1190c7-8dc0-4d2b-8984-0e5f55c67d92" width="170"> <img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/5cf335a1-b894-4f03-801b-bb498b8b358f" width="170"> <img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/63fa1274-3a49-4ead-96fb-63441213e2d7" width="170"> <img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/639e5b77-b568-4049-84cb-63b6b9069815" width="170"> <img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/46cbfff8-915b-407a-8df1-91475b9a2c85" width="170"> <img src="https://github.com/Tehreer/Tehreer-Cocoa/assets/2664112/7d5b3f16-62a1-47a3-a7d4-55ed0eab288e" width="170"></p>
 <h2 id='api-reference' class='heading'>API Reference</h2>
 
 <p>The <a href="https://tehreer.github.io/Tehreer-Cocoa/apidocs/">Apidocs</a> are available for online browsing.</p>
@@ -253,7 +287,7 @@
 
 <p><a href="https://github.com/AbdullahRusi">@AbdullahRusi</a> for QA</p>
 <h2 id='license' class='heading'>License</h2>
-<pre class="highlight plaintext"><code>Copyright (C) 2019-2020 Muhammad Tayyab Akram
+<pre class="highlight plaintext"><code>Copyright (C) 2019-2023 Muhammad Tayyab Akram
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -271,11 +305,10 @@ limitations under the License.
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external noopener">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2023-06-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

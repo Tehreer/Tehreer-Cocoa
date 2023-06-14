@@ -8,19 +8,29 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Enum/Script" class="dashAnchor"></a>
     <a title="Script Enumeration Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">Tehreer-Cocoa</a> (84% documented)</p>
+        <p><a href="../index.html">TehreerCocoa 3.0 Docs</a> (86% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tehreer/Tehreer-Cocoa"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftehreer.github.io%2FTehreer-Cocoa%2Fapidocs%2Fdocsets%2FTehreerCocoa.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html">TehreerCocoa Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         Script Enumeration Reference
       </p>
     </div>
@@ -62,6 +72,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FontFile.html">FontFile</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/FrameResolver.html">FrameResolver</a>
@@ -115,16 +128,19 @@
                 <a href="../Classes/TLabel.html">TLabel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/TTextView.html">TTextView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Weight.html">– Weight</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Width.html">– Width</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
@@ -172,6 +188,9 @@
               <li class="nav-group-task">
                 <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/String">String</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -184,6 +203,12 @@
                 <a href="../Structs/BidiRun.html">BidiRun</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/ColorPalette.html">ColorPalette</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ColorPalette/Flags.html">– Flags</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/HHEATable.html">HHEATable</a>
               </li>
               <li class="nav-group-task">
@@ -194,6 +219,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NamedStyle.html">NamedStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OS2Table.html">OS2Table</a>
@@ -209,6 +237,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis.html">VariationAxis</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis/Flags.html">– Flags</a>
               </li>
             </ul>
           </li>
@@ -231,6 +265,7 @@
             <h1>Script</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Script</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                 </div>
@@ -239,6 +274,9 @@
 to the script property values defined in
 <a href="https://www.unicode.org/reports/tr24/#Data_File_PVA">Unicode Standard Annex #24: PropertyValueAliases.txt</a>.</p>
 
+              <div class="slightly-smaller">
+                <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L23-L470">Show on GitHub</a>
+              </div>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -256,7 +294,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Inherited</q>.</p>
+                        <p>Script &ldquo;Inherited&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -266,6 +304,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">inherited</span> <span class="o">=</span> <span class="mh">0x01</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L25">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -283,7 +324,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Common</q>.</p>
+                        <p>Script &ldquo;Common&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -293,6 +334,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">common</span> <span class="o">=</span> <span class="mh">0x02</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L28">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -310,7 +354,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Unknown</q>.</p>
+                        <p>Script &ldquo;Unknown&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -320,6 +364,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">unknown</span> <span class="o">=</span> <span class="mh">0x03</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L31">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -337,7 +384,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Arabic</q>.</p>
+                        <p>Script &ldquo;Arabic&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -347,6 +394,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">arabic</span> <span class="o">=</span> <span class="mh">0x04</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L34">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -364,7 +414,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Armenian</q>.</p>
+                        <p>Script &ldquo;Armenian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -374,6 +424,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">armenian</span> <span class="o">=</span> <span class="mh">0x05</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L37">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -391,7 +444,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Bengali</q>.</p>
+                        <p>Script &ldquo;Bengali&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -401,6 +454,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">bengali</span> <span class="o">=</span> <span class="mh">0x06</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L40">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -418,7 +474,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Bopomofo</q>.</p>
+                        <p>Script &ldquo;Bopomofo&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -428,6 +484,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">bopomofo</span> <span class="o">=</span> <span class="mh">0x07</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L43">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -445,7 +504,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Cyrillic</q>.</p>
+                        <p>Script &ldquo;Cyrillic&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -455,6 +514,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">cyrillic</span> <span class="o">=</span> <span class="mh">0x08</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L46">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -472,7 +534,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Devanagari</q>.</p>
+                        <p>Script &ldquo;Devanagari&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -482,6 +544,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">devanagari</span> <span class="o">=</span> <span class="mh">0x09</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L49">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -499,7 +564,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Georgian</q>.</p>
+                        <p>Script &ldquo;Georgian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -509,6 +574,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">georgian</span> <span class="o">=</span> <span class="mh">0x0A</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L52">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -526,7 +594,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Greek</q>.</p>
+                        <p>Script &ldquo;Greek&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -536,6 +604,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">greek</span> <span class="o">=</span> <span class="mh">0x0B</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L55">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -553,7 +624,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Gujarati</q>.</p>
+                        <p>Script &ldquo;Gujarati&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -563,6 +634,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">gujarati</span> <span class="o">=</span> <span class="mh">0x0C</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L58">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -580,7 +654,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Gurmukhi</q>.</p>
+                        <p>Script &ldquo;Gurmukhi&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -590,6 +664,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">gurmukhi</span> <span class="o">=</span> <span class="mh">0x0D</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L61">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -607,7 +684,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Hangul</q>.</p>
+                        <p>Script &ldquo;Hangul&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -617,6 +694,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">hangul</span> <span class="o">=</span> <span class="mh">0x0E</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L64">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -634,7 +714,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Han</q>.</p>
+                        <p>Script &ldquo;Han&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -644,6 +724,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">han</span> <span class="o">=</span> <span class="mh">0x0F</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L67">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -661,7 +744,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Hebrew</q>.</p>
+                        <p>Script &ldquo;Hebrew&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -671,6 +754,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">hebrew</span> <span class="o">=</span> <span class="mh">0x10</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L70">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -688,7 +774,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Hiragana</q>.</p>
+                        <p>Script &ldquo;Hiragana&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -698,6 +784,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">hiragana</span> <span class="o">=</span> <span class="mh">0x11</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L73">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -715,7 +804,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Katakana</q>.</p>
+                        <p>Script &ldquo;Katakana&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -725,6 +814,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">katakana</span> <span class="o">=</span> <span class="mh">0x12</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L76">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -742,7 +834,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Kannada</q>.</p>
+                        <p>Script &ldquo;Kannada&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -752,6 +844,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">kannada</span> <span class="o">=</span> <span class="mh">0x13</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L79">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -769,7 +864,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Lao</q>.</p>
+                        <p>Script &ldquo;Lao&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -779,6 +874,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">lao</span> <span class="o">=</span> <span class="mh">0x14</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L82">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -796,7 +894,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Latin</q>.</p>
+                        <p>Script &ldquo;Latin&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -806,6 +904,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">latin</span> <span class="o">=</span> <span class="mh">0x15</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L85">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -823,7 +924,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Malayalam</q>.</p>
+                        <p>Script &ldquo;Malayalam&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -833,6 +934,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">malayalam</span> <span class="o">=</span> <span class="mh">0x16</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L88">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -850,7 +954,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Oriya</q>.</p>
+                        <p>Script &ldquo;Oriya&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -860,6 +964,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">oriya</span> <span class="o">=</span> <span class="mh">0x17</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L91">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -877,7 +984,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Tamil</q>.</p>
+                        <p>Script &ldquo;Tamil&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -887,6 +994,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">tamil</span> <span class="o">=</span> <span class="mh">0x18</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L94">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -904,7 +1014,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Telugu</q>.</p>
+                        <p>Script &ldquo;Telugu&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -914,6 +1024,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">telugu</span> <span class="o">=</span> <span class="mh">0x19</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L97">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -931,7 +1044,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Thai</q>.</p>
+                        <p>Script &ldquo;Thai&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -941,6 +1054,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">thai</span> <span class="o">=</span> <span class="mh">0x1A</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L100">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -958,7 +1074,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Tibetan</q>.</p>
+                        <p>Script &ldquo;Tibetan&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -968,6 +1084,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">tibetan</span> <span class="o">=</span> <span class="mh">0x1B</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L103">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -985,7 +1104,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Braille</q>.</p>
+                        <p>Script &ldquo;Braille&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -995,6 +1114,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">braille</span> <span class="o">=</span> <span class="mh">0x1C</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L106">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1012,7 +1134,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Canadian_Aboriginal</q>.</p>
+                        <p>Script &ldquo;Canadian_Aboriginal&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1022,6 +1144,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">canadianAboriginal</span> <span class="o">=</span> <span class="mh">0x1D</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L109">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1039,7 +1164,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Cherokee</q>.</p>
+                        <p>Script &ldquo;Cherokee&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1049,6 +1174,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">cherokee</span> <span class="o">=</span> <span class="mh">0x1E</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L112">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1066,7 +1194,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Ethiopic</q>.</p>
+                        <p>Script &ldquo;Ethiopic&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1076,6 +1204,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">ethiopic</span> <span class="o">=</span> <span class="mh">0x1F</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L115">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1093,7 +1224,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Khmer</q>.</p>
+                        <p>Script &ldquo;Khmer&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1103,6 +1234,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">khmer</span> <span class="o">=</span> <span class="mh">0x20</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L118">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1120,7 +1254,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Mongolian</q>.</p>
+                        <p>Script &ldquo;Mongolian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1130,6 +1264,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">mongolian</span> <span class="o">=</span> <span class="mh">0x21</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L121">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1147,7 +1284,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Myanmar</q>.</p>
+                        <p>Script &ldquo;Myanmar&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1157,6 +1294,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">myanmar</span> <span class="o">=</span> <span class="mh">0x22</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L124">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1174,7 +1314,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Ogham</q>.</p>
+                        <p>Script &ldquo;Ogham&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1184,6 +1324,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">ogham</span> <span class="o">=</span> <span class="mh">0x23</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L127">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1201,7 +1344,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Runic</q>.</p>
+                        <p>Script &ldquo;Runic&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1211,6 +1354,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">runic</span> <span class="o">=</span> <span class="mh">0x24</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L130">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1228,7 +1374,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Sinhala</q>.</p>
+                        <p>Script &ldquo;Sinhala&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1238,6 +1384,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">sinhala</span> <span class="o">=</span> <span class="mh">0x25</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L133">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1255,7 +1404,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Syriac</q>.</p>
+                        <p>Script &ldquo;Syriac&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1265,6 +1414,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">syriac</span> <span class="o">=</span> <span class="mh">0x26</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L136">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1282,7 +1434,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Thaana</q>.</p>
+                        <p>Script &ldquo;Thaana&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1292,6 +1444,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">thaana</span> <span class="o">=</span> <span class="mh">0x27</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L139">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1309,7 +1464,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Yi</q>.</p>
+                        <p>Script &ldquo;Yi&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1319,6 +1474,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">yi</span> <span class="o">=</span> <span class="mh">0x28</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L142">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1336,7 +1494,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Deseret</q>.</p>
+                        <p>Script &ldquo;Deseret&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1346,6 +1504,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">deseret</span> <span class="o">=</span> <span class="mh">0x29</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L145">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1363,7 +1524,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Gothic</q>.</p>
+                        <p>Script &ldquo;Gothic&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1373,6 +1534,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">gothic</span> <span class="o">=</span> <span class="mh">0x2A</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L148">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1390,7 +1554,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Old_Italic</q>.</p>
+                        <p>Script &ldquo;Old_Italic&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1400,6 +1564,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">oldItalic</span> <span class="o">=</span> <span class="mh">0x2B</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L151">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1417,7 +1584,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Buhid</q>.</p>
+                        <p>Script &ldquo;Buhid&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1427,6 +1594,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">buhid</span> <span class="o">=</span> <span class="mh">0x2C</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L154">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1444,7 +1614,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Hanunoo</q>.</p>
+                        <p>Script &ldquo;Hanunoo&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1454,6 +1624,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">hanunoo</span> <span class="o">=</span> <span class="mh">0x2D</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L157">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1471,7 +1644,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Tagbanwa</q>.</p>
+                        <p>Script &ldquo;Tagbanwa&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1481,6 +1654,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">tagbanwa</span> <span class="o">=</span> <span class="mh">0x2E</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L160">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1498,7 +1674,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Tagalog</q>.</p>
+                        <p>Script &ldquo;Tagalog&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1508,6 +1684,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">tagalog</span> <span class="o">=</span> <span class="mh">0x2F</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L163">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1525,7 +1704,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Cypriot</q>.</p>
+                        <p>Script &ldquo;Cypriot&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1535,6 +1714,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">cypriot</span> <span class="o">=</span> <span class="mh">0x30</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L166">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1552,7 +1734,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Limbu</q>.</p>
+                        <p>Script &ldquo;Limbu&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1562,6 +1744,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">limbu</span> <span class="o">=</span> <span class="mh">0x31</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L169">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1579,7 +1764,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Linear_B</q>.</p>
+                        <p>Script &ldquo;Linear_B&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1589,6 +1774,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">linearB</span> <span class="o">=</span> <span class="mh">0x32</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L172">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1606,7 +1794,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Osmanya</q>.</p>
+                        <p>Script &ldquo;Osmanya&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1616,6 +1804,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">osmanya</span> <span class="o">=</span> <span class="mh">0x33</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L175">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1633,7 +1824,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Shavian</q>.</p>
+                        <p>Script &ldquo;Shavian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1643,6 +1834,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">shavian</span> <span class="o">=</span> <span class="mh">0x34</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L178">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1660,7 +1854,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Tai_Le</q>.</p>
+                        <p>Script &ldquo;Tai_Le&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1670,6 +1864,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">taiLe</span> <span class="o">=</span> <span class="mh">0x35</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L181">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1687,7 +1884,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Ugaritic</q>.</p>
+                        <p>Script &ldquo;Ugaritic&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1697,6 +1894,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">ugaritic</span> <span class="o">=</span> <span class="mh">0x36</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L184">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1714,7 +1914,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Buginese</q>.</p>
+                        <p>Script &ldquo;Buginese&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1724,6 +1924,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">buginese</span> <span class="o">=</span> <span class="mh">0x37</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L187">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1741,7 +1944,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Coptic</q>.</p>
+                        <p>Script &ldquo;Coptic&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1751,6 +1954,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">coptic</span> <span class="o">=</span> <span class="mh">0x38</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L190">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1768,7 +1974,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Glagolitic</q>.</p>
+                        <p>Script &ldquo;Glagolitic&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1778,6 +1984,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">glagolitic</span> <span class="o">=</span> <span class="mh">0x39</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L193">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1795,7 +2004,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Kharoshthi</q>.</p>
+                        <p>Script &ldquo;Kharoshthi&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1805,6 +2014,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">kharoshthi</span> <span class="o">=</span> <span class="mh">0x3A</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L196">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1822,7 +2034,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Syloti_Nagri</q>.</p>
+                        <p>Script &ldquo;Syloti_Nagri&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1832,6 +2044,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">sylotiNagri</span> <span class="o">=</span> <span class="mh">0x3B</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L199">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1849,7 +2064,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>New_Tai_Lue</q>.</p>
+                        <p>Script &ldquo;New_Tai_Lue&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1859,6 +2074,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">newTaiLue</span> <span class="o">=</span> <span class="mh">0x3C</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L202">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1876,7 +2094,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Tifinagh</q>.</p>
+                        <p>Script &ldquo;Tifinagh&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1886,6 +2104,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">tifinagh</span> <span class="o">=</span> <span class="mh">0x3D</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L205">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1903,7 +2124,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Old_Persian</q>.</p>
+                        <p>Script &ldquo;Old_Persian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1913,6 +2134,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">oldPersian</span> <span class="o">=</span> <span class="mh">0x3E</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L208">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1930,7 +2154,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Balinese</q>.</p>
+                        <p>Script &ldquo;Balinese&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1940,6 +2164,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">balinese</span> <span class="o">=</span> <span class="mh">0x3F</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L211">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1957,7 +2184,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Nko</q>.</p>
+                        <p>Script &ldquo;Nko&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1967,6 +2194,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">nko</span> <span class="o">=</span> <span class="mh">0x40</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L214">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -1984,7 +2214,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Phags_Pa</q>.</p>
+                        <p>Script &ldquo;Phags_Pa&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -1994,6 +2224,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">phagsPa</span> <span class="o">=</span> <span class="mh">0x41</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L217">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2011,7 +2244,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Phoenician</q>.</p>
+                        <p>Script &ldquo;Phoenician&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2021,6 +2254,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">phoenician</span> <span class="o">=</span> <span class="mh">0x42</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L220">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2038,7 +2274,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Cuneiform</q>.</p>
+                        <p>Script &ldquo;Cuneiform&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2048,6 +2284,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">cuneiform</span> <span class="o">=</span> <span class="mh">0x43</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L223">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2065,7 +2304,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Carian</q>.</p>
+                        <p>Script &ldquo;Carian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2075,6 +2314,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">carian</span> <span class="o">=</span> <span class="mh">0x44</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L226">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2092,7 +2334,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Cham</q>.</p>
+                        <p>Script &ldquo;Cham&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2102,6 +2344,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">cham</span> <span class="o">=</span> <span class="mh">0x45</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L229">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2119,7 +2364,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Kayah_Li</q>.</p>
+                        <p>Script &ldquo;Kayah_Li&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2129,6 +2374,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">kayahLi</span> <span class="o">=</span> <span class="mh">0x46</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L232">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2146,7 +2394,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Lepcha</q>.</p>
+                        <p>Script &ldquo;Lepcha&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2156,6 +2404,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">lepcha</span> <span class="o">=</span> <span class="mh">0x47</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L235">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2173,7 +2424,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Lycian</q>.</p>
+                        <p>Script &ldquo;Lycian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2183,6 +2434,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">lycian</span> <span class="o">=</span> <span class="mh">0x48</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L238">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2200,7 +2454,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Lydian</q>.</p>
+                        <p>Script &ldquo;Lydian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2210,6 +2464,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">lydian</span> <span class="o">=</span> <span class="mh">0x49</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L241">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2227,7 +2484,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Ol_Chiki</q>.</p>
+                        <p>Script &ldquo;Ol_Chiki&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2237,6 +2494,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">olChiki</span> <span class="o">=</span> <span class="mh">0x4A</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L244">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2254,7 +2514,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Rejang</q>.</p>
+                        <p>Script &ldquo;Rejang&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2264,6 +2524,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">rejang</span> <span class="o">=</span> <span class="mh">0x4B</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L247">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2281,7 +2544,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Saurashtra</q>.</p>
+                        <p>Script &ldquo;Saurashtra&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2291,6 +2554,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">saurashtra</span> <span class="o">=</span> <span class="mh">0x4C</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L250">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2308,7 +2574,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Sundanese</q>.</p>
+                        <p>Script &ldquo;Sundanese&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2318,6 +2584,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">sundanese</span> <span class="o">=</span> <span class="mh">0x4D</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L253">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2335,7 +2604,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Vai</q>.</p>
+                        <p>Script &ldquo;Vai&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2345,6 +2614,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">vai</span> <span class="o">=</span> <span class="mh">0x4E</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L256">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2362,7 +2634,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Imperial_Aramaic</q>.</p>
+                        <p>Script &ldquo;Imperial_Aramaic&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2372,6 +2644,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">imperialAramaic</span> <span class="o">=</span> <span class="mh">0x4F</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L259">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2389,7 +2664,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Avestan</q>.</p>
+                        <p>Script &ldquo;Avestan&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2399,6 +2674,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">avestan</span> <span class="o">=</span> <span class="mh">0x50</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L262">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2416,7 +2694,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Bamum</q>.</p>
+                        <p>Script &ldquo;Bamum&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2426,6 +2704,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">bamum</span> <span class="o">=</span> <span class="mh">0x51</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L265">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2443,7 +2724,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Egyptian_Hieroglyphs</q>.</p>
+                        <p>Script &ldquo;Egyptian_Hieroglyphs&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2453,6 +2734,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">egyptianHieroglyphs</span> <span class="o">=</span> <span class="mh">0x52</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L268">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2470,7 +2754,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Javanese</q>.</p>
+                        <p>Script &ldquo;Javanese&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2480,6 +2764,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">javanese</span> <span class="o">=</span> <span class="mh">0x53</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L271">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2497,7 +2784,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Kaithi</q>.</p>
+                        <p>Script &ldquo;Kaithi&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2507,6 +2794,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">kaithi</span> <span class="o">=</span> <span class="mh">0x54</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L274">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2524,7 +2814,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Tai_Tham</q>.</p>
+                        <p>Script &ldquo;Tai_Tham&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2534,6 +2824,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">taiTham</span> <span class="o">=</span> <span class="mh">0x55</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L277">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2551,7 +2844,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Lisu</q>.</p>
+                        <p>Script &ldquo;Lisu&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2561,6 +2854,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">lisu</span> <span class="o">=</span> <span class="mh">0x56</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L280">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2578,7 +2874,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Meetei_Mayek</q>.</p>
+                        <p>Script &ldquo;Meetei_Mayek&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2588,6 +2884,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">meeteiMayek</span> <span class="o">=</span> <span class="mh">0x57</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L283">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2605,7 +2904,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Old_Turkic</q>.</p>
+                        <p>Script &ldquo;Old_Turkic&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2615,6 +2914,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">oldTurkic</span> <span class="o">=</span> <span class="mh">0x58</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L286">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2632,7 +2934,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Inscriptional_Pahlavi</q>.</p>
+                        <p>Script &ldquo;Inscriptional_Pahlavi&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2642,6 +2944,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">inscriptionalPahlavi</span> <span class="o">=</span> <span class="mh">0x59</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L289">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2659,7 +2964,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Inscriptional_Parthian</q>.</p>
+                        <p>Script &ldquo;Inscriptional_Parthian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2669,6 +2974,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">inscriptionalParthian</span> <span class="o">=</span> <span class="mh">0x5A</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L292">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2686,7 +2994,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Samaritan</q>.</p>
+                        <p>Script &ldquo;Samaritan&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2696,6 +3004,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">samaritan</span> <span class="o">=</span> <span class="mh">0x5B</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L295">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2713,7 +3024,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Old_South_Arabian</q>.</p>
+                        <p>Script &ldquo;Old_South_Arabian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2723,6 +3034,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">oldSouthArabian</span> <span class="o">=</span> <span class="mh">0x5C</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L298">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2740,7 +3054,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Tai_Viet</q>.</p>
+                        <p>Script &ldquo;Tai_Viet&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2750,6 +3064,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">taiViet</span> <span class="o">=</span> <span class="mh">0x5D</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L301">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2767,7 +3084,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Batak</q>.</p>
+                        <p>Script &ldquo;Batak&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2777,6 +3094,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">batak</span> <span class="o">=</span> <span class="mh">0x5E</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L304">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2794,7 +3114,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Brahmi</q>.</p>
+                        <p>Script &ldquo;Brahmi&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2804,6 +3124,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">brahmi</span> <span class="o">=</span> <span class="mh">0x5F</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L307">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2821,7 +3144,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Mandaic</q>.</p>
+                        <p>Script &ldquo;Mandaic&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2831,6 +3154,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">mandaic</span> <span class="o">=</span> <span class="mh">0x60</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L310">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2848,7 +3174,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Chakma</q>.</p>
+                        <p>Script &ldquo;Chakma&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2858,6 +3184,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">chakma</span> <span class="o">=</span> <span class="mh">0x61</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L313">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2875,7 +3204,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Meroitic_Cursive</q>.</p>
+                        <p>Script &ldquo;Meroitic_Cursive&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2885,6 +3214,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">meroiticCursive</span> <span class="o">=</span> <span class="mh">0x62</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L316">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2902,7 +3234,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Meroitic_Hieroglyphs</q>.</p>
+                        <p>Script &ldquo;Meroitic_Hieroglyphs&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2912,6 +3244,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">meroiticHieroglyphs</span> <span class="o">=</span> <span class="mh">0x63</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L319">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2929,7 +3264,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Miao</q>.</p>
+                        <p>Script &ldquo;Miao&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2939,6 +3274,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">miao</span> <span class="o">=</span> <span class="mh">0x64</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L322">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2956,7 +3294,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Sharada</q>.</p>
+                        <p>Script &ldquo;Sharada&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2966,6 +3304,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">sharada</span> <span class="o">=</span> <span class="mh">0x65</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L325">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -2983,7 +3324,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Sora_Sompeng</q>.</p>
+                        <p>Script &ldquo;Sora_Sompeng&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -2993,6 +3334,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">soraSompeng</span> <span class="o">=</span> <span class="mh">0x66</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L328">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3010,7 +3354,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Takri</q>.</p>
+                        <p>Script &ldquo;Takri&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3020,6 +3364,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">takri</span> <span class="o">=</span> <span class="mh">0x67</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L331">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3037,7 +3384,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Caucasian_Albanian</q>.</p>
+                        <p>Script &ldquo;Caucasian_Albanian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3047,6 +3394,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">caucasianAlbanian</span> <span class="o">=</span> <span class="mh">0x68</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L334">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3064,7 +3414,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Bassa_Vah</q>.</p>
+                        <p>Script &ldquo;Bassa_Vah&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3074,6 +3424,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">bassaVah</span> <span class="o">=</span> <span class="mh">0x69</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L337">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3091,7 +3444,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Duployan</q>.</p>
+                        <p>Script &ldquo;Duployan&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3101,6 +3454,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">duployan</span> <span class="o">=</span> <span class="mh">0x6A</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L340">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3118,7 +3474,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Elbasan</q>.</p>
+                        <p>Script &ldquo;Elbasan&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3128,6 +3484,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">elbasan</span> <span class="o">=</span> <span class="mh">0x6B</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L343">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3145,7 +3504,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Grantha</q>.</p>
+                        <p>Script &ldquo;Grantha&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3155,6 +3514,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">grantha</span> <span class="o">=</span> <span class="mh">0x6C</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L346">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3172,7 +3534,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Pahawh_Hmong</q>.</p>
+                        <p>Script &ldquo;Pahawh_Hmong&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3182,6 +3544,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">pahawhHmong</span> <span class="o">=</span> <span class="mh">0x6D</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L349">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3199,7 +3564,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Khojki</q>.</p>
+                        <p>Script &ldquo;Khojki&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3209,6 +3574,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">khojki</span> <span class="o">=</span> <span class="mh">0x6E</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L352">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3226,7 +3594,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Linear_A</q>.</p>
+                        <p>Script &ldquo;Linear_A&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3236,6 +3604,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">linearA</span> <span class="o">=</span> <span class="mh">0x6F</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L355">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3253,7 +3624,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Mahajani</q>.</p>
+                        <p>Script &ldquo;Mahajani&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3263,6 +3634,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">mahajani</span> <span class="o">=</span> <span class="mh">0x70</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L358">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3280,7 +3654,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Manichaean</q>.</p>
+                        <p>Script &ldquo;Manichaean&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3290,6 +3664,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">manichaean</span> <span class="o">=</span> <span class="mh">0x71</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L361">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3307,7 +3684,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Mende_Kikakui</q>.</p>
+                        <p>Script &ldquo;Mende_Kikakui&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3317,6 +3694,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">mendeKikakui</span> <span class="o">=</span> <span class="mh">0x72</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L364">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3334,7 +3714,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Modi</q>.</p>
+                        <p>Script &ldquo;Modi&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3344,6 +3724,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">modi</span> <span class="o">=</span> <span class="mh">0x73</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L367">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3361,7 +3744,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Mro</q>.</p>
+                        <p>Script &ldquo;Mro&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3371,6 +3754,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">mro</span> <span class="o">=</span> <span class="mh">0x74</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L370">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3388,7 +3774,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Old_North_Arabian</q>.</p>
+                        <p>Script &ldquo;Old_North_Arabian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3398,6 +3784,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">oldNorthArabian</span> <span class="o">=</span> <span class="mh">0x75</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L373">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3415,7 +3804,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Nabataean</q>.</p>
+                        <p>Script &ldquo;Nabataean&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3425,6 +3814,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">nabataean</span> <span class="o">=</span> <span class="mh">0x76</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L376">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3442,7 +3834,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Palmyrene</q>.</p>
+                        <p>Script &ldquo;Palmyrene&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3452,6 +3844,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">palmyrene</span> <span class="o">=</span> <span class="mh">0x77</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L379">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3469,7 +3864,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Pau_Cin_Hau</q>.</p>
+                        <p>Script &ldquo;Pau_Cin_Hau&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3479,6 +3874,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">pauCinHau</span> <span class="o">=</span> <span class="mh">0x78</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L382">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3496,7 +3894,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Old_Permic</q>.</p>
+                        <p>Script &ldquo;Old_Permic&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3506,6 +3904,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">oldPermic</span> <span class="o">=</span> <span class="mh">0x79</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L385">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3523,7 +3924,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Psalter_Pahlavi</q>.</p>
+                        <p>Script &ldquo;Psalter_Pahlavi&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3533,6 +3934,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">psalterPahlavi</span> <span class="o">=</span> <span class="mh">0x7A</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L388">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3550,7 +3954,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Siddham</q>.</p>
+                        <p>Script &ldquo;Siddham&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3560,6 +3964,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">siddham</span> <span class="o">=</span> <span class="mh">0x7B</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L391">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3577,7 +3984,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Khudawadi</q>.</p>
+                        <p>Script &ldquo;Khudawadi&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3587,6 +3994,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">khudawadi</span> <span class="o">=</span> <span class="mh">0x7C</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L394">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3604,7 +4014,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Tirhuta</q>.</p>
+                        <p>Script &ldquo;Tirhuta&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3614,6 +4024,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">tirhuta</span> <span class="o">=</span> <span class="mh">0x7D</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L397">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3631,7 +4044,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Warang_Citi</q>.</p>
+                        <p>Script &ldquo;Warang_Citi&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3641,6 +4054,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">warangCiti</span> <span class="o">=</span> <span class="mh">0x7E</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L400">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3658,7 +4074,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Ahom</q>.</p>
+                        <p>Script &ldquo;Ahom&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3668,6 +4084,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">ahom</span> <span class="o">=</span> <span class="mh">0x7F</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L403">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3685,7 +4104,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Hatran</q>.</p>
+                        <p>Script &ldquo;Hatran&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3695,6 +4114,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">hatran</span> <span class="o">=</span> <span class="mh">0x80</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L406">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3712,7 +4134,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Anatolian_Hieroglyphs</q>.</p>
+                        <p>Script &ldquo;Anatolian_Hieroglyphs&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3722,6 +4144,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">anatolianHieroglyphs</span> <span class="o">=</span> <span class="mh">0x81</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L409">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3739,7 +4164,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Old_Hungarian</q>.</p>
+                        <p>Script &ldquo;Old_Hungarian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3749,6 +4174,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">oldHungarian</span> <span class="o">=</span> <span class="mh">0x82</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L412">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3766,7 +4194,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Multani</q>.</p>
+                        <p>Script &ldquo;Multani&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3776,6 +4204,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">multani</span> <span class="o">=</span> <span class="mh">0x83</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L415">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3793,7 +4224,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>SignWriting</q>.</p>
+                        <p>Script &ldquo;SignWriting&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3803,6 +4234,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">signwriting</span> <span class="o">=</span> <span class="mh">0x84</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L418">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3820,7 +4254,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Adlam</q>.</p>
+                        <p>Script &ldquo;Adlam&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3830,6 +4264,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">adlam</span> <span class="o">=</span> <span class="mh">0x85</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L421">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3847,7 +4284,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Bhaiksuki</q>.</p>
+                        <p>Script &ldquo;Bhaiksuki&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3857,6 +4294,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">bhaiksuki</span> <span class="o">=</span> <span class="mh">0x86</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L424">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3874,7 +4314,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Marchen</q>.</p>
+                        <p>Script &ldquo;Marchen&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3884,6 +4324,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">marchen</span> <span class="o">=</span> <span class="mh">0x87</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L427">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3901,7 +4344,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Newa</q>.</p>
+                        <p>Script &ldquo;Newa&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3911,6 +4354,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">newa</span> <span class="o">=</span> <span class="mh">0x88</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L430">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3928,7 +4374,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Osage</q>.</p>
+                        <p>Script &ldquo;Osage&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3938,6 +4384,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">osage</span> <span class="o">=</span> <span class="mh">0x89</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L433">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3955,7 +4404,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Tangut</q>.</p>
+                        <p>Script &ldquo;Tangut&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3965,6 +4414,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">tangut</span> <span class="o">=</span> <span class="mh">0x8A</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L436">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -3982,7 +4434,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Masaram_Gondi</q>.</p>
+                        <p>Script &ldquo;Masaram_Gondi&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -3992,6 +4444,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">masaramGondi</span> <span class="o">=</span> <span class="mh">0x8B</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L439">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -4009,7 +4464,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Nushu</q>.</p>
+                        <p>Script &ldquo;Nushu&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -4019,6 +4474,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">nushu</span> <span class="o">=</span> <span class="mh">0x8C</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L442">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -4036,7 +4494,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Soyombo</q>.</p>
+                        <p>Script &ldquo;Soyombo&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -4046,6 +4504,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">soyombo</span> <span class="o">=</span> <span class="mh">0x8D</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L445">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -4063,7 +4524,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Zanabazar_Square</q>.</p>
+                        <p>Script &ldquo;Zanabazar_Square&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -4073,6 +4534,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">zanabazarSquare</span> <span class="o">=</span> <span class="mh">0x8E</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L448">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -4090,7 +4554,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Dogra</q>.</p>
+                        <p>Script &ldquo;Dogra&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -4100,6 +4564,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">dogra</span> <span class="o">=</span> <span class="mh">0x8F</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L451">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -4117,7 +4584,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Gunjala_Gondi</q>.</p>
+                        <p>Script &ldquo;Gunjala_Gondi&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -4127,6 +4594,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">gunjalaGondi</span> <span class="o">=</span> <span class="mh">0x90</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L454">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -4144,7 +4614,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Makasar</q>.</p>
+                        <p>Script &ldquo;Makasar&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -4154,6 +4624,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">makasar</span> <span class="o">=</span> <span class="mh">0x91</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L457">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -4171,7 +4644,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Medefaidrin</q>.</p>
+                        <p>Script &ldquo;Medefaidrin&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -4181,6 +4654,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">medefaidrin</span> <span class="o">=</span> <span class="mh">0x92</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L460">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -4198,7 +4674,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Hanifi_Rohingya</q>.</p>
+                        <p>Script &ldquo;Hanifi_Rohingya&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -4208,6 +4684,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">hanifiRohingya</span> <span class="o">=</span> <span class="mh">0x93</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L463">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -4225,7 +4704,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Sogdian</q>.</p>
+                        <p>Script &ldquo;Sogdian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -4235,6 +4714,9 @@ to the script property values defined in
                           <pre class="highlight swift"><code><span class="k">case</span> <span class="n">sogdian</span> <span class="o">=</span> <span class="mh">0x94</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L466">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -4252,7 +4734,7 @@ to the script property values defined in
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Script <q>Old_Sogdian</q>.</p>
+                        <p>Script &ldquo;Old_Sogdian&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
@@ -4263,13 +4745,12 @@ to the script property values defined in
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L469">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -4303,6 +4784,9 @@ returned.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/Script.swift#L483-L485">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -4311,11 +4795,10 @@ returned.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external noopener">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2023-06-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

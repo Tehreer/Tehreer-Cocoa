@@ -8,19 +8,29 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/ComposedFrame" class="dashAnchor"></a>
     <a title="ComposedFrame Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">Tehreer-Cocoa</a> (84% documented)</p>
+        <p><a href="../index.html">TehreerCocoa 3.0 Docs</a> (86% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tehreer/Tehreer-Cocoa"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftehreer.github.io%2FTehreer-Cocoa%2Fapidocs%2Fdocsets%2FTehreerCocoa.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html">TehreerCocoa Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         ComposedFrame Class Reference
       </p>
     </div>
@@ -62,6 +72,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FontFile.html">FontFile</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/FrameResolver.html">FrameResolver</a>
@@ -115,16 +128,19 @@
                 <a href="../Classes/TLabel.html">TLabel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/TTextView.html">TTextView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Weight.html">– Weight</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Width.html">– Width</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
@@ -172,6 +188,9 @@
               <li class="nav-group-task">
                 <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/String">String</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -184,6 +203,12 @@
                 <a href="../Structs/BidiRun.html">BidiRun</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/ColorPalette.html">ColorPalette</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ColorPalette/Flags.html">– Flags</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/HHEATable.html">HHEATable</a>
               </li>
               <li class="nav-group-task">
@@ -194,6 +219,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NamedStyle.html">NamedStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OS2Table.html">OS2Table</a>
@@ -209,6 +237,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis.html">VariationAxis</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis/Flags.html">– Flags</a>
               </li>
             </ul>
           </li>
@@ -231,6 +265,7 @@
             <h1>ComposedFrame</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">ComposedFrame</span></code></pre>
 
                 </div>
@@ -238,10 +273,43 @@
             <p>Represents a frame containing multiple lines of text. It is the output resulting from
 text-framing process performed by a typesetter.</p>
 
+              <div class="slightly-smaller">
+                <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedFrame.swift#L22-L212">Show on GitHub</a>
+              </div>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
               <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ComposedFrameC13codeUnitRangeSnySiGvp"></a>
+                    <a name="//apple_ref/swift/Property/codeUnitRange" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC13codeUnitRangeSnySiGvp">codeUnitRange</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The UTF-16 range of this frame in source string.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedFrame.swift#L32">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -262,9 +330,12 @@ text-framing process performed by a typesetter.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">startIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">startIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedFrame.swift#L35-L37">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -289,9 +360,12 @@ text-framing process performed by a typesetter.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">endIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">endIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedFrame.swift#L40-L42">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -299,9 +373,9 @@ text-framing process performed by a typesetter.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa13ComposedFrameC5width12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa13ComposedFrameC5width14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/width" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC5width12CoreGraphics7CGFloatVvp">width</a>
+                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC5width14CoreFoundation7CGFloatVvp">width</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -316,9 +390,12 @@ text-framing process performed by a typesetter.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">width</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">width</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedFrame.swift#L45">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -326,9 +403,9 @@ text-framing process performed by a typesetter.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa13ComposedFrameC6height12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa13ComposedFrameC6height14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/height" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC6height12CoreGraphics7CGFloatVvp">height</a>
+                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC6height14CoreFoundation7CGFloatVvp">height</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -343,9 +420,12 @@ text-framing process performed by a typesetter.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">height</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">height</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedFrame.swift#L48">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -374,6 +454,62 @@ text-framing process performed by a typesetter.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedFrame.swift#L51">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ComposedFrameC11indexOfLine13forCodeUnitAtS2i_tF"></a>
+                    <a name="//apple_ref/swift/Method/indexOfLine(forCodeUnitAt:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC11indexOfLine13forCodeUnitAtS2i_tF">indexOfLine(forCodeUnitAt:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the index of line containing the specified UTF-16 code unit index.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">indexOfLine</span><span class="p">(</span><span class="n">forCodeUnitAt</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of UTF-16 code unit for which to return the line index.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The index of line containing the specified UTF-16 code unit index.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedFrame.swift#L57-L77">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -382,7 +518,7 @@ text-framing process performed by a typesetter.</p>
                     <code>
                     <a name="/s:12TehreerCocoa13ComposedFrameC11indexOfLine14forCharacterAtSiSS5IndexV_tF"></a>
                     <a name="//apple_ref/swift/Method/indexOfLine(forCharacterAt:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC11indexOfLine14forCharacterAtSiSS5IndexV_tF">indexOfLine(forCharacterAt:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC11indexOfLine14forCharacterAtSiSS5IndexV_tF">indexOfLine(forCharacterAt:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -424,6 +560,9 @@ text-framing process performed by a typesetter.</p>
                         <h4>Return Value</h4>
                         <p>The index of line containing the specified character index.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedFrame.swift#L83-L87">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -432,7 +571,7 @@ text-framing process performed by a typesetter.</p>
                     <code>
                     <a name="/s:12TehreerCocoa13ComposedFrameC11indexOfLine2atSiSo7CGPointV_tF"></a>
                     <a name="//apple_ref/swift/Method/indexOfLine(at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC11indexOfLine2atSiSo7CGPointV_tF">indexOfLine(at:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC11indexOfLine2atSiSo7CGPointV_tF">indexOfLine(at:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -474,6 +613,62 @@ text-framing process performed by a typesetter.</p>
                         <h4>Return Value</h4>
                         <p>The index of a suitable line representing the specified position.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedFrame.swift#L93-L105">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ComposedFrameC13selectionPath16forCodeUnitRangeSo9CGPathRefaSnySiG_tF"></a>
+                    <a name="//apple_ref/swift/Method/selectionPath(forCodeUnitRange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC13selectionPath16forCodeUnitRangeSo9CGPathRefaSnySiG_tF">selectionPath(forCodeUnitRange:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a path that contains a set of rectangles covering the specified UTF-16 code unit range.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">selectionPath</span><span class="p">(</span><span class="n">forCodeUnitRange</span> <span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGPath</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codeUnitRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The selection range in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A path that contains a set of rectangles covering the specified UTF-16 range.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedFrame.swift#L127-L183">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -482,7 +677,7 @@ text-framing process performed by a typesetter.</p>
                     <code>
                     <a name="/s:12TehreerCocoa13ComposedFrameC13selectionPath17forCharacterRangeSo9CGPathRefaSnySS5IndexVG_tF"></a>
                     <a name="//apple_ref/swift/Method/selectionPath(forCharacterRange:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC13selectionPath17forCharacterRangeSo9CGPathRefaSnySS5IndexVG_tF">selectionPath(forCharacterRange:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC13selectionPath17forCharacterRangeSo9CGPathRefaSnySS5IndexVG_tF">selectionPath(forCharacterRange:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -524,6 +719,9 @@ text-framing process performed by a typesetter.</p>
                         <h4>Return Value</h4>
                         <p>A path that contains a set of rectangles covering the specified character range.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedFrame.swift#L189-L191">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -532,7 +730,7 @@ text-framing process performed by a typesetter.</p>
                     <code>
                     <a name="/s:12TehreerCocoa13ComposedFrameC4draw4with2in2atyAA8RendererC_So12CGContextRefaSo7CGPointVtF"></a>
                     <a name="//apple_ref/swift/Method/draw(with:in:at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC4draw4with2in2atyAA8RendererC_So12CGContextRefaSo7CGPointVtF">draw(with:in:at:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa13ComposedFrameC4draw4with2in2atyAA8RendererC_So12CGContextRefaSo7CGPointVtF">draw(with:<wbr>in:<wbr>at:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -594,6 +792,9 @@ text-framing process performed by a typesetter.</p>
                           </tbody>
                         </table>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedFrame.swift#L199-L211">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -602,11 +803,10 @@ text-framing process performed by a typesetter.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external noopener">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2023-06-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

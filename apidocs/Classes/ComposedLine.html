@@ -8,19 +8,29 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/ComposedLine" class="dashAnchor"></a>
     <a title="ComposedLine Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">Tehreer-Cocoa</a> (84% documented)</p>
+        <p><a href="../index.html">TehreerCocoa 3.0 Docs</a> (86% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tehreer/Tehreer-Cocoa"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftehreer.github.io%2FTehreer-Cocoa%2Fapidocs%2Fdocsets%2FTehreerCocoa.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html">TehreerCocoa Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         ComposedLine Class Reference
       </p>
     </div>
@@ -62,6 +72,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FontFile.html">FontFile</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/FrameResolver.html">FrameResolver</a>
@@ -115,16 +128,19 @@
                 <a href="../Classes/TLabel.html">TLabel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/TTextView.html">TTextView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Weight.html">– Weight</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Width.html">– Width</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
@@ -172,6 +188,9 @@
               <li class="nav-group-task">
                 <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/String">String</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -184,6 +203,12 @@
                 <a href="../Structs/BidiRun.html">BidiRun</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/ColorPalette.html">ColorPalette</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ColorPalette/Flags.html">– Flags</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/HHEATable.html">HHEATable</a>
               </li>
               <li class="nav-group-task">
@@ -194,6 +219,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NamedStyle.html">NamedStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OS2Table.html">OS2Table</a>
@@ -209,6 +237,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis.html">VariationAxis</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis/Flags.html">– Flags</a>
               </li>
             </ul>
           </li>
@@ -231,16 +265,50 @@
             <h1>ComposedLine</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">ComposedLine</span></code></pre>
 
                 </div>
               </div>
             <p>Represents a line of text consisting of an array of <code><a href="../Classes/GlyphRun.html">GlyphRun</a></code> objects in visual order.</p>
 
+              <div class="slightly-smaller">
+                <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L21-L267">Show on GitHub</a>
+              </div>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
               <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa12ComposedLineC13codeUnitRangeSnySiGvp"></a>
+                    <a name="//apple_ref/swift/Property/codeUnitRange" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC13codeUnitRangeSnySiGvp">codeUnitRange</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The UTF-16 range of this line in source string.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L40">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -261,9 +329,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">startIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">startIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L43-L45">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -288,9 +359,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">endIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">endIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L48-L50">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -319,6 +393,9 @@
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L53">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -342,9 +419,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">origin</span><span class="p">:</span> <span class="kt">CGPoint</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">origin</span><span class="p">:</span> <span class="kt">CGPoint</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L56">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -352,9 +432,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa12ComposedLineC6ascent12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa12ComposedLineC6ascent14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/ascent" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC6ascent12CoreGraphics7CGFloatVvp">ascent</a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC6ascent14CoreFoundation7CGFloatVvp">ascent</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -369,9 +449,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">ascent</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">ascent</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L59">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -379,9 +462,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa12ComposedLineC7descent12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa12ComposedLineC7descent14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/descent" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC7descent12CoreGraphics7CGFloatVvp">descent</a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC7descent14CoreFoundation7CGFloatVvp">descent</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -396,9 +479,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">descent</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">descent</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L62">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -406,9 +492,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa12ComposedLineC7leading12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa12ComposedLineC7leading14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/leading" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC7leading12CoreGraphics7CGFloatVvp">leading</a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC7leading14CoreFoundation7CGFloatVvp">leading</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -423,9 +509,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">leading</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">leading</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L65">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -433,9 +522,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa12ComposedLineC5width12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa12ComposedLineC5width14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/width" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC5width12CoreGraphics7CGFloatVvp">width</a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC5width14CoreFoundation7CGFloatVvp">width</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -454,15 +543,18 @@
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L68-L70">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa12ComposedLineC6height12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa12ComposedLineC6height14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/height" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC6height12CoreGraphics7CGFloatVvp">height</a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC6height14CoreFoundation7CGFloatVvp">height</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -481,15 +573,18 @@
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L73-L75">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa12ComposedLineC24trailingWhitespaceExtent12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa12ComposedLineC24trailingWhitespaceExtent14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/trailingWhitespaceExtent" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC24trailingWhitespaceExtent12CoreGraphics7CGFloatVvp">trailingWhitespaceExtent</a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC24trailingWhitespaceExtent14CoreFoundation7CGFloatVvp">trailingWhitespaceExtent</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -507,6 +602,9 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">trailingWhitespaceExtent</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L98">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -535,15 +633,18 @@
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L101">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa12ComposedLineC8distance14forCharacterAt12CoreGraphics7CGFloatVSS5IndexV_tF"></a>
-                    <a name="//apple_ref/swift/Method/distance(forCharacterAt:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC8distance14forCharacterAt12CoreGraphics7CGFloatVSS5IndexV_tF">distance(forCharacterAt:)</a>
+                    <a name="/s:12TehreerCocoa12ComposedLineC8distance13forCodeUnitAt14CoreFoundation7CGFloatVSi_tF"></a>
+                    <a name="//apple_ref/swift/Method/distance(forCodeUnitAt:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC8distance13forCodeUnitAt14CoreFoundation7CGFloatVSi_tF">distance(forCodeUnitAt:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -551,7 +652,63 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Determines the distance of specified character from the start of the line assumed at zero.</p>
+                        <p>Determines the distance of the specified UTF-16 code unit from the start of the line assumed
+at zero.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">distance</span><span class="p">(</span><span class="n">forCodeUnitAt</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGFloat</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of the UTF-16 code unit in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The distance of the specified UTF-16 code unit from the start of the line assumed
+       at zero.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L110-L125">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa12ComposedLineC8distance14forCharacterAt14CoreFoundation7CGFloatVSS5IndexV_tF"></a>
+                    <a name="//apple_ref/swift/Method/distance(forCharacterAt:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC8distance14forCharacterAt14CoreFoundation7CGFloatVSS5IndexV_tF">distance(forCharacterAt:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determines the distance of the specified character from the start of the line assumed at
+zero.</p>
 
                       </div>
                       <div class="declaration">
@@ -585,15 +742,75 @@
                         <h4>Return Value</h4>
                         <p>The distance of specified character from the start of the line assumed at zero.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L133-L137">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa12ComposedLineC11visualEdges17forCharacterRangeSay12CoreGraphics7CGFloatVGSnySS5IndexVG_tF"></a>
+                    <a name="/s:12TehreerCocoa12ComposedLineC11visualEdges16forCodeUnitRangeSay14CoreFoundation7CGFloatVGSnySiG_tF"></a>
+                    <a name="//apple_ref/swift/Method/visualEdges(forCodeUnitRange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC11visualEdges16forCodeUnitRangeSay14CoreFoundation7CGFloatVGSnySiG_tF">visualEdges(forCodeUnitRange:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an array of visual edges corresponding to the specified range of UTF-16 code units.</p>
+
+<p>The resulting array will contain pairs of leading and trailing edges sorted from left to
+right. There will be a separate pair for each glyph run occurred in the specified code unit
+range. Each edge will be positioned relative to the start of the line assumed at zero.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">visualEdges</span><span class="p">(</span><span class="n">forCodeUnitRange</span> <span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">CGFloat</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codeUnitRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The range of UTF-16 code units in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An array of visual edges corresponding to the specified UTF-16 code unit range.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L148-L181">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa12ComposedLineC11visualEdges17forCharacterRangeSay14CoreFoundation7CGFloatVGSnySS5IndexVG_tF"></a>
                     <a name="//apple_ref/swift/Method/visualEdges(forCharacterRange:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC11visualEdges17forCharacterRangeSay12CoreGraphics7CGFloatVGSnySS5IndexVG_tF">visualEdges(forCharacterRange:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC11visualEdges17forCharacterRangeSay14CoreFoundation7CGFloatVGSnySS5IndexVG_tF">visualEdges(forCharacterRange:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -639,15 +856,73 @@ range. Each edge will be positioned relative to the start of the line assumed at
                         <h4>Return Value</h4>
                         <p>An array of visual edges corresponding to the specified character range.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L192-L194">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa12ComposedLineC16indexOfCharacter2atSS5IndexV12CoreGraphics7CGFloatV_tF"></a>
+                    <a name="/s:12TehreerCocoa12ComposedLineC15indexOfCodeUnit2atSi14CoreFoundation7CGFloatV_tF"></a>
+                    <a name="//apple_ref/swift/Method/indexOfCodeUnit(at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC15indexOfCodeUnit2atSi14CoreFoundation7CGFloatV_tF">indexOfCodeUnit(at:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the index of UTF-16 code unit nearest to the specified distance.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">indexOfCodeUnit</span><span class="p">(</span><span class="n">at</span> <span class="nv">distance</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>distance</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The distance for which to determine the UTF-16 code unit index. It should be
+      offset from zero origin.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The index of UTF-16 code unit in source string, nearest to the specified
+       distance.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L203-L211">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa12ComposedLineC16indexOfCharacter2atSS5IndexV14CoreFoundation7CGFloatV_tF"></a>
                     <a name="//apple_ref/swift/Method/indexOfCharacter(at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC16indexOfCharacter2atSS5IndexV12CoreGraphics7CGFloatV_tF">indexOfCharacter(at:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC16indexOfCharacter2atSS5IndexV14CoreFoundation7CGFloatV_tF">indexOfCharacter(at:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -690,15 +965,18 @@ range. Each edge will be positioned relative to the start of the line assumed at
                         <h4>Return Value</h4>
                         <p>The index of character in source string, nearest to the specified distance.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L219-L221">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa12ComposedLineC9penOffset14forFlushFactor11flushExtent12CoreGraphics7CGFloatVAI_AItF"></a>
+                    <a name="/s:12TehreerCocoa12ComposedLineC9penOffset14forFlushFactor11flushExtent14CoreFoundation7CGFloatVAI_AItF"></a>
                     <a name="//apple_ref/swift/Method/penOffset(forFlushFactor:flushExtent:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC9penOffset14forFlushFactor11flushExtent12CoreGraphics7CGFloatVAI_AItF">penOffset(forFlushFactor:flushExtent:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC9penOffset14forFlushFactor11flushExtent14CoreFoundation7CGFloatVAI_AItF">penOffset(forFlushFactor:<wbr>flushExtent:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -756,6 +1034,9 @@ range. Each edge will be positioned relative to the start of the line assumed at
                         <p>A value which can be used to offset the current pen position for the flush
        operation.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L233-L240">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -764,7 +1045,7 @@ range. Each edge will be positioned relative to the start of the line assumed at
                     <code>
                     <a name="/s:12TehreerCocoa12ComposedLineC4draw4with2inyAA8RendererC_So12CGContextRefatF"></a>
                     <a name="//apple_ref/swift/Method/draw(with:in:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC4draw4with2inyAA8RendererC_So12CGContextRefatF">draw(with:in:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa12ComposedLineC4draw4with2inyAA8RendererC_So12CGContextRefatF">draw(with:<wbr>in:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -814,6 +1095,9 @@ range. Each edge will be positioned relative to the start of the line assumed at
                           </tbody>
                         </table>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/ComposedLine.swift#L260-L266">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -822,11 +1106,10 @@ range. Each edge will be positioned relative to the start of the line assumed at
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external noopener">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2023-06-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

@@ -8,19 +8,29 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/ShapingEngine" class="dashAnchor"></a>
     <a title="ShapingEngine Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">Tehreer-Cocoa</a> (84% documented)</p>
+        <p><a href="../index.html">TehreerCocoa 3.0 Docs</a> (86% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tehreer/Tehreer-Cocoa"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftehreer.github.io%2FTehreer-Cocoa%2Fapidocs%2Fdocsets%2FTehreerCocoa.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html">TehreerCocoa Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         ShapingEngine Class Reference
       </p>
     </div>
@@ -62,6 +72,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FontFile.html">FontFile</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/FrameResolver.html">FrameResolver</a>
@@ -115,16 +128,19 @@
                 <a href="../Classes/TLabel.html">TLabel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/TTextView.html">TTextView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Weight.html">– Weight</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Width.html">– Width</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
@@ -172,6 +188,9 @@
               <li class="nav-group-task">
                 <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/String">String</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -184,6 +203,12 @@
                 <a href="../Structs/BidiRun.html">BidiRun</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/ColorPalette.html">ColorPalette</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ColorPalette/Flags.html">– Flags</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/HHEATable.html">HHEATable</a>
               </li>
               <li class="nav-group-task">
@@ -194,6 +219,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NamedStyle.html">NamedStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OS2Table.html">OS2Table</a>
@@ -209,6 +237,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis.html">VariationAxis</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis/Flags.html">– Flags</a>
               </li>
             </ul>
           </li>
@@ -231,12 +265,16 @@
             <h1>ShapingEngine</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">ShapingEngine</span></code></pre>
 
                 </div>
               </div>
             <p>The <code>ShapingEngine</code> class represents text shaping engine.</p>
 
+              <div class="slightly-smaller">
+                <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingEngine.swift#L22-L170">Show on GitHub</a>
+              </div>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -265,6 +303,9 @@
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingEngine.swift#L24">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -273,7 +314,7 @@
                     <code>
                     <a name="/s:12TehreerCocoa13ShapingEngineC25defaultDirectionForScriptyAA07WritingF0OAA7SFNTTagVFZ"></a>
                     <a name="//apple_ref/swift/Method/defaultDirectionForScript(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC25defaultDirectionForScriptyAA07WritingF0OAA7SFNTTagVFZ">defaultDirectionForScript(_:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC25defaultDirectionForScriptyAA07WritingF0OAA7SFNTTagVFZ">defaultDirectionForScript(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -315,6 +356,9 @@
                         <h4>Return Value</h4>
                         <p>The default writing direction of the script identified by <code><a href="../Classes/ShapingEngine.html#/s:12TehreerCocoa13ShapingEngineC9scriptTagAA7SFNTTagVvp">scriptTag</a></code>.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingEngine.swift#L30-L40">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -342,15 +386,18 @@
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingEngine.swift#L43">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa13ShapingEngineC8typeSize12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa13ShapingEngineC8typeSize14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/typeSize" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC8typeSize12CoreGraphics7CGFloatVvp">typeSize</a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC8typeSize14CoreFoundation7CGFloatVvp">typeSize</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -368,6 +415,9 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">typeSize</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingEngine.swift#L46">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -397,6 +447,9 @@
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingEngine.swift#L50">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -424,6 +477,9 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">languageTag</span><span class="p">:</span> <span class="kt"><a href="../Structs/SFNTTag.html">SFNTTag</a></span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingEngine.swift#L54">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -453,9 +509,12 @@ alternate glyph at this position.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">openTypeFeatures</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/SFNTTag.html">SFNTTag</a></span> <span class="p">:</span> <span class="kt">Int</span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">openTypeFeatures</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/SFNTTag.html">SFNTTag</a></span> <span class="p">:</span> <span class="kt">Int</span><span class="p">]</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingEngine.swift#L62">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -486,9 +545,12 @@ overridden explicitly.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">writingDirection</span><span class="p">:</span> <span class="kt"><a href="../Enums/WritingDirection.html">WritingDirection</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">writingDirection</span><span class="p">:</span> <span class="kt"><a href="../Enums/WritingDirection.html">WritingDirection</a></span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingEngine.swift#L71">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -519,9 +581,12 @@ original text.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shapingOrder</span><span class="p">:</span> <span class="kt"><a href="../Enums/ShapingOrder.html">ShapingOrder</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shapingOrder</span><span class="p">:</span> <span class="kt"><a href="../Enums/ShapingOrder.html">ShapingOrder</a></span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingEngine.swift#L80">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -529,9 +594,79 @@ original text.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa13ShapingEngineC5shape4text5rangeAA0C6ResultCSS_SnySS5IndexVGtF"></a>
-                    <a name="//apple_ref/swift/Method/shape(text:range:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC5shape4text5rangeAA0C6ResultCSS_SnySS5IndexVGtF">shape(text:range:)</a>
+                    <a name="/s:12TehreerCocoa13ShapingEngineC5shape6string13codeUnitRangeAA0C6ResultCSS_SnySiGtF"></a>
+                    <a name="//apple_ref/swift/Method/shape(string:codeUnitRange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC5shape6string13codeUnitRangeAA0C6ResultCSS_SnySiGtF">shape(string:<wbr>codeUnitRange:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Shapes the specified UTF-16 range of text into glyphs.</p>
+
+<p>The output glyphs in the <code><a href="../Classes/ShapingResult.html">ShapingResult</a></code> object flow visually in writing direction. For
+left-to-right direction, the position of pen is incremented with glyph&rsquo;s advance after
+rendering it. Similarly, for right-to-left direction, the position of pen is decremented
+with glyph&rsquo;s advance after rendering it.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">shape</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ShapingResult.html">ShapingResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>string</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The text to shape into glyphs.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codeUnitRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF-16 range of text to be shaped.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new <code><a href="../Classes/ShapingResult.html">ShapingResult</a></code> object.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingEngine.swift#L101-L154">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingEngineC5shape6string14characterRangeAA0C6ResultCSS_SnySS5IndexVGtF"></a>
+                    <a name="//apple_ref/swift/Method/shape(string:characterRange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingEngineC5shape6string14characterRangeAA0C6ResultCSS_SnySS5IndexVGtF">shape(string:<wbr>characterRange:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -551,7 +686,7 @@ with glyph&rsquo;s advance after rendering it.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">shape</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ShapingResult.html">ShapingResult</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">shape</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">characterRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ShapingResult.html">ShapingResult</a></span></code></pre>
 
                         </div>
                       </div>
@@ -562,7 +697,7 @@ with glyph&rsquo;s advance after rendering it.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>text</em>
+                                <em>string</em>
                                 </code>
                               </td>
                               <td>
@@ -574,12 +709,12 @@ with glyph&rsquo;s advance after rendering it.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>range</em>
+                                <em>characterRange</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The range of text to be shaped.</p>
+                                  <p>The character range of text to be shaped.</p>
                                 </div>
                               </td>
                             </tr>
@@ -590,6 +725,9 @@ with glyph&rsquo;s advance after rendering it.</p>
                         <h4>Return Value</h4>
                         <p>A new <code><a href="../Classes/ShapingResult.html">ShapingResult</a></code> object.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingEngine.swift#L167-L169">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -598,11 +736,10 @@ with glyph&rsquo;s advance after rendering it.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external noopener">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2023-06-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

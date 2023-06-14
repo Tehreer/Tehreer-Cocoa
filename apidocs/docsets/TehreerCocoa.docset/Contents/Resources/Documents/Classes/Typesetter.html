@@ -8,19 +8,29 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/Typesetter" class="dashAnchor"></a>
     <a title="Typesetter Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">Tehreer-Cocoa</a> (84% documented)</p>
+        <p><a href="../index.html">TehreerCocoa 3.0 Docs</a> (86% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tehreer/Tehreer-Cocoa"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftehreer.github.io%2FTehreer-Cocoa%2Fapidocs%2Fdocsets%2FTehreerCocoa.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html">TehreerCocoa Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         Typesetter Class Reference
       </p>
     </div>
@@ -62,6 +72,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FontFile.html">FontFile</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/FrameResolver.html">FrameResolver</a>
@@ -115,16 +128,19 @@
                 <a href="../Classes/TLabel.html">TLabel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/TTextView.html">TTextView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Weight.html">– Weight</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Width.html">– Width</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
@@ -172,6 +188,9 @@
               <li class="nav-group-task">
                 <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/String">String</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -184,6 +203,12 @@
                 <a href="../Structs/BidiRun.html">BidiRun</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/ColorPalette.html">ColorPalette</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ColorPalette/Flags.html">– Flags</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/HHEATable.html">HHEATable</a>
               </li>
               <li class="nav-group-task">
@@ -194,6 +219,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NamedStyle.html">NamedStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OS2Table.html">OS2Table</a>
@@ -209,6 +237,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis.html">VariationAxis</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis/Flags.html">– Flags</a>
               </li>
             </ul>
           </li>
@@ -231,6 +265,7 @@
             <h1>Typesetter</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Typesetter</span></code></pre>
 
                 </div>
@@ -238,6 +273,9 @@
             <p>Represents a typesetter which performs text layout. It can be used to create lines, perform line
 breaking, and do other contextual analysis based on the characters in the string.</p>
 
+              <div class="slightly-smaller">
+                <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L22-L262">Show on GitHub</a>
+              </div>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -266,6 +304,9 @@ breaking, and do other contextual analysis based on the characters in the string
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L24">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -274,7 +315,7 @@ breaking, and do other contextual analysis based on the characters in the string
                     <code>
                     <a name="/s:12TehreerCocoa10TypesetterC4text17defaultAttributesACSo18NSAttributedStringC_SDySo0gH3KeyaypGtcfc"></a>
                     <a name="//apple_ref/swift/Method/init(text:defaultAttributes:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC4text17defaultAttributesACSo18NSAttributedStringC_SDySo0gH3KeyaypGtcfc">init(text:defaultAttributes:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC4text17defaultAttributesACSo18NSAttributedStringC_SDySo0gH3KeyaypGtcfc">init(text:<wbr>defaultAttributes:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -324,15 +365,97 @@ breaking, and do other contextual analysis based on the characters in the string
                           </tbody>
                         </table>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L36-L45">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa10TypesetterC19suggestForwardBreak16inCharacterRange6extent9breakModeSS5IndexVSnyAIG_12CoreGraphics7CGFloatVAA0fL0OtF"></a>
+                    <a name="/s:12TehreerCocoa10TypesetterC19suggestForwardBreak15inCodeUnitRange6extent9breakModeSiSnySiG_14CoreFoundation7CGFloatVAA0fM0OtF"></a>
+                    <a name="//apple_ref/swift/Method/suggestForwardBreak(inCodeUnitRange:extent:breakMode:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC19suggestForwardBreak15inCodeUnitRange6extent9breakModeSiSnySiG_14CoreFoundation7CGFloatVAA0fM0OtF">suggestForwardBreak(inCodeUnitRange:<wbr>extent:<wbr>breakMode:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Suggests a forward break index based on the specified range and the extent. The measurement
+proceeds from first UTF-16 code unit to last code unit. If there is still room after
+measuring all characters, then last index is returned. Otherwise, break index is returned.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">suggestForwardBreak</span><span class="p">(</span><span class="n">inCodeUnitRange</span> <span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">extent</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">breakMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/BreakMode.html">BreakMode</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codeUnitRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF-16 range for break calculations.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>extent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The requested break extent.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>mode</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The requested break mode.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The index (exclusive) that would cause the break.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L56-L59">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa10TypesetterC19suggestForwardBreak16inCharacterRange6extent9breakModeSS5IndexVSnyAIG_14CoreFoundation7CGFloatVAA0fL0OtF"></a>
                     <a name="//apple_ref/swift/Method/suggestForwardBreak(inCharacterRange:extent:breakMode:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC19suggestForwardBreak16inCharacterRange6extent9breakModeSS5IndexVSnyAIG_12CoreGraphics7CGFloatVAA0fL0OtF">suggestForwardBreak(inCharacterRange:extent:breakMode:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC19suggestForwardBreak16inCharacterRange6extent9breakModeSS5IndexVSnyAIG_14CoreFoundation7CGFloatVAA0fL0OtF">suggestForwardBreak(inCharacterRange:<wbr>extent:<wbr>breakMode:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -400,15 +523,18 @@ characters, then last index is returned. Otherwise, break index is returned.</p>
                         <h4>Return Value</h4>
                         <p>The index (exclusive) that would cause the break.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L70-L77">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa10TypesetterC20suggestBackwardBreak16inCharacterRange6extent9breakModeSS5IndexVSnyAIG_12CoreGraphics7CGFloatVAA0fL0OtF"></a>
-                    <a name="//apple_ref/swift/Method/suggestBackwardBreak(inCharacterRange:extent:breakMode:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC20suggestBackwardBreak16inCharacterRange6extent9breakModeSS5IndexVSnyAIG_12CoreGraphics7CGFloatVAA0fL0OtF">suggestBackwardBreak(inCharacterRange:extent:breakMode:)</a>
+                    <a name="/s:12TehreerCocoa10TypesetterC20suggestBackwardBreak15inCodeUnitRange6extent9breakModeSiSnySiG_14CoreFoundation7CGFloatVAA0fM0OtF"></a>
+                    <a name="//apple_ref/swift/Method/suggestBackwardBreak(inCodeUnitRange:extent:breakMode:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC20suggestBackwardBreak15inCodeUnitRange6extent9breakModeSiSnySiG_14CoreFoundation7CGFloatVAA0fM0OtF">suggestBackwardBreak(inCodeUnitRange:<wbr>extent:<wbr>breakMode:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -417,15 +543,15 @@ characters, then last index is returned. Otherwise, break index is returned.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Suggests a backward break index based on the specified range and the extent. The measurement
-proceeds from last character to first character. If there is still room after measuring all
-characters, then start index is returned. Otherwise, break index is returned.</p>
+proceeds from last UTF-16 code unit to first code unit. If there is still room after
+measuring all characters, then start index is returned. Otherwise, break index is returned.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">suggestBackwardBreak</span><span class="p">(</span><span class="n">inCharacterRange</span> <span class="nv">characterRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">extent</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">breakMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/BreakMode.html">BreakMode</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">suggestBackwardBreak</span><span class="p">(</span><span class="n">inCodeUnitRange</span> <span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">extent</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">breakMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/BreakMode.html">BreakMode</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -436,12 +562,12 @@ characters, then start index is returned. Otherwise, break index is returned.</p
                             <tr>
                               <td>
                                 <code>
-                                <em>characterRange</em>
+                                <em>codeUnitRange</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The string range for break calculations.</p>
+                                  <p>The UTF-16 range for break calculations.</p>
                                 </div>
                               </td>
                             </tr>
@@ -476,6 +602,141 @@ characters, then start index is returned. Otherwise, break index is returned.</p
                         <h4>Return Value</h4>
                         <p>The index (inclusive) that would cause the break.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L88-L91">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa10TypesetterC20suggestBackwardBreak16inCharacterRange6extent9breakModeSS5IndexVSnyAIG_14CoreFoundation7CGFloatVAA0fL0OtF"></a>
+                    <a name="//apple_ref/swift/Method/suggestBackwardBreak(inCharacterRange:extent:breakMode:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC20suggestBackwardBreak16inCharacterRange6extent9breakModeSS5IndexVSnyAIG_14CoreFoundation7CGFloatVAA0fL0OtF">suggestBackwardBreak(inCharacterRange:<wbr>extent:<wbr>breakMode:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Suggests a backward break index based on the specified range and the extent. The measurement
+proceeds from last character to first character. If there is still room after measuring all
+characters, then start index is returned. Otherwise, break index is returned.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">suggestBackwardBreak</span><span class="p">(</span><span class="n">inCharacterRange</span> <span class="nv">characterRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">extent</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">breakMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/BreakMode.html">BreakMode</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>characterRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The character range for break calculations.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>extent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The requested break extent.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>mode</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The requested break mode.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The index (inclusive) that would cause the break.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L102-L109">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa10TypesetterC14makeSimpleLine13codeUnitRangeAA08ComposedF0CSnySiG_tF"></a>
+                    <a name="//apple_ref/swift/Method/makeSimpleLine(codeUnitRange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC14makeSimpleLine13codeUnitRangeAA08ComposedF0CSnySiG_tF">makeSimpleLine(codeUnitRange:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a simple line having the specified UTF-16 range.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeSimpleLine</span><span class="p">(</span><span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ComposedLine.html">ComposedLine</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codeUnitRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF-16 range of the line in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The new line.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L115-L118">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -484,7 +745,7 @@ characters, then start index is returned. Otherwise, break index is returned.</p
                     <code>
                     <a name="/s:12TehreerCocoa10TypesetterC14makeSimpleLine14characterRangeAA08ComposedF0CSnySS5IndexVG_tF"></a>
                     <a name="//apple_ref/swift/Method/makeSimpleLine(characterRange:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC14makeSimpleLine14characterRangeAA08ComposedF0CSnySS5IndexVG_tF">makeSimpleLine(characterRange:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC14makeSimpleLine14characterRangeAA08ComposedF0CSnySS5IndexVG_tF">makeSimpleLine(characterRange:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -515,7 +776,7 @@ characters, then start index is returned. Otherwise, break index is returned.</p
                               </td>
                               <td>
                                 <div>
-                                  <p>The range of the line in source string.</p>
+                                  <p>The character range of the line in source string.</p>
                                 </div>
                               </td>
                             </tr>
@@ -526,15 +787,121 @@ characters, then start index is returned. Otherwise, break index is returned.</p
                         <h4>Return Value</h4>
                         <p>The new line.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L124-L127">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa10TypesetterC17makeTruncatedLine14characterRange6extent9breakMode15truncationPlace11tokenStringAA08ComposedF0CSnySS5IndexVG_12CoreGraphics7CGFloatVAA05BreakK0OAA010TruncationM0OSSSgtF"></a>
+                    <a name="/s:12TehreerCocoa10TypesetterC17makeTruncatedLine13codeUnitRange6extent9breakMode15truncationPlace11tokenStringAA08ComposedF0CSnySiG_14CoreFoundation7CGFloatVAA05BreakL0OAA010TruncationN0OSSSgtF"></a>
+                    <a name="//apple_ref/swift/Method/makeTruncatedLine(codeUnitRange:extent:breakMode:truncationPlace:tokenString:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC17makeTruncatedLine13codeUnitRange6extent9breakMode15truncationPlace11tokenStringAA08ComposedF0CSnySiG_14CoreFoundation7CGFloatVAA05BreakL0OAA010TruncationN0OSSSgtF">makeTruncatedLine(codeUnitRange:<wbr>extent:<wbr>breakMode:<wbr>truncationPlace:<wbr>tokenString:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a line of specified UTF-16 range, truncating it if it overflows the specified extent.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeTruncatedLine</span><span class="p">(</span><span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">extent</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span>
+                              <span class="nv">breakMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/BreakMode.html">BreakMode</a></span><span class="p">,</span> <span class="nv">truncationPlace</span><span class="p">:</span> <span class="kt"><a href="../Enums/TruncationPlace.html">TruncationPlace</a></span><span class="p">,</span>
+                              <span class="nv">tokenString</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ComposedLine.html">ComposedLine</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codeUnitRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF-16 range of the line in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>extent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The extent at which truncation will begin.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>breakMode</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The truncation mode to be used on the line.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>truncationPlace</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The place of truncation for the line.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>tokenString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The token string to indicate the line truncation.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The new line which is truncated if it overflows the <code>extent</code>.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L138-L151">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa10TypesetterC17makeTruncatedLine14characterRange6extent9breakMode15truncationPlace11tokenStringAA08ComposedF0CSnySS5IndexVG_14CoreFoundation7CGFloatVAA05BreakK0OAA010TruncationM0OSSSgtF"></a>
                     <a name="//apple_ref/swift/Method/makeTruncatedLine(characterRange:extent:breakMode:truncationPlace:tokenString:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC17makeTruncatedLine14characterRange6extent9breakMode15truncationPlace11tokenStringAA08ComposedF0CSnySS5IndexVG_12CoreGraphics7CGFloatVAA05BreakK0OAA010TruncationM0OSSSgtF">makeTruncatedLine(characterRange:extent:breakMode:truncationPlace:tokenString:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC17makeTruncatedLine14characterRange6extent9breakMode15truncationPlace11tokenStringAA08ComposedF0CSnySS5IndexVG_14CoreFoundation7CGFloatVAA05BreakK0OAA010TruncationM0OSSSgtF">makeTruncatedLine(characterRange:<wbr>extent:<wbr>breakMode:<wbr>truncationPlace:<wbr>tokenString:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -626,15 +993,18 @@ characters, then start index is returned. Otherwise, break index is returned.</p
                         <h4>Return Value</h4>
                         <p>The new line which is truncated if it overflows the <code>extent</code>.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L162-L174">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa10TypesetterC17makeTruncatedLine14characterRange6extent9breakMode15truncationPlace05tokenF0AA08ComposedF0CSnySS5IndexVG_12CoreGraphics7CGFloatVAA05BreakK0OAA010TruncationM0OAKtF"></a>
-                    <a name="//apple_ref/swift/Method/makeTruncatedLine(characterRange:extent:breakMode:truncationPlace:tokenLine:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC17makeTruncatedLine14characterRange6extent9breakMode15truncationPlace05tokenF0AA08ComposedF0CSnySS5IndexVG_12CoreGraphics7CGFloatVAA05BreakK0OAA010TruncationM0OAKtF">makeTruncatedLine(characterRange:extent:breakMode:truncationPlace:tokenLine:)</a>
+                    <a name="/s:12TehreerCocoa10TypesetterC17makeTruncatedLine13codeUnitRange6extent9breakMode15truncationPlace05tokenF0AA08ComposedF0CSnySiG_14CoreFoundation7CGFloatVAA05BreakL0OAA010TruncationN0OAKtF"></a>
+                    <a name="//apple_ref/swift/Method/makeTruncatedLine(codeUnitRange:extent:breakMode:truncationPlace:tokenLine:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC17makeTruncatedLine13codeUnitRange6extent9breakMode15truncationPlace05tokenF0AA08ComposedF0CSnySiG_14CoreFoundation7CGFloatVAA05BreakL0OAA010TruncationN0OAKtF">makeTruncatedLine(codeUnitRange:<wbr>extent:<wbr>breakMode:<wbr>truncationPlace:<wbr>tokenLine:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -642,14 +1012,14 @@ characters, then start index is returned. Otherwise, break index is returned.</p
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Creates a line of specified string range, truncating it if it overflows the specified extent.</p>
+                        <p>Creates a line of specified UTF-16 range, truncating it if it overflows the specified extent.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeTruncatedLine</span><span class="p">(</span><span class="nv">characterRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">extent</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeTruncatedLine</span><span class="p">(</span><span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">extent</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span>
                               <span class="nv">breakMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/BreakMode.html">BreakMode</a></span><span class="p">,</span> <span class="nv">truncationPlace</span><span class="p">:</span> <span class="kt"><a href="../Enums/TruncationPlace.html">TruncationPlace</a></span><span class="p">,</span>
                               <span class="nv">tokenLine</span><span class="p">:</span> <span class="kt"><a href="../Classes/ComposedLine.html">ComposedLine</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ComposedLine.html">ComposedLine</a></span></code></pre>
 
@@ -662,12 +1032,12 @@ characters, then start index is returned. Otherwise, break index is returned.</p
                             <tr>
                               <td>
                                 <code>
-                                <em>characterRange</em>
+                                <em>codeUnitRange</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The range of the line in source string.</p>
+                                  <p>The UTF-16 range of the line in source string.</p>
                                 </div>
                               </td>
                             </tr>
@@ -726,6 +1096,282 @@ characters, then start index is returned. Otherwise, break index is returned.</p
                         <h4>Return Value</h4>
                         <p>The new line which is truncated if it overflows the <code>extent</code>.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L185-L196">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa10TypesetterC17makeTruncatedLine14characterRange6extent9breakMode15truncationPlace05tokenF0AA08ComposedF0CSnySS5IndexVG_14CoreFoundation7CGFloatVAA05BreakK0OAA010TruncationM0OAKtF"></a>
+                    <a name="//apple_ref/swift/Method/makeTruncatedLine(characterRange:extent:breakMode:truncationPlace:tokenLine:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC17makeTruncatedLine14characterRange6extent9breakMode15truncationPlace05tokenF0AA08ComposedF0CSnySS5IndexVG_14CoreFoundation7CGFloatVAA05BreakK0OAA010TruncationM0OAKtF">makeTruncatedLine(characterRange:<wbr>extent:<wbr>breakMode:<wbr>truncationPlace:<wbr>tokenLine:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a line of specified character range, truncating it if it overflows the specified extent.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeTruncatedLine</span><span class="p">(</span><span class="nv">characterRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">extent</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span>
+                              <span class="nv">breakMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/BreakMode.html">BreakMode</a></span><span class="p">,</span> <span class="nv">truncationPlace</span><span class="p">:</span> <span class="kt"><a href="../Enums/TruncationPlace.html">TruncationPlace</a></span><span class="p">,</span>
+                              <span class="nv">tokenLine</span><span class="p">:</span> <span class="kt"><a href="../Classes/ComposedLine.html">ComposedLine</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ComposedLine.html">ComposedLine</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>characterRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The character range of the line in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>extent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The extent at which truncation will begin.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>breakMode</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The truncation mode to be used on the line.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>truncationPlace</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The place of truncation for the line.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>tokenLine</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The token line to indicate the line truncation.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The new line which is truncated if it overflows the <code>extent</code>.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L207-L214">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa10TypesetterC17makeJustifiedLine13codeUnitRange19justificationFactor0J6ExtentAA08ComposedF0CSnySiG_14CoreFoundation7CGFloatVAMtF"></a>
+                    <a name="//apple_ref/swift/Method/makeJustifiedLine(codeUnitRange:justificationFactor:justificationExtent:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC17makeJustifiedLine13codeUnitRange19justificationFactor0J6ExtentAA08ComposedF0CSnySiG_14CoreFoundation7CGFloatVAMtF">makeJustifiedLine(codeUnitRange:<wbr>justificationFactor:<wbr>justificationExtent:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a justified line of specified UTF-16 range.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeJustifiedLine</span><span class="p">(</span><span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">,</span>
+                              <span class="nv">justificationFactor</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span>
+                              <span class="nv">justificationExtent</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ComposedLine.html">ComposedLine</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codeUnitRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The UTF-16 range of the line in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>justificationFactor</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The factor that specifies the full or partial justification. When
+                 set to 1.0 or greater, full justification is performed. If this
+                 parameter is set to less than 1.0, varying degrees of partial
+                 justification are performed. If it is set to 0 or less, no
+                 justification is performed.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>justificationExtent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The extent at which the line should be justified. If it is less
+                 than the actual width of the line, then negative justification is
+                 performed (that is, words are squeezed together).</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The new justified line.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L229-L238">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa10TypesetterC17makeJustifiedLine14characterRange19justificationFactor0I6ExtentAA08ComposedF0CSnySS5IndexVG_14CoreFoundation7CGFloatVAOtF"></a>
+                    <a name="//apple_ref/swift/Method/makeJustifiedLine(characterRange:justificationFactor:justificationExtent:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa10TypesetterC17makeJustifiedLine14characterRange19justificationFactor0I6ExtentAA08ComposedF0CSnySS5IndexVG_14CoreFoundation7CGFloatVAOtF">makeJustifiedLine(characterRange:<wbr>justificationFactor:<wbr>justificationExtent:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a justified line of specified character range.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">makeJustifiedLine</span><span class="p">(</span><span class="nv">characterRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">.</span><span class="kt">Index</span><span class="o">&gt;</span><span class="p">,</span>
+                              <span class="nv">justificationFactor</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span>
+                              <span class="nv">justificationExtent</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ComposedLine.html">ComposedLine</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>characterRange</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The character range of the line in source string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>justificationFactor</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The factor that specifies the full or partial justification. When
+                 set to 1.0 or greater, full justification is performed. If this
+                 parameter is set to less than 1.0, varying degrees of partial
+                 justification are performed. If it is set to 0 or less, no
+                 justification is performed.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>justificationExtent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The extent at which the line should be justified. If it is less
+                 than the actual width of the line, then negative justification is
+                 performed (that is, words are squeezed together).</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The new justified line.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Layout/Typesetter.swift#L253-L261">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -734,11 +1380,10 @@ characters, then start index is returned. Otherwise, break index is returned.</p
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external noopener">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2023-06-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

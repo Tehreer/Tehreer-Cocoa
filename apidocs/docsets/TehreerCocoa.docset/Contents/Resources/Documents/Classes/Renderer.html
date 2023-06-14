@@ -8,19 +8,29 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/Renderer" class="dashAnchor"></a>
     <a title="Renderer Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">Tehreer-Cocoa</a> (84% documented)</p>
+        <p><a href="../index.html">TehreerCocoa 3.0 Docs</a> (86% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tehreer/Tehreer-Cocoa"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftehreer.github.io%2FTehreer-Cocoa%2Fapidocs%2Fdocsets%2FTehreerCocoa.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html">TehreerCocoa Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         Renderer Class Reference
       </p>
     </div>
@@ -62,6 +72,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FontFile.html">FontFile</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/FrameResolver.html">FrameResolver</a>
@@ -115,16 +128,19 @@
                 <a href="../Classes/TLabel.html">TLabel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/TTextView.html">TTextView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Weight.html">– Weight</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Width.html">– Width</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
@@ -172,6 +188,9 @@
               <li class="nav-group-task">
                 <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/String">String</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -184,6 +203,12 @@
                 <a href="../Structs/BidiRun.html">BidiRun</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/ColorPalette.html">ColorPalette</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ColorPalette/Flags.html">– Flags</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/HHEATable.html">HHEATable</a>
               </li>
               <li class="nav-group-task">
@@ -194,6 +219,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NamedStyle.html">NamedStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OS2Table.html">OS2Table</a>
@@ -209,6 +237,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis.html">VariationAxis</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis/Flags.html">– Flags</a>
               </li>
             </ul>
           </li>
@@ -231,6 +265,7 @@
             <h1>Renderer</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Renderer</span></code></pre>
 
                 </div>
@@ -238,6 +273,9 @@
             <p>The <code>Renderer</code> class represents a generic glyph renderer. It can be used to generate glyph
 paths, measure their bounding boxes and draw them in a <code>CGContext</code> object.</p>
 
+              <div class="slightly-smaller">
+                <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L23-L389">Show on GitHub</a>
+              </div>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -267,6 +305,9 @@ paths, measure their bounding boxes and draw them in a <code>CGContext</code> ob
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L25-L35">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -294,6 +335,9 @@ paths, measure their bounding boxes and draw them in a <code>CGContext</code> ob
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">StrokeCap</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L38-L45">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -323,6 +367,9 @@ paths, measure their bounding boxes and draw them in a <code>CGContext</code> ob
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L48-L55">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -350,6 +397,9 @@ paths, measure their bounding boxes and draw them in a <code>CGContext</code> ob
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L60-L63">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -373,9 +423,12 @@ paths, measure their bounding boxes and draw them in a <code>CGContext</code> ob
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">fillColor</span><span class="p">:</span> <span class="kt">UIColor</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">fillColor</span><span class="p">:</span> <span class="kt">UIColor</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L66-L70">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -401,9 +454,12 @@ paths, measure their bounding boxes and draw them in a <code>CGContext</code> ob
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">renderingStyle</span><span class="p">:</span> <span class="kt">Renderer</span><span class="o">.</span><span class="kt"><a href="../Classes/Renderer/RenderingStyle.html">RenderingStyle</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">renderingStyle</span><span class="p">:</span> <span class="kt"><a href="../Classes/Renderer/RenderingStyle.html">RenderingStyle</a></span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L74">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -433,6 +489,9 @@ paths, measure their bounding boxes and draw them in a <code>CGContext</code> ob
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L78">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -460,15 +519,18 @@ paths, measure their bounding boxes and draw them in a <code>CGContext</code> ob
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L81-L85">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8RendererC8typeSize12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8RendererC8typeSize14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/typeSize" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC8typeSize12CoreGraphics7CGFloatVvp">typeSize</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC8typeSize14CoreFoundation7CGFloatVvp">typeSize</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -487,15 +549,18 @@ paths, measure their bounding boxes and draw them in a <code>CGContext</code> ob
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L88-L92">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8RendererC10slantAngle12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8RendererC10slantAngle14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/slantAngle" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC10slantAngle12CoreGraphics7CGFloatVvp">slantAngle</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC10slantAngle14CoreFoundation7CGFloatVvp">slantAngle</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -514,15 +579,18 @@ paths, measure their bounding boxes and draw them in a <code>CGContext</code> ob
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L95-L99">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8RendererC11renderScale12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8RendererC11renderScale14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/renderScale" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC11renderScale12CoreGraphics7CGFloatVvp">renderScale</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC11renderScale14CoreFoundation7CGFloatVvp">renderScale</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -541,15 +609,18 @@ paths, measure their bounding boxes and draw them in a <code>CGContext</code> ob
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L102-L106">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8RendererC6scaleX12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8RendererC6scaleX14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/scaleX" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC6scaleX12CoreGraphics7CGFloatVvp">scaleX</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC6scaleX14CoreFoundation7CGFloatVvp">scaleX</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -570,15 +641,18 @@ glyphs narrower.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L111-L115">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8RendererC6scaleY12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8RendererC6scaleY14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/scaleY" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC6scaleY12CoreGraphics7CGFloatVvp">scaleY</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC6scaleY14CoreFoundation7CGFloatVvp">scaleY</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -598,6 +672,9 @@ glyphs narrower.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">scaleY</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L120-L124">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -626,15 +703,18 @@ glyphs narrower.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L127">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8RendererC11strokeWidth12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8RendererC11strokeWidth14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/strokeWidth" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC11strokeWidth12CoreGraphics7CGFloatVvp">strokeWidth</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC11strokeWidth14CoreFoundation7CGFloatVvp">strokeWidth</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -652,6 +732,9 @@ glyphs narrower.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">strokeWidth</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L130-L134">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -677,9 +760,12 @@ treated. Its default value is <code>.butt</code>.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">strokeCap</span><span class="p">:</span> <span class="kt">Renderer</span><span class="o">.</span><span class="kt"><a href="../Classes/Renderer/StrokeCap.html">StrokeCap</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">strokeCap</span><span class="p">:</span> <span class="kt"><a href="../Classes/Renderer/StrokeCap.html">StrokeCap</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L138-L142">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -704,9 +790,12 @@ treated. Its default value is <code>.butt</code>.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">strokeJoin</span><span class="p">:</span> <span class="kt">Renderer</span><span class="o">.</span><span class="kt"><a href="../Classes/Renderer/StrokeJoin.html">StrokeJoin</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">strokeJoin</span><span class="p">:</span> <span class="kt"><a href="../Classes/Renderer/StrokeJoin.html">StrokeJoin</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L145-L149">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -714,9 +803,9 @@ treated. Its default value is <code>.butt</code>.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8RendererC11strokeMiter12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8RendererC11strokeMiter14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/strokeMiter" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC11strokeMiter12CoreGraphics7CGFloatVvp">strokeMiter</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC11strokeMiter14CoreFoundation7CGFloatVvp">strokeMiter</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -736,15 +825,18 @@ the joins angle is sharp.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L153-L157">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8RendererC12shadowRadius12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8RendererC12shadowRadius14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/shadowRadius" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC12shadowRadius12CoreGraphics7CGFloatVvp">shadowRadius</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC12shadowRadius14CoreFoundation7CGFloatVvp">shadowRadius</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -764,15 +856,18 @@ zero. The shadow would be disabled if the value is set to zero.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L161">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8RendererC8shadowDx12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8RendererC8shadowDx14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/shadowDx" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC8shadowDx12CoreGraphics7CGFloatVvp">shadowDx</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC8shadowDx14CoreFoundation7CGFloatVvp">shadowDx</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -791,15 +886,18 @@ zero. The shadow would be disabled if the value is set to zero.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L164">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8RendererC8shadowDy12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa8RendererC8shadowDy14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/shadowDy" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC8shadowDy12CoreGraphics7CGFloatVvp">shadowDy</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC8shadowDy14CoreFoundation7CGFloatVvp">shadowDy</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -817,6 +915,9 @@ zero. The shadow would be disabled if the value is set to zero.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shadowDy</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L167">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -845,6 +946,9 @@ zero. The shadow would be disabled if the value is set to zero.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L170">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -853,7 +957,7 @@ zero. The shadow would be disabled if the value is set to zero.</p>
                     <code>
                     <a name="/s:12TehreerCocoa8RendererC8makePath7glyphIDSo9CGPathRefaSgs6UInt16V_tF"></a>
                     <a name="//apple_ref/swift/Method/makePath(glyphID:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC8makePath7glyphIDSo9CGPathRefaSgs6UInt16V_tF">makePath(glyphID:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC8makePath7glyphIDSo9CGPathRefaSgs6UInt16V_tF">makePath(glyphID:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -895,15 +999,18 @@ zero. The shadow would be disabled if the value is set to zero.</p>
                         <h4>Return Value</h4>
                         <p>The path of the glyph specified by <code>glyphID</code>.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L189-L191">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8RendererC8makePath8glyphIDs7offsets8advancesSo9CGPathRefaSgx_q_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVAMRt_12CoreGraphics7CGFloatVAMRt0_r1_lF"></a>
+                    <a name="/s:12TehreerCocoa8RendererC8makePath8glyphIDs7offsets8advancesSo9CGPathRefaSgx_q_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVAMRt_14CoreFoundation7CGFloatVAMRt0_r1_lF"></a>
                     <a name="//apple_ref/swift/Method/makePath(glyphIDs:offsets:advances:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC8makePath8glyphIDs7offsets8advancesSo9CGPathRefaSgx_q_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVAMRt_12CoreGraphics7CGFloatVAMRt0_r1_lF">makePath(glyphIDs:offsets:advances:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC8makePath8glyphIDs7offsets8advancesSo9CGPathRefaSgx_q_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVAMRt_14CoreFoundation7CGFloatVAMRt0_r1_lF">makePath(glyphIDs:<wbr>offsets:<wbr>advances:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -972,6 +1079,9 @@ zero. The shadow would be disabled if the value is set to zero.</p>
                         <h4>Return Value</h4>
                         <p>The cumulative path of specified glyphs.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L200-L223">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -980,7 +1090,7 @@ zero. The shadow would be disabled if the value is set to zero.</p>
                     <code>
                     <a name="/s:12TehreerCocoa8RendererC18computeBoundingBox8forGlyphSo6CGRectVs6UInt16V_tF"></a>
                     <a name="//apple_ref/swift/Method/computeBoundingBox(forGlyph:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC18computeBoundingBox8forGlyphSo6CGRectVs6UInt16V_tF">computeBoundingBox(forGlyph:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC18computeBoundingBox8forGlyphSo6CGRectVs6UInt16V_tF">computeBoundingBox(forGlyph:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1022,15 +1132,18 @@ zero. The shadow would be disabled if the value is set to zero.</p>
                         <h4>Return Value</h4>
                         <p>A rectangle that tightly encloses the path of the specified glyph.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L240-L248">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8RendererC18computeBoundingBox9forGlyphs7offsets8advancesSo6CGRectVx_q_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVALRt_12CoreGraphics7CGFloatVALRt0_r1_lF"></a>
+                    <a name="/s:12TehreerCocoa8RendererC18computeBoundingBox9forGlyphs7offsets8advancesSo6CGRectVx_q_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVALRt_14CoreFoundation7CGFloatVALRt0_r1_lF"></a>
                     <a name="//apple_ref/swift/Method/computeBoundingBox(forGlyphs:offsets:advances:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC18computeBoundingBox9forGlyphs7offsets8advancesSo6CGRectVx_q_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVALRt_12CoreGraphics7CGFloatVALRt0_r1_lF">computeBoundingBox(forGlyphs:offsets:advances:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC18computeBoundingBox9forGlyphs7offsets8advancesSo6CGRectVx_q_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVALRt_14CoreFoundation7CGFloatVALRt0_r1_lF">computeBoundingBox(forGlyphs:<wbr>offsets:<wbr>advances:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1099,15 +1212,18 @@ zero. The shadow would be disabled if the value is set to zero.</p>
                         <h4>Return Value</h4>
                         <p>A rectangle that tightly encloses the paths of specified glyphs.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L257-L305">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8RendererC10drawGlyphs2in8glyphIDs7offsets8advancesySo12CGContextRefa_xq_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVAMRt_12CoreGraphics7CGFloatVAMRt0_r1_lF"></a>
+                    <a name="/s:12TehreerCocoa8RendererC10drawGlyphs2in8glyphIDs7offsets8advancesySo12CGContextRefa_xq_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVAMRt_14CoreFoundation7CGFloatVAMRt0_r1_lF"></a>
                     <a name="//apple_ref/swift/Method/drawGlyphs(in:glyphIDs:offsets:advances:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8RendererC10drawGlyphs2in8glyphIDs7offsets8advancesySo12CGContextRefa_xq_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVAMRt_12CoreGraphics7CGFloatVAMRt0_r1_lF">drawGlyphs(in:glyphIDs:offsets:advances:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8RendererC10drawGlyphs2in8glyphIDs7offsets8advancesySo12CGContextRefa_xq_q0_tSTRzSTR_STR0_s6UInt16V7ElementRtzSo7CGPointVAMRt_14CoreFoundation7CGFloatVAMRt0_r1_lF">drawGlyphs(in:<wbr>glyphIDs:<wbr>offsets:<wbr>advances:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1184,6 +1300,9 @@ zero. The shadow would be disabled if the value is set to zero.</p>
                           </tbody>
                         </table>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Renderer.swift#L355-L388">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1192,11 +1311,10 @@ zero. The shadow would be disabled if the value is set to zero.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external noopener">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2023-06-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

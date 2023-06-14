@@ -8,19 +8,29 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/ShapingResult" class="dashAnchor"></a>
     <a title="ShapingResult Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">Tehreer-Cocoa</a> (84% documented)</p>
+        <p><a href="../index.html">TehreerCocoa 3.0 Docs</a> (86% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tehreer/Tehreer-Cocoa"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftehreer.github.io%2FTehreer-Cocoa%2Fapidocs%2Fdocsets%2FTehreerCocoa.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html">TehreerCocoa Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         ShapingResult Class Reference
       </p>
     </div>
@@ -62,6 +72,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FontFile.html">FontFile</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/FrameResolver.html">FrameResolver</a>
@@ -115,16 +128,19 @@
                 <a href="../Classes/TLabel.html">TLabel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/TTextView.html">TTextView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Weight.html">– Weight</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Width.html">– Width</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
@@ -172,6 +188,9 @@
               <li class="nav-group-task">
                 <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/String">String</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -184,6 +203,12 @@
                 <a href="../Structs/BidiRun.html">BidiRun</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/ColorPalette.html">ColorPalette</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ColorPalette/Flags.html">– Flags</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/HHEATable.html">HHEATable</a>
               </li>
               <li class="nav-group-task">
@@ -194,6 +219,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NamedStyle.html">NamedStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OS2Table.html">OS2Table</a>
@@ -209,6 +237,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis.html">VariationAxis</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis/Flags.html">– Flags</a>
               </li>
             </ul>
           </li>
@@ -231,6 +265,7 @@
             <h1>ShapingResult</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">ShapingResult</span></code></pre>
 
                 </div>
@@ -239,10 +274,43 @@
 <code><a href="../Classes/ShapingEngine.html">ShapingEngine</a></code> object to provide the information related to characters, their glyphs, offsets,
 and advances.</p>
 
+              <div class="slightly-smaller">
+                <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L24-L169">Show on GitHub</a>
+              </div>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
               <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa13ShapingResultC13codeUnitRangeSnySiGvp"></a>
+                    <a name="//apple_ref/swift/Property/codeUnitRange" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC13codeUnitRangeSnySiGvp">codeUnitRange</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The UTF-16 range in source string.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">codeUnitRange</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L39">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -263,9 +331,12 @@ and advances.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">isBackward</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">isBackward</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L42">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -294,6 +365,9 @@ and advances.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L48-L50">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -320,6 +394,9 @@ and advances.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">endIndex</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Index</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L53-L55">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -348,6 +425,9 @@ and advances.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L62-L64">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -375,6 +455,9 @@ and advances.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L71-L73">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -401,6 +484,9 @@ and advances.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">glyphAdvances</span><span class="p">:</span> <span class="kt"><a href="../Classes/ShapingResult/GlyphAdvances.html">GlyphAdvances</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L76-L78">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -441,15 +527,18 @@ participating code unit, and all in-between characters, map to this glyph or lig
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L91-L93">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa13ShapingResultC14makeCaretEdges10caretStopsSay12CoreGraphics7CGFloatVGSaySbGSg_tF"></a>
+                    <a name="/s:12TehreerCocoa13ShapingResultC14makeCaretEdges10caretStopsSay14CoreFoundation7CGFloatVGSaySbGSg_tF"></a>
                     <a name="//apple_ref/swift/Method/makeCaretEdges(caretStops:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC14makeCaretEdges10caretStopsSay12CoreGraphics7CGFloatVGSaySbGSg_tF">makeCaretEdges(caretStops:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa13ShapingResultC14makeCaretEdges10caretStopsSay14CoreFoundation7CGFloatVGSaySbGSg_tF">makeCaretEdges(caretStops:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -492,6 +581,9 @@ participating code unit, and all in-between characters, map to this glyph or lig
                         <h4>Return Value</h4>
                         <p>An array of caret edges.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L144-L158">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -501,9 +593,11 @@ participating code unit, and all in-between characters, map to this glyph or lig
               <div class="task-name-container">
                 <a name="/Collections"></a>
                 <a name="//apple_ref/swift/Section/Collections" class="dashAnchor"></a>
-                <a href="#/Collections">
-                  <h3 class="section-name">Collections</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Collections"></a>
+                  <h3 class="section-name"><span>Collections</span>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -530,6 +624,9 @@ participating code unit, and all in-between characters, map to this glyph or lig
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">GlyphIDs</span> <span class="p">:</span> <span class="kt">RandomAccessCollection</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L175-L213">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -559,6 +656,9 @@ participating code unit, and all in-between characters, map to this glyph or lig
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L257-L298">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -586,6 +686,9 @@ participating code unit, and all in-between characters, map to this glyph or lig
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">GlyphAdvances</span> <span class="p">:</span> <span class="kt">RandomAccessCollection</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L301-L341">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -615,6 +718,9 @@ participating code unit, and all in-between characters, map to this glyph or lig
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/SFNT/ShapingResult.swift#L344-L373">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -623,11 +729,10 @@ participating code unit, and all in-between characters, map to this glyph or lig
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external noopener">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2023-06-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

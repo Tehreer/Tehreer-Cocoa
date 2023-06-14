@@ -8,19 +8,29 @@
     <script src="../../js/jquery.min.js" defer></script>
     <script src="../../js/jazzy.js" defer></script>
     
+    <script src="../../js/lunr.min.js" defer></script>
+    <script src="../../js/typeahead.jquery.js" defer></script>
+    <script src="../../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Struct/EmbeddingLevels" class="dashAnchor"></a>
     <a title="EmbeddingLevels Structure Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../../index.html">Tehreer-Cocoa</a> (84% documented)</p>
+        <p><a href="../../index.html">TehreerCocoa 3.0 Docs</a> (86% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tehreer/Tehreer-Cocoa"><img src="../../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftehreer.github.io%2FTehreer-Cocoa%2Fapidocs%2Fdocsets%2FTehreerCocoa.xml"><img src="../../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../../index.html">TehreerCocoa Reference</a>
-        <img id="carat" src="../../img/carat.png" />
+        <img id="carat" src="../../img/carat.png" alt=""/>
         EmbeddingLevels Structure Reference
       </p>
     </div>
@@ -62,6 +72,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Classes/FontFile.html">FontFile</a>
               </li>
               <li class="nav-group-task">
                 <a href="../../Classes/FrameResolver.html">FrameResolver</a>
@@ -115,16 +128,19 @@
                 <a href="../../Classes/TLabel.html">TLabel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../../Classes/TTextView.html">TTextView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../../Classes/Typeface/Weight.html">– Weight</a>
               </li>
               <li class="nav-group-task">
                 <a href="../../Classes/Typeface/Width.html">– Width</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../../Classes/TypefaceManager.html">TypefaceManager</a>
@@ -172,6 +188,9 @@
               <li class="nav-group-task">
                 <a href="../../Extensions/NSAttributedString/Key.html">– Key</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../../Extensions.html#/String">String</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -184,6 +203,12 @@
                 <a href="../../Structs/BidiRun.html">BidiRun</a>
               </li>
               <li class="nav-group-task">
+                <a href="../../Structs/ColorPalette.html">ColorPalette</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/ColorPalette/Flags.html">– Flags</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../../Structs/HHEATable.html">HHEATable</a>
               </li>
               <li class="nav-group-task">
@@ -194,6 +219,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/NamedStyle.html">NamedStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../../Structs/OS2Table.html">OS2Table</a>
@@ -209,6 +237,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/VariationAxis.html">VariationAxis</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/VariationAxis/Flags.html">– Flags</a>
               </li>
             </ul>
           </li>
@@ -231,12 +265,16 @@
             <h1>EmbeddingLevels</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">EmbeddingLevels</span> <span class="p">:</span> <span class="kt">RandomAccessCollection</span></code></pre>
 
                 </div>
               </div>
             <p>A collection of the embedding levels of a paragraph, represented by UTF-16 code unit indices.</p>
 
+              <div class="slightly-smaller">
+                <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/BidiParagraph.swift#L112-L156">Show on GitHub</a>
+              </div>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -265,6 +303,9 @@
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/BidiParagraph.swift#L123">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -291,6 +332,9 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">startIndex</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/BidiParagraph.swift#L126-L128">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -319,6 +363,9 @@
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/BidiParagraph.swift#L131-L133">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -327,7 +374,7 @@
                     <code>
                     <a name="/s:12TehreerCocoa13BidiParagraphC15EmbeddingLevelsVys5UInt8VSS5IndexVcip"></a>
                     <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa13BidiParagraphC15EmbeddingLevelsVys5UInt8VSS5IndexVcip">subscript(_:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa13BidiParagraphC15EmbeddingLevelsVys5UInt8VSS5IndexVcip">subscript(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -335,7 +382,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Accesses the embedding level at the specified character index.</p>
 
                       </div>
                       <div class="declaration">
@@ -346,6 +393,29 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A valid character index of the source string. It must be within the
+               paragraph&rsquo;s range.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/BidiParagraph.swift#L139-L145">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -354,7 +424,7 @@
                     <code>
                     <a name="/s:12TehreerCocoa13BidiParagraphC15EmbeddingLevelsVys5UInt8VSicip"></a>
                     <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa13BidiParagraphC15EmbeddingLevelsVys5UInt8VSicip">subscript(_:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa13BidiParagraphC15EmbeddingLevelsVys5UInt8VSicip">subscript(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -385,13 +455,16 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>The position of the element to access. <code>index</code> must be greater than or equal to
-               <code><a href="../../Classes/BidiParagraph/EmbeddingLevels.html#/s:12TehreerCocoa13BidiParagraphC15EmbeddingLevelsV10startIndexSivp">startIndex</a></code> and less than <code><a href="../../Classes/BidiParagraph/EmbeddingLevels.html#/s:12TehreerCocoa13BidiParagraphC15EmbeddingLevelsV8endIndexSivp">endIndex</a></code>.</p>
+                                  <p>The position of the element to access. <code>index</code> must be greater than
+               or equal to <code><a href="../../Classes/BidiParagraph/EmbeddingLevels.html#/s:12TehreerCocoa13BidiParagraphC15EmbeddingLevelsV10startIndexSivp">startIndex</a></code> and less than <code><a href="../../Classes/BidiParagraph/EmbeddingLevels.html#/s:12TehreerCocoa13BidiParagraphC15EmbeddingLevelsV8endIndexSivp">endIndex</a></code>.</p>
                                 </div>
                               </td>
                             </tr>
                           </tbody>
                         </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Unicode/BidiParagraph.swift#L151-L155">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -401,11 +474,10 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external noopener">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2023-06-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

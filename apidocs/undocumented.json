@@ -1,691 +1,677 @@
 {
   "warnings": [
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Collections/PrimitiveCollection.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Collections/PrimitiveCollection.swift",
       "line": 19,
       "symbol": "PrimitiveIterator",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Collections/PrimitiveCollection.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Collections/PrimitiveCollection.swift",
       "line": 44,
       "symbol": "PrimitiveCollection",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Collections/PrimitiveCollection.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Collections/PrimitiveCollection.swift",
       "line": 123,
       "symbol": "PrimitiveCollection.first",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Collections/PrimitiveCollection.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Collections/PrimitiveCollection.swift",
       "line": 127,
       "symbol": "PrimitiveCollection.last",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 50,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/ColorPalette.swift",
+      "line": 20,
+      "symbol": "ColorPalette",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/ColorPalette.swift",
+      "line": 23,
+      "symbol": "ColorPalette.Flags.usableWithLightBackground",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/ColorPalette.swift",
+      "line": 24,
+      "symbol": "ColorPalette.Flags.usableWithDarkBackground",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWeight.swift",
+      "line": 23,
       "symbol": "Typeface.Weight.thin",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 51,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWeight.swift",
+      "line": 24,
       "symbol": "Typeface.Weight.extraLight",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 52,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWeight.swift",
+      "line": 25,
       "symbol": "Typeface.Weight.light",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 53,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWeight.swift",
+      "line": 26,
       "symbol": "Typeface.Weight.regular",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 54,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWeight.swift",
+      "line": 27,
       "symbol": "Typeface.Weight.medium",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 55,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWeight.swift",
+      "line": 28,
       "symbol": "Typeface.Weight.semiBold",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 56,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWeight.swift",
+      "line": 29,
       "symbol": "Typeface.Weight.bold",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 57,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWeight.swift",
+      "line": 30,
       "symbol": "Typeface.Weight.extraBold",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 58,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWeight.swift",
+      "line": 31,
       "symbol": "Typeface.Weight.heavy",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 64,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWidth.swift",
+      "line": 24,
       "symbol": "Typeface.Width.ultraCondensed",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 65,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWidth.swift",
+      "line": 25,
       "symbol": "Typeface.Width.extraCondensed",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 66,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWidth.swift",
+      "line": 26,
       "symbol": "Typeface.Width.condensed",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 67,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWidth.swift",
+      "line": 27,
       "symbol": "Typeface.Width.semiCondensed",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 68,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWidth.swift",
+      "line": 28,
       "symbol": "Typeface.Width.normal",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 69,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWidth.swift",
+      "line": 29,
       "symbol": "Typeface.Width.semiExpanded",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 70,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWidth.swift",
+      "line": 30,
       "symbol": "Typeface.Width.expanded",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 71,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWidth.swift",
+      "line": 31,
       "symbol": "Typeface.Width.extraExpanded",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/Typeface.swift",
-      "line": 72,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypeWidth.swift",
+      "line": 32,
       "symbol": "Typeface.Width.ultraExpanded",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Graphics/TypefaceManager.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Graphics/TypefaceManager.swift",
       "line": 21,
       "symbol": "TypefaceManager.default",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
       "line": 38,
       "symbol": "HHEATable.version",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
       "line": 42,
       "symbol": "HHEATable.ascender",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
       "line": 46,
       "symbol": "HHEATable.descender",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
       "line": 50,
       "symbol": "HHEATable.lineGap",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
       "line": 54,
       "symbol": "HHEATable.advanceWidthMax",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
       "line": 58,
       "symbol": "HHEATable.minLeftSideBearing",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
       "line": 62,
       "symbol": "HHEATable.minRightSideBearing",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
       "line": 66,
       "symbol": "HHEATable.xMaxExtent",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
       "line": 70,
       "symbol": "HHEATable.caretSlopeRise",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
       "line": 74,
       "symbol": "HHEATable.caretSlopeRun",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
       "line": 78,
       "symbol": "HHEATable.caretOffset",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
       "line": 82,
       "symbol": "HHEATable.metricDataFormat",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HHEATable.swift",
       "line": 86,
       "symbol": "HHEATable.numberOfHMetrics",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 38,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 46,
       "symbol": "HeadTable.version",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 42,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 50,
       "symbol": "HeadTable.fontRevision",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 46,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 54,
       "symbol": "HeadTable.checkSumAdjustment",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 50,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 58,
       "symbol": "HeadTable.magicNumber",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 54,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 62,
       "symbol": "HeadTable.flags",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 58,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 66,
       "symbol": "HeadTable.unitsPerEm",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 62,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 70,
       "symbol": "HeadTable.created",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 66,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 74,
       "symbol": "HeadTable.modified",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 70,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 78,
       "symbol": "HeadTable.xMin",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 74,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 82,
       "symbol": "HeadTable.yMin",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 78,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 86,
       "symbol": "HeadTable.xMax",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 82,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 90,
       "symbol": "HeadTable.yMax",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 86,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 94,
       "symbol": "HeadTable.macStyle",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 90,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 98,
       "symbol": "HeadTable.lowestRecPPEM",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 94,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 102,
       "symbol": "HeadTable.fontDirectionHint",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 98,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 106,
       "symbol": "HeadTable.indexToLocFormat",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
-      "line": 102,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/HeadTable.swift",
+      "line": 110,
       "symbol": "HeadTable.glyphDataFormat",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 38,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 46,
       "symbol": "OS2Table.version",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 42,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 50,
       "symbol": "OS2Table.xAvgCharWidth",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 46,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 54,
       "symbol": "OS2Table.usWeightClass",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 50,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 58,
       "symbol": "OS2Table.usWidthClass",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 54,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 62,
       "symbol": "OS2Table.fsType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 58,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 66,
       "symbol": "OS2Table.ySubscriptXSize",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 62,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 70,
       "symbol": "OS2Table.ySubscriptYSize",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 66,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 74,
       "symbol": "OS2Table.ySubscriptXOffset",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 70,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 78,
       "symbol": "OS2Table.ySubscriptYOffset",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 74,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 82,
       "symbol": "OS2Table.ySuperscriptXSize",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 78,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 86,
       "symbol": "OS2Table.ySuperscriptYSize",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 82,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 90,
       "symbol": "OS2Table.ySuperscriptXOffset",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 86,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 94,
       "symbol": "OS2Table.ySuperscriptYOffset",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 90,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 98,
       "symbol": "OS2Table.yStrikeoutSize",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 94,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 102,
       "symbol": "OS2Table.yStrikeoutPosition",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 98,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 106,
       "symbol": "OS2Table.sFamilyClass",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 102,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 110,
       "symbol": "OS2Table.panose",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 108,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 116,
       "symbol": "OS2Table.ulUnicodeRange1",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 112,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 120,
       "symbol": "OS2Table.ulUnicodeRange2",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 116,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 124,
       "symbol": "OS2Table.ulUnicodeRange3",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 120,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 128,
       "symbol": "OS2Table.ulUnicodeRange4",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 124,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 132,
       "symbol": "OS2Table.achVendID",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 133,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 141,
       "symbol": "OS2Table.fsSelection",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 137,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 145,
       "symbol": "OS2Table.usFirstCharIndex",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 141,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 149,
       "symbol": "OS2Table.usLastCharIndex",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 145,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 153,
       "symbol": "OS2Table.sTypoAscender",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 149,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 157,
       "symbol": "OS2Table.sTypoDescender",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 153,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 161,
       "symbol": "OS2Table.sTypoLineGap",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 157,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 165,
       "symbol": "OS2Table.usWinAscent",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 161,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 169,
       "symbol": "OS2Table.usWinDescent",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 165,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 173,
       "symbol": "OS2Table.ulCodePageRange1",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 169,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 177,
       "symbol": "OS2Table.ulCodePageRange2",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 173,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 181,
       "symbol": "OS2Table.sxHeight",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 177,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 185,
       "symbol": "OS2Table.sCapHeight",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 181,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 189,
       "symbol": "OS2Table.usDefaultChar",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 185,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 193,
       "symbol": "OS2Table.usBreakChar",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 189,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 197,
       "symbol": "OS2Table.usMaxContext",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 193,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 201,
       "symbol": "OS2Table.usLowerOpticalPointSize",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
-      "line": 197,
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/SFNT/Tables/OS2Table.swift",
+      "line": 205,
       "symbol": "OS2Table.usUpperOpticalPointSize",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Unicode/BidiParagraph.swift",
-      "line": 36,
-      "symbol": "BidiParagraph.codeUnitRange",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Unicode/BidiParagraph.swift",
-      "line": 134,
-      "symbol": "BidiParagraph.EmbeddingLevels.subscript(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.subscript",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Views/TLabel.swift",
+      "file": "/Users/mta/Learning/Release/Tehreer-Cocoa/Source/Views/TLabel.swift",
       "line": 38,
       "symbol": "TLabel.textFrame",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
-    },
-    {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Views/TLabel.swift",
-      "line": 40,
-      "symbol": "TLabel.init(coder:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Views/TLabel.swift",
-      "line": 45,
-      "symbol": "TLabel.init(frame:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Volumes/Personal/Public/Release/Tehreer-Cocoa/Source/Views/TLabel.swift",
-      "line": 50,
-      "symbol": "TLabel.requiresConstraintBasedLayout",
-      "symbol_kind": "source.lang.swift.decl.var.class",
-      "warning": "undocumented"
     }
   ],
-  "source_directory": "/Volumes/Personal/Public/Release/Tehreer-Cocoa"
+  "source_directory": "/Users/mta/Learning/Release/Tehreer-Cocoa"
 }

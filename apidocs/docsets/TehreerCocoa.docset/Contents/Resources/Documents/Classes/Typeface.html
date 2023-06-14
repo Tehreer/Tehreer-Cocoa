@@ -8,19 +8,29 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/Typeface" class="dashAnchor"></a>
     <a title="Typeface Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">Tehreer-Cocoa</a> (84% documented)</p>
+        <p><a href="../index.html">TehreerCocoa 3.0 Docs</a> (86% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tehreer/Tehreer-Cocoa"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftehreer.github.io%2FTehreer-Cocoa%2Fapidocs%2Fdocsets%2FTehreerCocoa.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html">TehreerCocoa Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         Typeface Class Reference
       </p>
     </div>
@@ -62,6 +72,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FontFile.html">FontFile</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/FrameResolver.html">FrameResolver</a>
@@ -115,16 +128,19 @@
                 <a href="../Classes/TLabel.html">TLabel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/TTextView.html">TTextView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Weight.html">– Weight</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Width.html">– Width</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
@@ -172,6 +188,9 @@
               <li class="nav-group-task">
                 <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/String">String</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -184,6 +203,12 @@
                 <a href="../Structs/BidiRun.html">BidiRun</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/ColorPalette.html">ColorPalette</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ColorPalette/Flags.html">– Flags</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/HHEATable.html">HHEATable</a>
               </li>
               <li class="nav-group-task">
@@ -194,6 +219,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NamedStyle.html">NamedStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OS2Table.html">OS2Table</a>
@@ -209,6 +237,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis.html">VariationAxis</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis/Flags.html">– Flags</a>
               </li>
             </ul>
           </li>
@@ -231,6 +265,7 @@
             <h1>Typeface</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Typeface</span></code></pre>
 
                 </div>
@@ -239,6 +274,9 @@
 renderer, along with optionally <code><a href="../Classes/Renderer.html">Renderer</a></code> settings like <code>typeSize</code>, <code>slantAngle</code>, <code>scaleX</code>, to
 specify how text appears when drawn (and measured).</p>
 
+              <div class="slightly-smaller">
+                <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L31-L925">Show on GitHub</a>
+              </div>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -246,94 +284,9 @@ specify how text appears when drawn (and measured).</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8TypefaceC6WeightO"></a>
-                    <a name="//apple_ref/swift/Enum/Weight" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC6WeightO">Weight</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Specifies the thickness of a typeface, in terms of lightness or heaviness of the strokes.</p>
-
-                        <a href="../Classes/Typeface/Weight.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Weight</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12TehreerCocoa8TypefaceC5WidthO"></a>
-                    <a name="//apple_ref/swift/Enum/Width" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC5WidthO">Width</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Specifies the wideness of a typeface, in terms of the width of characters in relation to
-their heights.</p>
-
-                        <a href="../Classes/Typeface/Width.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Width</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12TehreerCocoa8TypefaceC5SlopeO"></a>
-                    <a name="//apple_ref/swift/Enum/Slope" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC5SlopeO">Slope</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Specifies the slope of a typeface.</p>
-
-                        <a href="../Classes/Typeface/Slope.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Slope</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:12TehreerCocoa8TypefaceC4pathACSgSS_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(path:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC4pathACSgSS_tcfc">init(path:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC4pathACSgSS_tcfc">init(path:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -349,7 +302,7 @@ file when needed.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">convenience</span> <span class="nf">init</span><span class="p">?(</span><span class="nv">path</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">?(</span><span class="nv">path</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -372,6 +325,58 @@ file when needed.</p>
                           </tbody>
                         </table>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L84-L91">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8TypefaceC4dataACSg10Foundation4DataV_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(data:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC4dataACSg10Foundation4DataV_tcfc">init(data:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a new typeface from the data of the font.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">?(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data of the font.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L96-L103">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -380,7 +385,7 @@ file when needed.</p>
                     <code>
                     <a name="/s:12TehreerCocoa8TypefaceC6streamACSgSo13NSInputStreamC_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(stream:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC6streamACSgSo13NSInputStreamC_tcfc">init(stream:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC6streamACSgSo13NSInputStreamC_tcfc">init(stream:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -388,16 +393,15 @@ file when needed.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Creates a typeface from the specified input stream. The data of the stream is not copied
-into the memory. Rather, it is directly read from the stream when needed. So the performance
-of resulting typeface might be slower and should be used with caution.</p>
+                        <p>Creates a new typeface from the input stream by copying its data into a memory buffer. It
+may take some time to create the typeface if the stream holds larger data.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">convenience</span> <span class="nf">init</span><span class="p">?(</span><span class="nv">stream</span><span class="p">:</span> <span class="kt">InputStream</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">?(</span><span class="nv">stream</span><span class="p">:</span> <span class="kt">InputStream</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -419,6 +423,325 @@ of resulting typeface might be slower and should be used with caution.</p>
                             </tr>
                           </tbody>
                         </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L109-L116">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8TypefaceC10isVariableSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isVariable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC10isVariableSbvp">isVariable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A Boolean value that indicates whether the typeface supports OpenType font variations.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isVariable</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L600-L602">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8TypefaceC17variationInstance14forCoordinatesACSgSay14CoreFoundation7CGFloatVG_tF"></a>
+                    <a name="//apple_ref/swift/Method/variationInstance(forCoordinates:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC17variationInstance14forCoordinatesACSgSay14CoreFoundation7CGFloatVG_tF">variationInstance(forCoordinates:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a variation instance of this typeface with the specified design coordinates.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">variationInstance</span><span class="p">(</span><span class="n">forCoordinates</span> <span class="nv">coordinates</span><span class="p">:</span> <span class="p">[</span><span class="kt">CGFloat</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Typeface</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>coordinates</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The variation design coordinates.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A variation instance of this typeface with the specified design coordinates.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L608-L625">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8TypefaceC13variationAxesSayAA13VariationAxisVGvp"></a>
+                    <a name="//apple_ref/swift/Property/variationAxes" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC13variationAxesSayAA13VariationAxisVGvp">variationAxes</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The variation axes of this typeface.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">variationAxes</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/VariationAxis.html">VariationAxis</a></span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L628-L630">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8TypefaceC11namedStylesSayAA10NamedStyleVGvp"></a>
+                    <a name="//apple_ref/swift/Property/namedStyles" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC11namedStylesSayAA10NamedStyleVGvp">namedStyles</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The named instance records of this typeface.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">namedStyles</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/NamedStyle.html">NamedStyle</a></span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L633-L635">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8TypefaceC20variationCoordinatesSay14CoreFoundation7CGFloatVGvp"></a>
+                    <a name="//apple_ref/swift/Property/variationCoordinates" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC20variationCoordinatesSay14CoreFoundation7CGFloatVGvp">variationCoordinates</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The design variation coordinates of this typeface.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">variationCoordinates</span><span class="p">:</span> <span class="p">[</span><span class="kt">CGFloat</span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L638-L640">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8TypefaceC17paletteEntryNamesSaySSGvp"></a>
+                    <a name="//apple_ref/swift/Property/paletteEntryNames" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC17paletteEntryNamesSaySSGvp">paletteEntryNames</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The names associated with palette entries if this typeface supports OpenType color palettes.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">paletteEntryNames</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L643-L645">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8TypefaceC18predefinedPalettesSayAA12ColorPaletteVGvp"></a>
+                    <a name="//apple_ref/swift/Property/predefinedPalettes" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC18predefinedPalettesSayAA12ColorPaletteVGvp">predefinedPalettes</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The predefined palettes in this typeface if it supports OpenType color palettes.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">predefinedPalettes</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/ColorPalette.html">ColorPalette</a></span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L648-L650">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8TypefaceC16associatedColorsSaySo7UIColorCGvp"></a>
+                    <a name="//apple_ref/swift/Property/associatedColors" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC16associatedColorsSaySo7UIColorCGvp">associatedColors</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The colors associated with this typeface if it supports OpenType color palettes.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">associatedColors</span><span class="p">:</span> <span class="p">[</span><span class="kt">UIColor</span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L653-L667">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8TypefaceC13colorInstance9forColorsACSgSaySo7UIColorCG_tF"></a>
+                    <a name="//apple_ref/swift/Method/colorInstance(forColors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC13colorInstance9forColorsACSgSaySo7UIColorCG_tF">colorInstance(forColors:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a color instance of this typeface with the specified colors array.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">colorInstance</span><span class="p">(</span><span class="n">forColors</span> <span class="nv">colors</span><span class="p">:</span> <span class="p">[</span><span class="kt">UIColor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Typeface</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>colors</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The colors array.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A color instance of this typeface with the specified colors array.</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L673-L686">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -443,9 +766,12 @@ of resulting typeface might be slower and should be used with caution.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">familyName</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">familyName</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L689-L691">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -470,9 +796,12 @@ of resulting typeface might be slower and should be used with caution.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">styleName</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">styleName</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L694-L696">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -497,9 +826,12 @@ of resulting typeface might be slower and should be used with caution.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">fullName</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">fullName</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L699-L701">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -525,9 +857,12 @@ associated with a given character in a typeface.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">weight</span><span class="p">:</span> <span class="kt">Typeface</span><span class="o">.</span><span class="kt"><a href="../Classes/Typeface/Weight.html">Weight</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">weight</span><span class="p">:</span> <span class="kt"><a href="../Classes/Typeface/Weight.html">Weight</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L705-L707">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -553,9 +888,12 @@ expanded or condensed when it is displayed.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">width</span><span class="p">:</span> <span class="kt">Typeface</span><span class="o">.</span><span class="kt"><a href="../Classes/Typeface/Width.html">Width</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">width</span><span class="p">:</span> <span class="kt"><a href="../Classes/Typeface/Width.html">Width</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L711-L713">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -581,9 +919,12 @@ plain or slanted when it is displayed.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">slope</span><span class="p">:</span> <span class="kt">Typeface</span><span class="o">.</span><span class="kt"><a href="../Classes/Typeface/Slope.html">Slope</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">slope</span><span class="p">:</span> <span class="kt"><a href="../Classes/Typeface/Slope.html">Slope</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L717-L719">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -612,6 +953,9 @@ plain or slanted when it is displayed.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L722-L724">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -638,6 +982,9 @@ plain or slanted when it is displayed.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">ascent</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L727-L729">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -666,6 +1013,9 @@ plain or slanted when it is displayed.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L732-L734">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -693,6 +1043,9 @@ plain or slanted when it is displayed.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L737-L743">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -719,6 +1072,9 @@ plain or slanted when it is displayed.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">glyphCount</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L746-L748">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -748,6 +1104,9 @@ from the font.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L752-L759">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -775,15 +1134,18 @@ from the font.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L762-L764">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8TypefaceC17underlineThicknesSivp"></a>
-                    <a name="//apple_ref/swift/Property/underlineThicknes" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC17underlineThicknesSivp">underlineThicknes</a>
+                    <a name="/s:12TehreerCocoa8TypefaceC18underlineThicknessSivp"></a>
+                    <a name="//apple_ref/swift/Property/underlineThickness" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC18underlineThicknessSivp">underlineThickness</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -798,9 +1160,12 @@ from the font.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">underlineThicknes</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">underlineThickness</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L767-L769">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -825,9 +1190,12 @@ from the font.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">strikeoutPosition</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">strikeoutPosition</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L772-L774">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -852,9 +1220,12 @@ from the font.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">strikeoutThickness</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">strikeoutThickness</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L777-L779">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -864,7 +1235,7 @@ from the font.</p>
                     <code>
                     <a name="/s:12TehreerCocoa8TypefaceC11dataOfTabley10Foundation4DataVSgAA7SFNTTagVF"></a>
                     <a name="//apple_ref/swift/Method/dataOfTable(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC11dataOfTabley10Foundation4DataVSgAA7SFNTTagVF">dataOfTable(_:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC11dataOfTabley10Foundation4DataVSgAA7SFNTTagVF">dataOfTable(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -906,6 +1277,9 @@ from the font.</p>
                         <h4>Return Value</h4>
                         <p>The data of the intended table, or <code>nil</code> if no such table exists.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L785-L787">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -914,7 +1288,7 @@ from the font.</p>
                     <code>
                     <a name="/s:12TehreerCocoa8TypefaceC7glyphID12forCodePoints6UInt16Vs6UInt32V_tF"></a>
                     <a name="//apple_ref/swift/Method/glyphID(forCodePoint:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC7glyphID12forCodePoints6UInt16Vs6UInt32V_tF">glyphID(forCodePoint:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC7glyphID12forCodePoints6UInt16Vs6UInt32V_tF">glyphID(forCodePoint:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -956,15 +1330,18 @@ from the font.</p>
                         <h4>Return Value</h4>
                         <p>The glyph id for the specified code point.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L793-L804">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8TypefaceC7advance8forGlyph8typeSize8vertical12CoreGraphics7CGFloatVs6UInt16V_AJSbtF"></a>
+                    <a name="/s:12TehreerCocoa8TypefaceC7advance8forGlyph8typeSize8vertical14CoreFoundation7CGFloatVs6UInt16V_AJSbtF"></a>
                     <a name="//apple_ref/swift/Method/advance(forGlyph:typeSize:vertical:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC7advance8forGlyph8typeSize8vertical12CoreGraphics7CGFloatVs6UInt16V_AJSbtF">advance(forGlyph:typeSize:vertical:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC7advance8forGlyph8typeSize8vertical14CoreFoundation7CGFloatVs6UInt16V_AJSbtF">advance(forGlyph:<wbr>typeSize:<wbr>vertical:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1030,15 +1407,18 @@ from the font.</p>
                         <h4>Return Value</h4>
                         <p>The advance for the specified glyph.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L813-L829">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa8TypefaceC4path8forGlyph8typeSize9transformSo9CGPathRefaSgs6UInt16V_12CoreGraphics7CGFloatVSo17CGAffineTransformVSgtF"></a>
+                    <a name="/s:12TehreerCocoa8TypefaceC4path8forGlyph8typeSize9transformSo9CGPathRefaSgs6UInt16V_14CoreFoundation7CGFloatVSo17CGAffineTransformVSgtF"></a>
                     <a name="//apple_ref/swift/Method/path(forGlyph:typeSize:transform:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC4path8forGlyph8typeSize9transformSo9CGPathRefaSgs6UInt16V_12CoreGraphics7CGFloatVSo17CGAffineTransformVSgtF">path(forGlyph:typeSize:transform:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC4path8forGlyph8typeSize9transformSo9CGPathRefaSgs6UInt16V_14CoreFoundation7CGFloatVSo17CGAffineTransformVSgtF">path(forGlyph:<wbr>typeSize:<wbr>transform:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1105,6 +1485,103 @@ from the font.</p>
                         <h4>Return Value</h4>
                         <p>The path for the specified glyph.</p>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/Typeface.swift#L905-L924">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8TypefaceC5SlopeO"></a>
+                    <a name="//apple_ref/swift/Enum/Slope" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC5SlopeO">Slope</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Specifies the slope of a typeface.</p>
+
+                        <a href="../Classes/Typeface/Slope.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Slope</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/TypeSlope.swift#L23-L46">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8TypefaceC6WeightO"></a>
+                    <a name="//apple_ref/swift/Enum/Weight" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC6WeightO">Weight</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Specifies the thickness of a typeface, in terms of lightness or heaviness of the strokes.</p>
+
+                        <a href="../Classes/Typeface/Weight.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Weight</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/TypeWeight.swift#L22-L57">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa8TypefaceC5WidthO"></a>
+                    <a name="//apple_ref/swift/Enum/Width" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa8TypefaceC5WidthO">Width</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Specifies the wideness of a typeface, in terms of the width of characters in relation to
+their heights.</p>
+
+                        <a href="../Classes/Typeface/Width.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Width</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Graphics/TypeWidth.swift#L23-L60">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1113,11 +1590,10 @@ from the font.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external noopener">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2023-06-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

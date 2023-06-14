@@ -8,19 +8,29 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/TLabel" class="dashAnchor"></a>
     <a title="TLabel Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">Tehreer-Cocoa</a> (84% documented)</p>
+        <p><a href="../index.html">TehreerCocoa 3.0 Docs</a> (86% documented)</p>
+        <p class="header-right"><a href="https://github.com/Tehreer/Tehreer-Cocoa"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftehreer.github.io%2FTehreer-Cocoa%2Fapidocs%2Fdocsets%2FTehreerCocoa.xml"><img src="../img/dash.png" alt="Dash"/>Install in Dash</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html">TehreerCocoa Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         TLabel Class Reference
       </p>
     </div>
@@ -62,6 +72,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/ComposedLine.html">ComposedLine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/FontFile.html">FontFile</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/FrameResolver.html">FrameResolver</a>
@@ -115,16 +128,19 @@
                 <a href="../Classes/TLabel.html">TLabel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/TTextView.html">TTextView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Typeface.html">Typeface</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Weight.html">– Weight</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Typeface/Width.html">– Width</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/Typeface/Slope.html">– Slope</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TypefaceManager.html">TypefaceManager</a>
@@ -172,6 +188,9 @@
               <li class="nav-group-task">
                 <a href="../Extensions/NSAttributedString/Key.html">– Key</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/String">String</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -184,6 +203,12 @@
                 <a href="../Structs/BidiRun.html">BidiRun</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/ColorPalette.html">ColorPalette</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ColorPalette/Flags.html">– Flags</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/HHEATable.html">HHEATable</a>
               </li>
               <li class="nav-group-task">
@@ -194,6 +219,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/NameTable/Record.html">– Record</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NamedStyle.html">NamedStyle</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/OS2Table.html">OS2Table</a>
@@ -209,6 +237,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ScriptRun.html">ScriptRun</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis.html">VariationAxis</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariationAxis/Flags.html">– Flags</a>
               </li>
             </ul>
           </li>
@@ -231,12 +265,16 @@
             <h1>TLabel</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">TLabel</span> <span class="p">:</span> <span class="kt">UIView</span></code></pre>
 
                 </div>
               </div>
             <p>A view that displays read-only text to the user.</p>
 
+              <div class="slightly-smaller">
+                <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L28-L514">Show on GitHub</a>
+              </div>
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -261,9 +299,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">private(set)</span> <span class="kd">open</span> <span class="k">var</span> <span class="nv">textFrame</span><span class="p">:</span> <span class="kt"><a href="../Classes/ComposedFrame.html">ComposedFrame</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">private(set)</span> <span class="kd">open</span> <span class="k">var</span> <span class="nv">textFrame</span><span class="p">:</span> <span class="kt"><a href="../Classes/ComposedFrame.html">ComposedFrame</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L38">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -273,7 +314,7 @@
                     <code>
                     <a name="/c:@M@TehreerCocoa@objc(cs)TLabel(im)initWithCoder:"></a>
                     <a name="//apple_ref/swift/Method/init(coder:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@M@TehreerCocoa@objc(cs)TLabel(im)initWithCoder:">init(coder:)</a>
+                    <a class="token" href="#/c:@M@TehreerCocoa@objc(cs)TLabel(im)initWithCoder:">init(coder:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -281,7 +322,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Returns an object initialized from data in a given unarchiver.</p>
 
                       </div>
                       <div class="declaration">
@@ -292,6 +333,28 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>coder</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An unarchiver object.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L43-L46">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -300,7 +363,7 @@
                     <code>
                     <a name="/c:@M@TehreerCocoa@objc(cs)TLabel(im)initWithFrame:"></a>
                     <a name="//apple_ref/swift/Method/init(frame:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@M@TehreerCocoa@objc(cs)TLabel(im)initWithFrame:">init(frame:)</a>
+                    <a class="token" href="#/c:@M@TehreerCocoa@objc(cs)TLabel(im)initWithFrame:">init(frame:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -308,7 +371,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Initializes and returns a newly allocated view object with the specified frame rectangle.</p>
 
                       </div>
                       <div class="declaration">
@@ -318,6 +381,28 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="nf">init</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>frame</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The frame rectangle for the view, measured in points.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L51-L54">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -335,7 +420,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>A Boolean value that indicates whether the view depends on the constraint-based layout
+system.</p>
 
                       </div>
                       <div class="declaration">
@@ -345,6 +431,9 @@
                           <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">override</span> <span class="kd">class</span> <span class="k">var</span> <span class="nv">requiresConstraintBasedLayout</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L58-L60">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -372,6 +461,9 @@
                           <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">layoutSubviews</span><span class="p">()</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L110-L120">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -401,6 +493,9 @@ coordinate system.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L124-L136">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -429,6 +524,9 @@ system.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L140-L152">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -437,7 +535,7 @@ system.</p>
                     <code>
                     <a name="/c:@M@TehreerCocoa@objc(cs)TLabel(im)drawRect:"></a>
                     <a name="//apple_ref/swift/Method/draw(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@M@TehreerCocoa@objc(cs)TLabel(im)drawRect:">draw(_:)</a>
+                    <a class="token" href="#/c:@M@TehreerCocoa@objc(cs)TLabel(im)drawRect:">draw(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -475,6 +573,9 @@ system.</p>
                           </tbody>
                         </table>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L157-L171">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -483,7 +584,7 @@ system.</p>
                     <code>
                     <a name="/s:12TehreerCocoa6TLabelC15indexOfCodeUnit2atSiSgSo7CGPointV_tF"></a>
                     <a name="//apple_ref/swift/Method/indexOfCodeUnit(at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa6TLabelC15indexOfCodeUnit2atSiSgSo7CGPointV_tF">indexOfCodeUnit(at:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa6TLabelC15indexOfCodeUnit2atSiSgSo7CGPointV_tF">indexOfCodeUnit(at:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -522,6 +623,9 @@ character at this position.</p>
                           </tbody>
                         </table>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L224-L230">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -530,7 +634,7 @@ character at this position.</p>
                     <code>
                     <a name="/s:12TehreerCocoa6TLabelC16indexOfCharacter2atSS5IndexVSgSo7CGPointV_tF"></a>
                     <a name="//apple_ref/swift/Method/indexOfCharacter(at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa6TLabelC16indexOfCharacter2atSS5IndexVSgSo7CGPointV_tF">indexOfCharacter(at:)</a>
+                    <a class="token" href="#/s:12TehreerCocoa6TLabelC16indexOfCharacter2atSS5IndexVSgSo7CGPointV_tF">indexOfCharacter(at:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -569,6 +673,9 @@ character at this position.</p>
                           </tbody>
                         </table>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L236-L259">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -585,7 +692,7 @@ character at this position.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The text alignment to apply on each line. Its default value is <code>.intrinsic</code>.</p>
+                        <p>The text alignment to apply on each line. Its default value is <code>.leading</code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -595,6 +702,9 @@ character at this position.</p>
                           <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">textAlignment</span><span class="p">:</span> <span class="kt"><a href="../Enums/TextAlignment.html">TextAlignment</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L262-L270">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -622,6 +732,9 @@ character at this position.</p>
                           <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">verticalAlignment</span><span class="p">:</span> <span class="kt"><a href="../Enums/VerticalAlignment.html">VerticalAlignment</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L273-L281">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -655,6 +768,9 @@ from the <code><a href="../Classes/TLabel.html#/s:12TehreerCocoa6TLabelC14attrib
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L289-L302">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -687,6 +803,9 @@ this property will make <code><a href="../Classes/TLabel.html#/s:12TehreerCocoa6
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L310-L321">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -713,6 +832,9 @@ this property will make <code><a href="../Classes/TLabel.html#/s:12TehreerCocoa6
                           <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">typeface</span><span class="p">:</span> <span class="kt"><a href="../Classes/Typeface.html">Typeface</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L324-L332">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -746,15 +868,18 @@ instead. Setting this property will make <code>text</code> property <code>nil</c
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L340-L351">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa6TLabelC8textSize12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa6TLabelC8textSize14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/textSize" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa6TLabelC8textSize12CoreGraphics7CGFloatVvp">textSize</a>
+                    <a class="token" href="#/s:12TehreerCocoa6TLabelC8textSize14CoreFoundation7CGFloatVvp">textSize</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -772,6 +897,9 @@ instead. Setting this property will make <code>text</code> property <code>nil</c
                           <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">textSize</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L354-L362">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -800,6 +928,9 @@ instead. Setting this property will make <code>text</code> property <code>nil</c
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L365-L373">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -826,6 +957,9 @@ instead. Setting this property will make <code>text</code> property <code>nil</c
                           <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">truncationMode</span><span class="p">:</span> <span class="kt"><a href="../Enums/BreakMode.html">BreakMode</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L376-L386">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -855,6 +989,9 @@ is <code>.nil</code></p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L390-L400">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -882,15 +1019,18 @@ is <code>.nil</code></p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L403-L413">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa6TLabelC16extraLineSpacing12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa6TLabelC16extraLineSpacing14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/extraLineSpacing" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa6TLabelC16extraLineSpacing12CoreGraphics7CGFloatVvp">extraLineSpacing</a>
+                    <a class="token" href="#/s:12TehreerCocoa6TLabelC16extraLineSpacing14CoreFoundation7CGFloatVvp">extraLineSpacing</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -910,15 +1050,18 @@ multiplier. Its default value is zero.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L417-L427">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12TehreerCocoa6TLabelC20lineHeightMultiplier12CoreGraphics7CGFloatVvp"></a>
+                    <a name="/s:12TehreerCocoa6TLabelC20lineHeightMultiplier14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/lineHeightMultiplier" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12TehreerCocoa6TLabelC20lineHeightMultiplier12CoreGraphics7CGFloatVvp">lineHeightMultiplier</a>
+                    <a class="token" href="#/s:12TehreerCocoa6TLabelC20lineHeightMultiplier14CoreFoundation7CGFloatVvp">lineHeightMultiplier</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -941,6 +1084,192 @@ line.</p>
 
                         </div>
                       </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L434-L444">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa6TLabelC14renderingStyleAA8RendererC09RenderingE0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/renderingStyle" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa6TLabelC14renderingStyleAA8RendererC09RenderingE0Ovp">renderingStyle</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The rendering style, used for controlling how text should appear while drawing. Its default value is
+<code>.fill</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">renderingStyle</span><span class="p">:</span> <span class="kt"><a href="../Classes/Renderer.html">Renderer</a></span><span class="o">.</span><span class="kt">RenderingStyle</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L448-L456">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa6TLabelC11strokeColorSo7UIColorCvp"></a>
+                    <a name="//apple_ref/swift/Property/strokeColor" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa6TLabelC11strokeColorSo7UIColorCvp">strokeColor</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The stroke color for text. Its default value is <code>black</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">strokeColor</span><span class="p">:</span> <span class="kt">UIColor</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L459-L467">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa6TLabelC11strokeWidth14CoreFoundation7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/strokeWidth" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa6TLabelC11strokeWidth14CoreFoundation7CGFloatVvp">strokeWidth</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The stroke width for text.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">strokeWidth</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L470-L478">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa6TLabelC9strokeCapAA8RendererC06StrokeE0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/strokeCap" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa6TLabelC9strokeCapAA8RendererC06StrokeE0Ovp">strokeCap</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The stroke cap style which controls how the start and end of stroked lines and paths are
+treated. Its default value is <code>.butt</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">strokeCap</span><span class="p">:</span> <span class="kt"><a href="../Classes/Renderer.html">Renderer</a></span><span class="o">.</span><span class="kt">StrokeCap</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L482-L490">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa6TLabelC10strokeJoinAA8RendererC06StrokeE0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/strokeJoin" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa6TLabelC10strokeJoinAA8RendererC06StrokeE0Ovp">strokeJoin</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The stroke join type. Its default value is <code>.round</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">strokeJoin</span><span class="p">:</span> <span class="kt"><a href="../Classes/Renderer.html">Renderer</a></span><span class="o">.</span><span class="kt">StrokeJoin</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L493-L501">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12TehreerCocoa6TLabelC11strokeMiter14CoreFoundation7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/strokeMiter" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12TehreerCocoa6TLabelC11strokeMiter14CoreFoundation7CGFloatVvp">strokeMiter</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The stroke miter limit in pixels. This is used to control the behavior of miter joins when
+the joins angle is sharp.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">var</span> <span class="nv">strokeMiter</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Tehreer/Tehreer-Cocoa/tree/v3.0/Source/Views/TLabel.swift#L505-L513">Show on GitHub</a>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -949,11 +1278,10 @@ line.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2020-01-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/Tehreer/Tehreer-Cocoa" target="_blank" rel="external noopener">Muhammad Tayyab Akram</a>. All rights reserved. (Last updated: 2023-06-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>
