@@ -61,7 +61,7 @@ Pod::Spec.new do |spec|
                                'Libraries/UniBreak/src/wordbreak.c'
   spec.preserve_paths        = 'Libraries/FreeType/include/**/*.h',
                                'Libraries/FreeType/src/**/*.{h,c}',
-                               'Libraries/HarfBuzz/src/*.{h,hh,cc}',
+                               'Libraries/HarfBuzz/src/**/*.{h,hh,cc}',
                                'Libraries/Patch/*.{h,c}',
                                'Libraries/SheenBidi/Headers/*.h',
                                'Libraries/SheenBidi/Source/**/*.{h,c}',
