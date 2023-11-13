@@ -92,47 +92,77 @@ struct ShapeResolver {
             let descent = CGFloat(typeface.descent) * sizeScale
             let leading = CGFloat(typeface.leading) * sizeScale
 
-            let glyphIDs = Array(shapingResult.glyphIDs)
-            var glyphOffsets = Array(shapingResult.glyphOffsets)
-            var glyphAdvances = Array(shapingResult.glyphAdvances)
-            let clusterMap = Array(shapingResult.clusterMap)
-            let caretEdges = shapingResult.makeCaretEdges(caretStops: nil)
+            let replacement = shapingRun.replacement
+            let textRun: TextRun
 
-            if shapingRun.scaleX != 1.0 || shapingRun.scaleY != 1.0 {
-                for i in 0 ..< glyphOffsets.count {
-                    glyphOffsets[i].x *= shapingRun.scaleX
-                    glyphOffsets[i].y *= shapingRun.scaleY
+            if let replacement = replacement {
+                let runRange = shapingRun.codeUnitRange
+                let runLength = runRange.upperBound - runRange.lowerBound
+
+                var caretEdges = Array<CGFloat>(repeating: .zero, count: runLength + 1)
+
+                if bidiLevel & 1 == 0 {
+                    caretEdges[runLength] = replacement.width
+                } else {
+                    caretEdges[0] = replacement.width
                 }
 
-                for i in 0 ..< glyphAdvances.count {
-                    glyphAdvances[i] *= shapingRun.scaleX
+                textRun = ReplacementRun(
+                    string: string,
+                    codeUnitRange: runRange,
+                    bidiLevel: bidiLevel,
+                    replacement: replacement,
+                    typeface: typeface,
+                    typeSize: typeSize,
+                    ascent: replacement.ascent,
+                    descent: replacement.descent,
+                    leading: replacement.leading,
+                    extent: replacement.width,
+                    caretEdges: PrimitiveCollection(caretEdges)
+                )
+            } else {
+                let glyphIDs = Array(shapingResult.glyphIDs)
+                var glyphOffsets = Array(shapingResult.glyphOffsets)
+                var glyphAdvances = Array(shapingResult.glyphAdvances)
+                let clusterMap = Array(shapingResult.clusterMap)
+                let caretEdges = shapingResult.makeCaretEdges(caretStops: nil)
+
+                if shapingRun.scaleX != 1.0 || shapingRun.scaleY != 1.0 {
+                    for i in 0 ..< glyphOffsets.count {
+                        glyphOffsets[i].x *= shapingRun.scaleX
+                        glyphOffsets[i].y *= shapingRun.scaleY
+                    }
+
+                    for i in 0 ..< glyphAdvances.count {
+                        glyphAdvances[i] *= shapingRun.scaleX
+                    }
                 }
+
+                let baselineOffset = shapingRun.baselineOffset
+                if baselineOffset != .zero {
+                    for i in 0 ..< glyphOffsets.count {
+                        glyphOffsets[i].y += baselineOffset
+                    }
+                }
+
+                textRun = IntrinsicRun(
+                    string: string,
+                    codeUnitRange: shapingRun.codeUnitRange,
+                    isBackward: shapingResult.isBackward,
+                    bidiLevel: bidiLevel,
+                    writingDirection: shapingEngine.writingDirection,
+                    typeface: typeface,
+                    typeSize: typeSize,
+                    ascent: ascent,
+                    descent: descent,
+                    leading: leading,
+                    glyphIDs: PrimitiveCollection(glyphIDs),
+                    glyphOffsets: PrimitiveCollection(glyphOffsets),
+                    glyphAdvances: PrimitiveCollection(glyphAdvances),
+                    clusterMap: PrimitiveCollection(clusterMap),
+                    caretEdges: PrimitiveCollection(caretEdges)
+                )
             }
-
-            let baselineOffset = shapingRun.baselineOffset
-            if baselineOffset != .zero {
-                for i in 0 ..< glyphOffsets.count {
-                    glyphOffsets[i].y += baselineOffset
-                }
-            }
-
-            let textRun = IntrinsicRun(
-                string: string,
-                codeUnitRange: shapingRun.codeUnitRange,
-                isBackward: shapingResult.isBackward,
-                bidiLevel: bidiLevel,
-                writingDirection: shapingEngine.writingDirection,
-                typeface: typeface,
-                typeSize: typeSize,
-                ascent: ascent,
-                descent: descent,
-                leading: leading,
-                glyphIDs: PrimitiveCollection(glyphIDs),
-                glyphOffsets: PrimitiveCollection(glyphOffsets),
-                glyphAdvances: PrimitiveCollection(glyphAdvances),
-                clusterMap: PrimitiveCollection(clusterMap),
-                caretEdges: PrimitiveCollection(caretEdges)
-            )
 
             runs.append(textRun)
         }

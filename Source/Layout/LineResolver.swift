@@ -387,6 +387,9 @@ struct LineResolver {
             let glyphRun = lineRuns[i]
             let runRange = glyphRun.codeUnitRange
             let textRun = glyphRun.textRun
+            if textRun is ReplacementRun {
+                continue
+            }
 
             var glyphAdvances = Array(glyphRun.glyphAdvances)
 

@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,4 +29,7 @@ extension NSAttributedString.Key {
     /// The value of this attribute is a `CGFloat` value. Use this attribute to specify the scale of
     /// of the typeface during rendering.
     public static let scaleY = NSAttributedString.Key("TScaleY")
+    /// The value of this attribute is a `TextReplacement` object. Use this attribute to display a
+    /// custom drawing in place of the specified string range.
+    public static let replacement = NSAttributedString.Key("TReplacement")
 }

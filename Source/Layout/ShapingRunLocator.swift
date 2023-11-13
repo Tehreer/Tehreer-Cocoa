@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import Foundation
 
 struct ShapingRun {
     var codeUnitRange: Range<Int>
+    var replacement: TextReplacement?
     var typeface: Typeface!
     var typeSize: CGFloat = 16
     var baselineOffset: CGFloat = .zero
@@ -97,6 +98,10 @@ struct ShapingRunLocator {
                 if let number = value as? NSNumber, let obliqueness = CGFloat(exactly: number) {
                     shapingRun.obliqueness = obliqueness
                 }
+            case .replacement:
+                if let replacement = value as? TextReplacement {
+                    shapingRun.replacement = replacement
+                }
             default:
                 break
             }
@@ -123,7 +128,8 @@ struct ShapingRunLocator {
                     && currentRun.baselineOffset == nextRun.baselineOffset
                     && currentRun.obliqueness == nextRun.obliqueness
                     && currentRun.scaleX == nextRun.scaleX
-                    && currentRun.scaleY == nextRun.scaleY {
+                    && currentRun.scaleY == nextRun.scaleY
+                    && currentRun.replacement === nextRun.replacement {
                     let startIndex = currentRun.codeUnitRange.lowerBound
                     let endIndex = nextRun.codeUnitRange.upperBound
                     currentRun.codeUnitRange = Range(uncheckedBounds: (startIndex, endIndex))
