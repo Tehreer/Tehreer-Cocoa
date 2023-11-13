@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2023 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -80,12 +80,12 @@ struct LineResolver {
     private var text: NSAttributedString
     private var defaultAttributes: [NSAttributedString.Key: Any]
     private var paragraphs: [BidiParagraph]
-    private var runs: [IntrinsicRun]
+    private var runs: [TextRun]
 
     init(text: NSAttributedString,
          defaultAttributes: [NSAttributedString.Key: Any],
          paragraphs: [BidiParagraph],
-         runs: [IntrinsicRun]) {
+         runs: [TextRun]) {
         self.text = text
         self.defaultAttributes = defaultAttributes
         self.paragraphs = paragraphs
@@ -301,7 +301,7 @@ struct LineResolver {
         //      - Consecutive intrinsic runs may have same bidi level.
 
         var insertIndex = runArray.count
-        var previousRun: IntrinsicRun?
+        var previousRun: TextRun?
 
         var visualStart = start
         let visualEnd = end

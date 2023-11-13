@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import CoreGraphics
 
 extension RandomAccessCollection
-    where Element == IntrinsicRun,
+    where Element == TextRun,
           Index == Int {
     func binarySearchIndex(forCodeUnitAt index: Int) -> Int {
         var low = 0

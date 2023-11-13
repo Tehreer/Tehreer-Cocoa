@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2020 Muhammad Tayyab Akram
+// Copyright (C) 2020-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import Foundation
 
 struct TokenResolver {
     let string: String
-    let runs: [IntrinsicRun]
+    let runs: [TextRun]
 
     func makeTokenLine(range: Range<String.Index>,
                        truncationPlace: TruncationPlace,

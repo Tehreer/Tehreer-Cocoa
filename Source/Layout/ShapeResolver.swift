@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2021 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,9 +29,9 @@ struct ShapeResolver {
         self.string = text.string
     }
 
-    func makeParagraphsAndRuns() -> (paragraphs: [BidiParagraph], runs: [IntrinsicRun]) {
+    func makeParagraphsAndRuns() -> (paragraphs: [BidiParagraph], runs: [TextRun]) {
         var paragraphs: [BidiParagraph] = []
-        var runs: [IntrinsicRun] = []
+        var runs: [TextRun] = []
 
         let bidiAlgorithm = BidiAlgorithm(string: string)
         let scriptClassifier = ScriptClassifier(string: string)
@@ -73,7 +73,7 @@ struct ShapeResolver {
         return (paragraphs, runs)
     }
 
-    func resolveTypefaces(runs: inout [IntrinsicRun], runLocator: inout ShapingRunLocator,
+    func resolveTypefaces(runs: inout [TextRun], runLocator: inout ShapingRunLocator,
                           shapingEngine: ShapingEngine, bidiLevel: UInt8) {
         while let shapingRun = runLocator.next() {
             guard let typeface = shapingRun.typeface else {
@@ -116,7 +116,7 @@ struct ShapeResolver {
                 }
             }
 
-            let intrinsicRun = IntrinsicRun(
+            let textRun = IntrinsicRun(
                 string: string,
                 codeUnitRange: shapingRun.codeUnitRange,
                 isBackward: shapingResult.isBackward,
@@ -134,7 +134,7 @@ struct ShapeResolver {
                 caretEdges: PrimitiveCollection(caretEdges)
             )
 
-            runs.append(intrinsicRun)
+            runs.append(textRun)
         }
     }
 }
