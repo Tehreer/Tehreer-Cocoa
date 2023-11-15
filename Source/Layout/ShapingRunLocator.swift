@@ -57,7 +57,9 @@ struct ShapingRunLocator {
                                              in: runRange)
 
             var shapingRun = initialRun
-            shapingRun.codeUnitRange = chunkRange
+            shapingRun.codeUnitRange = Range(
+                uncheckedBounds: (runRange.lowerBound, runRange.upperBound)
+            )
 
             resolveAttributes(shapingRun: &shapingRun, attributes: attributes)
 
@@ -123,6 +125,10 @@ struct ShapingRunLocator {
 
             // Merge runs of similar style.
             while let nextRun = resolveRun() {
+                defer {
+                    newRun = nextRun
+                }
+
                 if currentRun.typeface === nextRun.typeface
                     && currentRun.typeSize == nextRun.typeSize
                     && currentRun.baselineOffset == nextRun.baselineOffset
@@ -136,8 +142,6 @@ struct ShapingRunLocator {
                 } else {
                     break
                 }
-
-                newRun = nextRun
             }
 
             return currentRun
