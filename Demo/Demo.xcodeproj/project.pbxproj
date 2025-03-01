@@ -14,9 +14,6 @@
 		6E987FF823313A06009E721B /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E987FF723313A06009E721B /* UIViewController+Alert.swift */; };
 		6E987FFA23313F06009E721B /* OpenTypeInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E987FF923313F06009E721B /* OpenTypeInfoViewController.swift */; };
 		6E9E99572A345F2C005D46B3 /* TehreerCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 6E9E99562A345F2C005D46B3 /* TehreerCocoa */; };
-		6EA98E6A232D368400E582E8 /* MehrNastaliq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EA98E67232D368400E582E8 /* MehrNastaliq.ttf */; };
-		6EA98E6B232D368400E582E8 /* NafeesWeb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EA98E68232D368400E582E8 /* NafeesWeb.ttf */; };
-		6EA98E6C232D368400E582E8 /* TajNastaleeq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EA98E69232D368400E582E8 /* TajNastaleeq.ttf */; };
 		6EB1AFFA2336246900548553 /* TypefaceGlyphsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB1AFF92336246900548553 /* TypefaceGlyphsViewController.swift */; };
 		6EB1AFFE2336A0F500548553 /* GlyphInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB1AFFD2336A0F500548553 /* GlyphInfoViewController.swift */; };
 		6EB90B0C232CD19A000FA74E /* OpenTypeShapingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB90B0B232CD19A000FA74E /* OpenTypeShapingViewController.swift */; };
@@ -29,10 +26,13 @@
 		6EE775C8235219A200919591 /* BidiAlgorithmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE775C7235219A200919591 /* BidiAlgorithmViewController.swift */; };
 		6EE775CA23521D2600919591 /* BidiInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE775C923521D2600919591 /* BidiInfoViewController.swift */; };
 		7DB535E325D5A84A0066A9AD /* TextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB535E225D5A84A0066A9AD /* TextViewController.swift */; };
-		7DB5E1CF25D655DF00587743 /* Noorehuda.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7DB5E1CE25D655DE00587743 /* Noorehuda.ttf */; };
 		7DC1E09225DE545E0058A9FA /* AlKahf.json in Resources */ = {isa = PBXBuildFile; fileRef = 7DC1E09125DE545D0058A9FA /* AlKahf.json */; };
 		7DFEB57125E3AD300041CD29 /* VariableFontsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFEB57025E3AD2F0041CD29 /* VariableFontsViewController.swift */; };
-		7DFEB57325E3B66D0041CD29 /* VFonts.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7DFEB57225E3B66D0041CD29 /* VFonts.bundle */; };
+		945B98F82D733025009634C4 /* TajNastaleeq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 945B98F52D733025009634C4 /* TajNastaleeq.ttf */; };
+		945B98F92D733025009634C4 /* Noorehuda.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 945B98F42D733025009634C4 /* Noorehuda.ttf */; };
+		945B98FA2D733025009634C4 /* VFonts.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 945B98F62D733025009634C4 /* VFonts.bundle */; };
+		945B98FB2D733025009634C4 /* MehrNastaliq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 945B98F22D733025009634C4 /* MehrNastaliq.ttf */; };
+		945B98FC2D733025009634C4 /* NafeesWeb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 945B98F32D733025009634C4 /* NafeesWeb.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,15 +56,12 @@
 		6E987FF723313A06009E721B /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		6E987FF923313F06009E721B /* OpenTypeInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenTypeInfoViewController.swift; sourceTree = "<group>"; };
 		6E9E99552A345F18005D46B3 /* Tehreer-Cocoa */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "Tehreer-Cocoa"; path = ..; sourceTree = "<group>"; };
-		6EA98E67232D368400E582E8 /* MehrNastaliq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MehrNastaliq.ttf; sourceTree = "<group>"; };
-		6EA98E68232D368400E582E8 /* NafeesWeb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NafeesWeb.ttf; sourceTree = "<group>"; };
-		6EA98E69232D368400E582E8 /* TajNastaleeq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = TajNastaleeq.ttf; sourceTree = "<group>"; };
 		6EB1AFF92336246900548553 /* TypefaceGlyphsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypefaceGlyphsViewController.swift; sourceTree = "<group>"; };
 		6EB1AFFD2336A0F500548553 /* GlyphInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphInfoViewController.swift; sourceTree = "<group>"; };
 		6EB90B0B232CD19A000FA74E /* OpenTypeShapingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenTypeShapingViewController.swift; sourceTree = "<group>"; };
 		6EB90B13232D0077000FA74E /* AvailableTypefacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableTypefacesViewController.swift; sourceTree = "<group>"; };
 		6EB91DB42340C2C100595946 /* LabelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelViewController.swift; sourceTree = "<group>"; };
-		6EE0A4302305C56C0061D4EB /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6EE0A4302305C56C0061D4EB /* DemoUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EE0A4332305C56C0061D4EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6EE0A4382305C56C0061D4EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6EE0A43A2305C5760061D4EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -73,10 +70,13 @@
 		6EE775C7235219A200919591 /* BidiAlgorithmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BidiAlgorithmViewController.swift; sourceTree = "<group>"; };
 		6EE775C923521D2600919591 /* BidiInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BidiInfoViewController.swift; sourceTree = "<group>"; };
 		7DB535E225D5A84A0066A9AD /* TextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewController.swift; sourceTree = "<group>"; };
-		7DB5E1CE25D655DE00587743 /* Noorehuda.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Noorehuda.ttf; sourceTree = "<group>"; };
 		7DC1E09125DE545D0058A9FA /* AlKahf.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = AlKahf.json; sourceTree = "<group>"; };
 		7DFEB57025E3AD2F0041CD29 /* VariableFontsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableFontsViewController.swift; sourceTree = "<group>"; };
-		7DFEB57225E3B66D0041CD29 /* VFonts.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = VFonts.bundle; sourceTree = "<group>"; };
+		945B98F22D733025009634C4 /* MehrNastaliq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MehrNastaliq.ttf; sourceTree = "<group>"; };
+		945B98F32D733025009634C4 /* NafeesWeb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NafeesWeb.ttf; sourceTree = "<group>"; };
+		945B98F42D733025009634C4 /* Noorehuda.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Noorehuda.ttf; sourceTree = "<group>"; };
+		945B98F52D733025009634C4 /* TajNastaleeq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = TajNastaleeq.ttf; sourceTree = "<group>"; };
+		945B98F62D733025009634C4 /* VFonts.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = VFonts.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,25 +108,12 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
-		6EA98E66232D368400E582E8 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				6EA98E67232D368400E582E8 /* MehrNastaliq.ttf */,
-				6EA98E68232D368400E582E8 /* NafeesWeb.ttf */,
-				7DB5E1CE25D655DE00587743 /* Noorehuda.ttf */,
-				6EA98E69232D368400E582E8 /* TajNastaleeq.ttf */,
-				7DFEB57225E3B66D0041CD29 /* VFonts.bundle */,
-			);
-			name = Fonts;
-			path = Demo/Fonts;
-			sourceTree = "<group>";
-		};
 		6EE0A4272305C56C0061D4EB = {
 			isa = PBXGroup;
 			children = (
 				6E9E99542A345F18005D46B3 /* Packages */,
-				6EE0A4322305C56C0061D4EB /* Demo */,
-				6EA98E66232D368400E582E8 /* Fonts */,
+				6EE0A4322305C56C0061D4EB /* DemoUIKit */,
+				945B98F72D733025009634C4 /* Fonts */,
 				6EE0A4312305C56C0061D4EB /* Products */,
 				6EE0A4462305C6080061D4EB /* Frameworks */,
 			);
@@ -135,12 +122,12 @@
 		6EE0A4312305C56C0061D4EB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6EE0A4302305C56C0061D4EB /* Demo.app */,
+				6EE0A4302305C56C0061D4EB /* DemoUIKit.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		6EE0A4322305C56C0061D4EB /* Demo */ = {
+		6EE0A4322305C56C0061D4EB /* DemoUIKit */ = {
 			isa = PBXGroup;
 			children = (
 				6E987FF6233139DC009E721B /* Extensions */,
@@ -164,7 +151,7 @@
 				6EE0A43F2305C5760061D4EB /* Info.plist */,
 				7DC1E09125DE545D0058A9FA /* AlKahf.json */,
 			);
-			path = Demo;
+			path = DemoUIKit;
 			sourceTree = "<group>";
 		};
 		6EE0A4462305C6080061D4EB /* Frameworks */ = {
@@ -174,12 +161,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		945B98F72D733025009634C4 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				945B98F22D733025009634C4 /* MehrNastaliq.ttf */,
+				945B98F32D733025009634C4 /* NafeesWeb.ttf */,
+				945B98F42D733025009634C4 /* Noorehuda.ttf */,
+				945B98F52D733025009634C4 /* TajNastaleeq.ttf */,
+				945B98F62D733025009634C4 /* VFonts.bundle */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6EE0A42F2305C56C0061D4EB /* Demo */ = {
+		6EE0A42F2305C56C0061D4EB /* DemoUIKit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6EE0A4422305C5760061D4EB /* Build configuration list for PBXNativeTarget "Demo" */;
+			buildConfigurationList = 6EE0A4422305C5760061D4EB /* Build configuration list for PBXNativeTarget "DemoUIKit" */;
 			buildPhases = (
 				6EE0A42C2305C56C0061D4EB /* Sources */,
 				6EE0A42D2305C56C0061D4EB /* Frameworks */,
@@ -190,12 +189,12 @@
 			);
 			dependencies = (
 			);
-			name = Demo;
+			name = DemoUIKit;
 			packageProductDependencies = (
 				6E9E99562A345F2C005D46B3 /* TehreerCocoa */,
 			);
 			productName = Demo;
-			productReference = 6EE0A4302305C56C0061D4EB /* Demo.app */;
+			productReference = 6EE0A4302305C56C0061D4EB /* DemoUIKit.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -226,7 +225,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6EE0A42F2305C56C0061D4EB /* Demo */,
+				6EE0A42F2305C56C0061D4EB /* DemoUIKit */,
 			);
 		};
 /* End PBXProject section */
@@ -236,14 +235,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				945B98F82D733025009634C4 /* TajNastaleeq.ttf in Resources */,
+				945B98F92D733025009634C4 /* Noorehuda.ttf in Resources */,
+				945B98FA2D733025009634C4 /* VFonts.bundle in Resources */,
+				945B98FB2D733025009634C4 /* MehrNastaliq.ttf in Resources */,
+				945B98FC2D733025009634C4 /* NafeesWeb.ttf in Resources */,
 				6EE0A43E2305C5760061D4EB /* LaunchScreen.storyboard in Resources */,
-				7DFEB57325E3B66D0041CD29 /* VFonts.bundle in Resources */,
 				6EE0A43B2305C5760061D4EB /* Assets.xcassets in Resources */,
 				6EE0A4392305C56C0061D4EB /* Main.storyboard in Resources */,
-				6EA98E6A232D368400E582E8 /* MehrNastaliq.ttf in Resources */,
-				6EA98E6B232D368400E582E8 /* NafeesWeb.ttf in Resources */,
-				7DB5E1CF25D655DF00587743 /* Noorehuda.ttf in Resources */,
-				6EA98E6C232D368400E582E8 /* TajNastaleeq.ttf in Resources */,
 				7DC1E09225DE545E0058A9FA /* AlKahf.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,7 +344,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Libraries/FreeType/include\"";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -398,7 +397,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Libraries/FreeType/include\"";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -413,7 +412,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = Demo/Info.plist;
+				INFOPLIST_FILE = DemoUIKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tehreer.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -426,7 +426,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = Demo/Info.plist;
+				INFOPLIST_FILE = DemoUIKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tehreer.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -446,7 +447,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6EE0A4422305C5760061D4EB /* Build configuration list for PBXNativeTarget "Demo" */ = {
+		6EE0A4422305C5760061D4EB /* Build configuration list for PBXNativeTarget "DemoUIKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6EE0A4432305C5760061D4EB /* Debug */,
