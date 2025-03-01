@@ -103,7 +103,6 @@ public struct StyledText: View {
                 }
             }
             .frame(width: textFrame?.width, height: textFrame?.height)
-            .background(Color.cyan)
         }
         .frame(
             idealWidth: idealWidth,
@@ -113,7 +112,7 @@ public struct StyledText: View {
         )
         .background(
             GeometryReader { geometry in
-                Color.orange
+                Color.clear
                     .onAppear {
                         inputSize = geometry.size
                         updateLayout()
