@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,18 +21,15 @@
 		6EB91DB52340C2C100595946 /* LabelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB91DB42340C2C100595946 /* LabelViewController.swift */; };
 		6EE0A4342305C56C0061D4EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE0A4332305C56C0061D4EB /* AppDelegate.swift */; };
 		6EE0A4392305C56C0061D4EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EE0A4372305C56C0061D4EB /* Main.storyboard */; };
-		6EE0A43B2305C5760061D4EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6EE0A43A2305C5760061D4EB /* Assets.xcassets */; };
 		6EE0A43E2305C5760061D4EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6EE0A43C2305C5760061D4EB /* LaunchScreen.storyboard */; };
 		6EE775C8235219A200919591 /* BidiAlgorithmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE775C7235219A200919591 /* BidiAlgorithmViewController.swift */; };
 		6EE775CA23521D2600919591 /* BidiInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE775C923521D2600919591 /* BidiInfoViewController.swift */; };
 		7DB535E325D5A84A0066A9AD /* TextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB535E225D5A84A0066A9AD /* TextViewController.swift */; };
 		7DC1E09225DE545E0058A9FA /* AlKahf.json in Resources */ = {isa = PBXBuildFile; fileRef = 7DC1E09125DE545D0058A9FA /* AlKahf.json */; };
 		7DFEB57125E3AD300041CD29 /* VariableFontsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFEB57025E3AD2F0041CD29 /* VariableFontsViewController.swift */; };
-		945B98F82D733025009634C4 /* TajNastaleeq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 945B98F52D733025009634C4 /* TajNastaleeq.ttf */; };
-		945B98F92D733025009634C4 /* Noorehuda.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 945B98F42D733025009634C4 /* Noorehuda.ttf */; };
-		945B98FA2D733025009634C4 /* VFonts.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 945B98F62D733025009634C4 /* VFonts.bundle */; };
-		945B98FB2D733025009634C4 /* MehrNastaliq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 945B98F22D733025009634C4 /* MehrNastaliq.ttf */; };
-		945B98FC2D733025009634C4 /* NafeesWeb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 945B98F32D733025009634C4 /* NafeesWeb.ttf */; };
+		945B99102D733B78009634C4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 945B990F2D733B78009634C4 /* Assets.xcassets */; };
+		945B99112D733B78009634C4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 945B990F2D733B78009634C4 /* Assets.xcassets */; };
+		945B99252D733F0E009634C4 /* TehreerCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 945B99242D733F0E009634C4 /* TehreerCocoa */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,10 +58,9 @@
 		6EB90B0B232CD19A000FA74E /* OpenTypeShapingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenTypeShapingViewController.swift; sourceTree = "<group>"; };
 		6EB90B13232D0077000FA74E /* AvailableTypefacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableTypefacesViewController.swift; sourceTree = "<group>"; };
 		6EB91DB42340C2C100595946 /* LabelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelViewController.swift; sourceTree = "<group>"; };
-		6EE0A4302305C56C0061D4EB /* DemoUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6EE0A4302305C56C0061D4EB /* Tehreer UIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tehreer UIKit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EE0A4332305C56C0061D4EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6EE0A4382305C56C0061D4EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		6EE0A43A2305C5760061D4EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6EE0A43D2305C5760061D4EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6EE0A43F2305C5760061D4EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6EE775C7235219A200919591 /* BidiAlgorithmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BidiAlgorithmViewController.swift; sourceTree = "<group>"; };
@@ -72,12 +68,14 @@
 		7DB535E225D5A84A0066A9AD /* TextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewController.swift; sourceTree = "<group>"; };
 		7DC1E09125DE545D0058A9FA /* AlKahf.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = AlKahf.json; sourceTree = "<group>"; };
 		7DFEB57025E3AD2F0041CD29 /* VariableFontsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableFontsViewController.swift; sourceTree = "<group>"; };
-		945B98F22D733025009634C4 /* MehrNastaliq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MehrNastaliq.ttf; sourceTree = "<group>"; };
-		945B98F32D733025009634C4 /* NafeesWeb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NafeesWeb.ttf; sourceTree = "<group>"; };
-		945B98F42D733025009634C4 /* Noorehuda.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Noorehuda.ttf; sourceTree = "<group>"; };
-		945B98F52D733025009634C4 /* TajNastaleeq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = TajNastaleeq.ttf; sourceTree = "<group>"; };
-		945B98F62D733025009634C4 /* VFonts.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = VFonts.bundle; sourceTree = "<group>"; };
+		945B99012D7339C8009634C4 /* Tehreer SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tehreer SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		945B990F2D733B78009634C4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		945B99022D7339C8009634C4 /* DemoSwiftUI */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = DemoSwiftUI; sourceTree = "<group>"; };
+		945B99172D733BAA009634C4 /* Fonts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Fonts; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		6EE0A42D2305C56C0061D4EB /* Frameworks */ = {
@@ -85,6 +83,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E9E99572A345F2C005D46B3 /* TehreerCocoa in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		945B98FE2D7339C8009634C4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				945B99252D733F0E009634C4 /* TehreerCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,7 +119,9 @@
 			children = (
 				6E9E99542A345F18005D46B3 /* Packages */,
 				6EE0A4322305C56C0061D4EB /* DemoUIKit */,
-				945B98F72D733025009634C4 /* Fonts */,
+				945B99022D7339C8009634C4 /* DemoSwiftUI */,
+				945B990F2D733B78009634C4 /* Assets.xcassets */,
+				945B99172D733BAA009634C4 /* Fonts */,
 				6EE0A4312305C56C0061D4EB /* Products */,
 				6EE0A4462305C6080061D4EB /* Frameworks */,
 			);
@@ -122,7 +130,8 @@
 		6EE0A4312305C56C0061D4EB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6EE0A4302305C56C0061D4EB /* DemoUIKit.app */,
+				6EE0A4302305C56C0061D4EB /* Tehreer UIKit.app */,
+				945B99012D7339C8009634C4 /* Tehreer SwiftUI.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -146,7 +155,6 @@
 				6EB1AFF92336246900548553 /* TypefaceGlyphsViewController.swift */,
 				7DFEB57025E3AD2F0041CD29 /* VariableFontsViewController.swift */,
 				6EE0A4372305C56C0061D4EB /* Main.storyboard */,
-				6EE0A43A2305C5760061D4EB /* Assets.xcassets */,
 				6EE0A43C2305C5760061D4EB /* LaunchScreen.storyboard */,
 				6EE0A43F2305C5760061D4EB /* Info.plist */,
 				7DC1E09125DE545D0058A9FA /* AlKahf.json */,
@@ -159,18 +167,6 @@
 			children = (
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		945B98F72D733025009634C4 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				945B98F22D733025009634C4 /* MehrNastaliq.ttf */,
-				945B98F32D733025009634C4 /* NafeesWeb.ttf */,
-				945B98F42D733025009634C4 /* Noorehuda.ttf */,
-				945B98F52D733025009634C4 /* TajNastaleeq.ttf */,
-				945B98F62D733025009634C4 /* VFonts.bundle */,
-			);
-			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,12 +185,39 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				945B99172D733BAA009634C4 /* Fonts */,
+			);
 			name = DemoUIKit;
 			packageProductDependencies = (
 				6E9E99562A345F2C005D46B3 /* TehreerCocoa */,
 			);
 			productName = Demo;
-			productReference = 6EE0A4302305C56C0061D4EB /* DemoUIKit.app */;
+			productReference = 6EE0A4302305C56C0061D4EB /* Tehreer UIKit.app */;
+			productType = "com.apple.product-type.application";
+		};
+		945B99002D7339C8009634C4 /* DemoSwiftUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 945B990C2D7339CC009634C4 /* Build configuration list for PBXNativeTarget "DemoSwiftUI" */;
+			buildPhases = (
+				945B98FD2D7339C8009634C4 /* Sources */,
+				945B98FE2D7339C8009634C4 /* Frameworks */,
+				945B98FF2D7339C8009634C4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				945B99022D7339C8009634C4 /* DemoSwiftUI */,
+				945B99172D733BAA009634C4 /* Fonts */,
+			);
+			name = DemoSwiftUI;
+			packageProductDependencies = (
+				945B99242D733F0E009634C4 /* TehreerCocoa */,
+			);
+			productName = Demo;
+			productReference = 945B99012D7339C8009634C4 /* Tehreer SwiftUI.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -203,12 +226,15 @@
 		6EE0A4282305C56C0061D4EB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1010;
+				LastSwiftUpdateCheck = 1610;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = Tehreer;
 				TargetAttributes = {
 					6EE0A42F2305C56C0061D4EB = {
 						CreatedOnToolsVersion = 10.1;
+					};
+					945B99002D7339C8009634C4 = {
+						CreatedOnToolsVersion = 16.1;
 					};
 				};
 			};
@@ -226,6 +252,7 @@
 			projectRoot = "";
 			targets = (
 				6EE0A42F2305C56C0061D4EB /* DemoUIKit */,
+				945B99002D7339C8009634C4 /* DemoSwiftUI */,
 			);
 		};
 /* End PBXProject section */
@@ -235,15 +262,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				945B98F82D733025009634C4 /* TajNastaleeq.ttf in Resources */,
-				945B98F92D733025009634C4 /* Noorehuda.ttf in Resources */,
-				945B98FA2D733025009634C4 /* VFonts.bundle in Resources */,
-				945B98FB2D733025009634C4 /* MehrNastaliq.ttf in Resources */,
-				945B98FC2D733025009634C4 /* NafeesWeb.ttf in Resources */,
 				6EE0A43E2305C5760061D4EB /* LaunchScreen.storyboard in Resources */,
-				6EE0A43B2305C5760061D4EB /* Assets.xcassets in Resources */,
 				6EE0A4392305C56C0061D4EB /* Main.storyboard in Resources */,
+				945B99112D733B78009634C4 /* Assets.xcassets in Resources */,
 				7DC1E09225DE545E0058A9FA /* AlKahf.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		945B98FF2D7339C8009634C4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				945B99102D733B78009634C4 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +300,13 @@
 				6EE775CA23521D2600919591 /* BidiInfoViewController.swift in Sources */,
 				7DFEB57125E3AD300041CD29 /* VariableFontsViewController.swift in Sources */,
 				6E987FF823313A06009E721B /* UIViewController+Alert.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		945B98FD2D7339C8009634C4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,7 +452,7 @@
 				INFOPLIST_FILE = DemoUIKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tehreer.Demo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Tehreer UIKit";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -429,7 +466,67 @@
 				INFOPLIST_FILE = DemoUIKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tehreer.Demo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Tehreer UIKit";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		945B990D2D7339CC009634C4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tehreer.Demo;
+				PRODUCT_NAME = "Tehreer SwiftUI";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		945B990E2D7339CC009634C4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tehreer.Demo;
+				PRODUCT_NAME = "Tehreer SwiftUI";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -456,10 +553,23 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		945B990C2D7339CC009634C4 /* Build configuration list for PBXNativeTarget "DemoSwiftUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				945B990D2D7339CC009634C4 /* Debug */,
+				945B990E2D7339CC009634C4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		6E9E99562A345F2C005D46B3 /* TehreerCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TehreerCocoa;
+		};
+		945B99242D733F0E009634C4 /* TehreerCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TehreerCocoa;
 		};
