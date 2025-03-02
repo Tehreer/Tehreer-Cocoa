@@ -37,14 +37,24 @@ public struct StyledText: View {
         typeface: Typeface,
         textSize: CGFloat
     ) {
-        let defaultAttributes: [NSAttributedString.Key: Any] = [
-            .typeface: typeface,
-            .typeSize: textSize
-        ]
-
         self.init(
             NSAttributedString(string: string),
-            defaultAttributes: defaultAttributes
+            defaultTypeface: typeface,
+            defaultTextSize: textSize
+        )
+    }
+    
+    public init(
+        _ attributedString: NSAttributedString,
+        defaultTypeface: Typeface,
+        defaultTextSize: CGFloat
+    ) {
+        self.init(
+            attributedString,
+            defaultAttributes: [
+                .typeface: defaultTypeface,
+                .typeSize: defaultTextSize
+            ]
         )
     }
     
@@ -59,7 +69,6 @@ public struct StyledText: View {
                 text: attributedString,
                 defaultAttributes: defaultAttributes
             )
-
             self.init(typesetter: typesetter)
         }
     }
@@ -102,7 +111,7 @@ public struct StyledText: View {
                     }
                 }
             }
-            .frame(width: textFrame?.width, height: textFrame?.height)
+            .frame(width: textWidth, height: textHeight)
         }
         .frame(
             idealWidth: idealWidth,
