@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6EE0A42F2305C56C0061D4EB"
-               BuildableName = "DemoUIKit.app"
+               BuildableName = "Tehreer UIKit.app"
                BlueprintName = "DemoUIKit"
                ReferencedContainer = "container:Demo.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6EE0A42F2305C56C0061D4EB"
-            BuildableName = "DemoUIKit.app"
+            BuildableName = "Tehreer UIKit.app"
             BlueprintName = "DemoUIKit"
             ReferencedContainer = "container:Demo.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6EE0A42F2305C56C0061D4EB"
-            BuildableName = "DemoUIKit.app"
+            BuildableName = "Tehreer UIKit.app"
             BlueprintName = "DemoUIKit"
             ReferencedContainer = "container:Demo.xcodeproj">
          </BuildableReference>

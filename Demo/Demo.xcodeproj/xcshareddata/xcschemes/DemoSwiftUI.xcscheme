@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "945B99002D7339C8009634C4"
-               BuildableName = "DemoSwiftUI.app"
+               BuildableName = "Tehreer SwiftUI.app"
                BlueprintName = "DemoSwiftUI"
                ReferencedContainer = "container:Demo.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "945B99002D7339C8009634C4"
-            BuildableName = "DemoSwiftUI.app"
+            BuildableName = "Tehreer SwiftUI.app"
             BlueprintName = "DemoSwiftUI"
             ReferencedContainer = "container:Demo.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "945B99002D7339C8009634C4"
-            BuildableName = "DemoSwiftUI.app"
+            BuildableName = "Tehreer SwiftUI.app"
             BlueprintName = "DemoSwiftUI"
             ReferencedContainer = "container:Demo.xcodeproj">
          </BuildableReference>
