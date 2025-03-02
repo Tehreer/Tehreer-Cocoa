@@ -185,4 +185,102 @@ public struct StyledText: View {
             characterRange: string.startIndex ..< string.endIndex
         )
     }
+
+    /// Sets the text alignment to apply on each line.
+    public func textAlignment(_ textAlignment: TextAlignment) -> StyledText {
+        let styledText = self
+        styledText.resolver.textAlignment = textAlignment
+        return styledText
+    }
+
+    /// Sets the color of the text.
+    public func textColor(_ textColor: Color) -> StyledText {
+        let styledText = self
+        styledText.renderer.fillColor = UIColor(textColor)
+        return styledText
+    }
+
+    /// Sets the truncation mode that should be used on the last line of the text in case of
+    /// overflow.
+    public func truncationMode(_ truncationMode: BreakMode) -> StyledText {
+        let styledText = self
+        styledText.resolver.truncationMode = truncationMode
+        return styledText
+    }
+
+    /// Sets the truncation place for the last line of the text. The truncation is disabled if its
+    /// value is `.nil`
+    public func truncationPlace(_ truncationPlace: TruncationPlace?) -> StyledText {
+        let styledText = self
+        styledText.resolver.truncationPlace = truncationPlace
+        return styledText
+    }
+
+    /// Sets the maximum number of lines to use for rendering text.
+    public func maxLines(_ maxLines: Int?) -> StyledText {
+        let styledText = self
+        styledText.resolver.maxLines = maxLines
+        return styledText
+    }
+
+    /// Sets the extra spacing that is added after each text line. It is resolved before line
+    /// height multiplier.
+    public func extraLineSpacing(_ extraLineSpacing: CGFloat) -> StyledText {
+        let styledText = self
+        styledText.resolver.extraLineSpacing = extraLineSpacing
+        return styledText
+    }
+
+    /// Sets the height multiplier that is applied on each text line. It is resolved after extra
+    /// line spacing. The additional spacing is adjusted in such a way that text remains in the
+    /// middle of the line.
+    public func lineHeightMultiplier(_ lineHeightMultiplier: CGFloat) -> StyledText {
+        let styledText = self
+        styledText.resolver.lineHeightMultiplier = lineHeightMultiplier
+        return styledText
+    }
+
+    /// Sets the rendering style, used for controlling how text should appear while drawing.
+    public func renderingStyle(_ renderingStyle: Renderer.RenderingStyle) -> StyledText {
+        let styledText = self
+        styledText.renderer.renderingStyle = renderingStyle
+        return styledText
+    }
+
+    /// Sets the stroke color for text.
+    public func strokeColor(_ strokeColor: Color) -> StyledText {
+        let styledText = self
+        styledText.renderer.strokeColor = UIColor(strokeColor)
+        return styledText
+    }
+
+    /// Sets the stroke width for text.
+    public func strokeWidth(_ strokeWidth: CGFloat) -> StyledText {
+        let styledText = self
+        styledText.renderer.strokeWidth = strokeWidth
+        return styledText
+    }
+
+    /// Sets the stroke cap style which controls how the start and end of stroked lines and paths
+    /// are treated.
+    public func strokeCap(_ strokeCap: Renderer.StrokeCap) -> StyledText {
+        let styledText = self
+        styledText.renderer.strokeCap = strokeCap
+        return styledText
+    }
+
+    /// Sets the stroke join type.
+    public func strokeJoin(_ strokeJoin: Renderer.StrokeJoin) -> StyledText {
+        let styledText = self
+        styledText.renderer.strokeJoin = strokeJoin
+        return styledText
+    }
+
+    /// Sets the stroke miter limit in pixels. This is used to control the behavior of miter joins
+    /// when the joins angle is sharp.
+    public func strokeMiter(_ strokeMiter: CGFloat) -> StyledText {
+        let styledText = self
+        styledText.renderer.strokeMiter = strokeMiter
+        return styledText
+    }
 }
