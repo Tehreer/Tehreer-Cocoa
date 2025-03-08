@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2021 Muhammad Tayyab Akram
+// Copyright (C) 2019-2025 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -167,7 +167,7 @@ public class Renderer {
     public var shadowDy: CGFloat = 0.0
 
     /// The shadow color.
-    public var shadowColor: UIColor = .black
+    public var shadowColor: UIColor = .clear
 
     private func updatePixelSizes() {
         glyphAttributes.setPixelWidth(typeSize * scaleX * renderScale)
