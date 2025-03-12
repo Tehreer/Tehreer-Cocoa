@@ -14,229 +14,119 @@
 // limitations under the License.
 //
 
-import CoreFoundation
+import Foundation
 import SwiftUI
 
 @available(iOS 15.0, *)
 public struct StyledText: View {
-    private let typesetter: Typesetter?
-    private let renderer = Renderer()
-    private let resolver = FrameResolver()
-    
-    @State private var textFrame: ComposedFrame?
-    
-    @State private var fixedWidth: Bool?
-    @State private var fixedHeight: Bool?
-    
-    @State private var inputSize: CGSize = .zero
-    @State private var idealWidth: CGFloat = .zero
-    @State private var idealHeight: CGFloat = .zero
-    
-    public init(
-        _ string: String,
-        typeface: Typeface,
-        textSize: CGFloat
-    ) {
-        self.init(
-            NSAttributedString(string: string),
-            defaultTypeface: typeface,
-            defaultTextSize: textSize
-        )
+    @StateObject private var manager: StyledTextManager
+
+    private var properties: TextProperties
+
+    public init(_ string: String) {
+        _manager = StateObject(wrappedValue: StyledTextManager())
+        properties = TextProperties(string: string)
     }
-    
-    public init(
-        _ attributedString: NSAttributedString,
-        defaultTypeface: Typeface,
-        defaultTextSize: CGFloat
-    ) {
-        self.init(
-            attributedString,
-            defaultAttributes: [
-                .typeface: defaultTypeface,
-                .typeSize: defaultTextSize
-            ]
-        )
+
+    public init(_ attributedString: NSAttributedString) {
+        _manager = StateObject(wrappedValue: StyledTextManager())
+        properties = TextProperties(attributedString: attributedString)
     }
-    
-    public init(
-        _ attributedString: NSAttributedString,
-        defaultAttributes: [NSAttributedString.Key: Any]
-    ) {
-        if attributedString.string.isEmpty {
-            self.init(typesetter: nil)
-        } else {
-            let typesetter = Typesetter(
-                text: attributedString,
-                defaultAttributes: defaultAttributes
-            )
-            self.init(typesetter: typesetter)
-        }
-    }
-    
+
     public init(_ typesetter: Typesetter) {
-        self.init(typesetter: typesetter)
+        _manager = StateObject(wrappedValue: StyledTextManager())
+        properties = TextProperties(typesetter: typesetter)
     }
-    
-    private init(typesetter: Typesetter?) {
-        self.typesetter = typesetter
-        
-        resolver.typesetter = typesetter
-        resolver.fitsHorizontally = true
-        resolver.fitsVertically = true
-    }
-    
-    private var textWidth: CGFloat? {
-        return textFrame?.width.rounded(.up)
-    }
-    
-    private var textHeight: CGFloat? {
-        return textFrame?.height.rounded(.up)
-    }
-    
-    private var maxWidth: CGFloat? {
-        return (fixedWidth == true) ? nil : textWidth ?? .infinity
-    }
-    
-    private var maxHeight: CGFloat? {
-        return (fixedHeight == true) ? nil : textHeight ?? .infinity
-    }
-    
+
     public var body: some View {
         ZStack {
             Canvas { graphicsContext, size in
                 graphicsContext.withCGContext { context in
-                    if let textFrame {
-                        renderer.renderScale = UIScreen.main.scale
-                        textFrame.draw(with: renderer, in: context, at: .zero)
+                    if let textFrame = manager.textFrame {
+                        context.interpolationQuality = .none
+                        context.setShouldAntialias(false)
+                        context.setBlendMode(.normal)
+
+                        textFrame.draw(with: manager.renderer, in: context, at: .zero)
                     }
                 }
             }
-            .frame(width: textWidth, height: textHeight)
         }
         .frame(
-            idealWidth: idealWidth,
-            maxWidth: maxWidth,
-            idealHeight: idealHeight,
-            maxHeight: maxHeight
+            idealWidth: manager.idealWidth,
+            maxWidth: manager.maxWidth,
+            idealHeight: manager.idealHeight,
+            maxHeight: manager.maxHeight
         )
         .background(
             GeometryReader { geometry in
                 Color.clear
                     .onAppear {
-                        inputSize = geometry.size
-                        updateLayout()
+                        manager.setupProperties(properties, initialSize: geometry.size)
                     }
                     .onChange(of: geometry.size) { newSize in
-                        if newSize != inputSize {
-                            inputSize = newSize
-                            updateLayout()
-                        }
+                        manager.updateLayout(forSize: geometry.size)
                     }
             }
         )
     }
-    
-    private func updateLayout() {
-        if fixedWidth == nil {
-            fixedWidth = inputSize.width.isZero
-        }
-        if fixedHeight == nil {
-            fixedHeight = inputSize.height.isZero
-        }
-        
-        determineIdealSizeIfNeeded()
-        makeTextFrameIfNeeded()
-    }
-    
-    private func determineIdealSizeIfNeeded() {
-        guard let typesetter else { return }
-        
-        guard let determineWidth = fixedWidth,
-              let determineHeight = fixedHeight,
-              (determineWidth || determineHeight) else { return }
-        
-        let maxWidth = inputSize.width.isZero
-                        ? .infinity // This is the first time the ideal width is being determined.
-                        : inputSize.width // Ideal width has already been determined and imposed.
-        let maxHeight = inputSize.height.isZero
-                        ? .infinity  // This is the first time the ideal height is being determined.
-                        : (
-                            inputSize.width != idealWidth
-                            ? .infinity // Input width has changed, so re-calcualte the height.
-                            : inputSize.height // Otherwise, use the imposed height.
-                          )
-        
-        if maxWidth == idealWidth && maxHeight == idealHeight {
-            return
-        }
-        
-        resolver.frameBounds = CGRect(x: 0.0, y: 0.0, width: maxWidth, height: maxHeight)
-        
-        let string = typesetter.text.string
-        let idealFrame = resolver.makeFrame(
-            characterRange: string.startIndex ..< string.endIndex
-        )
-        
-        idealWidth = determineWidth ? idealFrame?.width.rounded(.up) ?? .zero : .zero
-        idealHeight = determineHeight ? idealFrame?.height.rounded(.up) ?? .zero : .zero
-    }
-    
-    private func makeTextFrameIfNeeded() {
-        guard let typesetter else { return }
-        guard inputSize.width > .zero && inputSize.height > .zero else { return }
 
-        resolver.frameBounds = CGRect(
-            x: 0.0, y: 0.0, width: inputSize.width, height: inputSize.height
-        )
-        
-        let string = typesetter.text.string
-        textFrame = resolver.makeFrame(
-            characterRange: string.startIndex ..< string.endIndex
-        )
+    /// Sets the typeface in which the text is displayed.
+    public func typeface(_ typeface: Typeface?) -> Self {
+        var styledText = self
+        styledText.properties.typeface = typeface
+        return styledText
+    }
+
+    /// Sets the default size of the text.
+    public func textSize(_ size: CGFloat) -> Self {
+        var styledText = self
+        styledText.properties.textSize = size
+        return styledText
     }
 
     /// Sets the text alignment to apply on each line.
     public func textAlignment(_ textAlignment: TextAlignment) -> StyledText {
-        let styledText = self
-        styledText.resolver.textAlignment = textAlignment
+        var styledText = self
+        styledText.properties.textAlignment = textAlignment
         return styledText
     }
 
     /// Sets the color of the text.
     public func textColor(_ textColor: Color) -> StyledText {
-        let styledText = self
-        styledText.renderer.fillColor = UIColor(textColor)
+        var styledText = self
+        styledText.properties.textColor = textColor
         return styledText
     }
 
     /// Sets the truncation mode that should be used on the last line of the text in case of
     /// overflow.
     public func truncationMode(_ truncationMode: BreakMode) -> StyledText {
-        let styledText = self
-        styledText.resolver.truncationMode = truncationMode
+        var styledText = self
+        styledText.properties.truncationMode = truncationMode
         return styledText
     }
 
     /// Sets the truncation place for the last line of the text. The truncation is disabled if its
     /// value is `.nil`
     public func truncationPlace(_ truncationPlace: TruncationPlace?) -> StyledText {
-        let styledText = self
-        styledText.resolver.truncationPlace = truncationPlace
+        var styledText = self
+        styledText.properties.truncationPlace = truncationPlace
         return styledText
     }
 
     /// Sets the maximum number of lines to use for rendering text.
     public func maxLines(_ maxLines: Int?) -> StyledText {
-        let styledText = self
-        styledText.resolver.maxLines = maxLines
+        var styledText = self
+        styledText.properties.maxLines = maxLines
         return styledText
     }
 
     /// Sets the extra spacing that is added after each text line. It is resolved before line
     /// height multiplier.
     public func extraLineSpacing(_ extraLineSpacing: CGFloat) -> StyledText {
-        let styledText = self
-        styledText.resolver.extraLineSpacing = extraLineSpacing
+        var styledText = self
+        styledText.properties.extraLineSpacing = extraLineSpacing
         return styledText
     }
 
@@ -244,52 +134,52 @@ public struct StyledText: View {
     /// line spacing. The additional spacing is adjusted in such a way that text remains in the
     /// middle of the line.
     public func lineHeightMultiplier(_ lineHeightMultiplier: CGFloat) -> StyledText {
-        let styledText = self
-        styledText.resolver.lineHeightMultiplier = lineHeightMultiplier
+        var styledText = self
+        styledText.properties.lineHeightMultiplier = lineHeightMultiplier
         return styledText
     }
 
     /// Sets the rendering style, used for controlling how text should appear while drawing.
     public func renderingStyle(_ renderingStyle: Renderer.RenderingStyle) -> StyledText {
-        let styledText = self
-        styledText.renderer.renderingStyle = renderingStyle
+        var styledText = self
+        styledText.properties.renderingStyle = renderingStyle
         return styledText
     }
 
     /// Sets the stroke color for text.
     public func strokeColor(_ strokeColor: Color) -> StyledText {
-        let styledText = self
-        styledText.renderer.strokeColor = UIColor(strokeColor)
+        var styledText = self
+        styledText.properties.strokeColor = strokeColor
         return styledText
     }
 
     /// Sets the stroke width for text.
     public func strokeWidth(_ strokeWidth: CGFloat) -> StyledText {
-        let styledText = self
-        styledText.renderer.strokeWidth = strokeWidth
+        var styledText = self
+        styledText.properties.strokeWidth = strokeWidth
         return styledText
     }
 
     /// Sets the stroke cap style which controls how the start and end of stroked lines and paths
     /// are treated.
     public func strokeCap(_ strokeCap: Renderer.StrokeCap) -> StyledText {
-        let styledText = self
-        styledText.renderer.strokeCap = strokeCap
+        var styledText = self
+        styledText.properties.strokeCap = strokeCap
         return styledText
     }
 
     /// Sets the stroke join type.
     public func strokeJoin(_ strokeJoin: Renderer.StrokeJoin) -> StyledText {
-        let styledText = self
-        styledText.renderer.strokeJoin = strokeJoin
+        var styledText = self
+        styledText.properties.strokeJoin = strokeJoin
         return styledText
     }
 
     /// Sets the stroke miter limit in pixels. This is used to control the behavior of miter joins
     /// when the joins angle is sharp.
     public func strokeMiter(_ strokeMiter: CGFloat) -> StyledText {
-        let styledText = self
-        styledText.renderer.strokeMiter = strokeMiter
+        var styledText = self
+        styledText.properties.strokeMiter = strokeMiter
         return styledText
     }
 }
