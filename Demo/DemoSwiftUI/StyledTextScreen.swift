@@ -76,20 +76,22 @@ struct StyledTextScreen: View {
                 .padding(.bottom)
             
             ScrollView {
-                StyledText(
-                    article,
-                    defaultTypeface: TypefaceManager.default.typeface(
-                        forTag: TypefaceTag.tajNastaleeq
-                    )!,
-                    defaultTextSize: 30.0
-                )
-                .textColor(Color(red: 0.30, green: 0.60, blue: 0.15))
-                .renderingStyle(.fillStroke)
-                .strokeColor(Color(red: 1.0, green: 0.5, blue: 0.0))
-                .strokeWidth(1.25)
-                .padding(.horizontal)
+                StyledText(article)
+                    .typeface(
+                        TypefaceManager.default.typeface(
+                            forTag: TypefaceTag.tajNastaleeq
+                        )!
+                    )
+                    .textSize(30.0)
+                    .textColor(Color(red: 0.30, green: 0.60, blue: 0.15))
+                    .renderingStyle(.fillStroke)
+                    .strokeColor(Color(red: 1.0, green: 0.5, blue: 0.0))
+                    .strokeWidth(1.25)
+                    .padding(.horizontal)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
             Text("https://ur.wikipedia.org/wiki/OpenType")
                 .font(.body)
                 .italic()
