@@ -44,9 +44,12 @@ struct StyledTextScreen: View {
         [TextColor.blue, LinkURL.unicode, "یونیکوڈ"],
         ["کی سہولت موجود ہے۔ ان میں لاطینیہ زبانوں کے ساتھ ساتھ غیرلاطینی ترسیمات و حروف رکھنے والی زبانوں کی تخطیط بھی کی جاسکتی ہے۔"]
     ]
-    
+
     private let article = NSMutableAttributedString()
-    
+
+    @State private var scrollSize: CGSize = .zero
+    @State private var layoutID = UUID()
+
     init() {
         for span in data {
             var attributes: [NSAttributedString.Key: Any] = [:]
@@ -66,41 +69,48 @@ struct StyledTextScreen: View {
     }
     
     var body: some View {
-        VStack(spacing: .zero) {
-            Text("OpenType")
-                .font(.largeTitle)
-                .italic()
-                .foregroundColor(Color(TextColor.blue))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal)
-                .padding(.bottom)
-            
-            ScrollView {
-                StyledText(article)
-                    .typeface(
-                        TypefaceManager.default.typeface(
-                            forTag: TypefaceTag.tajNastaleeq
-                        )!
-                    )
-                    .textSize(30.0)
-                    .textColor(Color(red: 0.30, green: 0.60, blue: 0.15))
-                    .renderingStyle(.fillStroke)
-                    .strokeColor(Color(red: 1.0, green: 0.5, blue: 0.0))
-                    .strokeWidth(1.25)
+        GeometryReader { geometry in
+            VStack(spacing: .zero) {
+                Text("OpenType")
+                    .font(.largeTitle)
+                    .italic()
+                    .foregroundColor(Color(TextColor.blue))
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.bottom)
 
-            Text("https://ur.wikipedia.org/wiki/OpenType")
-                .font(.body)
-                .italic()
-                .tint(Color(TextColor.blue))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal)
-                .padding(.top)
+                ScrollView {
+                    StyledText(article)
+                        .typeface(
+                            TypefaceManager.default.typeface(
+                                forTag: TypefaceTag.tajNastaleeq
+                            )!
+                        )
+                        .textSize(30.0)
+                        .textColor(Color(red: 0.30, green: 0.60, blue: 0.15))
+                        .renderingStyle(.fillStroke)
+                        .strokeColor(Color(red: 1.0, green: 0.5, blue: 0.0))
+                        .strokeWidth(1.25)
+                        .layoutID(layoutID)
+                        .padding(.horizontal)
+                }
+
+                Text("https://ur.wikipedia.org/wiki/OpenType")
+                    .font(.body)
+                    .italic()
+                    .tint(Color(TextColor.blue))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                    .padding(.top)
+            }
+            .onChange(of: geometry.size) { newSize in
+                if newSize != scrollSize {
+                    scrollSize = newSize
+                    layoutID = UUID()
+                }
+            }
+            .navigationTitle("Styled Text")
         }
-        .navigationTitle("Styled Text")
     }
 }
 
