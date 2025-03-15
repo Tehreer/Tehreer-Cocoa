@@ -22,12 +22,13 @@ final class StyledTextManager: ObservableObject {
     let renderer = Renderer()
     private let resolver = FrameResolver()
 
-    private var fixedWidth: Bool?
-    private var fixedHeight: Bool?
+    @Published private(set) var geometryID = UUID()
 
-    private(set) var inputSize: CGSize = .zero
     @Published private(set) var idealWidth: CGFloat = .zero
     @Published private(set) var idealHeight: CGFloat = .zero
+
+    @Published private(set) var maxWidth: CGFloat?
+    @Published private(set) var maxHeight: CGFloat?
 
     @Published private(set) var textFrame: ComposedFrame?
 
@@ -35,24 +36,13 @@ final class StyledTextManager: ObservableObject {
         return resolver.typesetter
     }
 
-    var textWidth: CGFloat? {
-        return textFrame?.width.rounded(.up)
-    }
-
-    var textHeight: CGFloat? {
-        return textFrame?.height.rounded(.up)
-    }
-
-    var maxWidth: CGFloat? {
-        return (fixedWidth == true) ? nil : textWidth ?? .infinity
-    }
-
-    var maxHeight: CGFloat? {
-        return (fixedHeight == true) ? nil : textHeight ?? .infinity
+    @MainActor
+    func setupProperties(_ properties: TextProperties) {
+        updateProperties(properties)
     }
 
     @MainActor
-    func setupProperties(_ properties: TextProperties, initialSize: CGSize) {
+    func updateProperties(_ properties: TextProperties) {
         let typesetter = updatedTypesetter(for: properties)
 
         properties.updateFrameResolver(resolver)
@@ -62,8 +52,41 @@ final class StyledTextManager: ObservableObject {
         resolver.fitsHorizontally = true
         resolver.fitsVertically = true
         renderer.renderScale = UIScreen.main.scale
+        
+        refreshLayout()
+    }
 
-        updateLayout(forSize: initialSize, forceUpdate: true)
+    @MainActor
+    func refreshLayout(forSize proposedSize: CGSize? = nil) {
+        if let proposedSize {
+            if proposedSize.width != maxWidth {
+                idealWidth = .zero
+                maxWidth = nil
+                textFrame = nil
+            }
+            if proposedSize.height != maxHeight {
+                idealHeight = .zero
+                maxHeight = nil
+                textFrame = nil
+            }
+
+            updateLayout(forSize: proposedSize)
+        } else {
+            geometryID = UUID()
+            idealWidth = .zero
+            idealHeight = .zero
+            maxWidth = nil
+            maxHeight = nil
+            textFrame = nil
+        }
+    }
+
+    @MainActor
+    func updateLayout(forSize proposedSize: CGSize) {
+        if (maxWidth == nil || maxHeight == nil)
+            || (proposedSize.width != idealWidth || proposedSize.height != idealHeight) {
+            updateTextFrame(forSize: proposedSize)
+        }
     }
 
     private func updatedTypesetter(for properties: TextProperties) -> Typesetter? {
@@ -88,68 +111,52 @@ final class StyledTextManager: ObservableObject {
         }
     }
 
-    func updateLayout(forSize proposedSize: CGSize, forceUpdate: Bool = false) {
-        if !forceUpdate && proposedSize == inputSize {
-            return
-        }
-
-        inputSize = proposedSize
-
-        if fixedWidth == nil {
-            fixedWidth = inputSize.width.isZero
-        }
-        if fixedHeight == nil {
-            fixedHeight = inputSize.height.isZero
-        }
-
-        determineIdealSizeIfNeeded()
-        makeTextFrameIfNeeded()
-    }
-
-    private func determineIdealSizeIfNeeded() {
+    private func updateTextFrame(forSize proposedSize: CGSize) {
         guard let typesetter else { return }
 
-        guard let determineWidth = fixedWidth,
-              let determineHeight = fixedHeight,
-              (determineWidth || determineHeight) else { return }
+        let isWidthPass = maxWidth == nil
+        var layoutSize = proposedSize
 
-        let maxWidth = inputSize.width.isZero
-                        ? .infinity // This is the first time the ideal width is being determined.
-                        : inputSize.width // Ideal width has already been determined and imposed.
-        let maxHeight = inputSize.height.isZero
-                        ? .infinity  // This is the first time the ideal height is being determined.
-                        : (
-                            inputSize.width != idealWidth
-                            ? .infinity // Input width has changed, so re-calcualte the height.
-                            : inputSize.height // Otherwise, use the imposed height.
-                          )
-
-        if maxWidth == idealWidth && maxHeight == idealHeight {
-            return
+        if proposedSize.width.isZero {
+            // Determine Width.
+            layoutSize.width = .greatestFiniteMagnitude
+        }
+        if proposedSize.height.isZero {
+            // Determine Height.
+            layoutSize.height = .greatestFiniteMagnitude
         }
 
-        resolver.frameBounds = CGRect(x: 0.0, y: 0.0, width: maxWidth, height: maxHeight)
-
-        let string = typesetter.text.string
-        let idealFrame = resolver.makeFrame(
-            characterRange: string.startIndex ..< string.endIndex
-        )
-
-        idealWidth = determineWidth ? idealFrame?.width.rounded(.up) ?? .zero : .zero
-        idealHeight = determineHeight ? idealFrame?.height.rounded(.up) ?? .zero : .zero
-    }
-
-    private func makeTextFrameIfNeeded() {
-        guard let typesetter else { return }
-        guard inputSize.width > .zero && inputSize.height > .zero else { return }
+        guard layoutSize.width > .zero && layoutSize.height > .zero else {
+            textFrame = nil
+            idealWidth = .zero
+            idealHeight = .zero
+            maxWidth = .zero
+            maxHeight = .zero
+            return
+        }
 
         resolver.frameBounds = CGRect(
-            x: 0.0, y: 0.0, width: inputSize.width, height: inputSize.height
+            x: 0.0, y: 0.0, width: layoutSize.width, height: layoutSize.height
         )
 
         let string = typesetter.text.string
         textFrame = resolver.makeFrame(
             characterRange: string.startIndex ..< string.endIndex
         )
+
+        if let textFrame {
+            idealWidth = textFrame.width.rounded(.up)
+            maxWidth = idealWidth
+
+            if !isWidthPass {
+                idealHeight = textFrame.height.rounded(.up)
+                maxHeight = idealHeight
+            }
+        } else {
+            idealWidth = .zero
+            idealHeight = .zero
+            maxWidth = .zero
+            maxHeight = .zero
+        }
     }
 }

@@ -22,6 +22,7 @@ public struct StyledText: View {
     @StateObject private var manager: StyledTextManager
 
     private var properties: TextProperties
+    private var layoutID: AnyHashable?
 
     public init(_ string: String) {
         _manager = StateObject(wrappedValue: StyledTextManager())
@@ -40,9 +41,9 @@ public struct StyledText: View {
 
     public var body: some View {
         ZStack {
-            Canvas { graphicsContext, size in
-                graphicsContext.withCGContext { context in
-                    if let textFrame = manager.textFrame {
+            if let textFrame = manager.textFrame {
+                Canvas { graphicsContext, size in
+                    graphicsContext.withCGContext { context in
                         context.interpolationQuality = .none
                         context.setShouldAntialias(false)
                         context.setBlendMode(.normal)
@@ -62,13 +63,23 @@ public struct StyledText: View {
             GeometryReader { geometry in
                 Color.clear
                     .onAppear {
-                        manager.setupProperties(properties, initialSize: geometry.size)
+                        manager.refreshLayout(forSize: geometry.size)
                     }
                     .onChange(of: geometry.size) { newSize in
-                        manager.updateLayout(forSize: geometry.size)
+                        manager.updateLayout(forSize: newSize)
                     }
             }
+            .id(manager.geometryID)
         )
+        .onAppear {
+            manager.setupProperties(properties)
+        }
+        .onChange(of: properties) { newProperties in
+            manager.updateProperties(newProperties)
+        }
+        .onChange(of: layoutID) { newID in
+            manager.refreshLayout()
+        }
     }
 
     /// Sets the typeface in which the text is displayed.
@@ -180,6 +191,12 @@ public struct StyledText: View {
     public func strokeMiter(_ strokeMiter: CGFloat) -> StyledText {
         var styledText = self
         styledText.properties.strokeMiter = strokeMiter
+        return styledText
+    }
+
+    public func layoutID<ID: Hashable>(_ layoutID: ID) -> StyledText {
+        var styledText = self
+        styledText.layoutID = layoutID
         return styledText
     }
 }
