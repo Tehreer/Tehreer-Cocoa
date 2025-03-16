@@ -41,8 +41,8 @@ public struct StyledText: View {
 
     public var body: some View {
         ZStack {
-            if let textFrame = manager.textFrame {
-                Canvas { graphicsContext, size in
+            Canvas { graphicsContext, size in
+                if let textFrame = manager.textFrame {
                     graphicsContext.withCGContext { context in
                         context.interpolationQuality = .none
                         context.setShouldAntialias(false)
@@ -54,10 +54,10 @@ public struct StyledText: View {
             }
         }
         .frame(
-            idealWidth: manager.idealWidth,
-            maxWidth: manager.maxWidth,
-            idealHeight: manager.idealHeight,
-            maxHeight: manager.maxHeight
+            idealWidth: manager.frameWidth ?? .zero,
+            maxWidth: manager.frameWidth,
+            idealHeight: manager.frameHeight ?? .zero,
+            maxHeight: manager.frameHeight
         )
         .background(
             GeometryReader { geometry in
@@ -66,7 +66,7 @@ public struct StyledText: View {
                         manager.refreshLayout(forSize: geometry.size)
                     }
                     .onChange(of: geometry.size) { newSize in
-                        manager.updateLayout(forSize: newSize)
+                        manager.refreshLayout(forSize: newSize)
                     }
             }
             .id(manager.geometryID)

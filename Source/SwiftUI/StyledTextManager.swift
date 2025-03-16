@@ -22,15 +22,14 @@ final class StyledTextManager: ObservableObject {
     let renderer = Renderer()
     private let resolver = FrameResolver()
 
+    private var lastProposedWidth: CGFloat?
+    private var lastProposedHeight: CGFloat?
+
     @Published private(set) var geometryID = UUID()
 
-    @Published private(set) var idealWidth: CGFloat = .zero
-    @Published private(set) var idealHeight: CGFloat = .zero
-
-    @Published private(set) var maxWidth: CGFloat?
-    @Published private(set) var maxHeight: CGFloat?
-
     @Published private(set) var textFrame: ComposedFrame?
+    @Published private(set) var frameWidth: CGFloat?
+    @Published private(set) var frameHeight: CGFloat?
 
     private var typesetter: Typesetter? {
         return resolver.typesetter
@@ -59,33 +58,44 @@ final class StyledTextManager: ObservableObject {
     @MainActor
     func refreshLayout(forSize proposedSize: CGSize? = nil) {
         if let proposedSize {
-            if proposedSize.width != maxWidth {
-                idealWidth = .zero
-                maxWidth = nil
-                textFrame = nil
+            if proposedSize.width == frameWidth {
+                // Update the last proposed width if the system has adopted the actual frame width.
+                lastProposedWidth = proposedSize.width
             }
-            if proposedSize.height != maxHeight {
-                idealHeight = .zero
-                maxHeight = nil
-                textFrame = nil
+            if proposedSize.height == frameHeight {
+                // Update the last proposed height if the system has adopted the actual frame
+                // height.
+                lastProposedHeight = proposedSize.height
             }
 
-            updateLayout(forSize: proposedSize)
+            if proposedSize.width != lastProposedWidth {
+                // Update the text frame by passing `zero` as proposed height in order to determine
+                // the actual height.
+                updateTextFrame(
+                    forSize: CGSize(width: proposedSize.width, height: .zero)
+                )
+
+                // Assign another geometry ID to ensure a second layout pass for determining the
+                // actual frame height.
+                geometryID = UUID()
+
+                // Update the last proposed with and the height.
+                lastProposedWidth = proposedSize.width
+                lastProposedHeight = nil
+            } else if proposedSize.height != lastProposedHeight {
+                // Update the text frame respecting the passed-in proposed size.
+                updateTextFrame(forSize: proposedSize)
+                // Update the last proposed height.
+                lastProposedHeight = proposedSize.height
+            }
         } else {
+            // Force layout by resetting the related properties.
+            lastProposedWidth = nil
+            lastProposedHeight = nil
             geometryID = UUID()
-            idealWidth = .zero
-            idealHeight = .zero
-            maxWidth = nil
-            maxHeight = nil
             textFrame = nil
-        }
-    }
-
-    @MainActor
-    func updateLayout(forSize proposedSize: CGSize) {
-        if (maxWidth == nil || maxHeight == nil)
-            || (proposedSize.width != idealWidth || proposedSize.height != idealHeight) {
-            updateTextFrame(forSize: proposedSize)
+            frameWidth = nil
+            frameHeight = nil
         }
     }
 
@@ -114,7 +124,7 @@ final class StyledTextManager: ObservableObject {
     private func updateTextFrame(forSize proposedSize: CGSize) {
         guard let typesetter else { return }
 
-        let isWidthPass = maxWidth == nil
+        let isWidthPass = frameWidth == nil
         var layoutSize = proposedSize
 
         if proposedSize.width.isZero {
@@ -128,10 +138,8 @@ final class StyledTextManager: ObservableObject {
 
         guard layoutSize.width > .zero && layoutSize.height > .zero else {
             textFrame = nil
-            idealWidth = .zero
-            idealHeight = .zero
-            maxWidth = .zero
-            maxHeight = .zero
+            frameWidth = .zero
+            frameHeight = .zero
             return
         }
 
@@ -145,18 +153,14 @@ final class StyledTextManager: ObservableObject {
         )
 
         if let textFrame {
-            idealWidth = textFrame.width.rounded(.up)
-            maxWidth = idealWidth
+            frameWidth = textFrame.width.rounded(.up)
 
             if !isWidthPass {
-                idealHeight = textFrame.height.rounded(.up)
-                maxHeight = idealHeight
+                frameHeight = textFrame.height.rounded(.up)
             }
         } else {
-            idealWidth = .zero
-            idealHeight = .zero
-            maxWidth = .zero
-            maxHeight = .zero
+            frameWidth = .zero
+            frameHeight = .zero
         }
     }
 }
