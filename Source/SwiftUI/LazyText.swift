@@ -49,25 +49,27 @@ struct LazyText: View {
 
             if let textFrame = manager.textFrame {
                 ForEach(manager.visibleIndices, id: \.self) { index in
-                    let lineBox = manager.lineBoxes[index]
                     let currentLine = textFrame.lines[index]
-
-                    if let separatorColor = properties.separatorColor {
-                        let separatorTop = currentLine.origin.y - currentLine.ascent
-                        let separatorBottom = separatorTop + currentLine.height
-                        let separatorY = separatorBottom.rounded()
-
-                        separatorColor
-                            .frame(width: manager.scrollWidth, height: 1)
-                            .position(x: manager.scrollWidth / 2.0, y: separatorY)
-                    }
+                    let defaultRenderer = manager.renderer
+                    let canvasFrame = CGRect(
+                        x: .zero,
+                        y: currentLine.origin.y - currentLine.ascent,
+                        width: manager.scrollWidth,
+                        height: currentLine.height.rounded(.up)
+                    )
+                    let lineBox = manager.lineBoxes[index]
+                    let separatorColor = properties.separatorColor
 
                     LineCanvas(
                         currentLine,
-                        renderer: manager.renderer,
-                        frame: lineBox
+                        asyncDrawing: true,
+                        defaultRenderer: defaultRenderer,
+                        canvasFrame: canvasFrame,
+                        lineBox: lineBox,
+                        separatorColor: separatorColor
                     )
-                    .position(x: lineBox.midX, y: lineBox.midY)
+                    .frame(width: canvasFrame.width, height: canvasFrame.height)
+                    .position(x: canvasFrame.midX, y: canvasFrame.midY)
                 }
                 .frame(height: textFrame.height.rounded(.up))
             }

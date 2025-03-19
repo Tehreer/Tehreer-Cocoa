@@ -165,14 +165,6 @@ private final class TextContext {
 
             var boundingBox = textLine.computeBoundingBox(with: renderer)
             boundingBox = boundingBox.offsetBy(dx: textLine.origin.x, dy: textLine.origin.y)
-            boundingBox = boundingBox.union(
-                CGRect(
-                    x: 0.0,
-                    y: textLine.origin.y - textLine.ascent,
-                    width: layoutWidth,
-                    height: textLine.height
-                )
-            )
             boundingBox.origin.x.round(.down)
             boundingBox.origin.y.round(.down)
             boundingBox.size.width.round(.up)
