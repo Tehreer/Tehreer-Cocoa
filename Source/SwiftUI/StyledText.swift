@@ -22,7 +22,6 @@ public struct StyledText: View {
     @StateObject private var manager: StyledTextManager
 
     private var properties: TextProperties
-    private var layoutID: AnyHashable?
 
     public init(_ string: String) {
         _manager = StateObject(wrappedValue: StyledTextManager())
@@ -40,25 +39,19 @@ public struct StyledText: View {
     }
 
     public var body: some View {
-        ZStack {
-            Canvas { graphicsContext, size in
-                if let textFrame = manager.textFrame {
-                    graphicsContext.withCGContext { context in
-                        context.interpolationQuality = .none
-                        context.setShouldAntialias(false)
-                        context.setBlendMode(.normal)
-
-                        textFrame.draw(with: manager.renderer, in: context, at: .zero)
-                    }
+        Group {
+            if #available(iOS 16.0, *) {
+                StyledTextLayout(manager: manager) {
+                    canvas
                 }
+            } else {
+                StyledTextSizer(manager: manager)
+                    .allowsHitTesting(false)
+                    .overlay {
+                        canvas
+                    }
             }
         }
-        .frame(
-            idealWidth: manager.frameWidth ?? .zero,
-            maxWidth: manager.frameWidth,
-            idealHeight: manager.frameHeight ?? .zero,
-            maxHeight: manager.frameHeight
-        )
         .background(
             GeometryReader { geometry in
                 Color.clear
@@ -77,8 +70,20 @@ public struct StyledText: View {
         .onChange(of: properties) { newProperties in
             manager.updateProperties(newProperties)
         }
-        .onChange(of: layoutID) { newID in
-            manager.refreshLayout()
+    }
+
+    @ViewBuilder
+    private var canvas: some View {
+        Canvas { graphicsContext, size in
+            if let textFrame = manager.textFrame {
+                graphicsContext.withCGContext { context in
+                    context.interpolationQuality = .none
+                    context.setShouldAntialias(false)
+                    context.setBlendMode(.normal)
+
+                    textFrame.draw(with: manager.renderer, in: context, at: .zero)
+                }
+            }
         }
     }
 
@@ -191,12 +196,6 @@ public struct StyledText: View {
     public func strokeMiter(_ strokeMiter: CGFloat) -> StyledText {
         var styledText = self
         styledText.properties.strokeMiter = strokeMiter
-        return styledText
-    }
-
-    public func layoutID<ID: Hashable>(_ layoutID: ID) -> StyledText {
-        var styledText = self
-        styledText.layoutID = layoutID
         return styledText
     }
 }

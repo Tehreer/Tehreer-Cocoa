@@ -22,14 +22,8 @@ final class StyledTextManager: ObservableObject {
     let renderer = Renderer()
     private let resolver = FrameResolver()
 
-    private var lastProposedWidth: CGFloat?
-    private var lastProposedHeight: CGFloat?
-
     @Published private(set) var geometryID = UUID()
-
     @Published private(set) var textFrame: ComposedFrame?
-    @Published private(set) var frameWidth: CGFloat?
-    @Published private(set) var frameHeight: CGFloat?
 
     private var typesetter: Typesetter? {
         return resolver.typesetter
@@ -37,11 +31,6 @@ final class StyledTextManager: ObservableObject {
 
     @MainActor
     func setupProperties(_ properties: TextProperties) {
-        updateProperties(properties)
-    }
-
-    @MainActor
-    func updateProperties(_ properties: TextProperties) {
         let typesetter = updatedTypesetter(for: properties)
 
         properties.updateFrameResolver(resolver)
@@ -51,52 +40,45 @@ final class StyledTextManager: ObservableObject {
         resolver.fitsHorizontally = true
         resolver.fitsVertically = true
         renderer.renderScale = UIScreen.main.scale
-        
+    }
+
+    @MainActor
+    func updateProperties(_ properties: TextProperties) {
+        setupProperties(properties)
         refreshLayout()
     }
 
     @MainActor
     func refreshLayout(forSize proposedSize: CGSize? = nil) {
         if let proposedSize {
-            if proposedSize.width == frameWidth {
-                // Update the last proposed width if the system has adopted the actual frame width.
-                lastProposedWidth = proposedSize.width
-            }
-            if proposedSize.height == frameHeight {
-                // Update the last proposed height if the system has adopted the actual frame
-                // height.
-                lastProposedHeight = proposedSize.height
-            }
-
-            if proposedSize.width != lastProposedWidth {
-                // Update the text frame by passing `zero` as proposed height in order to determine
-                // the actual height.
-                updateTextFrame(
-                    forSize: CGSize(width: proposedSize.width, height: .zero)
-                )
-
-                // Assign another geometry ID to ensure a second layout pass for determining the
-                // actual frame height.
-                geometryID = UUID()
-
-                // Update the last proposed with and the height.
-                lastProposedWidth = proposedSize.width
-                lastProposedHeight = nil
-            } else if proposedSize.height != lastProposedHeight {
-                // Update the text frame respecting the passed-in proposed size.
-                updateTextFrame(forSize: proposedSize)
-                // Update the last proposed height.
-                lastProposedHeight = proposedSize.height
-            }
+            updateTextFrame(forSize: proposedSize)
         } else {
-            // Force layout by resetting the related properties.
-            lastProposedWidth = nil
-            lastProposedHeight = nil
+            // Force re-layout by resetting the related properties.
             geometryID = UUID()
             textFrame = nil
-            frameWidth = nil
-            frameHeight = nil
         }
+    }
+
+    @MainActor
+    func determineFrameSize(for containerSize: CGSize) -> CGSize? {
+        guard let typesetter else { return nil }
+        guard containerSize.width > .zero && containerSize.height > .zero else { return .zero }
+
+        resolver.frameBounds = CGRect(
+            x: 0.0, y: 0.0, width: containerSize.width, height: containerSize.height
+        )
+
+        let string = typesetter.text.string
+        let resolvedFrame = resolver.makeFrame(
+            characterRange: string.startIndex ..< string.endIndex
+        )
+
+        guard let resolvedFrame else { return nil }
+
+        return CGSize(
+            width: resolvedFrame.width.rounded(.up),
+            height: resolvedFrame.height.rounded(.up)
+        )
     }
 
     private func updatedTypesetter(for properties: TextProperties) -> Typesetter? {
@@ -121,46 +103,20 @@ final class StyledTextManager: ObservableObject {
         }
     }
 
-    private func updateTextFrame(forSize proposedSize: CGSize) {
-        guard let typesetter else { return }
-
-        let isWidthPass = frameWidth == nil
-        var layoutSize = proposedSize
-
-        if proposedSize.width.isZero {
-            // Determine Width.
-            layoutSize.width = .greatestFiniteMagnitude
-        }
-        if proposedSize.height.isZero {
-            // Determine Height.
-            layoutSize.height = .greatestFiniteMagnitude
-        }
-
-        guard layoutSize.width > .zero && layoutSize.height > .zero else {
+    private func updateTextFrame(forSize containerSize: CGSize) {
+        guard let typesetter,
+              containerSize.width > .zero && containerSize.height > .zero else {
             textFrame = nil
-            frameWidth = .zero
-            frameHeight = .zero
             return
         }
 
         resolver.frameBounds = CGRect(
-            x: 0.0, y: 0.0, width: layoutSize.width, height: layoutSize.height
+            x: 0.0, y: 0.0, width: containerSize.width, height: containerSize.height
         )
 
         let string = typesetter.text.string
         textFrame = resolver.makeFrame(
             characterRange: string.startIndex ..< string.endIndex
         )
-
-        if let textFrame {
-            frameWidth = textFrame.width.rounded(.up)
-
-            if !isWidthPass {
-                frameHeight = textFrame.height.rounded(.up)
-            }
-        } else {
-            frameWidth = .zero
-            frameHeight = .zero
-        }
     }
 }
