@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2021 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 //
 
 import Foundation
-import SheenBidi
+@_implementationOnly import SheenBidi
 
 /// A `BidiParagraph` object represents a single paragraph of text processed with rules X1-I2 of
 /// Unicode Bidirectional Algorithm. It contains the resolved embedding levels of all the characters

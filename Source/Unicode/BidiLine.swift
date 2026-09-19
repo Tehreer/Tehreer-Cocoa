@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 //
 
 import Foundation
-import SheenBidi
+@_implementationOnly import SheenBidi
 
 /// A `BidiLine` object represents a single line processed with rules L1-L2 of Unicode Bidirectional
 /// Algorithm. Instead of reordering the characters as stated by rule L2, it allows to query and

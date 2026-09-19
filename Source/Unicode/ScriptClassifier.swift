@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 //
 
 import Foundation
-import SheenBidi
+@_implementationOnly import SheenBidi
 
 private func makeScriptsBuffer(string: String) -> UnsafeBufferPointer<SBScript> {
     let stringBuffer = BidiBuffer(string)

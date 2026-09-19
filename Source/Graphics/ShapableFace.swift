@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021 Muhammad Tayyab Akram
+// Copyright (C) 2021-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 import CoreGraphics
 import Foundation
-import FreeType
-import HarfBuzz
+@_implementationOnly import FreeType
+@_implementationOnly import HarfBuzz
 
 /// Provides HarfBuzz font having custom implementation by using FreeType face.
 class ShapableFace {

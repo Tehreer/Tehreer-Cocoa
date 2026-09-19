@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2021 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 import CoreGraphics
 import Foundation
-import FreeType
+@_implementationOnly import FreeType
 
 /// A `FontFile` object represents the file of a specific font format.
 public class FontFile {
