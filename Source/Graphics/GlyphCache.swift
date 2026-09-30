@@ -18,16 +18,6 @@ import CoreGraphics
 import Foundation
 @_implementationOnly import FreeType
 
-private func sizeOfLayer(_ layer: CGLayer) -> Int {
-    let size = layer.size
-
-    if layer.context?.bitsPerPixel == 32 {
-        return Int(size.width * size.height * 4)
-    }
-
-    return Int(size.width * size.height)
-}
-
 private class DataSegment: LRUSegment<UInt16> {
     let rasterizer: GlyphRasterizer
 
@@ -41,7 +31,7 @@ private class DataSegment: LRUSegment<UInt16> {
             return 0
         }
 
-        return sizeOfLayer(image.layer)
+        return image.byteCount
     }
 }
 
@@ -51,7 +41,7 @@ private class ImageSegment: LRUSegment<UInt16> {
     }
 
     override func sizeOf(key: UInt16, value: AnyObject) -> Int {
-        return sizeOfLayer((value as! GlyphImage).layer)
+        return (value as! GlyphImage).byteCount
     }
 }
 

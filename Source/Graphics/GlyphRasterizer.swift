@@ -88,7 +88,7 @@ class GlyphRasterizer {
         }
     }
 
-    private func makeLayer(bitmap: UnsafePointer<FT_Bitmap>) -> CGLayer? {
+    private func makeLayer(bitmap: UnsafePointer<FT_Bitmap>) -> (layer: CGLayer, bytesPerPixel: Int)? {
         switch bitmap.pointee.pixel_mode {
         case UInt8(FT_PIXEL_MODE_GRAY.rawValue):
             let bitmapLength = Int(bitmap.pointee.width * bitmap.pointee.rows)
@@ -138,7 +138,7 @@ class GlyphRasterizer {
             glyphContext?.scaleBy(x: 1.0, y: -1.0)
             glyphContext?.draw(mask, in: rect)
 
-            return glyphLayer
+            return glyphLayer.map { ($0, 1) }
 
         case UInt8(FT_PIXEL_MODE_BGRA.rawValue):
             let bitmapLength = Int(bitmap.pointee.width * bitmap.pointee.rows * 4)
@@ -191,7 +191,7 @@ class GlyphRasterizer {
             glyphContext?.scaleBy(x: 1.0, y: -1.0)
             glyphContext?.draw(image, in: rect)
 
-            return glyphLayer
+            return glyphLayer.map { ($0, 4) }
 
         default:
             print("Unsupported pixel mode of freetype bitmap")
@@ -248,7 +248,8 @@ class GlyphRasterizer {
                 return nil
             }
 
-            return GlyphImage(layer: glyphLayer,
+            return GlyphImage(layer: glyphLayer.layer,
+                              bytesPerPixel: glyphLayer.bytesPerPixel,
                               left: CGFloat(glyphSlot.pointee.bitmap_left),
                               top: CGFloat(glyphSlot.pointee.bitmap_top))
         }
@@ -275,7 +276,8 @@ class GlyphRasterizer {
             let bitmapGlyph = UnsafeMutablePointer<FT_BitmapGlyphRec_>(OpaquePointer(baseGlyph))!
 
             if let strokeLayer = makeLayer(bitmap: &bitmapGlyph.pointee.bitmap) {
-                return GlyphImage(layer: strokeLayer,
+                return GlyphImage(layer: strokeLayer.layer,
+                                  bytesPerPixel: strokeLayer.bytesPerPixel,
                                   left: CGFloat(bitmapGlyph.pointee.left),
                                   top: CGFloat(bitmapGlyph.pointee.top))
             }

@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021 Muhammad Tayyab Akram
+// Copyright (C) 2021-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,9 +20,11 @@ class GlyphImage {
     let layer: CGLayer
     let left: CGFloat
     let top: CGFloat
+    let bytesPerPixel: Int
 
-    init(layer: CGLayer, left: CGFloat, top: CGFloat) {
+    init(layer: CGLayer, bytesPerPixel: Int, left: CGFloat, top: CGFloat) {
         self.layer = layer
+        self.bytesPerPixel = bytesPerPixel
         self.left = left
         self.top = top
     }
@@ -33,5 +35,9 @@ class GlyphImage {
 
     var height: CGFloat {
         return layer.size.height
+    }
+
+    var byteCount: Int {
+        return Int(width * height) * bytesPerPixel
     }
 }
