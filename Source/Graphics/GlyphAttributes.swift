@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-@_implementationOnly import FreeType
+internal import FreeType
 
 import CoreGraphics
 import Foundation

@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-@_implementationOnly import SheenBidi
+internal import SheenBidi
 
 import Foundation
 

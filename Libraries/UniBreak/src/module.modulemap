@@ -1,0 +1,4 @@
+module UniBreak [system][extern_c] {
+    header "linebreak.h"
+    export *
+}

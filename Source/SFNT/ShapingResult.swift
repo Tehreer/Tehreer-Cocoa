@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-@_implementationOnly import HarfBuzz
+internal import HarfBuzz
 
 import CoreGraphics
 import Foundation

@@ -14,6 +14,7 @@ let package = Package(
         .target(
             name: "FreeType",
             path: "Libraries/FreeType",
+            exclude: ["include/module.modulemap"],
             sources: [
                 "src/autofit/autofit.c",
                 "src/base/ftbase.c",
@@ -49,9 +50,8 @@ let package = Package(
                 "src/winfonts/winfnt.c",
                 "include"
             ],
-            publicHeadersPath: "umbrella",
+            publicHeadersPath: "include",
             cSettings: [
-                .headerSearchPath("include"),
                 .define("FT2_BUILD_LIBRARY")
             ]
         ),
@@ -79,10 +79,7 @@ let package = Package(
                 "src/unibreakdef.c",
                 "src/wordbreak.c"
             ],
-            publicHeadersPath: "include",
-            cSettings: [
-                .headerSearchPath("src")
-            ]
+            publicHeadersPath: "src"
         ),
         .target(
             name: "HarfBuzz",
@@ -91,10 +88,8 @@ let package = Package(
             sources: [
                 "src/harfbuzz.cc"
             ],
-            publicHeadersPath: "include",
+            publicHeadersPath: "src",
             cxxSettings: [
-                .headerSearchPath("src"),
-                .headerSearchPath("../FreeType/include"),
                 .define("HAVE_FREETYPE"),
                 .define("HAVE_FT_GET_VAR_BLEND_COORDINATES"),
                 .define("HAVE_FT_DONE_MM_VAR")
@@ -103,22 +98,12 @@ let package = Package(
         .target(
             name: "TehreerCocoa",
             dependencies: ["FreeType", "HarfBuzz", "SheenBidi", "UniBreak"],
-            path: "Source",
-            cSettings: [
-                .headerSearchPath("../Libraries/FreeType/include"),
-                .headerSearchPath("../Libraries/HarfBuzz/src"),
-                .headerSearchPath("../Libraries/UniBreak/src")
-            ]
+            path: "Source"
         ),
         .testTarget(
             name: "TehreerCocoaTests",
             dependencies: ["TehreerCocoa"],
-            path: "Tests",
-            cSettings: [
-                .headerSearchPath("../Libraries/FreeType/include"),
-                .headerSearchPath("../Libraries/HarfBuzz/src"),
-                .headerSearchPath("../Libraries/UniBreak/src")
-            ]
+            path: "Tests"
         )
     ],
     swiftLanguageModes: [.v6],

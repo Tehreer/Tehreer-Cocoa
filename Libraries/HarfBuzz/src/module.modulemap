@@ -1,0 +1,6 @@
+module HarfBuzz [system][extern_c] {
+    header "hb.h"
+    header "hb-ft.h"
+    header "hb-ot.h"
+    export *
+}

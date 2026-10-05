@@ -1,0 +1,14 @@
+module FreeType [system][extern_c] {
+    header "ft2build.h"
+    header "freetype/ftadvanc.h"
+    header "freetype/freetype.h"
+    header "freetype/ftcolor.h"
+    header "freetype/ftmm.h"
+    header "freetype/ftsnames.h"
+    header "freetype/ftsizes.h"
+    header "freetype/ftstroke.h"
+    header "freetype/ftsystem.h"
+    header "freetype/tttables.h"
+    header "freetype/fttypes.h"
+    export *
+}
