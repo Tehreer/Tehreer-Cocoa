@@ -12,70 +12,102 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Libraries",
-            path: "Libraries",
+            name: "FreeType",
+            path: "Libraries/FreeType",
             sources: [
-                "FreeType/src/autofit/autofit.c",
-                "FreeType/src/base/ftbase.c",
-                "FreeType/src/base/ftbbox.c",
-                "FreeType/src/base/ftbitmap.c",
-                "FreeType/src/base/ftdebug.c",
-                "FreeType/src/base/ftgasp.c",
-                "FreeType/src/base/ftglyph.c",
-                "FreeType/src/base/ftinit.c",
-                "FreeType/src/base/ftmm.c",
-                "FreeType/src/base/ftpatent.c",
-                "FreeType/src/base/ftstroke.c",
-                "FreeType/src/base/ftsynth.c",
-                "FreeType/src/base/ftsystem.c",
-                "FreeType/src/bdf/bdf.c",
-                "FreeType/src/cff/cff.c",
-                "FreeType/src/cid/type1cid.c",
-                "FreeType/src/gzip/ftgzip.c",
-                "FreeType/src/lzw/ftlzw.c",
-                "FreeType/src/pcf/pcf.c",
-                "FreeType/src/pfr/pfr.c",
-                "FreeType/src/psaux/psaux.c",
-                "FreeType/src/pshinter/pshinter.c",
-                "FreeType/src/psnames/psnames.c",
-                "FreeType/src/raster/raster.c",
-                "FreeType/src/sdf/sdf.c",
-                "FreeType/src/sfnt/sfnt.c",
-                "FreeType/src/smooth/smooth.c",
-                "FreeType/src/svg/svg.c",
-                "FreeType/src/truetype/truetype.c",
-                "FreeType/src/type1/type1.c",
-                "FreeType/src/type42/type42.c",
-                "FreeType/src/winfonts/winfnt.c",
-                "HarfBuzz/src/harfbuzz.cc",
-                "SheenBidi/Source/SheenBidi.c",
-                "UniBreak/src/emojidef.c",
-                "UniBreak/src/graphemebreak.c",
-                "UniBreak/src/linebreak.c",
-                "UniBreak/src/linebreakdata.c",
-                "UniBreak/src/linebreakdef.c",
-                "UniBreak/src/unibreakbase.c",
-                "UniBreak/src/unibreakdef.c",
-                "UniBreak/src/wordbreak.c",
-                "module.modulemap"
+                "src/autofit/autofit.c",
+                "src/base/ftbase.c",
+                "src/base/ftbbox.c",
+                "src/base/ftbitmap.c",
+                "src/base/ftdebug.c",
+                "src/base/ftgasp.c",
+                "src/base/ftglyph.c",
+                "src/base/ftinit.c",
+                "src/base/ftmm.c",
+                "src/base/ftpatent.c",
+                "src/base/ftstroke.c",
+                "src/base/ftsynth.c",
+                "src/base/ftsystem.c",
+                "src/bdf/bdf.c",
+                "src/cff/cff.c",
+                "src/cid/type1cid.c",
+                "src/gzip/ftgzip.c",
+                "src/lzw/ftlzw.c",
+                "src/pcf/pcf.c",
+                "src/pfr/pfr.c",
+                "src/psaux/psaux.c",
+                "src/pshinter/pshinter.c",
+                "src/psnames/psnames.c",
+                "src/raster/raster.c",
+                "src/sdf/sdf.c",
+                "src/sfnt/sfnt.c",
+                "src/smooth/smooth.c",
+                "src/svg/svg.c",
+                "src/truetype/truetype.c",
+                "src/type1/type1.c",
+                "src/type42/type42.c",
+                "src/winfonts/winfnt.c",
+                "include"
             ],
-            publicHeadersPath: ".",
+            publicHeadersPath: "umbrella",
             cSettings: [
-                .headerSearchPath("FreeType/include"),
-                .headerSearchPath("SheenBidi/Headers"),
-                .define("FT2_BUILD_LIBRARY"),
-                .define("HAVE_FREETYPE"),
-                .define("HAVE_FT_GET_VAR_BLEND_COORDINATES"),
-                .define("HAVE_FT_DONE_MM_VAR"),
+                .headerSearchPath("include"),
+                .define("FT2_BUILD_LIBRARY")
+            ]
+        ),
+        .target(
+            name: "SheenBidi",
+            path: "Libraries/SheenBidi",
+            sources: [
+                "Source/SheenBidi.c"
+            ],
+            publicHeadersPath: "Headers",
+            cSettings: [
                 .define("SB_CONFIG_UNITY")
             ]
         ),
         .target(
+            name: "UniBreak",
+            path: "Libraries/UniBreak",
+            sources: [
+                "src/emojidef.c",
+                "src/graphemebreak.c",
+                "src/linebreak.c",
+                "src/linebreakdata.c",
+                "src/linebreakdef.c",
+                "src/unibreakbase.c",
+                "src/unibreakdef.c",
+                "src/wordbreak.c"
+            ],
+            publicHeadersPath: "include",
+            cSettings: [
+                .headerSearchPath("src")
+            ]
+        ),
+        .target(
+            name: "HarfBuzz",
+            dependencies: ["FreeType"],
+            path: "Libraries/HarfBuzz",
+            sources: [
+                "src/harfbuzz.cc"
+            ],
+            publicHeadersPath: "include",
+            cxxSettings: [
+                .headerSearchPath("src"),
+                .headerSearchPath("../FreeType/include"),
+                .define("HAVE_FREETYPE"),
+                .define("HAVE_FT_GET_VAR_BLEND_COORDINATES"),
+                .define("HAVE_FT_DONE_MM_VAR")
+            ]
+        ),
+        .target(
             name: "TehreerCocoa",
-            dependencies: ["Libraries"],
+            dependencies: ["FreeType", "HarfBuzz", "SheenBidi", "UniBreak"],
             path: "Source",
             cSettings: [
-                .headerSearchPath("../Libraries/FreeType/include")
+                .headerSearchPath("../Libraries/FreeType/include"),
+                .headerSearchPath("../Libraries/HarfBuzz/src"),
+                .headerSearchPath("../Libraries/UniBreak/src")
             ]
         ),
         .testTarget(
@@ -83,7 +115,9 @@ let package = Package(
             dependencies: ["TehreerCocoa"],
             path: "Tests",
             cSettings: [
-                .headerSearchPath("../Libraries/FreeType/include")
+                .headerSearchPath("../Libraries/FreeType/include"),
+                .headerSearchPath("../Libraries/HarfBuzz/src"),
+                .headerSearchPath("../Libraries/UniBreak/src")
             ]
         )
     ],
