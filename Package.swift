@@ -73,6 +73,7 @@ let package = Package(
             name: "UniBreak",
             path: "Libraries/UniBreak",
             sources: [
+                "src/eastasianwidthdef.c",
                 "src/emojidef.c",
                 "src/graphemebreak.c",
                 "src/linebreak.c",

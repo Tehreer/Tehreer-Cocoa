@@ -4,7 +4,7 @@
  * Line breaking in a Unicode sequence.  Designed to be used in a
  * generic text renderer.
  *
- * Copyright (C) 2008-2020 Wu Yongwei <wuyongwei at gmail dot com>
+ * Copyright (C) 2008-2026 Wu Yongwei <wuyongwei at gmail dot com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the author be held liable for any damages
@@ -30,9 +30,9 @@
  * Unicode 5.0.0:
  *      <URL:http://www.unicode.org/reports/tr14/tr14-19.html>
  *
- * This library has been updated according to Revision 45, for
- * Unicode 13.0.0:
- *      <URL:http://www.unicode.org/reports/tr14/tr14-45.html>
+ * This library has been updated according to Revision 55, for
+ * Unicode 17.0.0:
+ *      <URL:http://www.unicode.org/reports/tr14/tr14-55.html>
  *
  * The Unicode Terms of Use are available at
  *      <URL:http://www.unicode.org/copyright.html>
@@ -56,11 +56,11 @@
 extern "C" {
 #endif
 
-#define LINEBREAK_MUSTBREAK     0   /**< Break is mandatory */
-#define LINEBREAK_ALLOWBREAK    1   /**< Break is allowed */
-#define LINEBREAK_NOBREAK       2   /**< No break is possible */
-#define LINEBREAK_INSIDEACHAR   3   /**< A UTF-8/16 sequence is unfinished */
-#define LINEBREAK_INDETERMINATE 4   /**< End of input on a non-EOL char */
+#define LINEBREAK_MUSTBREAK      0  /**< Break is mandatory */
+#define LINEBREAK_ALLOWBREAK     1  /**< Break is allowed */
+#define LINEBREAK_NOBREAK        2  /**< No break is possible */
+#define LINEBREAK_INSIDEACHAR    3  /**< A UTF-8/16 sequence is unfinished */
+#define LINEBREAK_INDETERMINATE  4  /**< End of input on a non-EOL char */
 
 void init_linebreak(void);
 void set_linebreaks_utf8(

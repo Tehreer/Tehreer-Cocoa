@@ -4,7 +4,7 @@
  * Break processing in a Unicode sequence.  Designed to be used in a
  * generic text renderer.
  *
- * Copyright (C) 2015-2018 Wu Yongwei <wuyongwei at gmail dot com>
+ * Copyright (C) 2015-2026 Wu Yongwei <wuyongwei at gmail dot com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the author be held liable for any damages
@@ -35,14 +35,7 @@
 #ifndef UNIBREAKDEF_H
 #define UNIBREAKDEF_H
 
-#if defined(_MSC_VER) && _MSC_VER < 1800
-typedef int bool;
-#define false 0
-#define true 1
-#else
 #include <stdbool.h>
-#endif
-
 #include <stddef.h>
 #include "unibreakbase.h"
 
@@ -65,9 +58,41 @@ extern "C" {
 typedef utf32_t (*get_next_char_t)(const void *, size_t, size_t *);
 
 /* Function Prototype */
-utf32_t ub_get_next_char_utf8(const utf8_t *s, size_t len, size_t *ip);
-utf32_t ub_get_next_char_utf16(const utf16_t *s, size_t len, size_t *ip);
-utf32_t ub_get_next_char_utf32(const utf32_t *s, size_t len, size_t *ip);
+utf32_t ub_get_next_char_utf8 (const void *sv, size_t len, size_t *ip);
+utf32_t ub_get_next_char_utf16(const void *sv, size_t len, size_t *ip);
+utf32_t ub_get_next_char_utf32(const void *sv, size_t len, size_t *ip);
+
+inline const void *ub_bsearch(utf32_t ch, const void *ptr, size_t count,
+                              size_t size)
+{
+    int min = 0;
+    int max = (int)(count - 1);;
+    int mid;
+
+    do
+    {
+        mid = (min + max) / 2;
+        const unsigned char *mid_ptr =
+            (const unsigned char *)ptr + mid * size;
+        utf32_t mid_start = *(const utf32_t *)mid_ptr;
+        utf32_t mid_end = *((const utf32_t *)mid_ptr + 1);
+
+        if (ch < mid_start)
+        {
+            max = mid - 1;
+        }
+        else if (ch > mid_end)
+        {
+            min = mid + 1;
+        }
+        else
+        {
+            return mid_ptr;
+        }
+    } while (min <= max);
+
+    return NULL;
+}
 
 #ifdef __cplusplus
 }

@@ -2,19 +2,19 @@ include_HEADERS = \
 	unibreakbase.h \
 	unibreakdef.h \
 	linebreak.h \
-	linebreakdef.h \
 	graphemebreak.h \
 	wordbreak.h
 lib_LTLIBRARIES = libunibreak.la
 
 libunibreak_la_CFLAGS = -W -Wall
-libunibreak_la_LDFLAGS = -no-undefined -version-info 5:1:0
+libunibreak_la_LDFLAGS = -no-undefined -version-info 8:0:0
 libunibreak_la_SOURCES = \
 	unibreakbase.c \
 	unibreakdef.c \
 	linebreak.c \
 	linebreakdata.c \
 	linebreakdef.c \
+	eastasianwidthdef.c \
 	emojidef.c \
 	graphemebreak.c \
 	wordbreak.c
@@ -23,23 +23,32 @@ EXTRA_DIST = \
 	extract_data.sed \
 	expand_single.sed \
 	linebreakdata1.tmpl \
-	wordbreakdata1.tmpl \
-	wordbreakdata2.tmpl \
+	linebreakauxdata.c \
+	linebreakdef.h \
 	wordbreakdata.c \
-	graphemebreakdata1.tmpl \
-	graphemebreakdata2.tmpl \
 	graphemebreakdata.c \
-	emojidata1.tmpl \
-	emojidata2.tmpl \
+	indicconjunctbreakdata.c \
+	eastasianwidthdata.c \
+	eastasianwidthdef.h \
 	emojidata.c \
 	Makefile.gcc \
 	Makefile.msvc \
 	generate_linebreakdata.py \
-	sort_numeric_hex.py \
+	generate_linebreak_aux.py \
+	generate_word_break.py \
+	generate_grapheme_break.py \
+	generate_east_asian_width.py \
+	generate_extended_pictographic.py \
+	generate_indic_conjunct_break.py \
+	unicode_data_property.py \
 	wordbreakdef.h \
 	graphemebreakdef.h \
 	emojidef.h \
-	test_skips.h
+	indicconjunctbreakdef.h \
+	test_skips.h \
+	LineBreakTest.txt \
+	WordBreakTest.txt \
+	GraphemeBreakTest.txt
 
 install-exec-hook:
 	- [ -f $(DESTDIR)/${libdir}/libunibreak.a ] && \
@@ -47,7 +56,7 @@ install-exec-hook:
 	${LN_S} libunibreak.a $(DESTDIR)/${libdir}/liblinebreak.a
 
 distclean-local:
-	rm -f LineBreak.txt WordBreakData.txt GraphemeBreakData.txt emoji-data.txt LineBreakTest.txt WordBreakTest.txt GraphemeBreakTest.txt
+	rm -f LineBreak.txt WordBreakData.txt GraphemeBreakData.txt DerivedCoreProperties.txt DerivedGeneralCategory.txt EastAsianWidth.txt emoji-data.txt
 
 
 LineBreak.txt:
@@ -58,6 +67,15 @@ WordBreakProperty.txt:
 
 GraphemeBreakProperty.txt:
 	wget http://www.unicode.org/Public/UNIDATA/auxiliary/GraphemeBreakProperty.txt
+
+DerivedCoreProperties.txt:
+	wget https://www.unicode.org/Public/UNIDATA/DerivedCoreProperties.txt
+
+DerivedGeneralCategory.txt:
+	wget https://www.unicode.org/Public/UNIDATA/extracted/DerivedGeneralCategory.txt
+
+EastAsianWidth.txt:
+	wget https://www.unicode.org/Public/UNIDATA/EastAsianWidth.txt
 
 emoji-data.txt:
 	wget https://www.unicode.org/Public/UNIDATA/emoji/emoji-data.txt
@@ -71,39 +89,31 @@ linebreakdata: LineBreak.txt
 	cat ${srcdir}/linebreakdata1.tmpl tmp.txt tmp.c > ${srcdir}/linebreakdata.c
 	rm tmp.txt tmp.c
 
+linebreakauxdata: DerivedGeneralCategory.txt LineBreak.txt emoji-data.txt
+	${srcdir}/generate_linebreak_aux.py > ${srcdir}/linebreakauxdata.c
+
 wordbreakdata: WordBreakProperty.txt
-	sed -E -n -f ${srcdir}/extract_data.sed WordBreakProperty.txt | \
-	sed -E -f ${srcdir}/expand_single.sed | \
-	${srcdir}/sort_numeric_hex.py | \
-	sed -E 's/^([0-9A-F]+)\.\.([0-9A-F]+); *(.*)/'$$'\t''{0x\1, 0x\2, WBP_\3},/' > tmp.txt
-	echo "/* The content of this file is generated from:" > ${srcdir}/wordbreakdata.c
-	head -2 WordBreakProperty.txt >> ${srcdir}/wordbreakdata.c
-	echo "*/" >> ${srcdir}/wordbreakdata.c
-	cat ${srcdir}/wordbreakdata1.tmpl tmp.txt ${srcdir}/wordbreakdata2.tmpl >> ${srcdir}/wordbreakdata.c
-	rm tmp.txt
+	${srcdir}/generate_word_break.py > ${srcdir}/wordbreakdata.c
 
 graphemebreakdata: GraphemeBreakProperty.txt
-	sed -E -n -f ${srcdir}/extract_data.sed GraphemeBreakProperty.txt | \
-	sed -E -f ${srcdir}/expand_single.sed | \
-	${srcdir}/sort_numeric_hex.py | \
-	sed -E 's/^([0-9A-F]+)\.\.([0-9A-F]+); *(.*)/'$$'\t''{0x\1, 0x\2, GBP_\3},/' > tmp.txt
-	echo "/* The content of this file is generated from:" > ${srcdir}/graphemebreakdata.c
-	head -2 GraphemeBreakProperty.txt >> ${srcdir}/graphemebreakdata.c
-	echo "*/" >> ${srcdir}/graphemebreakdata.c
-	cat ${srcdir}/graphemebreakdata1.tmpl tmp.txt ${srcdir}/graphemebreakdata2.tmpl >> ${srcdir}/graphemebreakdata.c
-	rm tmp.txt
+	${srcdir}/generate_grapheme_break.py > ${srcdir}/graphemebreakdata.c
+
+eastasianwidthdata: EastAsianWidth.txt LineBreak.txt
+	${srcdir}/generate_east_asian_width.py > ${srcdir}/eastasianwidthdata.c
+
+indicconjunctbreakdata: DerivedCoreProperties.txt
+	${srcdir}/generate_indic_conjunct_break.py > ${srcdir}/indicconjunctbreakdata.c
 
 emojidata: emoji-data.txt
-	echo "/* The content of this file is generated from:" > ${srcdir}/emojidata.c
-	head -2 emoji-data.txt >> ${srcdir}/emojidata.c
-	echo "*/" >> ${srcdir}/emojidata.c
-	sed -E -n -f ${srcdir}/extract_data.sed emoji-data.txt | \
-	sed -E -f ${srcdir}/expand_single.sed | \
-	grep "; Extended_Pictographic" | \
-	${srcdir}/sort_numeric_hex.py | \
-	sed -E 's/^([0-9A-F]+)\.\.([0-9A-F]+);.*/'$$'\t''{0x\1, 0x\2},/' > tmp.txt
-	cat ${srcdir}/emojidata1.tmpl tmp.txt ${srcdir}/emojidata2.tmpl >> ${srcdir}/emojidata.c
-	rm tmp.txt
+	${srcdir}/generate_extended_pictographic.py > ${srcdir}/emojidata.c
+
+update-test:
+	rm -f LineBreakTest.txt WordBreakTest.txt GraphemeBreakTest.txt
+	rm -f ${srcdir}/LineBreakTest.txt ${srcdir}/WordBreakTest.txt ${srcdir}/GraphemeBreakTest.txt
+	wget http://www.unicode.org/Public/UNIDATA/auxiliary/LineBreakTest.txt
+	wget http://www.unicode.org/Public/UNIDATA/auxiliary/WordBreakTest.txt
+	wget http://www.unicode.org/Public/UNIDATA/auxiliary/GraphemeBreakTest.txt
+	[ -f ${srcdir}/LineBreakTest.txt ] || mv -f LineBreakTest.txt WordBreakTest.txt GraphemeBreakTest.txt ${srcdir}
 
 
 # Tests
@@ -115,16 +125,10 @@ tests_CPPFLAGS = -I$(srcdir)
 tests_LDADD = libunibreak.la
 tests_DEPENDENCIES = libunibreak.la
 
-check: LineBreakTest.txt WordBreakTest.txt GraphemeBreakTest.txt $(check_PROGRAMS)
+check: $(check_PROGRAMS)
+	@[ -f LineBreakTest.txt ]     || $(LN_S) ${srcdir}/LineBreakTest.txt .
+	@[ -f WordBreakTest.txt ]     || $(LN_S) ${srcdir}/WordBreakTest.txt .
+	@[ -f GraphemeBreakTest.txt ] || $(LN_S) ${srcdir}/GraphemeBreakTest.txt .
 	./tests line
 	./tests word
 	./tests grapheme
-
-LineBreakTest.txt:
-	wget http://www.unicode.org/Public/UNIDATA/auxiliary/LineBreakTest.txt
-
-WordBreakTest.txt:
-	wget http://www.unicode.org/Public/UNIDATA/auxiliary/WordBreakTest.txt
-
-GraphemeBreakTest.txt:
-	wget http://www.unicode.org/Public/UNIDATA/auxiliary/GraphemeBreakTest.txt

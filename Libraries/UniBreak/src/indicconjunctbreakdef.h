@@ -1,7 +1,7 @@
 /*
- * Emoji-related routine and data.
+ * Definitions of internal data types for Indic Conjunct Break.
  *
- * Copyright (C) 2018 Andreas Röver <roever at users dot sf dot net>
+ * Copyright (C) 2024 Wu Yongwei <wuyongwei at gmail dot com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the author be held liable for any damages
@@ -21,27 +21,32 @@
  *    distribution.
  */
 
-/**
- * @file    emojidef.c
- *
- * Emoji-related routine and data that are used internally.
- *
- * @author  Andreas Röver
- */
+#ifndef INDICCONJUNCTBREAKDEF_H
+#define INDICCONJUNCTBREAKDEF_H
 
-#include "emojidef.h"
-#include "emojidata.c"
 #include "unibreakdef.h"
 
 /**
- * Finds out if a codepoint is extended pictographic.
- *
- * @param[in] ch  character to check
- * @return        \c true if the codepoint is extended pictographic;
- *                \c false otherwise
+ * Indic conjunct break (InCB) class.  This is defined in Unicode
+ * Standard Annex 44.
  */
-bool ub_is_extended_pictographic(utf32_t ch)
+enum IndicConjunctBreakClass
 {
-    return ub_bsearch(ch, ep_prop, ARRAY_LEN(ep_prop),
-                      sizeof(struct ExtendedPictograpic)) != NULL;
-}
+    InCB_Linker,
+    InCB_Consonant,
+    InCB_Extend,
+    InCB_None
+};
+
+/**
+ * Struct for entries of Indic conjunct break (InCB) properties.  The
+ * array of the entries \e must be sorted.
+ */
+struct IndicConjunctBreakProperties
+{
+    utf32_t start;                     /**< Start codepoint */
+    utf32_t end;                       /**< End codepoint, inclusive */
+    enum IndicConjunctBreakClass prop; /**< The InCB property */
+};
+
+#endif /* INDICCONJUNCTBREAKDEF_H */

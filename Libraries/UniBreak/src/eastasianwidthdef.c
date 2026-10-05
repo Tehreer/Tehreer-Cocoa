@@ -1,7 +1,7 @@
 /*
- * Emoji-related routine and data.
+ * Implements East Asian Width lookup.
  *
- * Copyright (C) 2018 Andreas Röver <roever at users dot sf dot net>
+ * Copyright (C) 2024 Wu Yongwei <wuyongwei at gmail dot com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the author be held liable for any damages
@@ -21,27 +21,24 @@
  *    distribution.
  */
 
-/**
- * @file    emojidef.c
- *
- * Emoji-related routine and data that are used internally.
- *
- * @author  Andreas Röver
- */
-
-#include "emojidef.h"
-#include "emojidata.c"
+#include "eastasianwidthdef.h"
+#include "eastasianwidthdata.c"
 #include "unibreakdef.h"
 
 /**
- * Finds out if a codepoint is extended pictographic.
+ * Gets the East Asian Width class of a character.
  *
- * @param[in] ch  character to check
- * @return        \c true if the codepoint is extended pictographic;
- *                \c false otherwise
+ * @param ch  character to check
+ * @return    the East Asian Width class if found; \c EAW_N otherwise
  */
-bool ub_is_extended_pictographic(utf32_t ch)
+enum EastAsianWidthClass ub_get_char_eaw_class(utf32_t ch)
 {
-    return ub_bsearch(ch, ep_prop, ARRAY_LEN(ep_prop),
-                      sizeof(struct ExtendedPictograpic)) != NULL;
+    const struct EastAsianWidthProperties *result_ptr =
+        ub_bsearch(ch, eaw_prop, ARRAY_LEN(eaw_prop),
+                   sizeof(struct EastAsianWidthProperties));
+    if (result_ptr)
+    {
+        return result_ptr->prop;
+    }
+    return EAW_N;
 }

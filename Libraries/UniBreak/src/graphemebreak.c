@@ -3,6 +3,7 @@
  * generic text renderer.
  *
  * Copyright (C) 2016-2019 Andreas Röver <roever at users dot sf dot net>
+ * Copyright (C) 2024-2026 Wu Yongwei <wuyongwei at gmail dot com>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the author be held liable for any damages
@@ -28,9 +29,9 @@
  * Unicode 9.0.0:
  *      <URL:http://www.unicode.org/reports/tr29/tr29-29.html>
  *
- * This library has been updated according to Revision 37, for
- * Unicode 13.0.0:
- *      <URL:http://www.unicode.org/reports/tr29/tr29-37.html>
+ * This library has been updated according to Revision 47, for
+ * Unicode 17.0.0:
+ *      <URL:https://www.unicode.org/reports/tr29/tr29-47.html>
  *
  * The Unicode Terms of Use are available at
  *      <URL:http://www.unicode.org/copyright.html>
@@ -48,8 +49,26 @@
 #include <string.h>
 #include "graphemebreak.h"
 #include "graphemebreakdata.c"
-#include "unibreakdef.h"
+#include "indicconjunctbreakdata.c"
+#include "indicconjunctbreakdef.h"
 #include "emojidef.h"
+#include "unibreakdef.h"
+
+#ifndef UNIBREAK_LAZY_INCB
+/* Lazy InCB computation assumes InCB is only non-None for Extend/ZWJ-like
+ * characters.  Since Unicode 16.0 the InCB=Consonant value is assigned to
+ * consonants whose Grapheme_Cluster_Break is Other, so the InCB class must
+ * be looked up for those too.  Disable laziness by default. */
+#define UNIBREAK_LAZY_INCB 0
+#endif
+
+enum Rule9cStage
+{
+    R9C_INACTIVE,
+    R9C_STARTED,
+    R9C_LINKER,
+    R9C_END
+};
 
 /**
  * Initializes the wordbreak internals.  It currently does nothing, but
@@ -67,29 +86,52 @@ void init_graphemebreak(void)
  */
 static enum GraphemeBreakClass get_char_gb_class(utf32_t ch)
 {
-    int min = 0;
-    int max = ARRAY_LEN(gb_prop_default) - 1;
-    int mid;
-
-    do
+    const struct GraphemeBreakProperties *result_ptr =
+        ub_bsearch(ch, gb_prop_default, ARRAY_LEN(gb_prop_default) - 1,
+                   sizeof(struct GraphemeBreakProperties));
+    if (result_ptr)
     {
-        mid = (min + max) / 2;
-
-        if (ch < gb_prop_default[mid].start)
-        {
-            max = mid - 1;
-        }
-        else if (ch > gb_prop_default[mid].end)
-        {
-            min = mid + 1;
-        }
-        else
-        {
-            return gb_prop_default[mid].prop;
-        }
-    } while (min <= max);
+        return result_ptr->prop;
+    }
 
     return GBP_Other;
+}
+
+/**
+ * Gets the InCB class of a character.
+ *
+ * @param[in] ch  character to check
+ * @return        the InCB class if found; \c InCB_None otherwise
+ */
+static enum IndicConjunctBreakClass get_char_incb_class(utf32_t ch)
+{
+    const struct IndicConjunctBreakProperties *result_ptr =
+        ub_bsearch(ch, incb_prop, ARRAY_LEN(incb_prop),
+                   sizeof(struct IndicConjunctBreakProperties));
+    if (result_ptr)
+    {
+        return result_ptr->prop;
+    }
+    return InCB_None;
+}
+
+static enum Rule9cStage
+update_rule9c_stage(enum Rule9cStage stage,
+                    enum IndicConjunctBreakClass incb)
+{
+    static enum Rule9cStage states[R9C_END][InCB_None] = {
+        /* R9C_INACTIVE */
+        { R9C_INACTIVE, R9C_STARTED, R9C_INACTIVE },
+        /* R9C_STARTED */
+        { R9C_LINKER, R9C_STARTED, R9C_STARTED },
+        /* R9C_LINKER */
+        { R9C_LINKER, R9C_STARTED, R9C_LINKER }
+    };
+    if (incb == InCB_None)
+    {
+        return R9C_INACTIVE;
+    }
+    return states[stage][incb];
 }
 
 /**
@@ -106,6 +148,7 @@ static void set_graphemebreaks(const void *s, size_t len, char *brks,
                                get_next_char_t get_next_char)
 {
     size_t posNext = 0;
+    enum Rule9cStage rule9cStage = R9C_INACTIVE;
     int rule11Detector = 0;
     bool evenRegionalIndicators = true;  // is the number of preceeding
                                          // GBP_RegionalIndicator characters
@@ -113,13 +156,13 @@ static void set_graphemebreaks(const void *s, size_t len, char *brks,
 
     utf32_t ch = get_next_char(s, len, &posNext);
     enum GraphemeBreakClass current_class = get_char_gb_class(ch);
+    enum IndicConjunctBreakClass current_incb = get_char_incb_class(ch);
 
     // initialize whole output to inside char
     memset(brks, GRAPHEMEBREAK_INSIDEACHAR, len);
 
     while (true)
     {
-
         // this state-machine recognizes the following pattern:
         // extended_pictograph Extended* ZWJ
         // when that pattern has been detected rule11Detector will be
@@ -160,6 +203,8 @@ static void set_graphemebreaks(const void *s, size_t len, char *brks,
             break;
         }
 
+        rule9cStage = update_rule9c_stage(rule9cStage, current_incb);
+
         enum GraphemeBreakClass prev_class = current_class;
 
         // safe position if current character so that we can store the
@@ -179,6 +224,20 @@ static void set_graphemebreaks(const void *s, size_t len, char *brks,
 
         // get class of current character
         current_class = get_char_gb_class(ch);
+#if UNIBREAK_LAZY_INCB
+        if (prev_class == GBP_Extend || prev_class == GBP_ZWJ ||
+            prev_class == GBP_Virama || current_class == GBP_Extend ||
+            current_class == GBP_ZWJ || current_class == GBP_Virama)
+        {
+            current_incb = get_char_incb_class(ch);
+        }
+        else
+        {
+            current_incb = InCB_None;
+        }
+#else
+        current_incb = get_char_incb_class(ch);
+#endif
 
         if (prev_class == GBP_Regional_Indicator)
         {
@@ -230,6 +289,11 @@ static void set_graphemebreaks(const void *s, size_t len, char *brks,
         else if (prev_class == GBP_Prepend)
         {
             brks[brksPos] = GRAPHEMEBREAK_NOBREAK;  // Rule: GB9b
+        }
+        else if ((rule9cStage == R9C_LINKER) &&
+                 (current_incb == InCB_Consonant))
+        {
+            brks[brksPos] = GRAPHEMEBREAK_NOBREAK;  // Rule: GB9c
         }
         else if ((rule11Detector == 3) && ub_is_extended_pictographic(ch))
         {
