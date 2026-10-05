@@ -141,3 +141,44 @@ final class ReplacementRun: TextRun {
         replacement.draw(in: context)
     }
 }
+
+extension ReplacementRun {
+    /// Whether this run is a view that has a line of its own.
+    var isBlock: Bool {
+        return (replacement as? ViewAttachment)?.isBlock == true
+    }
+
+    /// Returns the run that a frame `layoutWidth` wide has to use, which is this one unless the
+    /// replacement decides its room when the frame is made, as a view attachment does. The run is
+    /// not changed, as other frames of the same typesetter may be in use.
+    func forFrame(layoutWidth: CGFloat) -> ReplacementRun {
+        guard let attachment = replacement as? ViewAttachment else {
+            return self
+        }
+
+        let room = attachment.computeRoom(layoutWidth: layoutWidth)
+        let length = codeUnitRange.count
+
+        var caretEdges = Array<CGFloat>(repeating: .zero, count: length + 1)
+
+        if bidiLevel & 1 == 0 {
+            caretEdges[length] = room.extent
+        } else {
+            caretEdges[0] = room.extent
+        }
+
+        return ReplacementRun(
+            string: string,
+            codeUnitRange: codeUnitRange,
+            bidiLevel: bidiLevel,
+            replacement: replacement,
+            typeface: typeface,
+            typeSize: typeSize,
+            ascent: room.ascent,
+            descent: room.descent,
+            leading: .zero,
+            extent: room.extent,
+            caretEdges: PrimitiveCollection(caretEdges)
+        )
+    }
+}

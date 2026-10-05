@@ -77,6 +77,14 @@ let package = Package(
             cSettings: [
                 .headerSearchPath("../Libraries/FreeType/include")
             ]
+        ),
+        .testTarget(
+            name: "TehreerCocoaTests",
+            dependencies: ["TehreerCocoa"],
+            path: "Tests",
+            cSettings: [
+                .headerSearchPath("../Libraries/FreeType/include")
+            ]
         )
     ],
     cxxLanguageStandard: .cxx11

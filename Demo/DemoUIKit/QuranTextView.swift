@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2023 Muhammad Tayyab Akram
+// Copyright (C) 2023-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -72,7 +72,9 @@ class QuranTextView: TTextView {
         highlightingView.backgroundColor = .clear
         highlightingView.isOpaque = false
         highlightingView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(highlightingView)
+
+        // Behind the lines of the text, so that it stays readable.
+        insertSubview(highlightingView, at: 0)
 
         let gesture = UITapGestureRecognizer(target: self, action: #selector(textViewTapped))
         addGestureRecognizer(gesture)

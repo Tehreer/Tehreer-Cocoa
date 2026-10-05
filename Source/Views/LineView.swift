@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021-2023 Muhammad Tayyab Akram
+// Copyright (C) 2021-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import UIKit
 class LineView: UIView {
     let renderer = Renderer()
 
+    var lineIndex = 0
     var layoutWidth: CGFloat = .zero
 
     var separatorColor: UIColor?

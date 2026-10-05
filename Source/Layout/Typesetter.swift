@@ -28,6 +28,12 @@ public class Typesetter {
     let paragraphs: [BidiParagraph]
     let runs: [TextRun]
 
+    /// The block runs (a replacement run that is a view with a line of its own) in `runs`, in
+    /// position order: a small subsequence, so that the break resolver never has to scan the whole
+    /// document's runs to answer "is there a block near here". It is computed once, before the
+    /// typesetter can be used from another thread.
+    let blocks: [ReplacementRun]
+
     /// Creates a typesetter using the specified text and the default attributes.
     ///
     /// - Parameters:
@@ -42,6 +48,9 @@ public class Typesetter {
         self.breaks = BreakClassifier(string: text.string)
         self.paragraphs = shapeResult.paragraphs
         self.runs = shapeResult.runs
+        self.blocks = shapeResult.runs.compactMap { run in
+            (run as? ReplacementRun).flatMap { $0.isBlock ? $0 : nil }
+        }
     }
 
     /// Suggests a forward break index based on the specified range and the extent. The measurement
@@ -54,7 +63,7 @@ public class Typesetter {
     ///   - mode: The requested break mode.
     /// - Returns: The index (exclusive) that would cause the break.
     public func suggestForwardBreak(inCodeUnitRange codeUnitRange: Range<Int>, extent: CGFloat, breakMode: BreakMode) -> Int {
-        let breakResolver = BreakResolver(string: text.string, paragraphs: paragraphs, runs: runs, breaks: breaks)
+        let breakResolver = BreakResolver(string: text.string, paragraphs: paragraphs, runs: runs, blocks: blocks, breaks: breaks)
         return breakResolver.suggestForwardBreak(for: extent, in: codeUnitRange, with: breakMode)
     }
 
@@ -86,7 +95,7 @@ public class Typesetter {
     ///   - mode: The requested break mode.
     /// - Returns: The index (inclusive) that would cause the break.
     public func suggestBackwardBreak(inCodeUnitRange codeUnitRange: Range<Int>, extent: CGFloat, breakMode: BreakMode) -> Int {
-        let breakResolver = BreakResolver(string: text.string, paragraphs: paragraphs, runs: runs, breaks: breaks)
+        let breakResolver = BreakResolver(string: text.string, paragraphs: paragraphs, runs: runs, blocks: blocks, breaks: breaks)
         return breakResolver.suggestBackwardBreak(for: extent, in: codeUnitRange, with: breakMode)
     }
 
@@ -113,8 +122,15 @@ public class Typesetter {
     /// - Parameter codeUnitRange: The UTF-16 range of the line in source string.
     /// - Returns: The new line.
     public func makeSimpleLine(codeUnitRange: Range<Int>) -> ComposedLine {
+        return makeSimpleLine(codeUnitRange: codeUnitRange, layoutWidth: .nan)
+    }
+
+    /// Creates a simple line having the specified UTF-16 range. The runs whose room is decided by
+    /// the frame, those of view attachments, get it from the frame's `layoutWidth`, if it is
+    /// known.
+    func makeSimpleLine(codeUnitRange: Range<Int>, layoutWidth: CGFloat) -> ComposedLine {
         let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes, paragraphs: paragraphs, runs: runs)
-        return lineResolver.makeSimpleLine(codeUnitRange: codeUnitRange)
+        return lineResolver.makeSimpleLine(codeUnitRange: codeUnitRange, layoutWidth: layoutWidth)
     }
 
     /// Creates a simple line having the specified character range.
@@ -188,7 +204,7 @@ public class Typesetter {
         let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes,
                                         paragraphs: paragraphs, runs: runs)
         let breakResolver = BreakResolver(string: text.string,
-                                          paragraphs: paragraphs, runs: runs, breaks: breaks)
+                                          paragraphs: paragraphs, runs: runs, blocks: blocks, breaks: breaks)
 
         return lineResolver.makeCompactLine(codeUnitRange: codeUnitRange, extent: extent,
                                             breaks: breakResolver, mode: breakMode,

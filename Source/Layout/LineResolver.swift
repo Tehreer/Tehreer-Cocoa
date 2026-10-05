@@ -19,7 +19,8 @@ import Foundation
 
 func makeGlyphRun(textRun: TextRun,
                   codeUnitRange: Range<Int>,
-                  attributes: [NSAttributedString.Key: Any]) -> GlyphRun {
+                  attributes: [NSAttributedString.Key: Any],
+                  layoutWidth: CGFloat = .nan) -> GlyphRun {
     var innerRun = textRun
 
     if let intrinsicRun = textRun as? IntrinsicRun {
@@ -28,6 +29,9 @@ func makeGlyphRun(textRun: TextRun,
             codeUnitRange: codeUnitRange,
             attributes: attributes
         )
+    } else if let replacementRun = textRun as? ReplacementRun, !layoutWidth.isNaN {
+        // The room of a view is decided by the frame that the line is in.
+        innerRun = replacementRun.forFrame(layoutWidth: layoutWidth)
     }
 
     return GlyphRun(textRun: innerRun)
@@ -41,6 +45,7 @@ func makeComposedLine(string: String,
     var lineDescent: CGFloat = 0.0
     var lineLeading: CGFloat = 0.0
     var lineExtent: CGFloat = 0.0
+    var blockRun: GlyphRun?
 
     let trailingWhitespaceStart = string.trailingWhitespaceStart(in: codeUnitRange)
     var trailingWhitespaceExtent: CGFloat = 0.0
@@ -61,9 +66,21 @@ func makeComposedLine(string: String,
         lineDescent = max(lineDescent, glyphRun.descent)
         lineLeading = max(lineLeading, glyphRun.leading)
         lineExtent += glyphRun.width
+
+        if let replacementRun = glyphRun.textRun as? ReplacementRun, replacementRun.isBlock {
+            blockRun = glyphRun
+        }
     }
 
-    return ComposedLine(
+    // A line that holds a block view is as tall as the view and its margins, and nothing else: the
+    // metrics of the newline that ends its paragraph would only add blank space.
+    if let blockRun = blockRun {
+        lineAscent = blockRun.ascent
+        lineDescent = blockRun.descent
+        lineLeading = blockRun.leading
+    }
+
+    let composedLine = ComposedLine(
         string: string,
         codeUnitRange: codeUnitRange,
         paragraphLevel: paragraphLevel,
@@ -74,6 +91,9 @@ func makeComposedLine(string: String,
         trailingWhitespaceExtent: trailingWhitespaceExtent,
         visualRuns: visualRuns
     )
+    composedLine.isBlock = blockRun != nil
+
+    return composedLine
 }
 
 struct LineResolver {
@@ -92,12 +112,14 @@ struct LineResolver {
         self.runs = runs
     }
 
-    func makeSimpleLine(codeUnitRange: Range<Int>) -> ComposedLine {
+    /// Creates a line. The runs whose room is decided by the frame, those of view attachments,
+    /// get it from the frame's `layoutWidth`, if it is known.
+    func makeSimpleLine(codeUnitRange: Range<Int>, layoutWidth: CGFloat = .nan) -> ComposedLine {
         var lineRuns: [GlyphRun] = []
 
         paragraphs.forEachLineRun(in: codeUnitRange) { (bidiRun) in
             let runRange = bidiRun.codeUnitRange
-            appendVisualRuns(from: runRange.lowerBound, to: runRange.upperBound, in: &lineRuns)
+            appendVisualRuns(from: runRange.lowerBound, to: runRange.upperBound, in: &lineRuns, layoutWidth: layoutWidth)
         }
 
         return makeComposedLine(string: text.string,
@@ -293,7 +315,7 @@ struct LineResolver {
         }
     }
 
-    private func appendVisualRuns(from start: Int, to end: Int, in runArray: inout [GlyphRun]) {
+    private func appendVisualRuns(from start: Int, to end: Int, in runArray: inout [GlyphRun], layoutWidth: CGFloat = .nan) {
         guard start < end else { return }
 
         // ASSUMPTIONS:
@@ -346,7 +368,8 @@ struct LineResolver {
                 let codeUnitRange = spanRange.location ..< spanRange.location + spanRange.length
                 let glyphRun = makeGlyphRun(textRun: intrinsicRun,
                                             codeUnitRange: codeUnitRange,
-                                            attributes: allAttributes)
+                                            attributes: allAttributes,
+                                            layoutWidth: layoutWidth)
                 runArray.insert(glyphRun, at: insertIndex)
 
                 if isForwardRun {
@@ -374,7 +397,7 @@ struct LineResolver {
         let extraWidth = justificationExtent - actualWidth
         let availableWidth = extraWidth * justificationFactor
 
-        let innerSpaceCount = computeSpaceCount(in: wordStart ..< wordEnd)
+        let innerSpaceCount = computeSpaceCount(from: wordStart, to: wordEnd)
         let spaceAddition = availableWidth / CGFloat(innerSpaceCount)
 
         var lineRuns: [GlyphRun] = []
@@ -436,14 +459,14 @@ struct LineResolver {
         )
     }
 
-    private func computeSpaceCount(in codeUnitRange: Range<Int>) -> Int {
+    private func computeSpaceCount(from start: Int, to end: Int) -> Int {
         let string = text.string
         var spaceCount = 0
 
-        var i = codeUnitRange.lowerBound
-        while i < codeUnitRange.upperBound {
-            let spaceStart = string.nextSpace(in: i ..< codeUnitRange.upperBound)
-            let spaceEnd = string.leadingWhitespaceEnd(in: spaceStart ..< codeUnitRange.upperBound)
+        var i = start
+        while i < end {
+            let spaceStart = string.nextSpace(in: i ..< end)
+            let spaceEnd = string.leadingWhitespaceEnd(in: spaceStart ..< end)
 
             spaceCount += spaceEnd - spaceStart
             i = spaceEnd + 1

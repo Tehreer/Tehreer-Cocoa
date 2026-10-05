@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2023 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -111,6 +111,8 @@ public class FrameResolver {
     /// spacing. Its default value is one.
     public var lineHeightMultiplier: CGFloat = 1.0
 
+    public init() { }
+
     /// Creates a frame representing the specified UTF-16 range in source string.
     ///
     /// The resolver keeps on filling the frame until it either runs out of text or it finds that
@@ -203,7 +205,7 @@ public class FrameResolver {
                                                          extent: context.lineExtent, breakMode: .line)
 
             // Create the line and resolve its attributes.
-            let textLine = typesetter.makeSimpleLine(codeUnitRange: lineStart ..< lineEnd)
+            let textLine = typesetter.makeSimpleLine(codeUnitRange: lineStart ..< lineEnd, layoutWidth: context.layoutWidth)
             resolveAttributes(context: &context, textLine: textLine)
 
             // Make sure that at least one line is added even if frame is smaller in height.
@@ -309,8 +311,12 @@ public class FrameResolver {
         let lineStyle = context.paragraphSpans.last { $0.range.contains(lineStart) }?.attribute
 
         resolveLineStyle(textLine: textLine, style: lineStyle)
-        resolveLineHeightMultiplier(textLine: textLine, multiplier: lineHeightMultiplier)
-        resolveExtraLineSpacing(textLine: textLine, spacing: extraLineSpacing)
+
+        // The line of a view is as tall as the view and its margins.
+        if !textLine.isBlock {
+            resolveLineHeightMultiplier(textLine: textLine, multiplier: lineHeightMultiplier)
+            resolveExtraLineSpacing(textLine: textLine, spacing: extraLineSpacing)
+        }
 
         // Compute the origin of current line.
         let originX = context.leftIndent + textLine.penOffset(forFlushFactor: context.flushFactor, flushExtent: context.lineExtent)
@@ -447,6 +453,14 @@ public class FrameResolver {
         }
     }
 
+    private func endsBeforeBlock(_ codeUnitEnd: Int) -> Bool {
+        let text = typesetter.text
+        guard codeUnitEnd < text.length else { return false }
+
+        let attachment = text.attribute(.replacement, at: codeUnitEnd, effectiveRange: nil) as? ViewAttachment
+        return attachment?.isBlock == true
+    }
+
     private func resolveJustification(context: inout FrameContext) {
         guard isJustificationEnabled else { return }
 
@@ -460,6 +474,11 @@ public class FrameResolver {
 
             // Skip the last line of paragraph if it's smaller in width.
             if textLine.endIndex == string.endIndex || string[string.index(before: textLine.endIndex)] == "\n" {
+                continue
+            }
+
+            // The line of a view has nothing to justify, and the one before it ends there.
+            if textLine.isBlock || endsBeforeBlock(lineRange.upperBound) {
                 continue
             }
 

@@ -101,10 +101,15 @@ struct ShapeResolver {
 
                 var caretEdges = Array<CGFloat>(repeating: .zero, count: runLength + 1)
 
+                // The room of a view is decided by the frame that the line is in; this is only
+                // the provisional one, which is what the line breaking sees.
+                let room = (replacement as? ViewAttachment)?.computeRoom(layoutWidth: .zero)
+                let extent = room?.extent ?? replacement.width
+
                 if bidiLevel & 1 == 0 {
-                    caretEdges[runLength] = replacement.width
+                    caretEdges[runLength] = extent
                 } else {
-                    caretEdges[0] = replacement.width
+                    caretEdges[0] = extent
                 }
 
                 textRun = ReplacementRun(
@@ -114,10 +119,10 @@ struct ShapeResolver {
                     replacement: replacement,
                     typeface: typeface,
                     typeSize: typeSize,
-                    ascent: replacement.ascent,
-                    descent: replacement.descent,
+                    ascent: room?.ascent ?? replacement.ascent,
+                    descent: room?.descent ?? replacement.descent,
                     leading: replacement.leading,
-                    extent: replacement.width,
+                    extent: extent,
                     caretEdges: PrimitiveCollection(caretEdges)
                 )
             } else {
