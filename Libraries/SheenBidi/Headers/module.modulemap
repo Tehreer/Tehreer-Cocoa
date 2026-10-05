@@ -1,0 +1,4 @@
+module SheenBidi [system][extern_c] {
+    header "SheenBidi/SheenBidi.h"
+    export *
+}

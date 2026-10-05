@@ -58,12 +58,15 @@ let package = Package(
         .target(
             name: "SheenBidi",
             path: "Libraries/SheenBidi",
+            exclude: ["Headers/module.modulemap"],
             sources: [
                 "Source/SheenBidi.c"
             ],
             publicHeadersPath: "Headers",
             cSettings: [
-                .define("SB_CONFIG_UNITY")
+                .headerSearchPath("Source"),
+                .define("SB_CONFIG_UNITY"),
+                .define("SB_CONFIG_DISABLE_SCRATCH_MEMORY")
             ]
         ),
         .target(
