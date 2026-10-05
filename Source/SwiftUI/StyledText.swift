@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2025 Muhammad Tayyab Akram
+// Copyright (C) 2025-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,24 +24,33 @@ public struct StyledText: View {
     private var properties: TextProperties
 
     public init(_ string: String) {
-        _manager = StateObject(wrappedValue: StyledTextManager())
+        let textManager = StyledTextManager()
         properties = TextProperties(string: string)
+        textManager.setupProperties(properties)
+
+        _manager = StateObject(wrappedValue: textManager)
     }
 
     public init(_ attributedString: NSAttributedString) {
-        _manager = StateObject(wrappedValue: StyledTextManager())
+        let textManager = StyledTextManager()
         properties = TextProperties(attributedString: attributedString)
+        textManager.setupProperties(properties)
+
+        _manager = StateObject(wrappedValue: textManager)
     }
 
     public init(_ typesetter: Typesetter) {
-        _manager = StateObject(wrappedValue: StyledTextManager())
+        let textManager = StyledTextManager()
         properties = TextProperties(typesetter: typesetter)
+        textManager.setupProperties(properties)
+
+        _manager = StateObject(wrappedValue: textManager)
     }
 
     public var body: some View {
         Group {
             if #available(iOS 16.0, *) {
-                StyledTextLayout(manager: manager) {
+                StyledTextLayout(manager: manager, revision: manager.geometryID) {
                     canvas
                 }
             } else {
@@ -65,7 +74,10 @@ public struct StyledText: View {
             .id(manager.geometryID)
         )
         .onAppear {
-            manager.setupProperties(properties)
+            // The background's `onAppear` above runs first, laying out the properties captured at
+            // `init`, before any modifier (typeface, size) was applied. Refresh so the final
+            // ones are laid out even if the geometry never changes again (fixed-size frames).
+            manager.updateProperties(properties)
         }
         .onChange(of: properties) { newProperties in
             manager.updateProperties(newProperties)

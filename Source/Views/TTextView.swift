@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021-2023 Muhammad Tayyab Akram
+// Copyright (C) 2021-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -54,10 +54,13 @@ private class TypesettingOperation: Operation {
                 return (NSAttributedString(string: text), defaultAttributes)
             }
         } else if let attributedText = context.attributedText {
-            if let typeface = context.typeface, !attributedText.string.isEmpty {
-                let defaultAttributes: [NSAttributedString.Key: Any] = [
-                    .typeface: typeface,
+            if !attributedText.string.isEmpty {
+                // The default typeface is optional: runs of the text can carry their own.
+                var defaultAttributes: [NSAttributedString.Key: Any] = [
                     .typeSize: context.textSize]
+                if let typeface = context.typeface {
+                    defaultAttributes[.typeface] = typeface
+                }
 
                 return (attributedText, defaultAttributes)
             }
@@ -145,7 +148,9 @@ private class LineBoxesOperation: Operation {
     private func boxRenderer() -> Renderer {
         let renderer = Renderer()
         renderer.renderScale = context.renderScale
-        renderer.typeface = context.typeface
+        if let typeface = context.typeface {
+            renderer.typeface = typeface
+        }
         renderer.typeSize = context.textSize
         renderer.fillColor = context.textColor
 
@@ -494,7 +499,9 @@ open class TTextView: UIScrollView {
     private func updateRenderer(_ renderer: Renderer) {
         renderer.fillColor = textColor
         renderer.renderingStyle = renderingStyle
-        renderer.typeface = typeface
+        if let typeface = typeface {
+            renderer.typeface = typeface
+        }
         renderer.typeSize = textSize
         renderer.renderScale = renderScale
         renderer.strokeColor = strokeColor

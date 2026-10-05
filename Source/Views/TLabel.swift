@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2023 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -204,10 +204,13 @@ open class TLabel: UIView {
                                          defaultAttributes: defaultAttributes)
             }
         } else if let attributedText = attributedText {
-            if let typeface = typeface, !attributedText.string.isEmpty {
-                let defaultAttributes: [NSAttributedString.Key: Any] = [
-                    .typeface: typeface,
+            if !attributedText.string.isEmpty {
+                // The default typeface is optional: runs of the text can carry their own.
+                var defaultAttributes: [NSAttributedString.Key: Any] = [
                     .typeSize: textSize]
+                if let typeface = typeface {
+                    defaultAttributes[.typeface] = typeface
+                }
 
                 _typesetter = Typesetter(text: attributedText, defaultAttributes: defaultAttributes)
             }

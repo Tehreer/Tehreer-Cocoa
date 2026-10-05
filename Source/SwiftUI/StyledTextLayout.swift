@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2025 Muhammad Tayyab Akram
+// Copyright (C) 2025-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,6 +20,11 @@ import SwiftUI
 @available(iOS 16.0, *)
 struct StyledTextLayout: Layout {
     @ObservedObject var manager: StyledTextManager
+
+    /// Changes whenever the manager's text or properties change. `manager` is a reference that
+    /// never changes identity, so without it SwiftUI would consider this layout unchanged and
+    /// reuse the size measured before the text was set up (zero, in a fixed-size frame).
+    let revision: UUID
 
     func sizeThatFits(
         proposal: ProposedViewSize,
