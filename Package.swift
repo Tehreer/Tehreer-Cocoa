@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:6.2
 import PackageDescription
 
 let package = Package(
@@ -121,5 +121,6 @@ let package = Package(
             ]
         )
     ],
+    swiftLanguageModes: [.v6],
     cxxLanguageStandard: .cxx11
 )

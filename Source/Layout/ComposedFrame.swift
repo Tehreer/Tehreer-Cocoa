@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,13 +19,21 @@ import Foundation
 
 /// Represents a frame containing multiple lines of text. It is the output resulting from
 /// text-framing process performed by a typesetter.
-public class ComposedFrame {
+public final class ComposedFrame: Sendable {
     let string: String
 
-    init(string: String, codeUnitRange: Range<Int>, lines: [ComposedLine]) {
+    init(
+        string: String,
+        codeUnitRange: Range<Int>,
+        lines: [ComposedLine],
+        width: CGFloat,
+        height: CGFloat
+    ) {
         self.string = string
         self.codeUnitRange = codeUnitRange
         self.lines = lines
+        self.width = width
+        self.height = height
     }
 
     /// The UTF-16 range of this frame in source string.
@@ -42,10 +50,10 @@ public class ComposedFrame {
     }
 
     /// The width of this frame.
-    public internal(set) var width: CGFloat = .zero
+    public let width: CGFloat
 
     /// The height of this frame.
-    public internal(set) var height: CGFloat = .zero
+    public let height: CGFloat
 
     /// The array containing all the lines of this frame.
     public let lines: [ComposedLine]

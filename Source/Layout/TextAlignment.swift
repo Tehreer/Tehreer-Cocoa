@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2023 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import CoreGraphics
 import Foundation
 
 /// Specifies the horizontal text alignment.
-public enum TextAlignment: Int {
+public enum TextAlignment: Int, Sendable {
     /// Aligns the text to the left side of the line.
     case left = 0
     /// Aligns the text to the right side of the line.

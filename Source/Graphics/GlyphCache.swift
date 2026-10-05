@@ -14,11 +14,12 @@
 // limitations under the License.
 //
 
-import CoreGraphics
-import Foundation
 @_implementationOnly import FreeType
 
-private class DataSegment: LRUSegment<UInt16> {
+import CoreGraphics
+import Foundation
+
+private final class DataSegment: LRUSegment<UInt16> {
     let rasterizer: GlyphRasterizer
 
     init(cache: LRUCache<UInt16>, rasterizer: GlyphRasterizer) {
@@ -35,7 +36,7 @@ private class DataSegment: LRUSegment<UInt16> {
     }
 }
 
-private class ImageSegment: LRUSegment<UInt16> {
+private final class ImageSegment: LRUSegment<UInt16> {
     override init(cache: LRUCache<UInt16>) {
         super.init(cache: cache)
     }
@@ -45,7 +46,9 @@ private class ImageSegment: LRUSegment<UInt16> {
     }
 }
 
-class GlyphCache: LRUCache<UInt16> {
+// Unchecked because `LRUCache` is a plain class; every mutation of it and of `segments` is made
+// while holding `mutex`.
+final class GlyphCache: LRUCache<UInt16>, @unchecked Sendable {
     static let instance = GlyphCache(capacity: 8192 * 1024)
 
     private let mutex = Mutex()

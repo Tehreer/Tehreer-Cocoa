@@ -14,8 +14,9 @@
 // limitations under the License.
 //
 
-import Foundation
 @_implementationOnly import FreeType
+
+import Foundation
 
 /// Represents an OpenType `OS/2` table.
 public struct OS2Table {

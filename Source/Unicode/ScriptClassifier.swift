@@ -14,8 +14,9 @@
 // limitations under the License.
 //
 
-import Foundation
 @_implementationOnly import SheenBidi
+
+import Foundation
 
 private func makeScriptsBuffer(string: String) -> UnsafeBufferPointer<SBScript> {
     let stringBuffer = BidiBuffer(string)
@@ -48,7 +49,7 @@ private func makeScriptsBuffer(string: String) -> UnsafeBufferPointer<SBScript> 
 
 /// This class implements UAX #24 available at
 /// [http://www.unicode.org/reports/tr24](http://www.unicode.org/reports/tr24).
-public class ScriptClassifier {
+public final class ScriptClassifier {
     private let scriptsBuffer: UnsafeBufferPointer<SBScript>
 
     /// Creates a script classifier for the specified string.

@@ -19,7 +19,7 @@ import SwiftUI
 
 @available(iOS 16.0, *)
 struct StyledTextLayout: Layout {
-    @ObservedObject var manager: StyledTextManager
+    let manager: StyledTextManager
 
     /// Changes whenever the manager's text or properties change. `manager` is a reference that
     /// never changes identity, so without it SwiftUI would consider this layout unchanged and
@@ -35,7 +35,9 @@ struct StyledTextLayout: Layout {
             width: proposal.width ?? .greatestFiniteMagnitude,
             height: proposal.height ?? .greatestFiniteMagnitude
         )
-        return manager.determineFrameSize(for: containerSize) ?? .zero
+        return MainActor.assumeIsolated {
+            manager.determineFrameSize(for: containerSize) ?? .zero
+        }
     }
 
     func placeSubviews(

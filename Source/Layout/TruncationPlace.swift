@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2020 Muhammad Tayyab Akram
+// Copyright (C) 2020-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import Foundation
 
 /// Specifies the text truncation place.
-public enum TruncationPlace: Int {
+public enum TruncationPlace: Int, Sendable {
     /// Text is truncated at the start of the line.
     case start = 0
     /// Text is truncated at the middle of the line.

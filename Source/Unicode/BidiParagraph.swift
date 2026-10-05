@@ -14,13 +14,14 @@
 // limitations under the License.
 //
 
-import Foundation
 @_implementationOnly import SheenBidi
+
+import Foundation
 
 /// A `BidiParagraph` object represents a single paragraph of text processed with rules X1-I2 of
 /// Unicode Bidirectional Algorithm. It contains the resolved embedding levels of all the characters
 /// of a paragraph and provides the facility to query them or iterate over their runs.
-public class BidiParagraph {
+public final class BidiParagraph {
     let buffer: BidiBuffer
     let paragraph: SBParagraphRef
 

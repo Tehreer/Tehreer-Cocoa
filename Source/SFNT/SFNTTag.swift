@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ private func isValidByte(_ byte: UInt8) -> Bool {
 }
 
 /// An SFNT tag value type.
-public struct SFNTTag: RawRepresentable {
+public struct SFNTTag: RawRepresentable, Sendable {
     /// The corresponding value of the raw type.
     public let rawValue: UInt32
 
@@ -86,7 +86,7 @@ extension SFNTTag: CustomStringConvertible {
             UInt8((rawValue >> 8) & 0xFF),
             UInt8(rawValue & 0xFF), 0]
 
-        return String(cString: bytes)
+        return String(decoding: bytes.prefix { $0 != 0 }, as: UTF8.self)
     }
 }
 

@@ -14,11 +14,12 @@
 // limitations under the License.
 //
 
-import Foundation
 @_implementationOnly import SheenBidi
 
+import Foundation
+
 /// Specifies the base direction of a paragraph.
-public enum BaseDirection: UInt8 {
+public enum BaseDirection: UInt8, Sendable {
     /// Base direction is left-to-right.
     case leftToRight = 0
     /// Base direction is right-to-left.
@@ -46,7 +47,7 @@ extension BaseDirection {
 /// by applying rule P1. It can be used to create paragraph objects by explicitly specifying the
 /// paragraph level or deriving it from rules P2 and P3. Once a paragraph object is created,
 /// embedding levels of characters can be queried from it.
-public class BidiAlgorithm {
+public final class BidiAlgorithm {
     /// Maximum explicit embedding level.
     public static let maxLevel: UInt8 = 125
 

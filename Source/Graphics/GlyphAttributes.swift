@@ -14,12 +14,13 @@
 // limitations under the License.
 //
 
+@_implementationOnly import FreeType
+
 import CoreGraphics
 import Foundation
-@_implementationOnly import FreeType
 import UIKit
 
-class GlyphAttributes {
+final class GlyphAttributes {
     private let _dataKey = GlyphKey.Data()
     private let _colorKey = GlyphKey.Color()
     private let _strokeKey = GlyphKey.Stroke()

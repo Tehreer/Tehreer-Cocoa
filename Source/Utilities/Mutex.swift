@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 import Foundation
 
-struct Mutex {
+struct Mutex: Sendable {
     private let semaphore = DispatchSemaphore(value: 1)
 
     func lock() {
@@ -33,5 +33,23 @@ struct Mutex {
         defer { unlock() }
 
         return try closure()
+    }
+}
+
+/// A value that can be accessed only while holding its lock.
+final class Locked<Value>: @unchecked Sendable {
+    // The value is non-Sendable in general, so Sendable is asserted here once: every access goes
+    // through `withLock`, which serializes it.
+    private let mutex = Mutex()
+    private var value: Value
+
+    init(_ value: Value) {
+        self.value = value
+    }
+
+    func withLock<Result>(_ body: (inout Value) throws -> Result) rethrows -> Result {
+        return try mutex.synchronized {
+            try body(&value)
+        }
     }
 }

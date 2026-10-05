@@ -14,9 +14,10 @@
 // limitations under the License.
 //
 
+@_implementationOnly import FreeType
+
 import CoreGraphics
 import Foundation
-@_implementationOnly import FreeType
 
 private func freetypeBitmapInfo() -> CGBitmapInfo {
     let byteOrder = CFByteOrderGetCurrent()
@@ -35,8 +36,8 @@ private func freetypeBitmapInfo() -> CGBitmapInfo {
     return .byteOrderMask
 }
 
-class GlyphRasterizer {
-    private static var maskDecode: [CGFloat] = [1.0, 0.0]
+final class GlyphRasterizer {
+    private static let maskDecode: [CGFloat] = [1.0, 0.0]
     private static let maskSpace = CGColorSpaceCreateDeviceGray()
 
     private static let rgbSpace = CGColorSpaceCreateDeviceRGB()
@@ -82,7 +83,7 @@ class GlyphRasterizer {
                         return
                     }
 
-                    input.assign(from: baseAddress, count: pointer.count)
+                    input.update(from: baseAddress, count: pointer.count)
                 }
             }
         }
@@ -112,7 +113,7 @@ class GlyphRasterizer {
                     bitsPerPixel: 8,
                     bytesPerRow: Int(bitmap.pointee.width),
                     provider: provider,
-                    decode: &Self.maskDecode,
+                    decode: Self.maskDecode,
                     shouldInterpolate: false) else {
                 return nil
             }

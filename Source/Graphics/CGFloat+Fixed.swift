@@ -14,8 +14,9 @@
 // limitations under the License.
 //
 
-import CoreGraphics
 @_implementationOnly import FreeType
+
+import CoreGraphics
 
 extension CGFloat {
     init(f16Dot16 value: FT_Fixed) {

@@ -56,7 +56,8 @@ final class TextLayoutContext {
     }
 }
 
-final class TypesettingOperation: Operation {
+// Unchecked as `Operation` itself is; the context is shared as `TextLayoutContext` describes.
+final class TypesettingOperation: Operation, @unchecked Sendable {
     private let context: TextLayoutContext
     private let updateBlock: ((Typesetter?) -> Void)
 
@@ -107,7 +108,8 @@ final class TypesettingOperation: Operation {
     }
 }
 
-final class FrameResolvingOperation: Operation {
+// Unchecked as `Operation` itself is; the context is shared as `TextLayoutContext` describes.
+final class FrameResolvingOperation: Operation, @unchecked Sendable {
     private let context: TextLayoutContext
     private let updateBlock: ((ComposedFrame?) -> Void)
 
@@ -152,7 +154,8 @@ final class FrameResolvingOperation: Operation {
     }
 }
 
-final class LineBoxesOperation: Operation {
+// Unchecked as `Operation` itself is; the context is shared as `TextLayoutContext` describes.
+final class LineBoxesOperation: Operation, @unchecked Sendable {
     private let context: TextLayoutContext
     private let updateBlock: ((LineBoxes) -> Void)
 

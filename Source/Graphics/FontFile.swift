@@ -14,12 +14,13 @@
 // limitations under the License.
 //
 
-import CoreGraphics
-import Foundation
 @_implementationOnly import FreeType
 
+import CoreGraphics
+import Foundation
+
 /// A `FontFile` object represents the file of a specific font format.
-public class FontFile {
+public final class FontFile {
     private var defaultTypefaces: [Typeface]!
 
     /// Creates a font file instance representing the specified file path. The data of the font is

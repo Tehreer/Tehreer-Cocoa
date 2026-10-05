@@ -14,8 +14,9 @@
 // limitations under the License.
 //
 
-import Foundation
 @_implementationOnly import FreeType
+
+import Foundation
 import UIKit
 
 extension UIColor {

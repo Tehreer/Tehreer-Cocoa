@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 import Foundation
 
 /// Specifies the text break mode.
-public enum BreakMode: Int {
+public enum BreakMode: Int, Sendable {
     /// Breaks the text at a suitable opportunity as determined by the Unicode Line Breaking
     /// Algorithm.
     case character = 0

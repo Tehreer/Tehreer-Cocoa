@@ -14,10 +14,11 @@
 // limitations under the License.
 //
 
-import Foundation
 @_implementationOnly import FreeType
 
-class FontStream {
+import Foundation
+
+final class FontStream {
     private var arguments: FT_Open_Args
 
     let faceCount: Int
@@ -29,7 +30,7 @@ class FontStream {
             }
 
             let newPath = UnsafeMutablePointer<FT_String>.allocate(capacity: pointer.count)
-            newPath.assign(from: baseAddress, count: pointer.count)
+            newPath.update(from: baseAddress, count: pointer.count)
             return newPath
         }
 

@@ -14,13 +14,14 @@
 // limitations under the License.
 //
 
+@_implementationOnly import FreeType
+
 import CoreGraphics
 import Foundation
-@_implementationOnly import FreeType
 
 extension Typeface {
     /// Specifies the slope of a typeface.
-    public enum Slope: Int {
+    public enum Slope: Int, Sendable {
         /// The plain slope indicating upright characters.
         case plain = 0
         /// The italic slope indicating truly slanted characters which appear as they were designed.

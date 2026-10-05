@@ -14,14 +14,15 @@
 // limitations under the License.
 //
 
-import Foundation
 @_implementationOnly import SheenBidi
+
+import Foundation
 
 /// A `BidiLine` object represents a single line processed with rules L1-L2 of Unicode Bidirectional
 /// Algorithm. Instead of reordering the characters as stated by rule L2, it allows to query and
 /// iterate over reordered level runs. The caller is responsible to reorder the characters manually,
 /// if required.
-public class BidiLine {
+public final class BidiLine {
     let buffer: BidiBuffer
     let line: SBLineRef
 
@@ -133,7 +134,7 @@ extension BidiLine {
     }
 
     /// An iterator over the mirrored characters.
-    public class MirrorIterator: IteratorProtocol {
+    public final class MirrorIterator: IteratorProtocol {
         private let owner: BidiLine
         private let locator: SBMirrorLocatorRef
         private let agent: UnsafePointer<SBMirrorAgent>

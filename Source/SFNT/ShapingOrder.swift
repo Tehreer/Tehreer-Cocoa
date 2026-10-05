@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import Foundation
 
 /// Specifies the order in which the text is shaped.
-public enum ShapingOrder: Int {
+public enum ShapingOrder: Int, Sendable {
     /// Text is shaped in forward order starting from first index (inclusive) to last index
     /// (exclusive).
     case forward = 0

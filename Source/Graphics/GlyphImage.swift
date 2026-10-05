@@ -16,7 +16,7 @@
 
 import CoreGraphics
 
-class GlyphImage {
+final class GlyphImage {
     let layer: CGLayer
     let left: CGFloat
     let top: CGFloat

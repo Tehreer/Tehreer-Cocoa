@@ -14,10 +14,11 @@
 // limitations under the License.
 //
 
-import Foundation
 @_implementationOnly import FreeType
 
-class GlyphOutline {
+import Foundation
+
+final class GlyphOutline {
     private(set) var glyph: FT_Glyph
 
     init(glyph: FT_Glyph) {

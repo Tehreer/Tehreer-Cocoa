@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021 Muhammad Tayyab Akram
+// Copyright (C) 2021-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ import CoreGraphics
 import Foundation
 
 /// Represents font variation axis.
-public struct VariationAxis {
+public struct VariationAxis: Sendable {
     /// Flags for variation axis.
-    public struct Flags: OptionSet {
+    public struct Flags: OptionSet, Sendable {
         /// The axis should not be exposed directly in user interfaces.
         public static let hiddenAxis = Flags(rawValue: 0x0001)
 

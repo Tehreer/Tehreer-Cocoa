@@ -60,7 +60,7 @@ private struct FrameContext {
 }
 
 /// This class resolves text frames by using a typesetter object.
-public class FrameResolver {
+public final class FrameResolver {
     /// The typesetter to use for resolving frames.
     public var typesetter: Typesetter!
 
@@ -160,13 +160,13 @@ public class FrameResolver {
         resolveAlignments(context: &context)
         resolveJustification(context: &context)
 
-        let textFrame = ComposedFrame(string: typesetter.text.string,
-                                      codeUnitRange: codeUnitRange.lowerBound ..< context.endIndex,
-                                      lines: context.textLines)
-        textFrame.width = context.layoutWidth
-        textFrame.height = context.layoutHeight
-
-        return textFrame
+        return ComposedFrame(
+            string: typesetter.text.string,
+            codeUnitRange: codeUnitRange.lowerBound ..< context.endIndex,
+            lines: context.textLines,
+            width: context.layoutWidth,
+            height: context.layoutHeight
+        )
     }
 
     /// Creates a frame representing the specified character range in source string.

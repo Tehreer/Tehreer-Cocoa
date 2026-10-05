@@ -24,9 +24,15 @@ import UIKit
 ///
 /// Unlike a plain `TextReplacement`, a `ViewAttachment` draws nothing itself - the room is filled
 /// by `view` instead.
-open class ViewAttachment: TextReplacement {
+///
+/// An attachment is shared between the threads that typeset the text, the main thread and
+/// whichever thread calls `setNeedsResize()`, so its own state is guarded by a lock. A subclass
+/// must keep its overrides safe to call from any thread, apart from `loadView()` and
+/// `measure(forLayoutWidth:view:)`, which run on the main thread.
+// Unchecked because the compiler cannot verify the lock, nor the state of subclasses.
+open class ViewAttachment: TextReplacement, @unchecked Sendable {
     /// Where a `ViewAttachment` goes in the text.
-    public enum Placement {
+    public enum Placement: Sendable {
         /// The view has a line of its own and is as wide as the text, at whatever place the text
         /// begins. This is the default.
         case block
@@ -82,6 +88,7 @@ open class ViewAttachment: TextReplacement {
     public init() {}
 
     /// Makes the view. Called on the main thread, when the view is needed.
+    @MainActor
     open func loadView() -> UIView {
         fatalError("ViewAttachment subclasses must override loadView()")
     }
@@ -95,6 +102,7 @@ open class ViewAttachment: TextReplacement {
     /// The default fits the view at that width with as much height as it wants, which is right
     /// for any view whose height is known as soon as it is sized; override it to do differently.
     /// The view has no superview yet, and may never be shown.
+    @MainActor
     open func measure(forLayoutWidth layoutWidth: CGFloat, view: UIView) -> CGSize {
         let viewWidth = isBlock ? layoutWidth : max(width, 0)
 

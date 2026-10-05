@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021 Muhammad Tayyab Akram
+// Copyright (C) 2021-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 import Foundation
 
-class AdvanceCache {
+final class AdvanceCache {
     private var advances: [GlyphID: Int32] = [:]
 
     subscript(key: GlyphID) -> Int32? {

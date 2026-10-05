@@ -14,9 +14,10 @@
 // limitations under the License.
 //
 
+@_implementationOnly import FreeType
+
 import CoreGraphics
 import Foundation
-@_implementationOnly import FreeType
 import UIKit
 
 enum GlyphType: Int {
@@ -26,7 +27,7 @@ enum GlyphType: Int {
     case mixed = 3
 }
 
-class Glyph {
+final class Glyph {
     var type: GlyphType?
     var image: GlyphImage?
     var outline: GlyphOutline?

@@ -19,7 +19,7 @@ import XCTest
 @testable import TehreerCocoa
 
 /// A block view with a fixed height.
-private final class FixedBlock: ViewAttachment {
+private final class FixedBlock: ViewAttachment, @unchecked Sendable {
     let fixedHeight: CGFloat
     private(set) var loadCount = 0
 
@@ -41,7 +41,7 @@ private final class FixedBlock: ViewAttachment {
 }
 
 /// A block view whose height is whatever its content asks for.
-private final class WrappingBlock: ViewAttachment {
+private final class WrappingBlock: ViewAttachment, @unchecked Sendable {
     var contentHeight: CGFloat
     var hides = true
 
@@ -62,7 +62,7 @@ private final class WrappingBlock: ViewAttachment {
 }
 
 /// An inline view.
-private final class InlineBox: ViewAttachment {
+private final class InlineBox: ViewAttachment, @unchecked Sendable {
     override var placement: Placement { .inline }
     override var width: CGFloat { 40.0 }
     override var height: CGFloat { 50.0 }
@@ -379,7 +379,7 @@ final class TTextViewAttachmentTests: TTextViewTestCase {
     }
 }
 
-private final class RetainedBlock: ViewAttachment {
+private final class RetainedBlock: ViewAttachment, @unchecked Sendable {
     override var height: CGFloat { 100.0 }
     override var retainWhenOffscreen: Bool { true }
 

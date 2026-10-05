@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ extension IntrinsicCollection {
     }
 }
 
-fileprivate class IntrinsicMapCollection<Input, Output>: IntrinsicCollection<Output> {
+fileprivate final class IntrinsicMapCollection<Input, Output>: IntrinsicCollection<Output> {
     let base: IntrinsicCollection<Input>
     let operation: (_ : Input) -> Output
 
@@ -53,7 +53,7 @@ fileprivate class IntrinsicMapCollection<Input, Output>: IntrinsicCollection<Out
     }
 }
 
-class IntrinsicWrapCollection<Base, Element>: IntrinsicCollection<Element>
+final class IntrinsicWrapCollection<Base, Element>: IntrinsicCollection<Element>
     where Base: RandomAccessCollection,
           Base.Index == Int,
           Base.Element == Element {

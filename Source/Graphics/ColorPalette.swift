@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021 Muhammad Tayyab Akram
+// Copyright (C) 2021-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 import Foundation
 import UIKit
 
-public struct ColorPalette {
+public struct ColorPalette: Sendable {
     /// Flags for color palette.
-    public struct Flags: OptionSet {
+    public struct Flags: OptionSet, Sendable {
         public static let usableWithLightBackground = Flags(rawValue: 0x0001)
         public static let usableWithDarkBackground = Flags(rawValue: 0x0002)
 

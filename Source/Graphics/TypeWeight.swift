@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021 Muhammad Tayyab Akram
+// Copyright (C) 2021-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import Foundation
 
 extension Typeface {
     /// Specifies the thickness of a typeface, in terms of lightness or heaviness of the strokes.
-    public enum Weight: Int {
+    public enum Weight: Int, Sendable {
         case thin = 100
         case extraLight = 200
         case light = 300

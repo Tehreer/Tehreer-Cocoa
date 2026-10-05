@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2025 Muhammad Tayyab Akram
+// Copyright (C) 2025-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ import Foundation
 import UIKit
 
 @available(iOS 15.0, *)
+@MainActor
 final class StyledTextManager: ObservableObject {
     let renderer = Renderer()
     private let resolver = FrameResolver()
@@ -29,7 +30,6 @@ final class StyledTextManager: ObservableObject {
         return resolver.typesetter
     }
 
-    @MainActor
     func setupProperties(_ properties: TextProperties) {
         let typesetter = updatedTypesetter(for: properties)
 
@@ -42,13 +42,11 @@ final class StyledTextManager: ObservableObject {
         renderer.renderScale = UIScreen.main.scale
     }
 
-    @MainActor
     func updateProperties(_ properties: TextProperties) {
         setupProperties(properties)
         refreshLayout()
     }
 
-    @MainActor
     func refreshLayout(forSize proposedSize: CGSize? = nil) {
         if let proposedSize {
             updateTextFrame(forSize: proposedSize)
@@ -59,7 +57,6 @@ final class StyledTextManager: ObservableObject {
         }
     }
 
-    @MainActor
     func determineFrameSize(for containerSize: CGSize) -> CGSize? {
         guard let typesetter else { return nil }
         guard containerSize.width > .zero && containerSize.height > .zero else { return .zero }

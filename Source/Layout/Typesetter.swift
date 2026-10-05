@@ -19,7 +19,11 @@ import Foundation
 
 /// Represents a typesetter which performs text layout. It can be used to create lines, perform line
 /// breaking, and do other contextual analysis based on the characters in the string.
-public class Typesetter {
+///
+/// A typesetter does not change once it is created, so it can be shared between threads, and lines
+/// can be made from it by several of them at a time.
+// Unchecked because the attributes are `Any` values, which the compiler cannot prove immutable.
+public final class Typesetter: @unchecked Sendable {
     /// The source text for which this typesetter object was created.
     public let text: NSAttributedString
 

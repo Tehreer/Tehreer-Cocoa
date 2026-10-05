@@ -14,12 +14,13 @@
 // limitations under the License.
 //
 
-import CoreGraphics
-import Foundation
 @_implementationOnly import FreeType
 
+import CoreGraphics
+import Foundation
+
 /// Holds FreeType face with locking support.
-class RenderableFace {
+final class RenderableFace {
     private let mutex = Mutex()
 
     let fontStream: FontStream

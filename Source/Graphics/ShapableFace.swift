@@ -14,14 +14,16 @@
 // limitations under the License.
 //
 
-import CoreGraphics
-import Foundation
 @_implementationOnly import FreeType
 @_implementationOnly import HarfBuzz
 
+import CoreGraphics
+import Foundation
+
 /// Provides HarfBuzz font having custom implementation by using FreeType face.
-class ShapableFace {
-    private static let fontFuncs = makeFontFuncs()
+final class ShapableFace {
+    // The functions are immutable once created, and HarfBuzz allows sharing them between fonts.
+    private nonisolated(unsafe) static let fontFuncs = makeFontFuncs()
 
     private var rootFace: ShapableFace!
 

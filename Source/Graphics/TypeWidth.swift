@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021 Muhammad Tayyab Akram
+// Copyright (C) 2021-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import Foundation
 extension Typeface {
     /// Specifies the wideness of a typeface, in terms of the width of characters in relation to
     /// their heights.
-    public enum Width: Int {
+    public enum Width: Int, Sendable {
         case ultraCondensed = 1
         case extraCondensed = 2
         case condensed = 3

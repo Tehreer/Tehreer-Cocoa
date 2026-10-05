@@ -14,12 +14,13 @@
 // limitations under the License.
 //
 
-import CoreGraphics
-import Foundation
 @_implementationOnly import HarfBuzz
 
+import CoreGraphics
+import Foundation
+
 /// The `ShapingEngine` class represents text shaping engine.
-public class ShapingEngine {
+public final class ShapingEngine {
     /// Creates a shaping engine.
     public init() { }
 

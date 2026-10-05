@@ -18,7 +18,9 @@ import CoreGraphics
 import Foundation
 
 /// Represents a line of text consisting of an array of `GlyphRun` objects in visual order.
-public class ComposedLine {
+// Unchecked because the resolver that makes the line sets its layout properties (`extent`,
+// `flushFactor`, `isBlock`, ...) while it is being built; once it is handed out nothing changes.
+public final class ComposedLine: @unchecked Sendable {
     private let string: String
     private var extent: CGFloat
 

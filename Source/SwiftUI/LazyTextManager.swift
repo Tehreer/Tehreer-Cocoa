@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2025 Muhammad Tayyab Akram
+// Copyright (C) 2025-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,20 +23,23 @@ private typealias TextSection = Int
 private typealias LineIndex = Int
 private typealias SectionDictionary = [TextSection: [LineIndex]]
 
+@MainActor
 private var sectionHeight: CGFloat {
     let screenBounds = UIScreen.main.bounds
     return max(screenBounds.width, screenBounds.height)
 }
 
 @available(iOS 13.0, *)
-private final class TextContext {
+private struct TextContext: Sendable {
     typealias LineUpdatesBlock = @MainActor (SectionDictionary, [CGRect]) -> Void
 
     let layoutID: LayoutID
     let renderScale: CGFloat
+    let sectionHeight: CGFloat
     let layoutWidth: CGFloat
     let string: String?
-    let attributedString: NSAttributedString?
+    // The string is immutable, since it is copied when the context is made, and is only read.
+    nonisolated(unsafe) let attributedString: NSAttributedString?
     let typeface: Typeface?
     let textSize: CGFloat
     let textAlignment: TextAlignment
@@ -46,12 +49,12 @@ private final class TextContext {
     let isJustificationEnabled: Bool
     let justificationLevel: CGFloat
 
-    private(set) var typesetter: Typesetter?
-    private(set) var textFrame: ComposedFrame?
+    let typesetter: Typesetter?
 
     init(
         layoutID: UUID,
         renderScale: CGFloat,
+        sectionHeight: CGFloat,
         layoutWidth: CGFloat,
         string: String?,
         attributedString: NSAttributedString?,
@@ -67,9 +70,10 @@ private final class TextContext {
     ) {
         self.layoutID = layoutID
         self.renderScale = renderScale
+        self.sectionHeight = sectionHeight
         self.layoutWidth = layoutWidth
         self.string = string
-        self.attributedString = attributedString
+        self.attributedString = attributedString?.copy() as? NSAttributedString
         self.typesetter = typesetter
         self.typeface = typeface
         self.textSize = textSize
@@ -107,16 +111,16 @@ private final class TextContext {
         return nil
     }
 
-    func performTypesetting() async {
-        guard let params = typesetterParams() else { return }
+    func performTypesetting() async -> Typesetter? {
+        guard let params = typesetterParams() else { return nil }
 
-        typesetter = Typesetter(
+        return Typesetter(
             text: params.attributedString,
             defaultAttributes: params.defaultAttributes
         )
     }
 
-    private func makeFrameResolver() -> FrameResolver {
+    private func makeFrameResolver(typesetter: Typesetter) -> FrameResolver {
         let resolver = FrameResolver()
         resolver.typesetter = typesetter
         resolver.frameBounds = CGRect(
@@ -135,14 +139,14 @@ private final class TextContext {
         return resolver
     }
 
-    func resolveTextFrame() async {
-        guard let typesetter else { return }
-        guard layoutWidth > .zero else { return }
+    func resolveTextFrame(typesetter: Typesetter?) async -> ComposedFrame? {
+        guard let typesetter else { return nil }
+        guard layoutWidth > .zero else { return nil }
 
-        let resolver = makeFrameResolver()
+        let resolver = makeFrameResolver(typesetter: typesetter)
         let string = typesetter.text.string
 
-        textFrame = resolver.makeFrame(characterRange: string.startIndex ..< string.endIndex)
+        return resolver.makeFrame(characterRange: string.startIndex ..< string.endIndex)
     }
 
     private func makeBoxRenderer() -> Renderer {
@@ -152,7 +156,7 @@ private final class TextContext {
         return renderer
     }
 
-    func measureLines(updatesBlock: @escaping LineUpdatesBlock) async {
+    func measureLines(of textFrame: ComposedFrame?, updatesBlock: @escaping LineUpdatesBlock) async {
         guard let lines = textFrame?.lines else { return }
 
         let renderer = makeBoxRenderer()
@@ -294,6 +298,7 @@ final class LazyTextManager: ObservableObject {
         let context = TextContext(
             layoutID: layoutID,
             renderScale: UIScreen.main.scale,
+            sectionHeight: sectionHeight,
             layoutWidth: scrollWidth,
             string: properties.string,
             attributedString: properties.attributedString,
@@ -310,17 +315,18 @@ final class LazyTextManager: ObservableObject {
 
         layoutTask?.cancel()
         layoutTask = Task {
-            if context.typesetter == nil {
-                await context.performTypesetting()
-                updateTypesetter(context.typesetter, forLayout: context.layoutID)
+            var typesetter = context.typesetter
+            if typesetter == nil {
+                typesetter = await context.performTypesetting()
+                updateTypesetter(typesetter, forLayout: context.layoutID)
             }
             if Task.isCancelled { return }
 
-            await context.resolveTextFrame()
-            updateTextFrame(context.textFrame, forLayout: context.layoutID)
+            let textFrame = await context.resolveTextFrame(typesetter: typesetter)
+            updateTextFrame(textFrame, forLayout: context.layoutID)
             if Task.isCancelled { return }
 
-            await context.measureLines { [weak self] sections, boxes in
+            await context.measureLines(of: textFrame) { [weak self] sections, boxes in
                 self?.updateLines((sections, boxes), forLayout: context.layoutID)
             }
         }

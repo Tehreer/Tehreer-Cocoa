@@ -14,15 +14,16 @@
 // limitations under the License.
 //
 
-import Foundation
 @_implementationOnly import FreeType
+
+import Foundation
 import UIKit
 
 /// The `Renderer` class represents a generic glyph renderer. It can be used to generate glyph
 /// paths, measure their bounding boxes and draw them in a `CGContext` object.
-public class Renderer {
+public final class Renderer {
     /// Specifies if the glyph being drawn is filled, stroked, or both.
-    public enum RenderingStyle {
+    public enum RenderingStyle: Sendable {
         /// Glyphs drawn with this style will be filled, ignoring all stroke-related settings in the
         /// renderer.
         case fill
@@ -35,7 +36,7 @@ public class Renderer {
     }
 
     /// Specifies the treatment for the beginning and ending of stroked lines and paths.
-    public enum StrokeCap: Int {
+    public enum StrokeCap: Int, Sendable {
         /// The stroke ends with the path, and does not project beyond it.
         case butt = 0
         /// The stroke projects out as a semicircle, with the center at the end of the path.
@@ -45,7 +46,7 @@ public class Renderer {
     }
 
     /// Specifies the treatment where lines and curve segments join on a stroked path.
-    public enum StrokeJoin: Int {
+    public enum StrokeJoin: Int, Sendable {
         /// The outer edges of a join meet with a straight line.
         case bevel = 1
         /// The outer edges of a join meet at a sharp angle.

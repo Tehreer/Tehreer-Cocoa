@@ -14,13 +14,14 @@
 // limitations under the License.
 //
 
-import Foundation
 @_implementationOnly import SheenBidi
+
+import Foundation
 
 /// Represents the script of a character in Unicode specification. The literals of enum correspond
 /// to the script property values defined in
 /// [Unicode Standard Annex #24: PropertyValueAliases.txt](https://www.unicode.org/reports/tr24/#Data_File_PVA).
-public enum Script: Int {
+public enum Script: Int, Sendable {
     /// Script "Inherited".
     case inherited = 0x01
 

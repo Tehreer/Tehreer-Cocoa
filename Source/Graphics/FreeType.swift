@@ -14,26 +14,27 @@
 // limitations under the License.
 //
 
-import Foundation
 @_implementationOnly import FreeType
 
-class FreeType {
+import Foundation
+
+final class FreeType: Sendable {
     private static let instance = FreeType()
 
-    private let mutex = Mutex()
-    private var library: FT_Library!
+    private let library: Locked<FT_Library?>
 
     static func withLibrary<Result>(_ body: (FT_Library) throws -> Result) rethrows -> Result {
-        return try instance.mutex.synchronized {
-            try body(instance.library)
-        }
+        return try instance.library.withLock { try body($0!) }
     }
 
     private init() {
+        var library: FT_Library?
         FT_Init_FreeType(&library)
+
+        self.library = Locked(library)
     }
 
     deinit {
-        FT_Done_FreeType(library)
+        library.withLock { _ = FT_Done_FreeType($0) }
     }
 }

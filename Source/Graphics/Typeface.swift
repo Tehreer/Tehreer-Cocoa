@@ -14,9 +14,10 @@
 // limitations under the License.
 //
 
+@_implementationOnly import FreeType
+
 import CoreGraphics
 import Foundation
-@_implementationOnly import FreeType
 import UIKit
 
 /// An ID of a glyph in a font.
@@ -28,7 +29,10 @@ public typealias TypefaceTag = AnyHashable
 /// The `Typeface` class specifies the typeface and intrinsic style of a font. This is used in the
 /// renderer, along with optionally `Renderer` settings like `typeSize`, `slantAngle`, `scaleX`, to
 /// specify how text appears when drawn (and measured).
-public class Typeface {
+// Unchecked because the FreeType face and the stroker are not thread-safe; they are reached only
+// through `withFreeTypeFace` and `withFreeTypeStroker`, which serialize them. The rest is set once
+// in the initializers, and `tag` is guarded by `TypefaceManager`.
+public final class Typeface: @unchecked Sendable {
     private let mutex = Mutex()
 
     var tag: TypefaceTag?

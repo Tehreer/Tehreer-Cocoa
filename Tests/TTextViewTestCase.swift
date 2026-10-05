@@ -20,6 +20,7 @@ import XCTest
 
 /// A fixture that shows a `TTextView` in a window and waits for the text to be framed. The test
 /// font is the one of the demo.
+@MainActor
 class TTextViewTestCase: XCTestCase {
     static let typeface: Typeface = {
         let path = URL(fileURLWithPath: #filePath)
@@ -34,8 +35,8 @@ class TTextViewTestCase: XCTestCase {
     var window: UIWindow!
     var textView: TTextView!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
         window = UIWindow(frame: CGRect(x: 0, y: 0, width: 320, height: 480))
         window.makeKeyAndVisible()
@@ -47,11 +48,11 @@ class TTextViewTestCase: XCTestCase {
         window.addSubview(textView)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         textView = nil
         window = nil
 
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func urduText(_ count: Int) -> String {

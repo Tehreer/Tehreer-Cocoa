@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import Foundation
 
 /// A bidi run represents a sequence of characters which have the same embedding level. The
 /// direction of run is considered right-to-left, if its embedding level is odd.
-public struct BidiRun {
+public struct BidiRun: Sendable {
     private var string: String
 
     /// The UTF-16 range of the run in source string.
@@ -52,7 +52,7 @@ extension BidiRun {
 }
 
 /// Represents a pair of a unicode code point at a specific index in source string.
-public struct BidiPair {
+public struct BidiPair: Sendable {
     private var string: String
 
     /// The index of actual UTF-16 code unit.

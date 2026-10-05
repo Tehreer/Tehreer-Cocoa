@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2020 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import Foundation
 
 /// A script run represents a sequence of characters which have the same script.
-public struct ScriptRun {
+public struct ScriptRun: Sendable {
     private let string: String
 
     /// The UTF-16 range of the run in source string.

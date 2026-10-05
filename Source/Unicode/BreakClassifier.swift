@@ -14,8 +14,9 @@
 // limitations under the License.
 //
 
-import Foundation
 @_implementationOnly import UniBreak
+
+import Foundation
 
 private func makeLineBreaksBuffer(string: String) -> UnsafeBufferPointer<Int8> {
     let stringBuffer = BidiBuffer(string)
@@ -32,7 +33,7 @@ protocol StringBreak {
     var characterIndex: String.Index { get }
 }
 
-class BreakClassifier {
+final class BreakClassifier {
     private let string: String
     private let lineBreaks: UnsafeBufferPointer<Int8>
 

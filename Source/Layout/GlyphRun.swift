@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2023 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +19,9 @@ import Foundation
 import UIKit
 
 /// A glyph run is a collection of consecutive glyphs sharing the same attributes and direction.
-public class GlyphRun {
+// Unchecked because the resolver replaces its `textRun` while the line is being built; once the
+// line is handed out nothing changes.
+public final class GlyphRun: @unchecked Sendable {
     var textRun: TextRun
 
     init(textRun: TextRun) {

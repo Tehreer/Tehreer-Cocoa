@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import Foundation
 
 /// Specifies the writing direction of the text.
-public enum WritingDirection: Int {
+public enum WritingDirection: Int, Sendable {
     /// Text is written from left-to-right.
     case leftToRight = 0
     /// Text is written from right-to-left.
