@@ -22,10 +22,13 @@ import Foundation
 final class FontStream {
     private var arguments: FT_Open_Args
 
-    let faceCount: Int
-
     /// The font file of Core that holds the same data.
     let coreFile: TRFontFileRef
+
+    /// The number of faces in the font file.
+    var faceCount: Int {
+        return Int(TRFontFileGetFaceCount(coreFile))
+    }
 
     convenience init?(path: String) {
         guard let coreFile = TRFontFileCreateFromPath(path) else {
@@ -100,30 +103,8 @@ final class FontStream {
         self.init(arguments: &arguments, coreFile: coreFile)
     }
 
-    convenience init?(arguments: inout FT_Open_Args, coreFile: TRFontFileRef) {
-        let numFaces = FreeType.withLibrary { (library) -> FT_Long in
-            var face: FT_Face!
-
-            if FT_Open_Face(library, &arguments, -1, &face) == FT_Err_Ok {
-                let numFaces = face.pointee.num_faces
-                FT_Done_Face(face)
-
-                return numFaces
-            }
-
-            return 0
-        }
-        guard numFaces > 0 else {
-            TRFontFileRelease(coreFile)
-            return nil
-        }
-
-        self.init(arguments: &arguments, numFaces: numFaces, coreFile: coreFile)
-    }
-
-    private init(arguments: inout FT_Open_Args, numFaces: Int, coreFile: TRFontFileRef) {
+    private init(arguments: inout FT_Open_Args, coreFile: TRFontFileRef) {
         self.arguments = arguments
-        self.faceCount = numFaces
         self.coreFile = coreFile
     }
 
