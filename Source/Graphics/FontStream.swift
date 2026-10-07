@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021-2026 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,15 +14,14 @@
 // limitations under the License.
 //
 
-internal import FreeType
+
 internal import Tehreer
 
 import Foundation
 
+/// The font file of Core that is behind a font file and its typefaces.
 final class FontStream {
-    private var arguments: FT_Open_Args
-
-    /// The font file of Core that holds the same data.
+    /// The font file of Core.
     let coreFile: TRFontFileRef
 
     /// The number of faces in the font file.
@@ -30,29 +29,23 @@ final class FontStream {
         return Int(TRFontFileGetFaceCount(coreFile))
     }
 
-    convenience init?(path: String) {
+    init?(path: String) {
         guard let coreFile = TRFontFileCreateFromPath(path) else {
             return nil
         }
 
-        let utf8Path = path.utf8CString.withUnsafeBufferPointer { (pointer) -> UnsafeMutablePointer<FT_String>? in
-            guard let baseAddress = pointer.baseAddress else {
-                return nil
-            }
+        self.coreFile = coreFile
+    }
 
-            let newPath = UnsafeMutablePointer<FT_String>.allocate(capacity: pointer.count)
-            newPath.update(from: baseAddress, count: pointer.count)
-            return newPath
+    init?(data: Data) {
+        let coreFile = data.withUnsafeBytes { (bytes) in
+            TRFontFileCreateFromMemory(bytes.baseAddress, TRUInteger(bytes.count))
+        }
+        guard let coreFile = coreFile else {
+            return nil
         }
 
-        var arguments = FT_Open_Args()
-        arguments.flags = FT_UInt(FT_OPEN_PATHNAME)
-        arguments.memory_base = nil
-        arguments.memory_size = 0
-        arguments.pathname = utf8Path
-        arguments.stream = nil
-
-        self.init(arguments: &arguments, coreFile: coreFile)
+        self.coreFile = coreFile
     }
 
     convenience init?(stream: InputStream) {
@@ -78,64 +71,7 @@ final class FontStream {
         self.init(data: data)
     }
 
-    convenience init?(data: Data) {
-        let coreFile = data.withUnsafeBytes { (bytes) in
-            TRFontFileCreateFromMemory(bytes.baseAddress, TRUInteger(bytes.count))
-        }
-        guard let coreFile = coreFile else {
-            return nil
-        }
-
-        let streamBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
-        data.copyBytes(to: streamBuffer, count: data.count)
-
-        self.init(pointer: UnsafePointer<FT_Byte>(streamBuffer), size: data.count, coreFile: coreFile)
-    }
-
-    private convenience init?(pointer: UnsafePointer<FT_Byte>, size: Int, coreFile: TRFontFileRef) {
-        var arguments = FT_Open_Args()
-        arguments.flags = FT_UInt(FT_OPEN_MEMORY)
-        arguments.memory_base = pointer
-        arguments.memory_size = size
-        arguments.pathname = nil
-        arguments.stream = nil
-
-        self.init(arguments: &arguments, coreFile: coreFile)
-    }
-
-    private init(arguments: inout FT_Open_Args, coreFile: TRFontFileRef) {
-        self.arguments = arguments
-        self.coreFile = coreFile
-    }
-
     deinit {
         TRFontFileRelease(coreFile)
-
-        if let utf8Path = arguments.pathname {
-            utf8Path.deallocate()
-        }
-        if let pointer = arguments.memory_base {
-            pointer.deallocate()
-        }
-        if let stream = arguments.stream {
-            stream.pointee.close(stream)
-            stream.deallocate()
-        }
-    }
-
-    func makeRenderableFace(faceIndex: Int) -> RenderableFace? {
-        FreeType.withLibrary { (library) in
-            let id: FT_Long = faceIndex
-            var ftFace: FT_Face!
-
-            if FT_Open_Face(library, &arguments, id, &ftFace) == FT_Err_Ok {
-                if (ftFace.pointee.face_flags & FT_FACE_FLAG_SCALABLE) == 0 {
-                    FT_Done_Face(ftFace)
-                    ftFace = nil
-                }
-            }
-
-            return RenderableFace(fontStream: self, ftFace: ftFace)
-        }
     }
 }

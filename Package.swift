@@ -127,7 +127,7 @@ let package = Package(
         ),
         .target(
             name: "TehreerCocoa",
-            dependencies: ["Tehreer", "FreeType", "SheenBidi", "UniBreak"],
+            dependencies: ["Tehreer", "SheenBidi", "UniBreak"],
             path: "Source"
         ),
         .testTarget(

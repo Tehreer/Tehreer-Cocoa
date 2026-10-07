@@ -15,7 +15,6 @@
 //
 
 
-internal import FreeType
 internal import Tehreer
 
 import CoreGraphics
@@ -31,23 +30,13 @@ public typealias TypefaceTag = AnyHashable
 /// The `Typeface` class specifies the typeface and intrinsic style of a font. This is used in the
 /// renderer, along with optionally `Renderer` settings like `typeSize`, `slantAngle`, `scaleX`, to
 /// specify how text appears when drawn (and measured).
-// Unchecked because the FreeType face and the stroker are not thread-safe; they are reached only
-// through `withFreeTypeFace` and `withFreeTypeStroker`, which serialize them. The rest is set once
-// in the initializers, and `tag` is guarded by `TypefaceManager`. The typeface of Core is
-// immutable and safe to use from any thread.
+// Unchecked because everything is set once in the initializers, except `tag`, which is guarded by
+// `TypefaceManager`. The typeface of Core is immutable and safe to use from any thread.
 public final class Typeface: @unchecked Sendable {
-    private let mutex = Mutex()
-
     var tag: TypefaceTag?
 
     /// The typeface of Core that answers everything about the font.
     let core: TRTypefaceRef
-
-    // The members below serve the parts that are still to move to Core.
-    private let renderableFace: RenderableFace
-    private var ftSize: FT_Size!
-    private var ftStroker: FT_Stroker!
-    private let palette: [FT_Color]
 
     private let names: Names
     private let design: DesignCharacteristics
@@ -105,36 +94,21 @@ public final class Typeface: @unchecked Sendable {
     }
 
     init?(fontStream: FontStream, faceIndex: Int) {
-        guard let core = TRTypefaceCreate(fontStream.coreFile, TRUInteger(faceIndex)),
-              let renderableFace = fontStream.makeRenderableFace(faceIndex: faceIndex) else {
+        guard let core = TRTypefaceCreate(fontStream.coreFile, TRUInteger(faceIndex)) else {
             return nil
         }
 
-        let axes = Typeface.makeVariationAxes(core: core)
-
-        // The face of FreeType has to follow the default design coordinates of the font.
-        if !axes.isEmpty {
-            renderableFace.setupCoordinates(axes.map { $0.defaultValue })
-        }
-
         self.core = core
-        self.renderableFace = renderableFace
-        self.palette = Typeface.makePalette(core: core)
-
-        self.variationAxes = axes
+        self.variationAxes = Typeface.makeVariationAxes(core: core)
         self.namedStyles = Typeface.makeNamedStyles(core: core)
         self.paletteEntryNames = Typeface.makePaletteEntryNames(core: core)
         self.predefinedPalettes = Typeface.makePredefinedPalettes(core: core)
         self.names = Typeface.makeNames(core: core)
         self.design = Typeface.makeDesign(core: core)
-
-        FT_New_Size(renderableFace.ftFace, &ftSize)
     }
 
-    private init(parent: Typeface, core: TRTypefaceRef, renderableFace: RenderableFace) {
+    private init(parent: Typeface, core: TRTypefaceRef) {
         self.core = core
-        self.renderableFace = renderableFace
-        self.palette = parent.palette
 
         self.variationAxes = parent.variationAxes
         self.namedStyles = parent.namedStyles
@@ -142,34 +116,9 @@ public final class Typeface: @unchecked Sendable {
         self.predefinedPalettes = parent.predefinedPalettes
         self.names = Typeface.makeNames(core: core)
         self.design = Typeface.makeDesign(core: core)
-
-        FT_New_Size(renderableFace.ftFace, &ftSize)
-    }
-
-    private init(parent: Typeface, core: TRTypefaceRef) {
-        self.core = core
-        self.renderableFace = parent.renderableFace
-        self.palette = Typeface.makePalette(core: core)
-
-        self.variationAxes = parent.variationAxes
-        self.namedStyles = parent.namedStyles
-        self.paletteEntryNames = parent.paletteEntryNames
-        self.predefinedPalettes = parent.predefinedPalettes
-        self.names = parent.names
-        self.design = parent.design
-
-        FT_New_Size(renderableFace.ftFace, &ftSize)
     }
 
     deinit {
-        withFreeTypeFace { _ -> Void in
-            FT_Done_Size(ftSize)
-        }
-
-        if ftStroker != nil {
-            FT_Stroker_Done(ftStroker)
-        }
-
         TRTypefaceRelease(core)
     }
 
@@ -235,21 +184,6 @@ public final class Typeface: @unchecked Sendable {
         }
     }
 
-    private static func makePalette(core: TRTypefaceRef) -> [FT_Color] {
-        guard let pointer = TRTypefaceGetAssociatedColorsPtr(core) else {
-            return []
-        }
-
-        let colors = UnsafeBufferPointer(start: pointer, count: Int(TRTypefaceGetPaletteEntryCount(core)))
-
-        return colors.map { color in
-            FT_Color(blue: FT_Byte(color & 0xFF),
-                     green: FT_Byte((color >> 8) & 0xFF),
-                     red: FT_Byte((color >> 16) & 0xFF),
-                     alpha: FT_Byte((color >> 24) & 0xFF))
-        }
-    }
-
     private static func makeNames(core: TRTypefaceRef) -> Names {
         return Names(family: String(TRTypefaceGetFamilyName(core)),
                      style: String(TRTypefaceGetSubfamilyName(core)),
@@ -262,101 +196,6 @@ public final class Typeface: @unchecked Sendable {
             width: Typeface.Width(rawValue: Int(TRTypefaceGetWidth(core))) ?? .normal,
             slope: Typeface.Slope(rawValue: Int(TRTypefaceGetSlope(core))) ?? .plain
         )
-    }
-
-    // MARK: Parts To Move
-
-    func withFreeTypeFace<Result>(_ body: (FT_Face) throws -> Result) rethrows -> Result {
-        return try renderableFace.withRawFace(body)
-    }
-
-    func withFreeTypeStroker<Result>(_ body: (FT_Stroker) throws -> Result) rethrows -> Result {
-        mutex.lock()
-        defer { mutex.unlock() }
-
-        if ftStroker == nil {
-            FreeType.withLibrary { (library) -> Void in
-                if ftStroker == nil {
-                    FT_Stroker_New(library, &ftStroker)
-                }
-            }
-        }
-
-        return try body(ftStroker)
-    }
-
-    var ftFace: FT_Face {
-        return renderableFace.ftFace
-    }
-
-    var ftColors: [FT_Color] {
-        return palette
-    }
-
-    func unsafeMakePath(glyphID: FT_UInt) -> CGPath? {
-        let ftFace = renderableFace.ftFace
-        let loadFlags = FT_Int32(FT_LOAD_NO_BITMAP)
-
-        guard FT_Load_Glyph(ftFace, glyphID, loadFlags) == FT_Err_Ok else {
-            return nil
-        }
-
-        var outline = ftFace.pointee.glyph.pointee.outline
-        var funcs = FT_Outline_Funcs(
-            move_to: { (to, user) -> Int32 in
-                let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
-                let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
-                                    y: CGFloat(f26Dot6: to!.pointee.y))
-                path.move(to: point)
-
-                return 0
-            },
-            line_to: { (to, user) -> Int32 in
-                let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
-                let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
-                                    y: CGFloat(f26Dot6: to!.pointee.y))
-                path.addLine(to: point)
-
-                return 0
-            },
-            conic_to: { (control1, to, user) -> Int32 in
-                let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
-                let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
-                                    y: CGFloat(f26Dot6: to!.pointee.y))
-                let first = CGPoint(x: CGFloat(f26Dot6: control1!.pointee.x),
-                                    y: CGFloat(f26Dot6: control1!.pointee.y))
-                path.addQuadCurve(to: point, control: first)
-
-                return 0
-            },
-            cubic_to: { (control1, control2, to, user) -> Int32 in
-                let unmanaged = Unmanaged<CGMutablePath>.fromOpaque(user!)
-                let path = unmanaged.takeUnretainedValue()
-                let point = CGPoint(x: CGFloat(f26Dot6: to!.pointee.x),
-                                    y: CGFloat(f26Dot6: to!.pointee.y))
-                let first = CGPoint(x: CGFloat(f26Dot6: control1!.pointee.x),
-                                    y: CGFloat(f26Dot6: control1!.pointee.y))
-                let second = CGPoint(x: CGFloat(f26Dot6: control2!.pointee.x),
-                                     y: CGFloat(f26Dot6: control2!.pointee.y))
-                path.addCurve(to: point, control1: first, control2: second)
-
-                return 0
-            },
-            shift: 0,
-            delta: 0
-        )
-
-        let path = CGMutablePath()
-        let user = Unmanaged.passUnretained(path).toOpaque()
-
-        guard FT_Outline_Decompose(&outline, &funcs, user) == FT_Err_Ok else {
-            return nil
-        }
-
-        return path
     }
 
     // MARK: Variations
@@ -382,16 +221,12 @@ public final class Typeface: @unchecked Sendable {
             coordArray[i] = coordinates[i]
         }
 
-        guard let derivedFace = renderableFace.variationInstance(forCoordinates: coordArray) else {
-            return nil
-        }
-
         let floats = coordArray.map { Float($0) }
         guard let derivedCore = TRTypefaceCreateWithVariation(core, floats, TRUInteger(floats.count)) else {
             return nil
         }
 
-        return Typeface(parent: self, core: derivedCore, renderableFace: derivedFace)
+        return Typeface(parent: self, core: derivedCore)
     }
 
     /// The design variation coordinates of this typeface.
@@ -529,7 +364,17 @@ public final class Typeface: @unchecked Sendable {
     /// - Parameter tag: The tag of the table.
     /// - Returns: The data of the intended table, or `nil` if no such table exists.
     public func dataOfTable(_ tag: SFNTTag) -> Data? {
-        return renderableFace.dataOfTable(tag)
+        let size = Int(TRTypefaceGetTableData(core, tag.rawValue, nil, 0))
+        guard size > 0 else {
+            return nil
+        }
+
+        var data = Data(count: size)
+        let copied = data.withUnsafeMutableBytes { (bytes) in
+            TRTypefaceGetTableData(core, tag.rawValue, bytes.baseAddress, TRUInteger(size))
+        }
+
+        return Int(copied) == size ? data : nil
     }
 
     // MARK: Glyphs

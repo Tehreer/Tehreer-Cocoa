@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-internal import FreeType
+internal import Tehreer
 
 import Foundation
 import UIKit
@@ -55,18 +55,21 @@ public final class Renderer {
         case round = 0
     }
 
-    private let glyphAttributes = GlyphAttributes()
+    private let core: TRRendererRef
 
     /// Creates a renderer.
     public init() {
-        updatePixelSizes()
-        updateTransform()
+        core = TRRendererCreate()
+    }
+
+    deinit {
+        TRRendererRelease(core)
     }
 
     /// The fill color for glyphs. Its default value is `.black`.
     public var fillColor: UIColor = .black {
         didSet {
-            glyphAttributes.setForegroundColor(fillColor.ftColor())
+            TRRendererSetForegroundColor(core, fillColor.coreColor)
         }
     }
 
@@ -76,33 +79,41 @@ public final class Renderer {
 
     /// The direction in which the pen will advance after drawing a glyph. Its default value is
     /// `.leftToRight`.
-    public var writingDirection: WritingDirection = .leftToRight
+    public var writingDirection: WritingDirection = .leftToRight {
+        didSet {
+            let direction = (writingDirection == .rightToLeft
+                             ? TRWritingDirectionRightToLeft
+                             : TRWritingDirectionLeftToRight)
+
+            TRRendererSetWritingDirection(core, TRWritingDirection(direction))
+        }
+    }
 
     /// The typeface, used for drawing glyphs.
     public var typeface: Typeface! = nil {
         didSet {
-            glyphAttributes.setTypeface(typeface)
+            TRRendererSetTypeface(core, typeface?.core)
         }
     }
 
     /// The type size applied on the glyphs while drawing.
     public var typeSize: CGFloat = 16.0 {
         didSet {
-            updatePixelSizes()
+            TRRendererSetTypeSize(core, TRFloat(typeSize))
         }
     }
 
     /// The slant angle for glyphs. Its default value is zero.
     public var slantAngle: CGFloat = 0.0 {
         didSet {
-            updateTransform()
+            TRRendererSetSkewX(core, TRFloat(slantAngle))
         }
     }
 
     /// The scale factor applied to the glyphs and their metrics such as offsets and advances.
     public var renderScale: CGFloat = 1.0 {
         didSet {
-            updatePixelSizes()
+            TRRendererSetRenderScale(core, TRFloat(renderScale))
         }
     }
 
@@ -111,7 +122,7 @@ public final class Renderer {
     /// glyphs narrower.
     public var scaleX: CGFloat = 1.0 {
         didSet {
-            updatePixelSizes()
+            TRRendererSetScaleX(core, TRFloat(scaleX))
         }
     }
 
@@ -120,7 +131,7 @@ public final class Renderer {
     /// glyphs narrower.
     public var scaleY: CGFloat = 1.0 {
         didSet {
-            updatePixelSizes()
+            TRRendererSetScaleY(core, TRFloat(scaleY))
         }
     }
 
@@ -130,7 +141,7 @@ public final class Renderer {
     /// The width, in pixels, for stroking glyphs.
     public var strokeWidth: CGFloat = 1.0 {
         didSet {
-            glyphAttributes.setLineRadius(strokeWidth / 2.0)
+            TRRendererSetStrokeWidth(core, TRFloat(strokeWidth))
         }
     }
 
@@ -138,14 +149,14 @@ public final class Renderer {
     /// treated. Its default value is `.butt`.
     public var strokeCap: StrokeCap = .butt {
         didSet {
-            glyphAttributes.setLineCap(FT_Stroker_LineCap(UInt32(strokeCap.rawValue)))
+            TRRendererSetStrokeCap(core, TRStrokeCap(strokeCap.rawValue))
         }
     }
 
     /// The stroke join type. Its default value is `.round`.
     public var strokeJoin: StrokeJoin = .round {
         didSet {
-            glyphAttributes.setLineJoin(FT_Stroker_LineJoin(UInt32(strokeJoin.rawValue)))
+            TRRendererSetStrokeJoin(core, TRStrokeJoin(strokeJoin.rawValue))
         }
     }
 
@@ -153,7 +164,7 @@ public final class Renderer {
     /// the joins angle is sharp.
     public var strokeMiter: CGFloat = 1.0 {
         didSet {
-            glyphAttributes.setMiterLimit(strokeMiter)
+            TRRendererSetStrokeMiter(core, TRFloat(strokeMiter))
         }
     }
 
@@ -170,25 +181,17 @@ public final class Renderer {
     /// The shadow color.
     public var shadowColor: UIColor = .clear
 
-    private func updatePixelSizes() {
-        glyphAttributes.setPixelWidth(typeSize * scaleX * renderScale)
-        glyphAttributes.setPixelHeight(typeSize * scaleY * renderScale)
-    }
-
-    private func updateTransform() {
-        glyphAttributes.setSkewX(slantAngle)
-    }
-
-    private func cachedPath(forGlyph glyphID: GlyphID) -> CGPath? {
-        return GlyphCache.instance.path(forGlyph: glyphID, attributes: glyphAttributes)
-    }
-
     /// Generates the path of specified glyph.
     ///
     /// - Parameter glyphID: The ID of glyph whose path is generated.
     /// - Returns: The path of the glyph specified by `glyphID`.
     public func makePath(glyphID: GlyphID) -> CGPath? {
-        return cachedPath(forGlyph: glyphID)?.copy()
+        guard let corePath = TRRendererGetGlyphPath(core, glyphID) else {
+            return nil
+        }
+        defer { TRPathRelease(corePath) }
+
+        return Renderer.makeCGPath(from: corePath, transform: nil)
     }
 
     /// Generates a cumulative path of specified glyphs.
@@ -202,36 +205,55 @@ public final class Renderer {
         where GS : Sequence, GS.Element == GlyphID,
               OS : Sequence, OS.Element == CGPoint,
               AS : Sequence, AS.Element == CGFloat {
-        let comulativePath = CGMutablePath()
-        var penX: CGFloat = 0.0
+        let run = GlyphRunData(glyphIDs: glyphIDs, offsets: offsets, advances: advances)
+        let path = CGMutablePath()
 
-        var offsetIter = offsets.makeIterator()
-        var advanceIter = advances.makeIterator()
+        run.withPointers { (glyphIDs, offsets, advances, count) in
+            var callbacks = Renderer.makePathCallbacks()
 
-        for glyphID in glyphIDs {
-            let offset = offsetIter.next()!
-            let advance = advanceIter.next()!
-
-            if let path = cachedPath(forGlyph: glyphID) {
-                let position = CGAffineTransform(scaleX: penX + offset.x, y: offset.y)
-                comulativePath.addPath(path, transform: position)
-            }
-
-            penX += advance
+            let user = Unmanaged.passUnretained(path).toOpaque()
+            TRRendererEnumerateGlyphPaths(core, glyphIDs, offsets, advances, count, &callbacks, user)
         }
 
-        return comulativePath
+        return path
     }
 
-    private func cachedBoundingBox(forGlyph glyphID: GlyphID) -> CGRect {
-        if let glyphImage = GlyphCache.instance.defaultImage(forGlyph: glyphID, attributes: glyphAttributes) {
-            return CGRect(x: glyphImage.left,
-                          y: glyphImage.top,
-                          width: glyphImage.width,
-                          height: glyphImage.height)
+    private static func makePathCallbacks() -> TRPathCallbacks {
+        var callbacks = TRPathCallbacks()
+        callbacks.moveTo = { (user, x, y) in
+            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
+                .move(to: CGPoint(x: CGFloat(x), y: CGFloat(y)))
+        }
+        callbacks.lineTo = { (user, x, y) in
+            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
+                .addLine(to: CGPoint(x: CGFloat(x), y: CGFloat(y)))
+        }
+        callbacks.quadTo = { (user, controlX, controlY, x, y) in
+            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
+                .addQuadCurve(to: CGPoint(x: CGFloat(x), y: CGFloat(y)),
+                              control: CGPoint(x: CGFloat(controlX), y: CGFloat(controlY)))
+        }
+        callbacks.cubicTo = { (user, control1X, control1Y, control2X, control2Y, x, y) in
+            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
+                .addCurve(to: CGPoint(x: CGFloat(x), y: CGFloat(y)),
+                          control1: CGPoint(x: CGFloat(control1X), y: CGFloat(control1Y)),
+                          control2: CGPoint(x: CGFloat(control2X), y: CGFloat(control2Y)))
+        }
+        callbacks.close = { (user) in
+            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue().closeSubpath()
         }
 
-        return .zero
+        return callbacks
+    }
+
+    private static func makeCGPath(from corePath: TRPathRef, transform: UnsafePointer<TRAffineTransform>?) -> CGPath {
+        let path = CGMutablePath()
+        let user = Unmanaged.passUnretained(path).toOpaque()
+
+        var callbacks = makePathCallbacks()
+        TRPathEnumerate(corePath, transform, &callbacks, user)
+
+        return path
     }
 
     /// Calculates the bounding box of specified glyph.
@@ -239,13 +261,10 @@ public final class Renderer {
     /// - Parameter glyphID: The ID of glyph whose bounding box is calculated.
     /// - Returns: A rectangle that tightly encloses the path of the specified glyph.
     public func computeBoundingBox(forGlyph glyphID: GlyphID) -> CGRect {
-        var glyphBox = cachedBoundingBox(forGlyph: glyphID)
-        glyphBox.origin.x /= renderScale
-        glyphBox.origin.y /= renderScale
-        glyphBox.size.width /= renderScale
-        glyphBox.size.height /= renderScale
+        let box = TRRendererGetGlyphBoundingBox(core, glyphID)
 
-        return glyphBox
+        return CGRect(x: CGFloat(box.origin.x), y: CGFloat(box.origin.y),
+                      width: CGFloat(box.size.width), height: CGFloat(box.size.height))
     }
 
     /// Calculates the bounding box of specified glyphs.
@@ -259,90 +278,48 @@ public final class Renderer {
         where GS: Sequence, GS.Element == GlyphID,
               OS: Sequence, OS.Element == CGPoint,
               AS: Sequence, AS.Element == CGFloat {
-        let reverseMode = (writingDirection == .rightToLeft)
+        let run = GlyphRunData(glyphIDs: glyphIDs, offsets: offsets, advances: advances)
 
-        var comulativeBox = CGRect.null
-        var totalAdvance: CGFloat = .zero
-        var penX: CGFloat = .zero
-
-        var offsetIter = offsets.makeIterator()
-        var advanceIter = advances.makeIterator()
-
-        for glyphID in glyphIDs {
-            let unscaledOffset = offsetIter.next()!
-            let unscaledAdvance = advanceIter.next()!
-
-            let offset = CGPoint(x: unscaledOffset.x * renderScale,
-                                 y: unscaledOffset.y * renderScale)
-            let advance = unscaledAdvance * renderScale
-
-            if reverseMode {
-                penX -= advance
-            }
-
-            var glyphBox = cachedBoundingBox(forGlyph: glyphID)
-            glyphBox.origin.x = round(penX + offset.x + glyphBox.origin.x)
-            glyphBox.origin.y = round(-offset.y - glyphBox.origin.y)
-
-            comulativeBox = comulativeBox.union(glyphBox)
-
-            if !reverseMode {
-                penX += advance
-            }
-
-            totalAdvance += advance
+        let box = run.withPointers { (glyphIDs, offsets, advances, count) in
+            TRRendererGetRunBoundingBox(core, glyphIDs, offsets, advances, count)
         }
 
-        if reverseMode {
-            comulativeBox.origin.x += ceil(totalAdvance)
+        // An empty box is a null rectangle, as it has no place in the space of the glyphs.
+        if box.size.width == 0 && box.size.height == 0 {
+            return .null
         }
 
-        comulativeBox.origin.x /= renderScale
-        comulativeBox.origin.y /= renderScale
-        comulativeBox.size.width /= renderScale
-        comulativeBox.size.height /= renderScale
-
-        return comulativeBox
+        return CGRect(x: CGFloat(box.origin.x), y: CGFloat(box.origin.y),
+                      width: CGFloat(box.size.width), height: CGFloat(box.size.height))
     }
 
-    private func drawGlyphs<GS, OS, AS>(in context: CGContext, glyphIDs: GS, offsets: OS, advances: AS, strokeMode: Bool)
-        where GS: Sequence, GS.Element == GlyphID,
-              OS: Sequence, OS.Element == CGPoint,
-              AS: Sequence, AS.Element == CGFloat {
-        let cache = GlyphCache.instance
-        let reverseMode = (writingDirection == .rightToLeft)
-        var penX: CGFloat = 0.0
-
-        var offsetIter = offsets.makeIterator()
-        var advanceIter = advances.makeIterator()
-
-        for glyphID in glyphIDs {
-            let unscaledOffset: CGPoint! = offsetIter.next()
-            let unscaledAdvance: CGFloat! = advanceIter.next()
-
-            let offset = CGPoint(x: unscaledOffset.x * renderScale, y: unscaledOffset.y * renderScale)
-            let advance = unscaledAdvance * renderScale
-
-            if reverseMode {
-                penX -= advance
+    private func drawGlyphs(in context: CGContext, run: GlyphRunData, kind: Int) {
+        run.withPointers { (glyphIDs, offsets, advances, count) in
+            guard count > 0 else {
+                return
             }
 
-            let glyphImage = (!strokeMode
-                              ? cache.defaultImage(forGlyph: glyphID, attributes: glyphAttributes)
-                              : cache.strokeImage(forGlyph: glyphID, attributes: glyphAttributes))
+            let placements = UnsafeMutablePointer<TRGlyphPlacement>.allocate(capacity: Int(count))
+            defer { placements.deallocate() }
 
-            if let glyphImage = glyphImage {
-                let rect = CGRect(x: round(penX + offset.x + glyphImage.left),
-                                  y: round(-offset.y - glyphImage.top),
-                                  width: glyphImage.width,
-                                  height: glyphImage.height)
+            TRRendererGetGlyphPlacements(core, TRGlyphImageKind(kind), glyphIDs, offsets, advances,
+                                         count, placements)
 
-                context.draw(glyphImage.layer, in: rect)
+            for index in 0 ..< Int(count) {
+                guard let image = placements[index].image,
+                      let layer = GlyphLayers.layer(of: image) else {
+                    continue
+                }
+
+                let rect = CGRect(x: CGFloat(placements[index].origin.x),
+                                  y: CGFloat(placements[index].origin.y),
+                                  width: layer.size.width,
+                                  height: layer.size.height)
+
+                context.draw(layer, in: rect)
             }
 
-            if !reverseMode {
-                penX += advance
-            }
+            TRRendererReleaseGlyphPlacements(placements, count)
         }
     }
 
@@ -357,7 +334,9 @@ public final class Renderer {
         where GS: Sequence, GS.Element == GlyphID,
               OS: Sequence, OS.Element == CGPoint,
               AS: Sequence, AS.Element == CGFloat {
-        if glyphAttributes.isRenderable {
+        let run = GlyphRunData(glyphIDs: glyphIDs, offsets: offsets, advances: advances)
+
+        if TRRendererIsRenderable(core) != 0 {
             context.setShadow(offset: CGSize(width: shadowDx, height: shadowDy),
                               blur: shadowRadius,
                               color: shadowColor.cgColor)
@@ -375,16 +354,47 @@ public final class Renderer {
 
         if renderingStyle == .fill || renderingStyle == .fillStroke {
             context.setFillColor(fillColor.cgColor)
-            drawGlyphs(in: context, glyphIDs: glyphIDs, offsets: offsets, advances: advances, strokeMode: false)
+            drawGlyphs(in: context, run: run, kind: Int(TRGlyphImageKindFill))
         }
 
         if renderingStyle == .stroke || renderingStyle == .fillStroke {
             context.setFillColor(strokeColor.cgColor)
-            drawGlyphs(in: context, glyphIDs: glyphIDs, offsets: offsets, advances: advances, strokeMode: true)
+            drawGlyphs(in: context, run: run, kind: Int(TRGlyphImageKindStroke))
         }
 
         // Reset the scale and the translation.
         context.scaleBy(x: renderScale, y: renderScale)
         context.translateBy(x: -translation.width, y: -translation.height)
+    }
+}
+
+/// The glyphs of a run, which are copied into arrays that Core can read.
+private struct GlyphRunData {
+    private var glyphIDs: [GlyphID]
+    private var offsets: [TRPoint]
+    private var advances: [TRFloat]
+
+    init<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS)
+        where GS: Sequence, GS.Element == GlyphID,
+              OS: Sequence, OS.Element == CGPoint,
+              AS: Sequence, AS.Element == CGFloat {
+        self.glyphIDs = Array(glyphIDs)
+        self.offsets = offsets.map { TRPoint(x: TRFloat($0.x), y: TRFloat($0.y)) }
+        self.advances = advances.map { TRFloat($0) }
+
+        precondition(self.offsets.count >= self.glyphIDs.count
+                     && self.advances.count >= self.glyphIDs.count)
+    }
+
+    func withPointers<Result>(_ body: (UnsafePointer<GlyphID>?, UnsafePointer<TRPoint>?,
+                                       UnsafePointer<TRFloat>?, TRUInteger) -> Result) -> Result {
+        return glyphIDs.withUnsafeBufferPointer { (glyphIDs) in
+            offsets.withUnsafeBufferPointer { (offsets) in
+                advances.withUnsafeBufferPointer { (advances) in
+                    body(glyphIDs.baseAddress, offsets.baseAddress, advances.baseAddress,
+                         TRUInteger(glyphIDs.count))
+                }
+            }
+        }
     }
 }
