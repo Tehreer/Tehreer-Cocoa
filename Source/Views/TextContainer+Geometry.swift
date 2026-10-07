@@ -109,8 +109,7 @@ extension TextContainer {
 
         for textLine in textFrame.lines {
             for glyphRun in textLine.visualRuns {
-                guard let replacementRun = glyphRun.textRun as? ReplacementRun,
-                      replacementRun.replacement === replacement else {
+                guard glyphRun.replacement === replacement else {
                     continue
                 }
 

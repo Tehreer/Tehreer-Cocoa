@@ -14,30 +14,44 @@
 // limitations under the License.
 //
 
+
+internal import Tehreer
+
 import CoreGraphics
 import Foundation
 
 /// Represents a frame containing multiple lines of text. It is the output resulting from
 /// text-framing process performed by a typesetter.
-public final class ComposedFrame: Sendable {
+// Unchecked because the frame of Core is immutable, and the rest is set once in the initializer.
+public final class ComposedFrame: @unchecked Sendable {
+    private let core: TRComposedFrameRef
     let string: String
 
-    init(
-        string: String,
-        codeUnitRange: Range<Int>,
-        lines: [ComposedLine],
-        width: CGFloat,
-        height: CGFloat
-    ) {
+    init(core: TRComposedFrameRef, string: String, objects: CoreTextObjects) {
+        self.core = core
         self.string = string
-        self.codeUnitRange = codeUnitRange
+
+        let count = Int(TRComposedFrameGetLineCount(core))
+        var lines: [ComposedLine] = []
+        lines.reserveCapacity(count)
+
+        for index in 0 ..< count {
+            let line = TRComposedFrameGetLine(core, TRUInteger(index))!
+            lines.append(ComposedLine(core: TRComposedLineRetain(line), string: string, objects: objects))
+        }
+
         self.lines = lines
-        self.width = width
-        self.height = height
+    }
+
+    deinit {
+        TRComposedFrameRelease(core)
     }
 
     /// The UTF-16 range of this frame in source string.
-    public let codeUnitRange: Range<Int>
+    public var codeUnitRange: Range<Int> {
+        let range = TRComposedFrameGetCodeUnitRange(core)
+        return Int(range.index) ..< Int(range.index + range.length)
+    }
 
     /// The index to the first character of this frame in source string.
     public var startIndex: String.Index {
@@ -50,10 +64,14 @@ public final class ComposedFrame: Sendable {
     }
 
     /// The width of this frame.
-    public let width: CGFloat
+    public var width: CGFloat {
+        return CGFloat(TRComposedFrameGetWidth(core))
+    }
 
     /// The height of this frame.
-    public let height: CGFloat
+    public var height: CGFloat {
+        return CGFloat(TRComposedFrameGetHeight(core))
+    }
 
     /// The array containing all the lines of this frame.
     public let lines: [ComposedLine]
@@ -63,25 +81,11 @@ public final class ComposedFrame: Sendable {
     /// - Parameter index: The index of UTF-16 code unit for which to return the line index.
     /// - Returns: The index of line containing the specified UTF-16 code unit index.
     public func indexOfLine(forCodeUnitAt index: Int) -> Int {
-        precondition(index >= codeUnitRange.lowerBound && index <= codeUnitRange.upperBound, String.indexOutOfRange)
+        precondition(index >= codeUnitRange.lowerBound && index <= codeUnitRange.upperBound, .indexOutOfRange)
 
-        var low = 0
-        var high = lines.count - 1
+        let lineIndex = TRComposedFrameGetIndexOfLineForCodeUnit(core, TRUInteger(index))
 
-        while low <= high {
-            let mid = (low + high) >> 1
-            let lineRange = lines[mid].codeUnitRange
-
-            if index >= lineRange.upperBound {
-                low = mid + 1
-            } else if index < lineRange.lowerBound {
-                high = mid - 1
-            } else {
-                return mid
-            }
-        }
-
-        return -1
+        return lineIndex == TRUInteger.max ? -1 : Int(lineIndex)
     }
 
     /// Returns the index of line containing the specified character index.
@@ -89,7 +93,7 @@ public final class ComposedFrame: Sendable {
     /// - Parameter index: The index of character for which to return the line index.
     /// - Returns: The index of line containing the specified character index.
     public func indexOfLine(forCharacterAt index: String.Index) -> Int {
-        precondition(index >= startIndex && index <= endIndex, String.indexOutOfRange)
+        precondition(index >= startIndex && index <= endIndex, .indexOutOfRange)
 
         return indexOfLine(forCodeUnitAt: string.utf16Index(forCharacterAt: index))
     }
@@ -99,33 +103,12 @@ public final class ComposedFrame: Sendable {
     /// - Parameter position: The position for which to return the line index.
     /// - Returns: The index of a suitable line representing the specified position.
     public func indexOfLine(at position: CGPoint) -> Int {
-        let lineCount = lines.count
-
-        for i in 0 ..< lineCount {
-            let line = lines[i]
-
-            if position.y >= line.top && position.y <= line.bottom {
-                return i
-            }
+        guard !lines.isEmpty else {
+            return -1
         }
 
-        return lineCount - 1
-    }
-
-    private func addSelectionParts(of line: ComposedLine, range: Range<Int>, in path: CGMutablePath) {
-        let visualEdges = line.visualEdges(forCodeUnitRange: range)
-
-        let edgeCount = visualEdges.count
-        var edgeIndex = 0
-
-        while edgeIndex < edgeCount {
-            let edgeLeft = visualEdges[edgeIndex] + line.left
-            let edgeRight = visualEdges[edgeIndex + 1] + line.left
-
-            path.addRect(left: edgeLeft, top: line.top, right: edgeRight, bottom: line.bottom)
-
-            edgeIndex += 2
-        }
+        return Int(TRComposedFrameGetIndexOfLineAtPosition(core, TRPoint(x: TRFloat(position.x),
+                                                                         y: TRFloat(position.y))))
     }
 
     /// Creates a path that contains a set of rectangles covering the specified UTF-16 code unit range.
@@ -135,57 +118,20 @@ public final class ComposedFrame: Sendable {
     public func selectionPath(forCodeUnitRange codeUnitRange: Range<Int>) -> CGPath {
         let selectionPath = CGMutablePath()
 
-        let firstIndex = indexOfLine(forCodeUnitAt: codeUnitRange.lowerBound)
-        let lastIndex = indexOfLine(forCodeUnitAt: codeUnitRange.upperBound - 1)
-
-        let firstLine = lines[firstIndex]
-        let lastLine = lines[lastIndex]
-
-        if firstLine === lastLine {
-            addSelectionParts(of: firstLine, range: codeUnitRange, in: selectionPath)
-        } else {
-            let firstRange = firstLine.codeUnitRange
-            let lastRange = lastLine.codeUnitRange
-
-            let frameLeft: CGFloat = 0.0
-            let frameRight = width
-
-            // Select each intersecting part of first line.
-            addSelectionParts(of: firstLine,
-                              range: codeUnitRange.lowerBound ..< firstRange.upperBound,
-                              in: selectionPath)
-
-            // Select trailing padding of first line.
-            if (lastLine.paragraphLevel & 1) == 1 {
-                selectionPath.addRect(left: frameLeft, top: firstLine.top,
-                                      right: firstLine.left, bottom: firstLine.bottom)
-            } else {
-                selectionPath.addRect(left: firstLine.right, top: firstLine.top,
-                                      right: frameRight, bottom: firstLine.bottom)
-            }
-
-            // Select whole part of each mid line.
-            for i in firstIndex + 1 ..< lastIndex {
-                let midLine = lines[i]
-
-                selectionPath.addRect(left: frameLeft, top: midLine.top,
-                                      right: frameRight, bottom: midLine.bottom)
-            }
-
-            // Select leading padding of last line.
-            if (lastLine.paragraphLevel & 1) == 1 {
-                selectionPath.addRect(left: lastLine.right, top: lastLine.top,
-                                      right: frameRight, bottom: lastLine.bottom)
-            } else {
-                selectionPath.addRect(left: frameLeft, top: lastLine.top,
-                                      right: lastLine.left, bottom: lastLine.bottom)
-            }
-
-            // Select each intersecting part of last line.
-            addSelectionParts(of: lastLine,
-                              range: lastRange.lowerBound ..< codeUnitRange.upperBound,
-                              in: selectionPath)
+        guard !codeUnitRange.isEmpty else {
+            return selectionPath
         }
+
+        let range = TRRange(index: TRUInteger(codeUnitRange.lowerBound),
+                            length: TRUInteger(codeUnitRange.count))
+
+        let user = Unmanaged.passUnretained(selectionPath).toOpaque()
+
+        TRComposedFrameEnumerateSelection(core, range, { (user, rect) in
+            let path = Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
+            path.addRect(CGRect(x: CGFloat(rect.origin.x), y: CGFloat(rect.origin.y),
+                                width: CGFloat(rect.size.width), height: CGFloat(rect.size.height)))
+        }, user)
 
         return selectionPath
     }

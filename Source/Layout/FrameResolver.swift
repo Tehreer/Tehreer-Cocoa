@@ -14,50 +14,12 @@
 // limitations under the License.
 //
 
+
+internal import Tehreer
+
 import CoreGraphics
 import Foundation
 import UIKit
-
-private struct TextSpan<Attribute> {
-    let attribute: Attribute
-    let range: NSRange
-}
-
-private struct FrameContext {
-    // MARK: Layout Properties
-
-    var layoutWidth: CGFloat = .zero
-    var layoutHeight: CGFloat = .zero
-
-    let maxLines: Int
-
-    var textLines: [ComposedLine] = []
-    var isFilled: Bool = false
-
-    var occupiedWidth: CGFloat = .zero
-    var occupiedHeight: CGFloat = .zero
-    var lastSize: CGSize = .zero
-
-    // MARK: Paragraph Properties
-
-    var startIndex: Int = .zero
-    var endIndex: Int = .zero
-    var baseLevel: UInt8 = .zero
-    var paragraphSpans: [TextSpan<NSParagraphStyle>] = []
-
-    // MARK: Line Properties
-
-    var lineExtent: CGFloat = .zero
-    var lineMargins: CGFloat = .zero
-    var leftIndent: CGFloat = .zero
-    var flushFactor: CGFloat = .zero
-
-    init(resolver: FrameResolver) {
-        self.layoutWidth = min(max(resolver.frameBounds.width, 0), .greatestFiniteMagnitude)
-        self.layoutHeight = min(max(resolver.frameBounds.height, 0), .greatestFiniteMagnitude)
-        self.maxLines = resolver.maxLines ?? .max
-    }
-}
 
 /// This class resolves text frames by using a typesetter object.
 public final class FrameResolver {
@@ -122,51 +84,38 @@ public final class FrameResolver {
     /// - Parameter codeUnitRange: The UTF-16 range of the frame in source string.
     /// - Returns: A new composed frame.
     public func makeFrame(codeUnitRange: Range<Int>) -> ComposedFrame? {
-        var context = FrameContext(resolver: self)
+        guard let typesetter = typesetter, let resolver = TRFrameResolverCreate() else {
+            return nil
+        }
+        defer { TRFrameResolverRelease(resolver) }
 
-        let allParagraphs = typesetter.paragraphs
-        var paragraphIndex = allParagraphs.binarySearchIndex(forCodeUnitAt: codeUnitRange.lowerBound)
+        TRFrameResolverSetTypesetter(resolver, typesetter.core)
+        TRFrameResolverSetFrameSize(resolver, TRFloat(frameBounds.width), TRFloat(frameBounds.height))
+        TRFrameResolverSetFitsHorizontally(resolver, fitsHorizontally ? 1 : 0)
+        TRFrameResolverSetFitsVertically(resolver, fitsVertically ? 1 : 0)
+        TRFrameResolverSetTextAlignment(resolver, textAlignmentValue)
+        TRFrameResolverSetVerticalAlignment(resolver, verticalAlignmentValue)
+        TRFrameResolverSetTruncationMode(resolver, truncationModeValue)
+        TRFrameResolverSetJustificationEnabled(resolver, isJustificationEnabled ? 1 : 0)
+        TRFrameResolverSetJustificationLevel(resolver, TRFloat(justificationLevel))
+        TRFrameResolverSetMaxLines(resolver, TRUInteger(max(maxLines ?? 0, 0)))
+        TRFrameResolverSetExtraLineSpacing(resolver, TRFloat(extraLineSpacing))
+        TRFrameResolverSetLineHeightMultiplier(resolver, TRFloat(lineHeightMultiplier))
 
-        var segmentStart = codeUnitRange.lowerBound
+        if let truncationPlace = truncationPlace {
+            TRFrameResolverSetTruncationPlace(resolver, truncationPlaceValue(truncationPlace))
+        } else {
+            TRFrameResolverDisableTruncation(resolver)
+        }
 
-        // Iterate over all paragraphs in provided range.
-        repeat {
-            let paragraph = allParagraphs[paragraphIndex]
-            let paragraphRange = paragraph.codeUnitRange
-            let segmentEnd = min(codeUnitRange.upperBound, paragraphRange.upperBound)
+        let range = TRRange(index: TRUInteger(codeUnitRange.lowerBound),
+                            length: TRUInteger(codeUnitRange.count))
 
-            // Setup the paragraph properties.
-            context.startIndex = segmentStart
-            context.endIndex = segmentEnd
-            context.baseLevel = paragraph.baseLevel
+        guard let frame = TRFrameResolverCreateFrame(resolver, range) else {
+            return nil
+        }
 
-            // Setup the line properties.
-            context.lineExtent = context.layoutWidth
-            context.lineMargins = .zero
-            context.leftIndent = .zero
-            context.flushFactor = textAlignment.flushFactor(for: context.baseLevel)
-
-            resolveParagraphLines(context: &context)
-
-            if (context.isFilled) {
-                break
-            }
-
-            segmentStart = segmentEnd
-            paragraphIndex += 1
-        } while segmentStart < codeUnitRange.upperBound
-
-        resolveTruncation(context: &context, frameEnd: codeUnitRange.upperBound)
-        resolveAlignments(context: &context)
-        resolveJustification(context: &context)
-
-        return ComposedFrame(
-            string: typesetter.text.string,
-            codeUnitRange: codeUnitRange.lowerBound ..< context.endIndex,
-            lines: context.textLines,
-            width: context.layoutWidth,
-            height: context.layoutHeight
-        )
+        return ComposedFrame(core: frame, string: typesetter.text.string, objects: typesetter.objects)
     }
 
     /// Creates a frame representing the specified character range in source string.
@@ -184,335 +133,49 @@ public final class FrameResolver {
         return makeFrame(codeUnitRange: codeUnitRange)
     }
 
-    // MARK: Paragraph Handling
-
-    private func resolveParagraphLines(context: inout FrameContext) {
-        let text = typesetter.text
-        let string = text.string
-
-        let defaultSpan = extractParagraphSpans(context: &context, text: text)
-        resolveParagraphStyle(context: &context, span: defaultSpan)
-
-        var lineIndex = 0
-        var lineStart = context.startIndex
-
-        // Iterate over each line of this paragraph.
-        while lineStart != context.endIndex {
-            resolveHeadIndent(context: &context, lineIndex: lineIndex, style: defaultSpan?.attribute)
-
-            // Find out the length of new line.
-            let lineEnd = typesetter.suggestForwardBreak(inCodeUnitRange: lineStart ..< context.endIndex,
-                                                         extent: context.lineExtent, breakMode: .line)
-
-            // Create the line and resolve its attributes.
-            let textLine = typesetter.makeSimpleLine(codeUnitRange: lineStart ..< lineEnd, layoutWidth: context.layoutWidth)
-            resolveAttributes(context: &context, textLine: textLine)
-
-            // Make sure that at least one line is added even if frame is smaller in height.
-            let occupiedSize = computeOccupiedSize(context: &context, textLine: textLine)
-            if occupiedSize.height > frameBounds.height && !context.textLines.isEmpty {
-                context.isFilled = true
-                return
-            }
-
-            // Append the line, and update the occupied size.
-            context.textLines.append(textLine)
-            resolveOccupiedSize(context: &context, newSize: occupiedSize)
-
-            // Stop the filling process if maximum lines have been added.
-            if context.textLines.count == context.maxLines {
-                context.isFilled = true
-                return
-            }
-
-            lineIndex += 1
-            lineStart = lineEnd
-        }
-
-        resolveParagraphSpacing(context: &context, string: string, span: defaultSpan)
-    }
-
-    private func extractParagraphSpans(context: inout FrameContext, text: NSAttributedString) -> TextSpan<NSParagraphStyle>? {
-        let range = NSRange(location: context.startIndex, length: context.endIndex - context.startIndex)
-        var paragraphSpans: [TextSpan<NSParagraphStyle>] = []
-        var defaultSpan: TextSpan<NSParagraphStyle>?
-
-        text.enumerateAttribute(.paragraphStyle, in: range, options: []) { (attribute, spanRange, stop) in
-            guard let attribute = attribute as? NSParagraphStyle else { return }
-            let span = TextSpan(attribute: attribute, range: spanRange)
-
-            if spanRange.contains(range.location) {
-                defaultSpan = span
-            }
-
-            paragraphSpans.append(span)
-        }
-
-        context.paragraphSpans = paragraphSpans
-
-        return defaultSpan
-    }
-
-    private func resolveParagraphStyle(context: inout FrameContext, span: TextSpan<NSParagraphStyle>?) {
-        guard let span = span else { return }
-        let style = span.attribute
-
-        // Resolve `alignment`.
-        context.flushFactor = style.alignment.flushFactor(for: context.baseLevel)
-
-        // Resolve `paragraphSpacingBefore` if it is not the first paragraph.
-        if span.range.location > 0 {
-            context.occupiedHeight += style.paragraphSpacingBefore
-        }
-
-        // Resolve `firstLineHeadIndent` and `tailIndent`.
-        resolveIndents(context: &context,
-                       headIndent: style.firstLineHeadIndent,
-                       tailIndent: style.tailIndent)
-    }
-
-    private func resolveIndents(context: inout FrameContext, headIndent: CGFloat, tailIndent: CGFloat) {
-        let isRTL = context.baseLevel & 1 == 1
-
-        if tailIndent > .zero {
-            let resolvedIndent = context.layoutWidth - (headIndent + tailIndent)
-            context.leftIndent = isRTL ? resolvedIndent : headIndent
-            context.lineMargins = headIndent + resolvedIndent
-            context.lineExtent = tailIndent
-        } else {
-            context.leftIndent = isRTL ? -tailIndent : headIndent
-            context.lineMargins = headIndent + -tailIndent
-            context.lineExtent = context.layoutWidth - context.lineMargins
+    private var textAlignmentValue: TRTextAlignment {
+        switch textAlignment {
+        case .left:
+            return TRTextAlignment(TRTextAlignmentLeft)
+        case .center:
+            return TRTextAlignment(TRTextAlignmentCenter)
+        case .right:
+            return TRTextAlignment(TRTextAlignmentRight)
+        case .leading:
+            return TRTextAlignment(TRTextAlignmentLeading)
+        case .trailing:
+            return TRTextAlignment(TRTextAlignmentTrailing)
         }
     }
 
-    private func resolveHeadIndent(context: inout FrameContext, lineIndex: Int, style: NSParagraphStyle?) {
-        guard lineIndex == 1, let style = style else { return }
-
-        resolveIndents(context: &context,
-                       headIndent: style.headIndent,
-                       tailIndent: style.tailIndent)
-    }
-
-    private func resolveParagraphSpacing(context: inout FrameContext, string: String, span: TextSpan<NSParagraphStyle>?) {
-        guard let span = span else { return }
-
-        // Resolve `paragraphSpacing` if it is not the last paragraph.
-        if context.endIndex < string.utf16.count {
-            context.occupiedHeight += span.attribute.paragraphSpacing
+    private var verticalAlignmentValue: TRVerticalAlignment {
+        switch verticalAlignment {
+        case .top:
+            return TRVerticalAlignment(TRVerticalAlignmentTop)
+        case .middle:
+            return TRVerticalAlignment(TRVerticalAlignmentCenter)
+        case .bottom:
+            return TRVerticalAlignment(TRVerticalAlignmentBottom)
         }
     }
 
-    // MARK: Line Handling
-
-    private func resolveAttributes(context: inout FrameContext, textLine: ComposedLine) {
-        // Find out the style of the line, if any.
-        let lineStart = typesetter.text.string.utf16Index(forCharacterAt: textLine.startIndex)
-        let lineStyle = context.paragraphSpans.last { $0.range.contains(lineStart) }?.attribute
-
-        resolveLineStyle(textLine: textLine, style: lineStyle)
-
-        // The line of a view is as tall as the view and its margins.
-        if !textLine.isBlock {
-            resolveLineHeightMultiplier(textLine: textLine, multiplier: lineHeightMultiplier)
-            resolveExtraLineSpacing(textLine: textLine, spacing: extraLineSpacing)
-        }
-
-        // Compute the origin of current line.
-        let originX = context.leftIndent + textLine.penOffset(forFlushFactor: context.flushFactor, flushExtent: context.lineExtent)
-        let originY = context.occupiedHeight + textLine.ascent
-
-        // Update the properties of current line.
-        textLine.origin = CGPoint(x: originX, y: originY)
-        textLine.intrinsicMargin = context.layoutWidth - context.lineExtent
-        textLine.flushFactor = context.flushFactor
-    }
-
-    private func resolveLineStyle(textLine: ComposedLine, style: NSParagraphStyle?) {
-        guard let style = style else { return }
-
-        // Resolve `lineHeightMultiple`.
-        if style.lineHeightMultiple > .zero {
-            let oldHeight = textLine.height
-            let newHeight = oldHeight * style.lineHeightMultiple
-            textLine.ascent += newHeight - oldHeight
-        }
-
-        // Resolve `minimumLineHeight`.
-        if style.minimumLineHeight > .zero {
-            if textLine.height < style.minimumLineHeight {
-                textLine.ascent += style.minimumLineHeight - textLine.height
-            }
-        }
-
-        // Resolve `maximumLineHeight`.
-        if style.maximumLineHeight > .zero {
-            if textLine.height > style.maximumLineHeight {
-                textLine.ascent -= textLine.height - style.maximumLineHeight
-            }
-        }
-
-        // Resolve `lineSpacing`.
-        textLine.leading += style.lineSpacing
-    }
-
-    private func resolveLineHeightMultiplier(textLine: ComposedLine, multiplier: CGFloat) {
-        guard multiplier > .zero else { return }
-
-        let oldHeight = textLine.height
-        let newHeight = oldHeight * multiplier
-        let midOffset = (newHeight - oldHeight) / 2.0
-
-        // Adjust metrics in such a way that text remains in the middle of the line.
-        textLine.ascent += midOffset
-        textLine.descent += midOffset
-    }
-
-    private func resolveExtraLineSpacing(textLine: ComposedLine, spacing: CGFloat) {
-        guard spacing > .zero else { return }
-
-        textLine.leading += spacing
-    }
-
-    // MARK: Layout Handling
-
-    private func computeOccupiedSize(context: inout FrameContext, textLine: ComposedLine) -> CGSize {
-        let lineWidth = context.lineMargins + textLine.width - textLine.trailingWhitespaceExtent
-        let lineHeight = textLine.height
-
-        return CGSize(width: max(context.occupiedWidth, lineWidth),
-                      height: context.occupiedHeight + lineHeight)
-    }
-
-    private func resolveOccupiedSize(context: inout FrameContext, newSize: CGSize) {
-        context.lastSize = CGSize(width: context.occupiedWidth, height: context.occupiedHeight)
-        context.occupiedWidth = newSize.width
-        context.occupiedHeight = newSize.height
-    }
-
-    private func resolveOccupiedSize(context: inout FrameContext, textLine: ComposedLine) {
-        let newSize = computeOccupiedSize(context: &context, textLine: textLine)
-        resolveOccupiedSize(context: &context, newSize: newSize)
-    }
-
-    private func resolveTruncation(context: inout FrameContext, frameEnd: Int) {
-        guard let truncationPlace = truncationPlace else { return }
-
-        let lastIndex = context.textLines.count - 1
-        let lastLine = context.textLines[lastIndex]
-        let lastRange = lastLine.codeUnitRange
-
-        // No need to truncate if frame range is already covered.
-        if lastRange.upperBound == frameEnd {
-            return
-        }
-
-        // Restore the occupied size to previous value.
-        context.occupiedWidth = context.lastSize.width
-        context.occupiedHeight = context.lastSize.height
-
-        // Create the truncated line and resolve its attributes.
-        let lineRange = lastRange.lowerBound ..< frameEnd
-        let textLine = typesetter.makeTruncatedLine(codeUnitRange: lineRange,
-                                                    extent: context.lineExtent,
-                                                    breakMode: truncationMode,
-                                                    truncationPlace: truncationPlace,
-                                                    tokenString: nil)
-        resolveAttributes(context: &context, textLine: textLine)
-
-        // Replace the line and update the occupied size.
-        context.textLines[lastIndex] = textLine
-        resolveOccupiedSize(context: &context, textLine: textLine)
-    }
-
-    private func resolveAlignments(context: inout FrameContext) {
-        if fitsVertically {
-            // Update the layout height to occupied height.
-            context.layoutHeight = context.occupiedHeight
-        } else {
-            // Find out the additional top for vertical alignment.
-            let extraHeight = context.layoutHeight - context.occupiedHeight
-            let additionalTop = extraHeight * verticalAlignment.multiplier()
-
-            // Readjust the vertical position of each line.
-            for textLine in context.textLines {
-                textLine.origin.y += additionalTop
-            }
-        }
-
-        if fitsHorizontally {
-            let extraWidth = context.layoutWidth - context.occupiedWidth
-
-            // Readjust the horizontal position of each line.
-            for textLine in context.textLines {
-                textLine.origin.x -= extraWidth * textLine.flushFactor
-            }
-
-            // Update the layout width to occupied width.
-            context.layoutWidth = context.occupiedWidth
+    private var truncationModeValue: TRBreakMode {
+        switch truncationMode {
+        case .character:
+            return TRBreakMode(TRBreakModeCharacter)
+        case .line:
+            return TRBreakMode(TRBreakModeLine)
         }
     }
 
-    private func endsBeforeBlock(_ codeUnitEnd: Int) -> Bool {
-        let text = typesetter.text
-        guard codeUnitEnd < text.length else { return false }
-
-        let attachment = text.attribute(.replacement, at: codeUnitEnd, effectiveRange: nil) as? ViewAttachment
-        return attachment?.isBlock == true
-    }
-
-    private func resolveJustification(context: inout FrameContext) {
-        guard isJustificationEnabled else { return }
-
-        let string = typesetter.text.string
-        let textLines = context.textLines
-        let lineCount = textLines.count
-
-        for i in 0 ..< lineCount {
-            let textLine = textLines[i]
-            let lineRange = textLine.codeUnitRange
-
-            // Skip the last line of paragraph if it's smaller in width.
-            if textLine.endIndex == string.endIndex || string[string.index(before: textLine.endIndex)] == "\n" {
-                continue
-            }
-
-            // The line of a view has nothing to justify, and the one before it ends there.
-            if textLine.isBlock || endsBeforeBlock(lineRange.upperBound) {
-                continue
-            }
-
-            let justifiedLine = typesetter.makeJustifiedLine(
-                codeUnitRange: lineRange,
-                justificationFactor: 1.0,
-                justificationExtent: context.layoutWidth
-            )
-
-            let intrinsicMargin = textLine.intrinsicMargin
-            let flushFactor = textLine.flushFactor
-            let availableWidth = context.layoutWidth - intrinsicMargin
-            let alignedLeft = justifiedLine.penOffset(
-                forFlushFactor: flushFactor,
-                flushExtent: availableWidth
-            )
-            var marginalLeft: CGFloat = 0.0
-
-            let paragraphLevel = justifiedLine.paragraphLevel
-            if (paragraphLevel & 1) == 0 {
-                marginalLeft = intrinsicMargin
-            }
-
-            justifiedLine.origin.x = marginalLeft + alignedLeft
-            justifiedLine.origin.y = textLine.origin.y
-            justifiedLine.intrinsicMargin = textLine.intrinsicMargin
-            justifiedLine.flushFactor = textLine.flushFactor
-
-            // Setup the line metrics.
-            justifiedLine.ascent = textLine.ascent
-            justifiedLine.descent = textLine.descent
-            justifiedLine.leading = textLine.leading
-
-            context.textLines[i] = justifiedLine
+    private func truncationPlaceValue(_ place: TruncationPlace) -> TRTruncationPlace {
+        switch place {
+        case .start:
+            return TRTruncationPlace(TRTruncationPlaceStart)
+        case .middle:
+            return TRTruncationPlace(TRTruncationPlaceMiddle)
+        case .end:
+            return TRTruncationPlace(TRTruncationPlaceEnd)
         }
     }
 }

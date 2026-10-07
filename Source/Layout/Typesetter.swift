@@ -14,6 +14,9 @@
 // limitations under the License.
 //
 
+
+internal import Tehreer
+
 import CoreGraphics
 import Foundation
 
@@ -27,16 +30,11 @@ public final class Typesetter: @unchecked Sendable {
     /// The source text for which this typesetter object was created.
     public let text: NSAttributedString
 
+    let core: TRTypesetterRef
     let defaultAttributes: [NSAttributedString.Key: Any]
-    let breaks: BreakClassifier
-    let paragraphs: [BidiParagraph]
-    let runs: [TextRun]
 
-    /// The block runs (a replacement run that is a view with a line of its own) in `runs`, in
-    /// position order: a small subsequence, so that the break resolver never has to scan the whole
-    /// document's runs to answer "is there a block near here". It is computed once, before the
-    /// typesetter can be used from another thread.
-    let blocks: [ReplacementRun]
+    /// The typefaces and replacements of the text, which the runs of the lines point to.
+    let objects: CoreTextObjects
 
     /// Creates a typesetter using the specified text and the default attributes.
     ///
@@ -44,17 +42,57 @@ public final class Typesetter: @unchecked Sendable {
     ///   - text: The text that needs to be typeset.
     ///   - defaultAttributes: The default attributes that should be applied on the text.
     public init(text: NSAttributedString, defaultAttributes: [NSAttributedString.Key: Any]) {
-        let shapeResolver = ShapeResolver(text: text, defaultAttributes: defaultAttributes)
-        let shapeResult = shapeResolver.makeParagraphsAndRuns()
+        var objects = CoreTextObjects()
+        let coreText = CoreText.makeText(from: text, objects: &objects)
+        defer { TRTextRelease(coreText) }
+
+        let defaults = CoreText.makeDefaultAttributes(from: defaultAttributes, objects: &objects)
+
+        guard let core = TRTypesetterCreate(coreText, defaults, TRUInteger(defaults.count)) else {
+            fatalError("Typeface is not specified")
+        }
 
         self.text = text
         self.defaultAttributes = defaultAttributes
-        self.breaks = BreakClassifier(string: text.string)
-        self.paragraphs = shapeResult.paragraphs
-        self.runs = shapeResult.runs
-        self.blocks = shapeResult.runs.compactMap { run in
-            (run as? ReplacementRun).flatMap { $0.isBlock ? $0 : nil }
+        self.core = core
+        self.objects = objects
+    }
+
+    deinit {
+        TRTypesetterRelease(core)
+    }
+
+    private func makeRange(_ codeUnitRange: Range<Int>) -> TRRange {
+        return TRRange(index: TRUInteger(codeUnitRange.lowerBound),
+                       length: TRUInteger(codeUnitRange.count))
+    }
+
+    private func makeBreakMode(_ breakMode: BreakMode) -> TRBreakMode {
+        switch breakMode {
+        case .character:
+            return TRBreakMode(TRBreakModeCharacter)
+        case .line:
+            return TRBreakMode(TRBreakModeLine)
         }
+    }
+
+    private func makePlace(_ truncationPlace: TruncationPlace) -> TRTruncationPlace {
+        switch truncationPlace {
+        case .start:
+            return TRTruncationPlace(TRTruncationPlaceStart)
+        case .middle:
+            return TRTruncationPlace(TRTruncationPlaceMiddle)
+        case .end:
+            return TRTruncationPlace(TRTruncationPlaceEnd)
+        }
+    }
+
+    private func makeLine(_ line: TRComposedLineRef?) -> ComposedLine {
+        guard let line = line else {
+            fatalError("Could not make the line")
+        }
+
+        return ComposedLine(core: line, string: text.string, objects: objects)
     }
 
     /// Suggests a forward break index based on the specified range and the extent. The measurement
@@ -67,8 +105,8 @@ public final class Typesetter: @unchecked Sendable {
     ///   - mode: The requested break mode.
     /// - Returns: The index (exclusive) that would cause the break.
     public func suggestForwardBreak(inCodeUnitRange codeUnitRange: Range<Int>, extent: CGFloat, breakMode: BreakMode) -> Int {
-        let breakResolver = BreakResolver(string: text.string, paragraphs: paragraphs, runs: runs, blocks: blocks, breaks: breaks)
-        return breakResolver.suggestForwardBreak(for: extent, in: codeUnitRange, with: breakMode)
+        return Int(TRTypesetterSuggestForwardBreak(core, makeRange(codeUnitRange), TRFloat(extent),
+                                                   makeBreakMode(breakMode)))
     }
 
     /// Suggests a forward break index based on the specified range and the extent. The measurement
@@ -99,8 +137,8 @@ public final class Typesetter: @unchecked Sendable {
     ///   - mode: The requested break mode.
     /// - Returns: The index (inclusive) that would cause the break.
     public func suggestBackwardBreak(inCodeUnitRange codeUnitRange: Range<Int>, extent: CGFloat, breakMode: BreakMode) -> Int {
-        let breakResolver = BreakResolver(string: text.string, paragraphs: paragraphs, runs: runs, blocks: blocks, breaks: breaks)
-        return breakResolver.suggestBackwardBreak(for: extent, in: codeUnitRange, with: breakMode)
+        return Int(TRTypesetterSuggestBackwardBreak(core, makeRange(codeUnitRange), TRFloat(extent),
+                                                    makeBreakMode(breakMode)))
     }
 
     /// Suggests a backward break index based on the specified range and the extent. The measurement
@@ -126,15 +164,9 @@ public final class Typesetter: @unchecked Sendable {
     /// - Parameter codeUnitRange: The UTF-16 range of the line in source string.
     /// - Returns: The new line.
     public func makeSimpleLine(codeUnitRange: Range<Int>) -> ComposedLine {
-        return makeSimpleLine(codeUnitRange: codeUnitRange, layoutWidth: .nan)
-    }
+        precondition(!codeUnitRange.isEmpty, "The range of a line is empty")
 
-    /// Creates a simple line having the specified UTF-16 range. The runs whose room is decided by
-    /// the frame, those of view attachments, get it from the frame's `layoutWidth`, if it is
-    /// known.
-    func makeSimpleLine(codeUnitRange: Range<Int>, layoutWidth: CGFloat) -> ComposedLine {
-        let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes, paragraphs: paragraphs, runs: runs)
-        return lineResolver.makeSimpleLine(codeUnitRange: codeUnitRange, layoutWidth: layoutWidth)
+        return makeLine(TRTypesetterCreateSimpleLine(core, makeRange(codeUnitRange)))
     }
 
     /// Creates a simple line having the specified character range.
@@ -158,11 +190,19 @@ public final class Typesetter: @unchecked Sendable {
     public func makeTruncatedLine(codeUnitRange: Range<Int>, extent: CGFloat,
                                   breakMode: BreakMode, truncationPlace: TruncationPlace,
                                   tokenString: String?) -> ComposedLine {
-        let characterRange = text.string.characterRange(forUTF16Range: codeUnitRange)
-        let tokenResolver = TokenResolver(string: text.string, runs: runs)
-        let tokenLine = tokenResolver.makeTokenLine(range: characterRange,
-                                                    truncationPlace: truncationPlace,
-                                                    tokenString: tokenString)
+        precondition(!codeUnitRange.isEmpty, "The range of a line is empty")
+
+        let units = tokenString.map { Array($0.utf16) }
+        let token = units.map { (units) in
+            units.withUnsafeBufferPointer { (pointer) in
+                TRTypesetterCreateTruncationToken(core, makeRange(codeUnitRange), makePlace(truncationPlace),
+                                                  pointer.baseAddress, TRUInteger(pointer.count),
+                                                  TRStringEncoding(TRStringEncodingUTF16))
+            }
+        } ?? TRTypesetterCreateTruncationToken(core, makeRange(codeUnitRange), makePlace(truncationPlace),
+                                               nil, 0, TRStringEncoding(TRStringEncodingUTF16))
+
+        let tokenLine = makeLine(token)
 
         return makeTruncatedLine(codeUnitRange: codeUnitRange, extent: extent,
                                  breakMode: breakMode,
@@ -182,15 +222,11 @@ public final class Typesetter: @unchecked Sendable {
     public func makeTruncatedLine(characterRange: Range<String.Index>, extent: CGFloat,
                                   breakMode: BreakMode, truncationPlace: TruncationPlace,
                                   tokenString: String?) -> ComposedLine {
-        let tokenResolver = TokenResolver(string: text.string, runs: runs)
-        let tokenLine = tokenResolver.makeTokenLine(range: characterRange,
-                                                    truncationPlace: truncationPlace,
-                                                    tokenString: tokenString)
+        let codeUnitRange: Range<Int> = text.string.utf16Range(forCharacterRange: characterRange)
 
-        return makeTruncatedLine(characterRange: characterRange, extent: extent,
-                                 breakMode: breakMode,
-                                 truncationPlace: truncationPlace,
-                                 tokenLine: tokenLine)
+        return makeTruncatedLine(codeUnitRange: codeUnitRange, extent: extent,
+                                 breakMode: breakMode, truncationPlace: truncationPlace,
+                                 tokenString: tokenString)
     }
 
     /// Creates a line of specified UTF-16 range, truncating it if it overflows the specified extent.
@@ -205,14 +241,11 @@ public final class Typesetter: @unchecked Sendable {
     public func makeTruncatedLine(codeUnitRange: Range<Int>, extent: CGFloat,
                                   breakMode: BreakMode, truncationPlace: TruncationPlace,
                                   tokenLine: ComposedLine) -> ComposedLine {
-        let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes,
-                                        paragraphs: paragraphs, runs: runs)
-        let breakResolver = BreakResolver(string: text.string,
-                                          paragraphs: paragraphs, runs: runs, blocks: blocks, breaks: breaks)
+        precondition(!codeUnitRange.isEmpty, "The range of a line is empty")
 
-        return lineResolver.makeCompactLine(codeUnitRange: codeUnitRange, extent: extent,
-                                            breaks: breakResolver, mode: breakMode,
-                                            place: truncationPlace, token: tokenLine)
+        return makeLine(TRTypesetterCreateTruncatedLine(core, makeRange(codeUnitRange), TRFloat(extent),
+                                                        makeBreakMode(breakMode),
+                                                        makePlace(truncationPlace), tokenLine.core))
     }
 
     /// Creates a line of specified character range, truncating it if it overflows the specified extent.
@@ -249,12 +282,11 @@ public final class Typesetter: @unchecked Sendable {
     public func makeJustifiedLine(codeUnitRange: Range<Int>,
                                   justificationFactor: CGFloat,
                                   justificationExtent: CGFloat) -> ComposedLine {
-        let lineResolver = LineResolver(text: text, defaultAttributes: defaultAttributes,
-                                        paragraphs: paragraphs, runs: runs)
+        precondition(!codeUnitRange.isEmpty, "The range of a line is empty")
 
-        return lineResolver.makeJustifiedLine(codeUnitRange: codeUnitRange,
-                                              justificationFactor: justificationFactor,
-                                              justificationExtent: justificationExtent)
+        return makeLine(TRTypesetterCreateJustifiedLine(core, makeRange(codeUnitRange),
+                                                        TRFloat(justificationFactor),
+                                                        TRFloat(justificationExtent)))
     }
 
     /// Creates a justified line of specified character range.

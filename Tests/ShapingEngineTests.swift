@@ -102,16 +102,11 @@ final class ShapingEngineTests: XCTestCase {
 
         XCTAssertEqual(result.makeCaretEdges(caretStops: nil), [0.0, 1114.0, 2263.0, 3335.0])
 
-        // The edges match what the builder of the layout code makes from the same result.
-        for stops in [[true, false, true], [false, true, true], [true, true, false]] {
-            let builder = CaretEdgesBuilder(isBackward: result.isBackward,
-                                            isRTL: false,
-                                            glyphAdvances: result.glyphAdvances,
-                                            clusterMap: result.clusterMap,
-                                            caretStops: stops)
-
-            XCTAssertEqual(result.makeCaretEdges(caretStops: stops), builder.build())
-        }
+        // Without a caret stop before a cluster, the edge before it is the one after the cluster
+        // that comes first.
+        XCTAssertEqual(result.makeCaretEdges(caretStops: [true, false, true]), [0.0, 1114.0, 1114.0, 3335.0])
+        XCTAssertEqual(result.makeCaretEdges(caretStops: [false, true, true]), [0.0, 0.0, 2263.0, 3335.0])
+        XCTAssertEqual(result.makeCaretEdges(caretStops: [true, true, false]), [0.0, 1114.0, 2263.0, 3335.0])
     }
 
     func testResultOutlivesEngine() throws {

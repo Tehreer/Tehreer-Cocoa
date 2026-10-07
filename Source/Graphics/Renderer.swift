@@ -55,7 +55,7 @@ public final class Renderer {
         case round = 0
     }
 
-    private let core: TRRendererRef
+    let core: TRRendererRef
 
     /// Creates a renderer.
     public init() {
@@ -180,6 +180,20 @@ public final class Renderer {
 
     /// The shadow color.
     public var shadowColor: UIColor = .clear
+
+    /// Sets the properties of the renderer of Core again. Core changes the typeface, size, scales
+    /// and direction of a renderer when it measures a run with it.
+    func syncCore() {
+        TRRendererSetTypeface(core, typeface?.core)
+        TRRendererSetTypeSize(core, TRFloat(typeSize))
+        TRRendererSetScaleX(core, TRFloat(scaleX))
+        TRRendererSetScaleY(core, TRFloat(scaleY))
+        TRRendererSetSkewX(core, TRFloat(slantAngle))
+        TRRendererSetRenderScale(core, TRFloat(renderScale))
+        TRRendererSetWritingDirection(core, TRWritingDirection(writingDirection == .rightToLeft
+                                                                ? TRWritingDirectionRightToLeft
+                                                                : TRWritingDirectionLeftToRight))
+    }
 
     /// Generates the path of specified glyph.
     ///
