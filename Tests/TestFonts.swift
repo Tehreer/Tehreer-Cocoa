@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021-2026 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,21 +14,19 @@
 // limitations under the License.
 //
 
+
 import Foundation
 
-final class AdvanceCache {
-    private var advances: [GlyphID: Int32] = [:]
+/// The small fonts that Tehreer Core uses for its own tests.
+enum TestFonts {
+    static func path(_ name: String) -> String {
+        let root = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
 
-    subscript(key: GlyphID) -> Int32? {
-        get {
-            if let index = advances.index(forKey: key) {
-                return advances[index].value
-            }
-
-            return nil
-        }
-        set {
-            advances[key] = newValue
-        }
+        return root
+            .appendingPathComponent("Libraries/TehreerCore/Tests/Fonts")
+            .appendingPathComponent(name)
+            .path
     }
 }

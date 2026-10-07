@@ -22,14 +22,7 @@ import XCTest
 /// fonts are the small ones that Core uses for its own tests.
 final class FontFileTests: XCTestCase {
     private func fontPath(_ name: String) -> String {
-        let root = URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-
-        return root
-            .appendingPathComponent("Libraries/TehreerCore/Tests/Fonts")
-            .appendingPathComponent(name)
-            .path
+        return TestFonts.path(name)
     }
 
     func testStaticFont() throws {

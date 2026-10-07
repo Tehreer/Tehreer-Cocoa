@@ -14,26 +14,32 @@
 // limitations under the License.
 //
 
-internal import HarfBuzz
+
+internal import Tehreer
 
 import CoreGraphics
 import Foundation
 
 /// The `ShapingEngine` class represents text shaping engine.
 public final class ShapingEngine {
+    private let core: TRShapingEngineRef
+
     /// Creates a shaping engine.
-    public init() { }
+    public init() {
+        core = TRShapingEngineCreate()
+    }
+
+    deinit {
+        TRShapingEngineRelease(core)
+    }
 
     /// Returns the default writing direction of a script.
     ///
     /// - Parameter scriptTag: The tag of the script whose default direction is returned.
     /// - Returns: The default writing direction of the script identified by `scriptTag`.
     public static func defaultDirectionForScript(_ scriptTag: SFNTTag) -> WritingDirection {
-        let script = hb_ot_tag_to_script(scriptTag.rawValue)
-        let direction = hb_script_get_horizontal_direction(script)
-
-        switch direction {
-        case HB_DIRECTION_RTL:
+        switch TRShapingEngineGetScriptDefaultDirection(scriptTag.rawValue) {
+        case TRWritingDirection(TRWritingDirectionRightToLeft):
             return .rightToLeft
         default:
             return .leftToRight
@@ -41,18 +47,34 @@ public final class ShapingEngine {
     }
 
     /// The typeface which this shaping engine will use for shaping text.
-    public var typeface: Typeface! = nil
+    public var typeface: Typeface! = nil {
+        didSet {
+            TRShapingEngineSetTypeface(core, typeface?.core)
+        }
+    }
 
     /// The type size which this shaping engine will use for shaping text.
-    public var typeSize: CGFloat = 16
+    public var typeSize: CGFloat = 16 {
+        didSet {
+            TRShapingEngineSetTypeSize(core, TRFloat(typeSize))
+        }
+    }
 
     /// The script tag which this shaping engine will use for shaping text. Its default value is
     /// `DFLT`.
-    public var scriptTag: SFNTTag = "DFLT"
+    public var scriptTag: SFNTTag = "DFLT" {
+        didSet {
+            TRShapingEngineSetScriptTag(core, scriptTag.rawValue)
+        }
+    }
 
     /// The language tag which this shaping engine will use for shaping text. Its default value is
     /// `dflt`.
-    public var languageTag: SFNTTag = "dflt"
+    public var languageTag: SFNTTag = "dflt" {
+        didSet {
+            TRShapingEngineSetLanguageTag(core, languageTag.rawValue)
+        }
+    }
 
     /// The user-specified open type feature settings.
     ///
@@ -60,7 +82,15 @@ public final class ShapingEngine {
     /// required feature of the chosen script. If the value of a feature is greater than zero, it
     /// would be enabled. In case of an alternate feature, this value would be used to pick the
     /// alternate glyph at this position.
-    public var openTypeFeatures: [SFNTTag: Int] = [:]
+    public var openTypeFeatures: [SFNTTag: Int] = [:] {
+        didSet {
+            let features = openTypeFeatures.map { (key, value) in
+                TROpenTypeFeature(tag: key.rawValue, value: UInt32(value))
+            }
+
+            _ = TRShapingEngineSetOpenTypeFeatures(core, features, TRUInteger(features.count))
+        }
+    }
 
     /// The direction in which this shaping engine will place the resultant glyphs. Its default
     /// value is `.leftToRight`.
@@ -69,7 +99,15 @@ public final class ShapingEngine {
     /// cursive and mark glyphs are placed at appropriate locations. It should not be confused with
     /// the direction of a bidirectional run as that may not reflect the script direction if
     /// overridden explicitly.
-    public var writingDirection = WritingDirection.leftToRight
+    public var writingDirection = WritingDirection.leftToRight {
+        didSet {
+            let direction = (writingDirection == .rightToLeft
+                             ? TRWritingDirectionRightToLeft
+                             : TRWritingDirectionLeftToRight)
+
+            TRShapingEngineSetWritingDirection(core, TRWritingDirection(direction))
+        }
+    }
 
     /// The order in which this shaping engine will process the text. Its default value is
     /// `.forward`.
@@ -78,14 +116,14 @@ public final class ShapingEngine {
     /// opposite to that of script. For example, if the direction of a run, 'car' is explicitly set
     /// as right-to-left, backward order will automatically read it as 'rac' without reordering the
     /// original text.
-    public var shapingOrder = ShapingOrder.forward
+    public var shapingOrder = ShapingOrder.forward {
+        didSet {
+            let order = (shapingOrder == .backward
+                         ? TRShapingOrderBackward
+                         : TRShapingOrderForward)
 
-    private func isRTL() -> Bool {
-        if (shapingOrder == .backward) {
-            return writingDirection != .rightToLeft
+            TRShapingEngineSetShapingOrder(core, TRShapingOrder(order))
         }
-
-        return writingDirection == .rightToLeft
     }
 
     /// Shapes the specified UTF-16 range of text into glyphs.
@@ -104,54 +142,19 @@ public final class ShapingEngine {
             fatalError("Typeface was not set")
         }
 
-        let shapingResult = ShapingResult()
-
-        let script = hb_ot_tag_to_script(scriptTag.rawValue)
-        let language = hb_ot_tag_to_language(languageTag.rawValue)
-        let direction: hb_direction_t
-
-        switch (writingDirection) {
-        case .leftToRight:
-            direction = HB_DIRECTION_LTR
-
-        case .rightToLeft:
-            direction = HB_DIRECTION_RTL
-        }
-
-        let buffer = shapingResult.hbBuffer
-        hb_buffer_clear_contents(buffer)
-        hb_buffer_set_script(buffer, script)
-        hb_buffer_set_language(buffer, language)
-        hb_buffer_set_direction(buffer, direction)
-
         let characterRange = string.characterRange(forUTF16Range: codeUnitRange)
-        var codeUnits = Array(string[characterRange].utf16)
-        let length = codeUnits.count
+        let codeUnits = Array(string[characterRange].utf16)
 
-        codeUnits.withUnsafeMutableBufferPointer { (pointer) -> Void in
-            hb_buffer_add_utf16(buffer, pointer.baseAddress, Int32(length), 0, Int32(length))
+        let result = codeUnits.withUnsafeBufferPointer { (pointer) in
+            TRShapingEngineShape(core, pointer.baseAddress, TRUInteger(pointer.count),
+                                 TRStringEncoding(TRStringEncodingUTF16))
         }
 
-        let features = openTypeFeatures.map { (key, value) in
-            hb_feature_t(tag: key.rawValue, value: UInt32(value), start: 0, end: UInt32(length))
+        guard let result = result else {
+            fatalError("Could not shape the text")
         }
 
-        features.withUnsafeBufferPointer { (pointer) in
-            let hbFont = hb_font_create_sub_font(typeface.hbFont)
-            hb_font_set_ppem(hbFont, UInt32(typeSize + 0.5), UInt32(typeSize + 0.5))
-
-            hb_shape(hbFont, buffer, pointer.baseAddress, UInt32(pointer.count))
-
-            hb_font_destroy(hbFont)
-        }
-
-        shapingResult.setup(string: string,
-                            codeUnitRange: codeUnitRange,
-                            isBackward: shapingOrder == .backward,
-                            isRTL: isRTL(),
-                            sizeByEm: typeSize / CGFloat(typeface.unitsPerEm))
-
-        return shapingResult
+        return ShapingResult(core: result, string: string, codeUnitRange: codeUnitRange)
     }
 
     /// Shapes the specified range of text into glyphs.
@@ -169,4 +172,3 @@ public final class ShapingEngine {
         shape(string: string, codeUnitRange: string.utf16Range(forCharacterRange: characterRange))
     }
 }
-

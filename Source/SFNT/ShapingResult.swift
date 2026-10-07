@@ -14,7 +14,8 @@
 // limitations under the License.
 //
 
-internal import HarfBuzz
+
+internal import Tehreer
 
 import CoreGraphics
 import Foundation
@@ -23,27 +24,25 @@ import Foundation
 /// `ShapingEngine` object to provide the information related to characters, their glyphs, offsets,
 /// and advances.
 public final class ShapingResult {
-    let hbBuffer: OpaquePointer!
+    private let core: TRShapingResultRef
+    private let string: String
 
-    private var string: String!
-    private var sizeByEm: CGFloat = 0.0
-
-    init() {
-        hbBuffer = hb_buffer_create()
+    init(core: TRShapingResultRef, string: String, codeUnitRange: Range<Int>) {
+        self.core = core
+        self.string = string
+        self.codeUnitRange = codeUnitRange
+        self.isBackward = TRShapingResultIsBackward(core) != 0
     }
 
     deinit {
-        hb_buffer_destroy(hbBuffer)
+        TRShapingResultRelease(core)
     }
 
     /// The UTF-16 range in source string.
-    public private(set) var codeUnitRange = Range(uncheckedBounds: (0, 0))
+    public let codeUnitRange: Range<Int>
 
     /// A boolean value that indicates whether the shaped text segment flows backward.
-    public private(set) var isBackward: Bool = false
-
-    private var isRTL: Bool = false
-    private var _clusterMap: ClusterMap!
+    public let isBackward: Bool
 
     /// The index to the first character in source string.
     public var startIndex: String.Index {
@@ -56,16 +55,12 @@ public final class ShapingResult {
     }
 
     var glyphCount: Int {
-        return Int(hb_buffer_get_length(hbBuffer))
+        return Int(TRShapingResultGetGlyphCount(core))
     }
 
     /// The collection of glyph IDs.
     public var glyphIDs: GlyphIDs {
         return GlyphIDs(self)
-    }
-
-    private var glyphClusters: GlyphClusters {
-        return GlyphClusters(self)
     }
 
     /// The collection of glyph offsets.
@@ -90,51 +85,7 @@ public final class ShapingResult {
     /// 3. If nonconsecutive code units translate to a single glyph or ligature, then each
     ///    participating code unit, and all in-between characters, map to this glyph or ligature.
     public var clusterMap: ClusterMap {
-        return _clusterMap
-    }
-
-    private func makeCodeUnitToGlyphMap() -> [Int] {
-        let clusters = glyphClusters
-        let codeunitCount = codeUnitRange.count
-        var association = 0
-
-        var array = Array<Int>(repeating: -1, count: codeUnitRange.count)
-        var index = glyphCount - 1
-
-        /* Traverse in reverse order so that first glyph takes priority in case of multiple substitution. */
-        while index >= 0 {
-            association = clusters[index]
-            array[association] = index
-            index -= 1
-        }
-
-        if isBackward {
-            index = codeunitCount - 1
-
-            /* Assign the same glyph index to preceding codeunits. */
-            while index >= 0 {
-                if array[index] == -1 {
-                    array[index] = association
-                }
-
-                association = array[index]
-                index -= 1
-            }
-        } else {
-            index = 0
-
-            /* Assign the same glyph index to subsequent codeunits. */
-            while index < codeunitCount {
-                if array[index] == -1 {
-                    array[index] = association
-                }
-
-                association = array[index]
-                index += 1
-            }
-        }
-
-        return array
+        return ClusterMap(self)
     }
 
     /// Creates an array of caret edges.
@@ -143,29 +94,22 @@ public final class ShapingResult {
     ///                         this object.
     /// - Returns: An array of caret edges.
     public func makeCaretEdges(caretStops: [Bool]?) -> [CGFloat] {
+        let codeUnitCount = codeUnitRange.count
+
         if let caretStops = caretStops {
-            precondition(caretStops.count >= codeUnitRange.count)
+            precondition(caretStops.count >= codeUnitCount)
         }
 
-        let caretEdgesBuilder = CaretEdgesBuilder(
-            isBackward: isBackward,
-            isRTL: isRTL,
-            glyphAdvances: glyphAdvances,
-            clusterMap: clusterMap,
-            caretStops: caretStops
-        )
+        var edges = Array<TRFloat>(repeating: 0, count: codeUnitCount + 1)
 
-        return caretEdgesBuilder.build()
-    }
+        if let caretStops = caretStops {
+            let flags = caretStops[0 ..< codeUnitCount].map { $0 ? TRBoolean(1) : TRBoolean(0) }
+            TRShapingResultGetCaretEdges(core, flags, &edges)
+        } else {
+            TRShapingResultGetCaretEdges(core, nil, &edges)
+        }
 
-    func setup(string: String, codeUnitRange: Range<Int>,
-               isBackward: Bool, isRTL: Bool, sizeByEm: CGFloat) {
-        self.string = string
-        self.codeUnitRange = codeUnitRange
-        self.isBackward = isBackward
-        self.isRTL = isRTL
-        self.sizeByEm = sizeByEm
-        self._clusterMap = ClusterMap(makeCodeUnitToGlyphMap())
+        return edges.map { CGFloat($0) }
     }
 }
 
@@ -175,11 +119,11 @@ extension ShapingResult {
     /// A collection of the glyph ids in a shaping result.
     public struct GlyphIDs: RandomAccessCollection {
         private let owner: ShapingResult
-        private let pointer: UnsafeMutablePointer<hb_glyph_info_t>!
+        private let pointer: UnsafePointer<GlyphID>?
 
         init(_ owner: ShapingResult) {
             self.owner = owner
-            self.pointer = hb_buffer_get_glyph_infos(owner.hbBuffer, nil)
+            self.pointer = TRShapingResultGetGlyphIDsPtr(owner.core)
             self.count = owner.glyphCount
         }
 
@@ -203,65 +147,18 @@ extension ShapingResult {
         public subscript(index: Int) -> GlyphID {
             precondition(index >= 0 && index < count, String.indexOutOfRange)
 
-            var actualIndex = index
-
-            if owner.isRTL {
-                actualIndex = count - index - 1;
-            }
-
-            return GlyphID(pointer.advanced(by: actualIndex).pointee.codepoint)
-        }
-    }
-
-    /// A collection of the glyph clusters in a shaping result.
-    private struct GlyphClusters: RandomAccessCollection {
-        private let owner: ShapingResult
-        private let pointer: UnsafeMutablePointer<hb_glyph_info_t>!
-
-        init(_ owner: ShapingResult) {
-            self.owner = owner
-            self.pointer = hb_buffer_get_glyph_infos(owner.hbBuffer, nil)
-            self.count = owner.glyphCount
-        }
-
-        /// The number of elements in the collection.
-        public let count: Int
-
-        /// The index to the first element.
-        public var startIndex: Int {
-            return 0
-        }
-
-        /// The index after the last element.
-        public var endIndex: Int {
-            return count
-        }
-
-        /// Accesses the glyph cluster at the specified position.
-        ///
-        /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
-        ///                    `startIndex` and less than `endIndex`.
-        public subscript(index: Int) -> Int {
-            precondition(index >= 0 && index < count, String.indexOutOfRange)
-
-            var actualIndex = index
-
-            if owner.isRTL {
-                actualIndex = count - index - 1;
-            }
-
-            return Int(pointer.advanced(by: actualIndex).pointee.cluster)
+            return pointer![index]
         }
     }
 
     /// A collection of the glyph offsets in a shaping result.
     public struct GlyphOffsets: RandomAccessCollection {
         private let owner: ShapingResult
-        private let pointer: UnsafeMutablePointer<hb_glyph_position_t>!
+        private let pointer: UnsafePointer<TRPoint>?
 
         init(_ owner: ShapingResult) {
             self.owner = owner
-            self.pointer = hb_buffer_get_glyph_positions(owner.hbBuffer, nil)
+            self.pointer = TRShapingResultGetGlyphOffsetsPtr(owner.core)
             self.count = owner.glyphCount
         }
 
@@ -285,27 +182,20 @@ extension ShapingResult {
         public subscript(index: Int) -> CGPoint {
             precondition(index >= 0 && index < count, String.indexOutOfRange)
 
-            var actualIndex = index
+            let element = pointer![index]
 
-            if owner.isRTL {
-                actualIndex = count - index - 1;
-            }
-
-            let element = pointer.advanced(by: actualIndex)
-
-            return CGPoint(x: CGFloat(element.pointee.x_offset) * owner.sizeByEm,
-                           y: CGFloat(element.pointee.y_offset) * owner.sizeByEm)
+            return CGPoint(x: CGFloat(element.x), y: CGFloat(element.y))
         }
     }
 
     /// A collection of the glyph advances in a shaping result.
     public struct GlyphAdvances: RandomAccessCollection {
         private let owner: ShapingResult
-        private let pointer: UnsafeMutablePointer<hb_glyph_position_t>!
+        private let pointer: UnsafePointer<TRFloat>?
 
         init(_ owner: ShapingResult) {
             self.owner = owner
-            self.pointer = hb_buffer_get_glyph_positions(owner.hbBuffer, nil)
+            self.pointer = TRShapingResultGetGlyphAdvancesPtr(owner.core)
             self.count = owner.glyphCount
         }
 
@@ -329,29 +219,23 @@ extension ShapingResult {
         public subscript(index: Int) -> CGFloat {
             precondition(index >= 0 && index < count, String.indexOutOfRange)
 
-            var actualIndex = index
-
-            if owner.isRTL {
-                actualIndex = count - index - 1;
-            }
-
-            let element = pointer.advanced(by: actualIndex)
-
-            return CGFloat(element.pointee.x_advance) * owner.sizeByEm
+            return CGFloat(pointer![index])
         }
     }
 
     /// A collection of the cluster map in a shaping result, represented by UTF-16 code unit indices.
     public struct ClusterMap: RandomAccessCollection {
-        private let array: [Int]
+        private let owner: ShapingResult
+        private let pointer: UnsafePointer<TRUInteger>?
 
-        init(_ array: [Int]) {
-            self.array = array
+        init(_ owner: ShapingResult) {
+            self.owner = owner
+            self.pointer = TRShapingResultGetClusterMapPtr(owner.core)
         }
 
         /// The number of elements in the collection.
         public var count: Int {
-            return array.count
+            return owner.codeUnitRange.count
         }
 
         /// The index to the first element.
@@ -369,7 +253,9 @@ extension ShapingResult {
         /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
         ///                    `startIndex` and less than `endIndex`.
         public subscript(index: Int) -> Int {
-            return array[index]
+            precondition(index >= 0 && index < count, String.indexOutOfRange)
+
+            return Int(pointer![index])
         }
     }
 }

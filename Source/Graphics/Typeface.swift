@@ -45,7 +45,6 @@ public final class Typeface: @unchecked Sendable {
 
     // The members below serve the parts that are still to move to Core.
     private let renderableFace: RenderableFace
-    private let shapableFace: ShapableFace
     private var ftSize: FT_Size!
     private var ftStroker: FT_Stroker!
     private let palette: [FT_Color]
@@ -120,7 +119,6 @@ public final class Typeface: @unchecked Sendable {
 
         self.core = core
         self.renderableFace = renderableFace
-        self.shapableFace = ShapableFace(renderableFace: renderableFace)
         self.palette = Typeface.makePalette(core: core)
 
         self.variationAxes = axes
@@ -136,7 +134,6 @@ public final class Typeface: @unchecked Sendable {
     private init(parent: Typeface, core: TRTypefaceRef, renderableFace: RenderableFace) {
         self.core = core
         self.renderableFace = renderableFace
-        self.shapableFace = ShapableFace(parent: parent.shapableFace, renderableFace: renderableFace)
         self.palette = parent.palette
 
         self.variationAxes = parent.variationAxes
@@ -152,7 +149,6 @@ public final class Typeface: @unchecked Sendable {
     private init(parent: Typeface, core: TRTypefaceRef) {
         self.core = core
         self.renderableFace = parent.renderableFace
-        self.shapableFace = parent.shapableFace
         self.palette = Typeface.makePalette(core: core)
 
         self.variationAxes = parent.variationAxes
@@ -291,10 +287,6 @@ public final class Typeface: @unchecked Sendable {
 
     var ftFace: FT_Face {
         return renderableFace.ftFace
-    }
-
-    var hbFont: OpaquePointer {
-        return shapableFace.hbFont
     }
 
     var ftColors: [FT_Color] {
