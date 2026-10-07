@@ -206,4 +206,41 @@ final class TypesetterTests: XCTestCase {
         XCTAssertEqual(line.width, 3335.0)
         XCTAssertTrue(line.visualRuns[0].typeface === typeface)
     }
+
+    /// Draws the two lines that a cluster is split between, which makes each run hold only a part
+    /// of the cluster. The edge clusters are positioned outside of the run, so this used to trap.
+    private func drawSplitCluster(_ string: String, splitAt split: Int, length: Int) throws {
+        let text = NSAttributedString(string: string)
+        let typesetter = Typesetter(text: text, defaultAttributes: [.typeface: typeface, .typeSize: CGFloat(40.0)])
+        let lines = [typesetter.makeSimpleLine(codeUnitRange: 0 ..< split),
+                     typesetter.makeSimpleLine(codeUnitRange: split ..< length)]
+
+        let run = try XCTUnwrap(lines[0].visualRuns.first)
+        XCTAssertTrue(run.startExtraLength > 0 || run.endExtraLength > 0)
+
+        let renderer = Renderer()
+        var pixels = [UInt8](repeating: 0xFF, count: 200 * 100 * 4)
+
+        try pixels.withUnsafeMutableBytes { (bytes) in
+            let context = try XCTUnwrap(CGContext(data: bytes.baseAddress, width: 200, height: 100,
+                                                  bitsPerComponent: 8, bytesPerRow: 200 * 4,
+                                                  space: CGColorSpaceCreateDeviceRGB(),
+                                                  bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+            for line in lines {
+                context.saveGState()
+                context.translateBy(x: 20.0, y: 50.0)
+                line.draw(with: renderer, in: context)
+                context.restoreGState()
+            }
+        }
+    }
+
+    func testDrawsSplitClusterInLeftToRightRun() throws {
+        // The combining mark is in the cluster of its base, and the lines cut it off.
+        try drawSplitCluster("a\u{0301}b", splitAt: 1, length: 3)
+    }
+
+    func testDrawsSplitClusterInRightToLeftRun() throws {
+        try drawSplitCluster("\u{05D0}\u{0301}\u{05D1}", splitAt: 1, length: 3)
+    }
 }

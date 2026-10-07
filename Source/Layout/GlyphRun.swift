@@ -379,8 +379,17 @@ public final class GlyphRun: @unchecked Sendable {
         var glyphEnd: Int
     }
 
+    /// Returns the distance of a code unit that may belong to a cluster split by the start or the
+    /// end of this run, so it can lie outside of the run.
+    private func clusterDistance(forCodeUnitAt index: Int) -> CGFloat {
+        precondition(index >= codeUnitRange.lowerBound - startExtraLength
+                     && index <= codeUnitRange.upperBound + endExtraLength, .indexOutOfRange)
+
+        return CGFloat(TRGlyphRunGetClusterDistance(core, TRUInteger(index)))
+    }
+
     private func leadingEdge(from start: Int, to end: Int) -> CGFloat {
-        return distance(forCodeUnitAt: !isBackward ? start : end)
+        return clusterDistance(forCodeUnitAt: !isBackward ? start : end)
     }
 
     private func clusterRange(forCodeUnitAt index: Int, exclusion: ClusterRange?) -> ClusterRange? {
