@@ -1,0 +1,3 @@
+[submodule "Libraries/TehreerCore"]
+	path = Libraries/TehreerCore
+	url = https://github.com/Tehreer/Tehreer-Core.git

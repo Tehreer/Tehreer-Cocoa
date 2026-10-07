@@ -66,6 +66,7 @@ let package = Package(
             cSettings: [
                 .headerSearchPath("Source"),
                 .define("SB_CONFIG_UNITY"),
+                .define("SB_CONFIG_EXPERIMENTAL_TEXT_API"),
                 .define("SB_CONFIG_DISABLE_SCRATCH_MEMORY")
             ]
         ),
@@ -100,8 +101,33 @@ let package = Package(
             ]
         ),
         .target(
-            name: "TehreerCocoa",
+            name: "Tehreer",
             dependencies: ["FreeType", "HarfBuzz", "SheenBidi", "UniBreak"],
+            path: "Libraries/TehreerCore",
+            exclude: [
+                "AGENTS.md",
+                "CLAUDE.md",
+                "CMakeLists.txt",
+                "LICENSE",
+                "NOTICE",
+                "README.md",
+                "Tehreer.cmake.in",
+                "tehreer.pc.in",
+                "Tests"
+            ],
+            sources: [
+                "Source/Tehreer.c"
+            ],
+            publicHeadersPath: "Headers",
+            cSettings: [
+                .headerSearchPath("Source"),
+                .define("TR_CONFIG_UNITY"),
+                .define("SB_CONFIG_EXPERIMENTAL_TEXT_API")
+            ]
+        ),
+        .target(
+            name: "TehreerCocoa",
+            dependencies: ["Tehreer", "FreeType", "HarfBuzz", "SheenBidi", "UniBreak"],
             path: "Source"
         ),
         .testTarget(
