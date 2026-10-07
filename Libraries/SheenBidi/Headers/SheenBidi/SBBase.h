@@ -57,11 +57,8 @@
  * Expands to `1` if the experimental text editing and analysis API was enabled at build time
  * via `SB_CONFIG_EXPERIMENTAL_TEXT_API`, or `0` otherwise.
  */
-#if defined(SB_CONFIG_EXPERIMENTAL_TEXT_API)
+/* Tehreer Core always needs the text API, and the importers of its module have no way to define the macro. */
 #define SB_TEXT_API_SUPPORTED 1
-#else
-#define SB_TEXT_API_SUPPORTED 0
-#endif
 
 /**
  * Marks a declaration as deprecated, so that using it triggers a compiler warning where

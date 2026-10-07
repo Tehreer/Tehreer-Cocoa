@@ -83,20 +83,4 @@ final class RenderableFace {
             return Data(bytesNoCopy: bytes, count: count, deallocator: .free)
         }
     }
-
-    func cpalTable() -> CPAL.Table? {
-        guard let cpalData = dataOfTable("CPAL") else {
-            return nil
-        }
-
-        return CPAL.Table(data: cpalData)
-    }
-
-    func fvarTable() -> FVAR.Table? {
-        guard let fvarData = dataOfTable("fvar") else {
-            return nil
-        }
-
-        return FVAR.Table(data: fvarData)
-    }
 }

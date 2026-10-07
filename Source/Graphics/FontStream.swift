@@ -15,6 +15,7 @@
 //
 
 internal import FreeType
+internal import Tehreer
 
 import Foundation
 
@@ -23,7 +24,14 @@ final class FontStream {
 
     let faceCount: Int
 
+    /// The font file of Core that holds the same data.
+    let coreFile: TRFontFileRef
+
     convenience init?(path: String) {
+        guard let coreFile = TRFontFileCreateFromPath(path) else {
+            return nil
+        }
+
         let utf8Path = path.utf8CString.withUnsafeBufferPointer { (pointer) -> UnsafeMutablePointer<FT_String>? in
             guard let baseAddress = pointer.baseAddress else {
                 return nil
@@ -41,7 +49,7 @@ final class FontStream {
         arguments.pathname = utf8Path
         arguments.stream = nil
 
-        self.init(arguments: &arguments)
+        self.init(arguments: &arguments, coreFile: coreFile)
     }
 
     convenience init?(stream: InputStream) {
@@ -68,13 +76,20 @@ final class FontStream {
     }
 
     convenience init?(data: Data) {
+        let coreFile = data.withUnsafeBytes { (bytes) in
+            TRFontFileCreateFromMemory(bytes.baseAddress, TRUInteger(bytes.count))
+        }
+        guard let coreFile = coreFile else {
+            return nil
+        }
+
         let streamBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
         data.copyBytes(to: streamBuffer, count: data.count)
 
-        self.init(pointer: UnsafePointer<FT_Byte>(streamBuffer), size: data.count)
+        self.init(pointer: UnsafePointer<FT_Byte>(streamBuffer), size: data.count, coreFile: coreFile)
     }
 
-    private convenience init?(pointer: UnsafePointer<FT_Byte>, size: Int) {
+    private convenience init?(pointer: UnsafePointer<FT_Byte>, size: Int, coreFile: TRFontFileRef) {
         var arguments = FT_Open_Args()
         arguments.flags = FT_UInt(FT_OPEN_MEMORY)
         arguments.memory_base = pointer
@@ -82,10 +97,10 @@ final class FontStream {
         arguments.pathname = nil
         arguments.stream = nil
 
-        self.init(arguments: &arguments)
+        self.init(arguments: &arguments, coreFile: coreFile)
     }
 
-    convenience init?(arguments: inout FT_Open_Args) {
+    convenience init?(arguments: inout FT_Open_Args, coreFile: TRFontFileRef) {
         let numFaces = FreeType.withLibrary { (library) -> FT_Long in
             var face: FT_Face!
 
@@ -99,18 +114,22 @@ final class FontStream {
             return 0
         }
         guard numFaces > 0 else {
+            TRFontFileRelease(coreFile)
             return nil
         }
 
-        self.init(arguments: &arguments, numFaces: numFaces)
+        self.init(arguments: &arguments, numFaces: numFaces, coreFile: coreFile)
     }
 
-    private init(arguments: inout FT_Open_Args, numFaces: Int) {
+    private init(arguments: inout FT_Open_Args, numFaces: Int, coreFile: TRFontFileRef) {
         self.arguments = arguments
         self.faceCount = numFaces
+        self.coreFile = coreFile
     }
 
     deinit {
+        TRFontFileRelease(coreFile)
+
         if let utf8Path = arguments.pathname {
             utf8Path.deallocate()
         }
