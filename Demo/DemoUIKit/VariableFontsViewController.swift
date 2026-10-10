@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021 Muhammad Tayyab Akram
+// Copyright (C) 2021-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -123,7 +123,7 @@ class VariableFontsViewController: UIViewController, UIPickerViewDataSource, UIP
         let length = paletteField.font?.lineHeight ?? 0
 
         for palette in palettes {
-            let image = makePaletteImage(colors: palette.colors, length: length) ?? UIImage()
+            let image = makePaletteImage(colors: Array(palette.colors), length: length) ?? UIImage()
             paletteImages.append(image)
         }
 
@@ -166,7 +166,7 @@ class VariableFontsViewController: UIViewController, UIPickerViewDataSource, UIP
         }
 
         instances = fontFile.typefaces
-        variationAxes = firstFace.variationAxes
+        variationAxes = Array(firstFace.variationAxes)
 
         typefaceField.text = fontName(at: index)
         instancePicker.reloadAllComponents()
@@ -178,7 +178,7 @@ class VariableFontsViewController: UIViewController, UIPickerViewDataSource, UIP
     private func setupTypeface(_ face: Typeface) {
         typeface = face
         loadPalettes(for: face)
-        variationCoordinates = typeface?.variationCoordinates ?? []
+        variationCoordinates = typeface.map { Array($0.variationCoordinates) } ?? []
 
         instanceField.text = typeface?.styleName
 
@@ -207,7 +207,7 @@ class VariableFontsViewController: UIViewController, UIPickerViewDataSource, UIP
     private func setupPalette(index: Int) {
         paletteImageView.image = paletteImages[index]
 
-        let colors = typeface?.predefinedPalettes[index].colors ?? []
+        let colors = typeface.map { Array($0.predefinedPalettes[index].colors) } ?? []
         typeface = typeface?.colorInstance(forColors: colors)
 
         updatePreview()

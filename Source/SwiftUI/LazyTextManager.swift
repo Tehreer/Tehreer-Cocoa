@@ -167,7 +167,7 @@ private struct TextContext: Sendable {
         for (lineIndex, textLine) in lines.enumerated() {
             defer { lineCount += 1 }
 
-            var boundingBox = textLine.computeBoundingBox(with: renderer)
+            var boundingBox = textLine.computeInkBox(with: renderer)
             boundingBox = boundingBox.offsetBy(dx: textLine.origin.x, dy: textLine.origin.y)
             boundingBox.origin.x.round(.down)
             boundingBox.origin.y.round(.down)
@@ -256,10 +256,10 @@ final class LazyTextManager: ObservableObject {
     @MainActor
     private func updateRenderer() {
         renderer.renderScale = UIScreen.main.scale
-        renderer.renderingStyle = properties.renderingStyle
+        renderer.drawStyle = properties.drawStyle
         renderer.fillColor = UIColor(properties.textColor)
         renderer.strokeColor = UIColor(properties.strokeColor)
-        renderer.strokeWidth = properties.strokeWidth
+        renderer.strokeRadius = properties.strokeRadius
         renderer.strokeCap = properties.strokeCap
         renderer.strokeJoin = properties.strokeJoin
         renderer.strokeMiter = properties.strokeMiter

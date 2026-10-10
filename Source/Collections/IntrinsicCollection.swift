@@ -27,6 +27,12 @@ class IntrinsicCollection<T> {
     func item(at index: Int) -> T {
         fatalError()
     }
+
+    /// Returns the memory that Core keeps for a range of the elements, if this collection reads
+    /// it and its elements are of the requested type, or `nil` otherwise.
+    func coreBuffer<Raw>(of type: Raw.Type, in range: Range<Int>) -> UnsafeBufferPointer<Raw>? {
+        return nil
+    }
 }
 
 extension IntrinsicCollection {

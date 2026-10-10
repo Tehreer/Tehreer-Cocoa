@@ -76,6 +76,12 @@ public final class BidiAlgorithm {
         SBAlgorithmRelease(algorithm)
     }
 
+    /// The bidirectional classes of the characters of the string, represented by UTF-16 code unit
+    /// indices. They are read from SheenBidi when they are asked for.
+    public var characterBidiClasses: CharacterBidiClasses {
+        return CharacterBidiClasses(self)
+    }
+
     /// Returns the boundary of the first paragraph within the specified UTF-16 range.
     ///
     /// The boundary of the paragraph occurs after a character whose bidirectional type is Paragraph
@@ -202,5 +208,49 @@ public final class BidiAlgorithm {
         let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: clampedRange)
 
         return makeParagraph(codeUnitRange: codeUnitRange, baseLevel: baseLevel)
+    }
+}
+
+// MARK: - CharacterBidiClasses
+
+extension BidiAlgorithm {
+    /// A collection of the bidirectional classes of a string, represented by UTF-16 code unit
+    /// indices.
+    public struct CharacterBidiClasses: RandomAccessCollection {
+        private let owner: BidiAlgorithm
+
+        init(_ owner: BidiAlgorithm) {
+            self.owner = owner
+        }
+
+        /// The index to the first element.
+        public var startIndex: Int {
+            return 0
+        }
+
+        /// The index after the last element.
+        public var endIndex: Int {
+            return owner.buffer.length
+        }
+
+        /// Accesses the bidirectional class at the specified position.
+        ///
+        /// - Parameter index: The position of the element to access.
+        public subscript(index: Int) -> BidiClass {
+            precondition(index >= 0 && index < count, .indexOutOfRange)
+
+            let types = SBAlgorithmGetBidiTypesPtr(owner.algorithm)!
+            return BidiClass(rawValue: Int(types[index])) ?? .unknown
+        }
+
+        /// Accesses the bidirectional class at the specified character index.
+        ///
+        /// - Parameter index: A valid character index of the source string.
+        public subscript(index: String.Index) -> BidiClass {
+            let string = owner.buffer.string
+            precondition(index >= string.startIndex && index < string.endIndex, .indexOutOfRange)
+
+            return self[string.utf16Index(forCharacterAt: index)]
+        }
     }
 }

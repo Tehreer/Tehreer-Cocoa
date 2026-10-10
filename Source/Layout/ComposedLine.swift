@@ -25,21 +25,12 @@ import Foundation
 public final class ComposedLine: @unchecked Sendable {
     let core: TRComposedLineRef
     private let string: String
+    private let objects: CoreTextObjects
 
     init(core: TRComposedLineRef, string: String, objects: CoreTextObjects) {
         self.core = core
         self.string = string
-
-        let count = Int(TRComposedLineGetGlyphRunCount(core))
-        var runs: [GlyphRun] = []
-        runs.reserveCapacity(count)
-
-        for index in 0 ..< count {
-            runs.append(GlyphRun(core: TRComposedLineGetGlyphRun(core, TRUInteger(index)),
-                                 string: string, objects: objects))
-        }
-
-        self.visualRuns = runs
+        self.objects = objects
     }
 
     deinit {
@@ -48,8 +39,7 @@ public final class ComposedLine: @unchecked Sendable {
 
     /// The UTF-16 range of this line in source string.
     public var codeUnitRange: Range<Int> {
-        let range = TRComposedLineGetCodeUnitRange(core)
-        return Int(range.index) ..< Int(range.index + range.length)
+        return Int(TRComposedLineGetCodeUnitStart(core)) ..< Int(TRComposedLineGetCodeUnitEnd(core))
     }
 
     /// The index to the first character of this line in source string.
@@ -69,8 +59,7 @@ public final class ComposedLine: @unchecked Sendable {
 
     /// The origin of this line in parent frame.
     public var origin: CGPoint {
-        let origin = TRComposedLineGetOrigin(core)
-        return CGPoint(x: CGFloat(origin.x), y: CGFloat(origin.y))
+        return CGPoint(TRComposedLineGetOrigin(core))
     }
 
     /// The ascent of this line which is the maximum ascent from the baseline of all runs.
@@ -96,6 +85,12 @@ public final class ComposedLine: @unchecked Sendable {
     /// The typographic height of this line.
     public var height: CGFloat {
         return CGFloat(TRComposedLineGetHeight(core))
+    }
+
+    /// A Boolean value that indicates whether the text of this line is cut short, as by a
+    /// truncation token.
+    public var isTruncated: Bool {
+        return TRComposedLineIsTruncated(core) != 0
     }
 
     /// Whether this line is the line of a view that has a line of its own.
@@ -124,8 +119,20 @@ public final class ComposedLine: @unchecked Sendable {
         return CGFloat(TRComposedLineGetTrailingWhitespaceExtent(core))
     }
 
-    /// The glyph runs of this line in visual order.
-    public let visualRuns: [GlyphRun]
+    private let runs = Lazy<[GlyphRun]>()
+
+    /// The glyph runs of this line in visual order. They are made the first time they are asked for.
+    public var visualRuns: PrimitiveCollection<GlyphRun> {
+        return PrimitiveCollection(runs.get {
+            (0 ..< TRComposedLineGetGlyphRunCount(core)).map {
+                GlyphRun(
+                    core: TRComposedLineGetGlyphRun(core, $0)!,
+                    string: string,
+                    objects: objects
+                )
+            }
+        })
+    }
 
     /// Determines the distance of the specified UTF-16 code unit from the start of the line assumed
     /// at zero.
@@ -137,7 +144,10 @@ public final class ComposedLine: @unchecked Sendable {
     public func distance(forCodeUnitAt index: Int) -> CGFloat {
         precondition(index >= codeUnitRange.lowerBound && index <= codeUnitRange.upperBound, .indexOutOfRange)
 
-        return CGFloat(TRComposedLineGetDistance(core, TRUInteger(index)))
+        var distance: TRFloat = 0
+        _ = TRComposedLineGetCodeUnitDistance(core, TRUInteger(index), &distance)
+
+        return CGFloat(distance)
     }
 
     /// Determines the distance of the specified character from the start of the line assumed at
@@ -169,15 +179,19 @@ public final class ComposedLine: @unchecked Sendable {
         }
 
         var edges: [CGFloat] = []
-        let range = TRRange(index: TRUInteger(clampedRange.lowerBound),
-                            length: TRUInteger(clampedRange.count))
 
         withUnsafeMutablePointer(to: &edges) { (pointer) in
-            TRComposedLineEnumerateEdges(core, range, { (user, left, right) in
-                let edges = user!.assumingMemoryBound(to: [CGFloat].self)
-                edges.pointee.append(CGFloat(left))
-                edges.pointee.append(CGFloat(right))
-            }, pointer)
+            _ = TRComposedLineEnumerateEdges(
+                core,
+                TRUInteger(clampedRange.lowerBound),
+                TRUInteger(clampedRange.count),
+                { (user, left, right, _) in
+                    let edges = user!.assumingMemoryBound(to: [CGFloat].self)
+                    edges.pointee.append(CGFloat(left))
+                    edges.pointee.append(CGFloat(right))
+                },
+                pointer
+            )
         }
 
         return edges
@@ -204,7 +218,7 @@ public final class ComposedLine: @unchecked Sendable {
     /// - Returns: The index of UTF-16 code unit in source string, nearest to the specified
     ///            distance.
     public func indexOfCodeUnit(at distance: CGFloat) -> Int {
-        return Int(TRComposedLineGetIndexOfCodeUnit(core, TRFloat(distance)))
+        return Int(TRComposedLineGetCodeUnitIndex(core, TRFloat(distance)))
     }
 
     /// Returns the index of character nearest to the specified distance.
@@ -231,28 +245,36 @@ public final class ComposedLine: @unchecked Sendable {
         return CGFloat(TRComposedLineGetPenOffset(core, TRFloat(flushFactor), TRFloat(flushExtent)))
     }
 
-    func computeBoundingBox(with renderer: Renderer) -> CGRect {
-        let box = TRComposedLineGetBoundingBox(core, renderer.core)
-        renderer.syncCore()
-
-        if box.size.width == 0 && box.size.height == 0 {
-            return .null
-        }
-
-        return CGRect(x: CGFloat(box.origin.x), y: CGFloat(box.origin.y),
-                      width: CGFloat(box.size.width), height: CGFloat(box.size.height))
+    /// Calculates the ink box of this line, which is the smallest rectangle that encloses what is
+    /// drawn for its glyphs, relative to the origin of the line. It is a null rectangle if nothing
+    /// is drawn.
+    ///
+    /// The renderer is set up for each run while it is measured, and gets back what it had.
+    ///
+    /// - Parameter renderer: The renderer with the glyph cache to use, and with the settings that
+    ///                       are not the runs'.
+    /// - Returns: A rectangle that tightly encloses the glyphs of this line.
+    public func computeInkBox(with renderer: Renderer) -> CGRect {
+        return CGRect(inkBox: TRComposedLineGetInkBox(core, renderer.core))
     }
 
-    /// Draws this line in the `context` with the specified renderer.
+    /// Draws this line in the `context` with the specified renderer. The runs are drawn one after
+    /// another in their visual order: the background, the glyphs and then the decorations of a run,
+    /// before those of the next one. The backgrounds are as tall as the line.
     ///
     /// - Parameters:
     ///   - renderer: The renderer with which to draw the line.
     ///   - context: The context in which to draw the line.
     public func draw(with renderer: Renderer, in context: CGContext) {
-        for glyphRun in visualRuns {
-            context.translateBy(x: glyphRun.origin.x, y: glyphRun.origin.y)
-            glyphRun.draw(with: renderer, in: context)
-            context.translateBy(x: -glyphRun.origin.x, y: -glyphRun.origin.y)
+        // The origin of the line is where it is placed in its frame. Here it is drawn at the
+        // current position of the context, so the origin is taken back.
+        let origin = TRPoint(
+            x: -TRComposedLineGetOrigin(core).x,
+            y: -TRComposedLineGetOrigin(core).y
+        )
+
+        renderer.withDrawing(in: context, objects: objects) {
+            TRComposedLineDraw(core, renderer.core, origin)
         }
     }
 }

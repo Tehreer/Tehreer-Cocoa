@@ -105,18 +105,22 @@ final class RendererTests: XCTestCase {
     func testBoundingBoxes() throws {
         let renderer = try makeRenderer()
 
-        let glyphBox = renderer.computeBoundingBox(forGlyph: 1)
+        let glyphBox = renderer.computeInkBox(forGlyph: 1)
         XCTAssertFalse(glyphBox.isEmpty)
         XCTAssertLessThan(glyphBox.minY, 0.0)
 
-        let runBox = renderer.computeBoundingBox(forGlyphs: [1, 2] as [GlyphID],
-                                                 offsets: [CGPoint.zero, CGPoint.zero],
-                                                 advances: [50.0, 50.0] as [CGFloat])
+        let runBox = renderer.computeInkBox(
+            forGlyphs: [1, 2] as [GlyphID],
+            offsets: [CGPoint.zero, CGPoint.zero],
+            advances: [50.0, 50.0] as [CGFloat]
+        )
         XCTAssertGreaterThan(runBox.width, glyphBox.width)
 
-        let empty = renderer.computeBoundingBox(forGlyphs: [] as [GlyphID],
-                                                offsets: [] as [CGPoint],
-                                                advances: [] as [CGFloat])
+        let empty = renderer.computeInkBox(
+            forGlyphs: [] as [GlyphID],
+            offsets: [] as [CGPoint],
+            advances: [] as [CGFloat]
+        )
         XCTAssertTrue(empty.isNull)
     }
 
@@ -173,10 +177,10 @@ final class RendererTests: XCTestCase {
 
     func testStrokeStyles() throws {
         let renderer = try makeRenderer()
-        renderer.strokeWidth = 4.0
+        renderer.strokeRadius = 2.0
 
-        func render(_ style: Renderer.RenderingStyle) throws -> [UInt8] {
-            renderer.renderingStyle = style
+        func render(_ style: Renderer.DrawStyle) throws -> [UInt8] {
+            renderer.drawStyle = style
 
             return try draw(width: 200, height: 200) { (context) in
                 context.translateBy(x: 50.0, y: 150.0)
@@ -255,9 +259,11 @@ final class RendererTests: XCTestCase {
 
             queue.async(group: group) {
                 for _ in 0 ..< 50 {
-                    let box = local.computeBoundingBox(forGlyphs: [1, 2, 3] as [GlyphID],
-                                                       offsets: [CGPoint](repeating: .zero, count: 3),
-                                                       advances: [CGFloat](repeating: 20.0, count: 3))
+                    let box = local.computeInkBox(
+                        forGlyphs: [1, 2, 3] as [GlyphID],
+                        offsets: [CGPoint](repeating: .zero, count: 3),
+                        advances: [CGFloat](repeating: 20.0, count: 3)
+                    )
                     if box.isNull || box.isEmpty {
                         inked.lock()
                         failures += 1

@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2021 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -78,8 +78,8 @@ class LabelViewController: UIViewController {
         articleLabel.textColor = UIColor(red: 0.30, green: 0.60, blue: 0.15, alpha: 1.0)
         articleLabel.textSize = 30.0
         articleLabel.attributedText = text
-        articleLabel.renderingStyle = .fillStroke
+        articleLabel.drawStyle = .fillStroke
         articleLabel.strokeColor = UIColor(red: 1.0, green: 0.5, blue: 0.0, alpha: 1.0)
-        articleLabel.strokeWidth = 1.25
+        articleLabel.strokeRadius = 0.625
     }
 }

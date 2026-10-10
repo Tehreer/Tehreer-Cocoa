@@ -135,11 +135,18 @@ public struct StyledText: View {
         return styledText
     }
 
-    /// Sets the truncation place for the last line of the text. The truncation is disabled if its
-    /// value is `.nil`
-    public func truncationPlace(_ truncationPlace: TruncationPlace?) -> StyledText {
+    /// Sets the truncation place for the last line of the text. It takes effect only when the
+    /// truncation is enabled.
+    public func truncationPlace(_ truncationPlace: TruncationPlace) -> StyledText {
         var styledText = self
         styledText.properties.truncationPlace = truncationPlace
+        return styledText
+    }
+
+    /// Sets whether or not to truncate the last line of the text in case of overflow.
+    public func truncationEnabled(_ enabled: Bool) -> StyledText {
+        var styledText = self
+        styledText.properties.isTruncationEnabled = enabled
         return styledText
     }
 
@@ -167,10 +174,10 @@ public struct StyledText: View {
         return styledText
     }
 
-    /// Sets the rendering style, used for controlling how text should appear while drawing.
-    public func renderingStyle(_ renderingStyle: Renderer.RenderingStyle) -> StyledText {
+    /// Sets the draw style, used for controlling how text should appear while drawing.
+    public func drawStyle(_ drawStyle: Renderer.DrawStyle) -> StyledText {
         var styledText = self
-        styledText.properties.renderingStyle = renderingStyle
+        styledText.properties.drawStyle = drawStyle
         return styledText
     }
 
@@ -181,10 +188,10 @@ public struct StyledText: View {
         return styledText
     }
 
-    /// Sets the stroke width for text.
-    public func strokeWidth(_ strokeWidth: CGFloat) -> StyledText {
+    /// Sets the stroke radius for text.
+    public func strokeRadius(_ strokeRadius: CGFloat) -> StyledText {
         var styledText = self
-        styledText.properties.strokeWidth = strokeWidth
+        styledText.properties.strokeRadius = strokeRadius
         return styledText
     }
 

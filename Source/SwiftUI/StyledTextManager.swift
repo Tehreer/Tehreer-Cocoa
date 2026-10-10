@@ -88,7 +88,7 @@ final class StyledTextManager: ObservableObject {
             if let typesetter = resolver.typesetter {
                 let existingAttributes = typesetter.defaultAttributes
 
-                if typesetter.text == attributedString
+                if typesetter.text.attributedString == attributedString
                     && existingAttributes.count == defaultAttributes.count
                     && existingAttributes[.typeface] as? Typeface === defaultAttributes[.typeface] as? Typeface
                     && existingAttributes[.typeSize] as? CGFloat == defaultAttributes[.typeSize] as? CGFloat {

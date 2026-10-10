@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-
 internal import Tehreer
 
 import CoreGraphics
@@ -24,33 +23,22 @@ import UIKit
 /// An ID of a glyph in a font.
 public typealias GlyphID = UInt16
 
-/// A tag of a typeface.
-public typealias TypefaceTag = AnyHashable
+/// A tag that identifies a registered typeface. It is a positive integer, and zero means none.
+public typealias TypefaceTag = Int
+
+/// An ID of a family of typefaces. It is a positive integer, and zero means none.
+public typealias TypeFamilyID = Int
 
 /// The `Typeface` class specifies the typeface and intrinsic style of a font. This is used in the
 /// renderer, along with optionally `Renderer` settings like `typeSize`, `slantAngle`, `scaleX`, to
 /// specify how text appears when drawn (and measured).
-// Unchecked because everything is set once in the initializers, except `tag`, which is guarded by
-// `TypefaceManager`. The typeface of Core is immutable and safe to use from any thread.
+///
+/// Everything a typeface tells is read from Core when it is asked for, or the first time it is, in
+/// a thread safe manner. The typeface of Core is immutable and safe to use from any thread.
+// Unchecked because everything is set once in the initializers.
 public final class Typeface: @unchecked Sendable {
-    var tag: TypefaceTag?
-
     /// The typeface of Core that answers everything about the font.
     let core: TRTypefaceRef
-
-    private let names: Names
-    private let design: DesignCharacteristics
-
-    public let variationAxes: [VariationAxis]
-    public let namedStyles: [NamedStyle]
-    public let paletteEntryNames: [String]
-    public let predefinedPalettes: [ColorPalette]
-
-    private struct DesignCharacteristics {
-        var weight: Typeface.Weight
-        var width: Typeface.Width
-        var slope: Typeface.Slope
-    }
 
     private struct Names {
         var family: String
@@ -58,8 +46,10 @@ public final class Typeface: @unchecked Sendable {
         var full: String
     }
 
-    /// Creates a typeface from the specified file. The data for the font is directly read from the
-    /// file when needed.
+    private let names = Lazy<Names>()
+
+    /// Creates a typeface from the first typeface of the specified file. The data for the font is
+    /// directly read from the file when needed.
     ///
     /// - Parameter path: The path of the font file.
     public convenience init?(path: String) {
@@ -67,7 +57,7 @@ public final class Typeface: @unchecked Sendable {
             return nil
         }
 
-        self.init(fontStream: fontStream, faceIndex: 0)
+        self.init(fontStream: fontStream)
     }
 
     /// Creates a new typeface from the data of the font.
@@ -78,7 +68,7 @@ public final class Typeface: @unchecked Sendable {
             return nil
         }
 
-        self.init(fontStream: fontStream, faceIndex: 0)
+        self.init(fontStream: fontStream)
     }
 
     /// Creates a new typeface from the input stream by copying its data into a memory buffer. It
@@ -90,217 +80,187 @@ public final class Typeface: @unchecked Sendable {
             return nil
         }
 
-        self.init(fontStream: fontStream, faceIndex: 0)
+        self.init(fontStream: fontStream)
     }
 
-    init?(fontStream: FontStream, faceIndex: Int) {
-        guard let core = TRTypefaceCreate(fontStream.coreFile, TRUInteger(faceIndex)) else {
+    /// Creates a typeface from the first default typeface of the font file of Core.
+    convenience init?(fontStream: FontStream) {
+        guard let core = fontStream.coreTypeface(at: 0) else {
             return nil
         }
 
-        self.core = core
-        self.variationAxes = Typeface.makeVariationAxes(core: core)
-        self.namedStyles = Typeface.makeNamedStyles(core: core)
-        self.paletteEntryNames = Typeface.makePaletteEntryNames(core: core)
-        self.predefinedPalettes = Typeface.makePredefinedPalettes(core: core)
-        self.names = Typeface.makeNames(core: core)
-        self.design = Typeface.makeDesign(core: core)
+        self.init(retaining: core)
     }
 
-    private init(parent: Typeface, core: TRTypefaceRef) {
-        self.core = core
+    /// Creates a typeface that retains the typeface of Core, so it can outlive its font file.
+    init(retaining core: TRTypefaceRef) {
+        self.core = TRTypefaceRetain(core)!
+    }
 
-        self.variationAxes = parent.variationAxes
-        self.namedStyles = parent.namedStyles
-        self.paletteEntryNames = parent.paletteEntryNames
-        self.predefinedPalettes = parent.predefinedPalettes
-        self.names = Typeface.makeNames(core: core)
-        self.design = Typeface.makeDesign(core: core)
+    /// Creates a typeface that takes over the reference of the typeface of Core.
+    private init(owning core: TRTypefaceRef) {
+        self.core = core
     }
 
     deinit {
         TRTypefaceRelease(core)
     }
 
-    // MARK: Conversion From Core
-
-    private static func makeVariationAxes(core: TRTypefaceRef) -> [VariationAxis] {
-        guard let pointer = TRTypefaceGetVariationAxesPtr(core) else {
-            return []
-        }
-
-        let axes = UnsafeBufferPointer(start: pointer, count: Int(TRTypefaceGetVariationAxisCount(core)))
-
-        return axes.map { axis in
-            VariationAxis(tag: SFNTTag(rawValue: axis.tag)!,
-                          name: String(axis.name),
-                          flags: VariationAxis.Flags(rawValue: Int(axis.flags)),
-                          defaultValue: CGFloat(axis.defaultValue),
-                          minValue: CGFloat(axis.minValue),
-                          maxValue: CGFloat(axis.maxValue))
-        }
-    }
-
-    private static func makeNamedStyles(core: TRTypefaceRef) -> [NamedStyle] {
-        guard let pointer = TRTypefaceGetNamedStylesPtr(core) else {
-            return []
-        }
-
-        let styles = UnsafeBufferPointer(start: pointer, count: Int(TRTypefaceGetNamedStyleCount(core)))
-
-        return styles.map { style in
-            let coordinates = UnsafeBufferPointer(start: style.coordinatesPtr,
-                                                  count: Int(style.coordinateCount))
-
-            return NamedStyle(styleName: String(style.subfamilyName),
-                              coordinates: coordinates.map { CGFloat($0) },
-                              postScriptName: style.postScriptName.map { String($0) })
-        }
-    }
-
-    private static func makePaletteEntryNames(core: TRTypefaceRef) -> [String] {
-        guard let pointer = TRTypefaceGetPaletteEntriesPtr(core) else {
-            return []
-        }
-
-        let entries = UnsafeBufferPointer(start: pointer, count: Int(TRTypefaceGetPaletteEntryCount(core)))
-
-        return entries.map { String($0.name) }
-    }
-
-    private static func makePredefinedPalettes(core: TRTypefaceRef) -> [ColorPalette] {
-        guard let pointer = TRTypefaceGetPredefinedPalettesPtr(core) else {
-            return []
-        }
-
-        let palettes = UnsafeBufferPointer(start: pointer, count: Int(TRTypefaceGetPredefinedPaletteCount(core)))
-
-        return palettes.map { palette in
-            let colors = UnsafeBufferPointer(start: palette.colorsPtr, count: Int(palette.colorCount))
-
-            return ColorPalette(name: String(palette.name),
-                                flags: ColorPalette.Flags(rawValue: Int(palette.flags)),
-                                colors: colors.map { UIColor(coreColor: $0) })
-        }
-    }
-
-    private static func makeNames(core: TRTypefaceRef) -> Names {
-        return Names(family: String(TRTypefaceGetFamilyName(core)),
-                     style: String(TRTypefaceGetSubfamilyName(core)),
-                     full: String(TRTypefaceGetFullName(core)))
-    }
-
-    private static func makeDesign(core: TRTypefaceRef) -> DesignCharacteristics {
-        return DesignCharacteristics(
-            weight: Typeface.Weight(rawValue: Int(TRTypefaceGetWeight(core))) ?? .regular,
-            width: Typeface.Width(rawValue: Int(TRTypefaceGetWidth(core))) ?? .normal,
-            slope: Typeface.Slope(rawValue: Int(TRTypefaceGetSlope(core))) ?? .plain
-        )
-    }
-
     // MARK: Variations
 
     /// A Boolean value that indicates whether the typeface supports OpenType font variations.
     public var isVariable: Bool {
-        return !variationAxes.isEmpty
+        return TRTypefaceGetVariationAxisCount(core) > 0
+    }
+
+    /// The variation axes of this typeface, which is empty if it is not variable.
+    public var variationAxes: PrimitiveCollection<VariationAxis> {
+        return PrimitiveCollection(CoreCollection(
+            owner: self,
+            pointer: TRTypefaceGetVariationAxesPtr(core),
+            count: Int(TRTypefaceGetVariationAxisCount(core))
+        ) {
+            VariationAxis(owner: self, axis: $0)
+        })
+    }
+
+    /// The named styles of this typeface, which is empty if it has none.
+    public var namedStyles: PrimitiveCollection<NamedStyle> {
+        return PrimitiveCollection(CoreCollection(
+            owner: self,
+            pointer: TRTypefaceGetNamedStylesPtr(core),
+            count: Int(TRTypefaceGetNamedStyleCount(core))
+        ) {
+            NamedStyle(owner: self, style: $0)
+        })
     }
 
     /// Returns a variation instance of this typeface with the specified design coordinates.
     ///
     /// - Parameter coordinates: The variation design coordinates.
-    /// - Returns: A variation instance of this typeface with the specified design coordinates.
+    /// - Returns: A variation instance of this typeface with the specified design coordinates, or
+    ///            `nil` if this typeface is not variable.
     public func variationInstance(forCoordinates coordinates: [CGFloat]) -> Typeface? {
         guard isVariable else {
             return nil
         }
 
-        var coordArray = Array<CGFloat>(repeating: 0, count: variationAxes.count)
-        let coordCount = min(coordinates.count, variationAxes.count)
-
-        for i in 0 ..< coordCount {
-            coordArray[i] = coordinates[i]
-        }
-
-        let floats = coordArray.map { Float($0) }
+        let floats = coordinates.map { TRFloat($0) }
         guard let derivedCore = TRTypefaceCreateWithVariation(core, floats, TRUInteger(floats.count)) else {
             return nil
         }
 
-        return Typeface(parent: self, core: derivedCore)
+        return Typeface(owning: derivedCore)
     }
 
     /// The design variation coordinates of this typeface.
-    public var variationCoordinates: [CGFloat] {
-        guard let pointer = TRTypefaceGetVariationCoordinatesPtr(core) else {
-            return []
-        }
-
-        let coordinates = UnsafeBufferPointer(start: pointer, count: variationAxes.count)
-        return coordinates.map { CGFloat($0) }
+    public var variationCoordinates: PrimitiveCollection<CGFloat> {
+        return PrimitiveCollection(CoreCollection(
+            owner: self,
+            pointer: TRTypefaceGetVariationCoordinatesPtr(core),
+            count: Int(TRTypefaceGetVariationAxisCount(core))
+        ) {
+            CGFloat($0)
+        })
     }
 
     // MARK: Colors
 
-    /// The colors associated with this typeface if it supports OpenType color palettes.
-    public var associatedColors: [UIColor] {
-        guard let pointer = TRTypefaceGetAssociatedColorsPtr(core) else {
-            return []
-        }
+    /// The names of the palette entries of this typeface, which is empty if it has no color
+    /// palettes.
+    public var paletteEntryNames: PrimitiveCollection<String> {
+        return PrimitiveCollection(CoreCollection(
+            owner: self,
+            pointer: TRTypefaceGetPaletteEntriesPtr(core),
+            count: Int(TRTypefaceGetPaletteEntryCount(core))
+        ) {
+            String($0.name)
+        })
+    }
 
-        let colors = UnsafeBufferPointer(start: pointer, count: paletteEntryNames.count)
-        return colors.map { UIColor(coreColor: $0) }
+    /// The predefined color palettes of this typeface.
+    public var predefinedPalettes: PrimitiveCollection<ColorPalette> {
+        return PrimitiveCollection(CoreCollection(
+            owner: self,
+            pointer: TRTypefaceGetPredefinedPalettesPtr(core),
+            count: Int(TRTypefaceGetPredefinedPaletteCount(core))
+        ) {
+            ColorPalette(owner: self, palette: $0)
+        })
+    }
+
+    /// The colors associated with this typeface if it supports OpenType color palettes.
+    public var associatedColors: PrimitiveCollection<UIColor> {
+        return PrimitiveCollection(CoreCollection(
+            owner: self,
+            pointer: TRTypefaceGetAssociatedColorsPtr(core),
+            count: Int(TRTypefaceGetPaletteEntryCount(core))
+        ) {
+            UIColor(coreValue: $0)
+        })
     }
 
     /// Returns a color instance of this typeface with the specified colors array.
     ///
     /// - Parameter colors: The colors array.
-    /// - Returns: A color instance of this typeface with the specified colors array.
+    /// - Returns: A color instance of this typeface with the specified colors array, or `nil` if
+    ///            this typeface has no color palettes.
     public func colorInstance(forColors colors: [UIColor]) -> Typeface? {
-        guard !paletteEntryNames.isEmpty else {
+        guard TRTypefaceGetPaletteEntryCount(core) > 0 else {
             return nil
         }
 
-        let values = colors.map { $0.coreColor }
+        let values = colors.map { $0.coreValue }
         guard let derivedCore = TRTypefaceCreateWithColors(core, values, TRUInteger(values.count)) else {
             return nil
         }
 
-        return Typeface(parent: self, core: derivedCore)
+        return Typeface(owning: derivedCore)
     }
 
     // MARK: Description
 
+    private var lazyNames: Names {
+        return names.get {
+            Names(
+                family: String(TRTypefaceGetFamilyName(core)),
+                style: String(TRTypefaceGetSubfamilyName(core)),
+                full: String(TRTypefaceGetFullName(core))
+            )
+        }
+    }
+
     /// The family name of this typeface.
     public var familyName: String {
-        return names.family
+        return lazyNames.family
     }
 
     /// The style name of this typeface.
     public var styleName: String {
-        return names.style
+        return lazyNames.style
     }
 
     /// The full name of this typeface.
     public var fullName: String {
-        return names.full
+        return lazyNames.full
     }
 
     /// The typographic weight of this typeface. The weight value determines the thickness
     /// associated with a given character in a typeface.
     public var weight: Weight {
-        return design.weight
+        return Weight(coreValue: TRTypefaceGetWeight(core))
     }
 
     /// The typographic width of this typeface. The width value determines whether a typeface is
     /// expanded or condensed when it is displayed.
     public var width: Width {
-        return design.width
+        return Width(coreValue: TRTypefaceGetWidth(core))
     }
 
     /// The typographic slope of this typeface. The slope value determines whether a typeface is
     /// plain or slanted when it is displayed.
     public var slope: Slope {
-        return design.slope
+        return Slope(coreValue: TRTypefaceGetSlope(core))
     }
 
     // MARK: Metrics
@@ -333,10 +293,7 @@ public final class Typeface: @unchecked Sendable {
     /// The font bounding box expressed in font units. The box is large enough to contain any glyph
     /// from the font.
     public var boundingBox: CGRect {
-        let box = TRTypefaceGetBoundingBox(core)
-
-        return CGRect(x: CGFloat(box.origin.x), y: CGFloat(box.origin.y),
-                      width: CGFloat(box.size.width), height: CGFloat(box.size.height))
+        return CGRect(TRTypefaceGetBoundingBox(core))
     }
 
     /// The position, in font units, of the underline for this typeface.
@@ -359,22 +316,77 @@ public final class Typeface: @unchecked Sendable {
         return Int(TRTypefaceGetStrikeoutThickness(core))
     }
 
+    /// A Boolean value that indicates whether the glyphs of this typeface have outlines. The glyphs
+    /// of a typeface that is not scalable, such as a color emoji font with bitmaps only, have
+    /// images at the sizes of its bitmap strikes.
+    public var isScalable: Bool {
+        return TRTypefaceIsScalable(core) != 0
+    }
+
+    /// The sizes at which this typeface has the images of its glyphs, which is empty for a typeface
+    /// that has none.
+    public var bitmapStrikes: PrimitiveCollection<BitmapStrike> {
+        return PrimitiveCollection(CoreCollection(
+            owner: self,
+            pointer: TRTypefaceGetBitmapStrikesPtr(core),
+            count: Int(TRTypefaceGetBitmapStrikeCount(core))
+        ) {
+            BitmapStrike(pixelWidth: CGFloat($0.pixelWidth), pixelHeight: CGFloat($0.pixelHeight))
+        })
+    }
+
+    // MARK: Tables
+
+    /// Returns the size of the table specified by the tag, without reading it.
+    ///
+    /// - Parameter tag: The tag of the table.
+    /// - Returns: The size of the table in bytes, which is zero if no such table exists.
+    public func sizeOfTable(_ tag: SFNTTag) -> Int {
+        return Int(TRTypefaceGetTableSize(core, tag.rawValue))
+    }
+
     /// Returns the data of the table specified by the tag.
     ///
     /// - Parameter tag: The tag of the table.
     /// - Returns: The data of the intended table, or `nil` if no such table exists.
     public func dataOfTable(_ tag: SFNTTag) -> Data? {
-        let size = Int(TRTypefaceGetTableData(core, tag.rawValue, nil, 0))
-        guard size > 0 else {
+        return dataOfTable(tag, offset: 0, length: sizeOfTable(tag))
+    }
+
+    /// Returns a part of the data of the table specified by the tag. Only the part that is asked
+    /// for is read from the font, so a part of a big table is cheap.
+    ///
+    /// - Parameters:
+    ///   - tag: The tag of the table.
+    ///   - offset: The offset in the table from where to copy, in bytes.
+    ///   - length: The maximum number of bytes to copy. A part that goes beyond the end of the
+    ///             table is cut short.
+    /// - Returns: The data copied from the table, or `nil` if no such table exists or the offset is
+    ///            not within it.
+    public func dataOfTable(_ tag: SFNTTag, offset: Int, length: Int) -> Data? {
+        precondition(offset >= 0 && length >= 0, .indexOutOfRange)
+
+        guard length > 0 else {
             return nil
         }
 
-        var data = Data(count: size)
+        var data = Data(count: length)
         let copied = data.withUnsafeMutableBytes { (bytes) in
-            TRTypefaceGetTableData(core, tag.rawValue, bytes.baseAddress, TRUInteger(size))
+            Int(TRTypefaceGetTableData(
+                core,
+                tag.rawValue,
+                TRUInteger(offset),
+                bytes.baseAddress,
+                TRUInteger(length)
+            ))
         }
 
-        return Int(copied) == size ? data : nil
+        guard copied > 0 else {
+            return nil
+        }
+
+        data.removeSubrange(copied...)
+        return data
     }
 
     // MARK: Glyphs
@@ -385,6 +397,28 @@ public final class Typeface: @unchecked Sendable {
     /// - Returns: The glyph id for the specified code point.
     public func glyphID(forCodePoint codePoint: UTF32Char) -> GlyphID {
         return TRTypefaceGetGlyphID(core, codePoint)
+    }
+
+    /// Returns the glyph id for the specified code point followed by a variation selector.
+    ///
+    /// - Parameters:
+    ///   - codePoint: The code point for which the glyph id is obtained.
+    ///   - selector: The variation selector that follows the code point.
+    /// - Returns: The glyph id of the variant, or zero if the typeface has no such variant.
+    public func variantGlyphID(forCodePoint codePoint: UTF32Char, selector: UTF32Char) -> GlyphID {
+        return TRTypefaceGetVariantGlyphID(core, codePoint, selector)
+    }
+
+    /// Returns the name that the font gives to a glyph in its post table, or its charset if it is
+    /// a CFF font.
+    ///
+    /// - Parameter glyphID: The id of the glyph.
+    /// - Returns: The name of the glyph, or `nil` if the font has none for it.
+    public func glyphName(forGlyph glyphID: GlyphID) -> String? {
+        var buffer = [CChar](repeating: 0, count: 256)
+        let length = Int(TRTypefaceGetGlyphName(core, glyphID, &buffer, TRUInteger(buffer.count)))
+
+        return length > 0 ? String(coreCharacters: buffer, length: length) : nil
     }
 
     /// Retrieves the advance for the specified glyph.
@@ -414,45 +448,13 @@ public final class Typeface: @unchecked Sendable {
 
         // The path of Core points downward. The transform is meant for the upward path, so it
         // is applied between two flips.
-        var matrix = TRAffineTransform(a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0)
+        var matrix = CGAffineTransform.identity.coreValue
         if let transform = transform {
             let flip = CGAffineTransform(scaleX: 1.0, y: -1.0)
-            let adjusted = flip.concatenating(transform).concatenating(flip)
 
-            matrix = TRAffineTransform(a: TRFloat(adjusted.a), b: TRFloat(adjusted.b),
-                                       c: TRFloat(adjusted.c), d: TRFloat(adjusted.d),
-                                       tx: TRFloat(adjusted.tx), ty: TRFloat(adjusted.ty))
+            matrix = flip.concatenating(transform).concatenating(flip).coreValue
         }
 
-        let path = CGMutablePath()
-        let user = Unmanaged.passUnretained(path).toOpaque()
-
-        var callbacks = TRPathCallbacks()
-        callbacks.moveTo = { (user, x, y) in
-            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
-                .move(to: CGPoint(x: CGFloat(x), y: CGFloat(y)))
-        }
-        callbacks.lineTo = { (user, x, y) in
-            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
-                .addLine(to: CGPoint(x: CGFloat(x), y: CGFloat(y)))
-        }
-        callbacks.quadTo = { (user, controlX, controlY, x, y) in
-            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
-                .addQuadCurve(to: CGPoint(x: CGFloat(x), y: CGFloat(y)),
-                              control: CGPoint(x: CGFloat(controlX), y: CGFloat(controlY)))
-        }
-        callbacks.cubicTo = { (user, control1X, control1Y, control2X, control2Y, x, y) in
-            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
-                .addCurve(to: CGPoint(x: CGFloat(x), y: CGFloat(y)),
-                          control1: CGPoint(x: CGFloat(control1X), y: CGFloat(control1Y)),
-                          control2: CGPoint(x: CGFloat(control2X), y: CGFloat(control2Y)))
-        }
-        callbacks.close = { (user) in
-            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue().closeSubpath()
-        }
-
-        TRPathEnumerate(corePath, &matrix, &callbacks, user)
-
-        return path
+        return CGPath.make(from: corePath, transform: &matrix)
     }
 }

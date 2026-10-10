@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2025 Muhammad Tayyab Akram
+// Copyright (C) 2025-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -84,9 +84,9 @@ struct StyledTextScreen: View {
                     )
                     .textSize(30.0)
                     .textColor(Color(red: 0.30, green: 0.60, blue: 0.15))
-                    .renderingStyle(.fillStroke)
+                    .drawStyle(.fillStroke)
                     .strokeColor(Color(red: 1.0, green: 0.5, blue: 0.0))
-                    .strokeWidth(1.25)
+                    .strokeRadius(0.625)
                     .padding(.horizontal)
             }
 

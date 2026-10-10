@@ -26,21 +26,12 @@ import Foundation
 public final class ComposedFrame: @unchecked Sendable {
     private let core: TRComposedFrameRef
     let string: String
+    private let objects: CoreTextObjects
 
     init(core: TRComposedFrameRef, string: String, objects: CoreTextObjects) {
         self.core = core
         self.string = string
-
-        let count = Int(TRComposedFrameGetLineCount(core))
-        var lines: [ComposedLine] = []
-        lines.reserveCapacity(count)
-
-        for index in 0 ..< count {
-            let line = TRComposedFrameGetLine(core, TRUInteger(index))!
-            lines.append(ComposedLine(core: TRComposedLineRetain(line), string: string, objects: objects))
-        }
-
-        self.lines = lines
+        self.objects = objects
     }
 
     deinit {
@@ -49,8 +40,7 @@ public final class ComposedFrame: @unchecked Sendable {
 
     /// The UTF-16 range of this frame in source string.
     public var codeUnitRange: Range<Int> {
-        let range = TRComposedFrameGetCodeUnitRange(core)
-        return Int(range.index) ..< Int(range.index + range.length)
+        return Int(TRComposedFrameGetCodeUnitStart(core)) ..< Int(TRComposedFrameGetCodeUnitEnd(core))
     }
 
     /// The index to the first character of this frame in source string.
@@ -73,8 +63,20 @@ public final class ComposedFrame: @unchecked Sendable {
         return CGFloat(TRComposedFrameGetHeight(core))
     }
 
-    /// The array containing all the lines of this frame.
-    public let lines: [ComposedLine]
+    private let lineCache = Lazy<[ComposedLine]>()
+
+    /// The lines of this frame. They are made the first time they are asked for.
+    public var lines: PrimitiveCollection<ComposedLine> {
+        return PrimitiveCollection(lineCache.get {
+            (0 ..< TRComposedFrameGetLineCount(core)).map {
+                ComposedLine(
+                    core: TRComposedLineRetain(TRComposedFrameGetLine(core, $0)!),
+                    string: string,
+                    objects: objects
+                )
+            }
+        })
+    }
 
     /// Returns the index of line containing the specified UTF-16 code unit index.
     ///
@@ -122,16 +124,18 @@ public final class ComposedFrame: @unchecked Sendable {
             return selectionPath
         }
 
-        let range = TRRange(index: TRUInteger(codeUnitRange.lowerBound),
-                            length: TRUInteger(codeUnitRange.count))
-
         let user = Unmanaged.passUnretained(selectionPath).toOpaque()
 
-        TRComposedFrameEnumerateSelection(core, range, { (user, rect) in
-            let path = Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
-            path.addRect(CGRect(x: CGFloat(rect.origin.x), y: CGFloat(rect.origin.y),
-                                width: CGFloat(rect.size.width), height: CGFloat(rect.size.height)))
-        }, user)
+        _ = TRComposedFrameEnumerateSelection(
+            core,
+            TRUInteger(codeUnitRange.lowerBound),
+            TRUInteger(codeUnitRange.count),
+            { (user, rect, _) in
+                                                                                                                                                                                                                    let path = Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
+                                                                                                                                                                                                                    path.addRect(CGRect(rect))
+                                                                                                                                                                                                                },
+            user
+        )
 
         return selectionPath
     }
@@ -144,23 +148,20 @@ public final class ComposedFrame: @unchecked Sendable {
         return selectionPath(forCodeUnitRange: string.utf16Range(forCharacterRange: characterRange))
     }
 
-    /// Draws this frame in the `context` with the specified renderer.
+    /// Draws this frame in the `context` with the specified renderer, line by line in the order of
+    /// the text, as `ComposedLine.draw(with:in:)` does. Selections and carets are not drawn.
     ///
     /// - Parameters:
     ///   - renderer: The renderer with which to draw the frame.
     ///   - context: The context in which to draw the frame.
     ///   - point: The position at which to draw the frame.
     public func draw(with renderer: Renderer, in context: CGContext, at point: CGPoint) {
-        context.translateBy(x: point.x, y: point.y)
-
-        for line in lines {
-            // TODO: Handle Attributes.
-
-            context.translateBy(x: line.origin.x, y: line.origin.y)
-            line.draw(with: renderer, in: context)
-            context.translateBy(x: -line.origin.x, y: -line.origin.y)
+        renderer.withDrawing(in: context, objects: objects) {
+            TRComposedFrameDraw(
+                core,
+                renderer.core,
+                TRPoint(x: TRFloat(point.x), y: TRFloat(point.y))
+            )
         }
-
-        context.translateBy(x: -point.x, y: -point.y)
     }
 }

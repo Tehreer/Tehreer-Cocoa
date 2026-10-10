@@ -166,9 +166,9 @@ final class TextContainer: UIView {
         context.lineHeightMultiplier = lineHeightMultiplier
         context.isJustificationEnabled = isJustificationEnabled
         context.justificationLevel = justificationLevel
-        context.renderingStyle = renderingStyle
+        context.drawStyle = drawStyle
         context.strokeColor = strokeColor
-        context.strokeWidth = strokeWidth
+        context.strokeRadius = strokeRadius
         context.strokeCap = strokeCap
         context.strokeJoin = strokeJoin
         context.strokeMiter = strokeMiter
@@ -386,14 +386,14 @@ final class TextContainer: UIView {
 
     private func updateRenderer(_ renderer: Renderer) {
         renderer.fillColor = textColor
-        renderer.renderingStyle = renderingStyle
+        renderer.drawStyle = drawStyle
         if let typeface = typeface {
             renderer.typeface = typeface
         }
         renderer.typeSize = textSize
         renderer.renderScale = renderScale
         renderer.strokeColor = strokeColor
-        renderer.strokeWidth = strokeWidth
+        renderer.strokeRadius = strokeRadius
         renderer.strokeCap = strokeCap
         renderer.strokeJoin = strokeJoin
         renderer.strokeMiter = strokeMiter
@@ -623,7 +623,7 @@ final class TextContainer: UIView {
         }
     }
 
-    var renderingStyle: Renderer.RenderingStyle = .fill {
+    var drawStyle: Renderer.DrawStyle = .fill {
         didSet {
             updateLineViews()
         }
@@ -635,7 +635,7 @@ final class TextContainer: UIView {
         }
     }
 
-    var strokeWidth: CGFloat = 1.0 {
+    var strokeRadius: CGFloat = 0.5 {
         didSet {
             updateLineViews()
         }

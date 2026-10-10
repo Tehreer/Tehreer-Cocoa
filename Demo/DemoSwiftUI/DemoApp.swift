@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2025 Muhammad Tayyab Akram
+// Copyright (C) 2025-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,13 +18,13 @@ import SwiftUI
 import TehreerCocoa
 
 enum TypefaceTag {
-    static let mehrNastaliq = "MehrNastaliq"
-    static let nafeesWeb = "NafeesWeb"
-    static let noorehuda = "Noorehuda"
-    static let tajNastaleeq = "TajNstaleeq"
+    static let mehrNastaliq = 1
+    static let nafeesWeb = 2
+    static let noorehuda = 3
+    static let tajNastaleeq = 4
 }
 
-private func register(file: (name: String, type: String), forTag tag: String) {
+private func register(file: (name: String, type: String), forTag tag: Int) {
     if let fullPath = Bundle.main.path(forResource: file.name, ofType: file.type),
        let typeface = Typeface(path: fullPath) {
         TypefaceManager.default.register(typeface, forTag: tag)

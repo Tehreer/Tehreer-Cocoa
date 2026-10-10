@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-internal import FreeType
+internal import Tehreer
 
 import CoreGraphics
 import Foundation
@@ -61,28 +61,15 @@ public final class FontFile {
     private func loadTypefaces(from fontStream: FontStream) {
         defaultTypefaces = []
 
-        for i in 0 ..< fontStream.faceCount {
-            guard let firstFace = Typeface(fontStream: fontStream, faceIndex: i) else {
-                continue
-            }
-
-            let namedStyles = firstFace.namedStyles
-
-            if namedStyles.isEmpty {
-                defaultTypefaces.append(firstFace)
-            } else {
-                for namedStyle in namedStyles {
-                    let coordinates = namedStyle.coordinates
-
-                    if let instance = firstFace.variationInstance(forCoordinates: coordinates) {
-                        defaultTypefaces.append(instance)
-                    }
-                }
+        for index in 0 ..< fontStream.typefaceCount {
+            if let core = fontStream.coreTypeface(at: index) {
+                defaultTypefaces.append(Typeface(retaining: core))
             }
         }
     }
 
-    /// Named typefaces of this font file.
+    /// Named typefaces of this font file. A face having named styles gives a typeface for each of
+    /// them, and any other face gives a single one.
     public var typefaces: [Typeface] {
         return defaultTypefaces
     }

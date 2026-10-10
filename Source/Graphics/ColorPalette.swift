@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021-2026 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,10 +14,13 @@
 // limitations under the License.
 //
 
+internal import Tehreer
+
 import Foundation
 import UIKit
 
-public struct ColorPalette: Sendable {
+/// Represents a color palette of a font. It reads what it tells from Core when it is asked for.
+public struct ColorPalette: @unchecked Sendable {
     /// Flags for color palette.
     public struct Flags: OptionSet, Sendable {
         public static let usableWithLightBackground = Flags(rawValue: 0x0001)
@@ -34,18 +37,31 @@ public struct ColorPalette: Sendable {
         }
     }
 
+    // The typeface owns the memory that the palette of Core points to.
+    private let owner: Typeface
+    private let palette: TRPredefinedPalette
+
+    init(owner: Typeface, palette: TRPredefinedPalette) {
+        self.owner = owner
+        self.palette = palette
+    }
+
     /// The display name.
-    public let name: String
+    public var name: String {
+        return String(palette.name)
+    }
 
     /// The property flags.
-    public let flags: Flags
+    public var flags: Flags {
+        return Flags(rawValue: Int(palette.flags))
+    }
 
     /// The colors array.
-    public let colors: [UIColor]
-
-    init(name: String, flags: Flags, colors: [UIColor]) {
-        self.name = name
-        self.flags = flags
-        self.colors = colors
+    public var colors: PrimitiveCollection<UIColor> {
+        return PrimitiveCollection(
+            CoreCollection(
+                owner: owner, pointer: palette.colorsPtr, count: Int(palette.colorCount)
+            ) { UIColor(coreValue: $0) }
+        )
     }
 }

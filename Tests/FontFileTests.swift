@@ -66,7 +66,7 @@ final class FontFileTests: XCTestCase {
         XCTAssertEqual(typefaces[0].styleName, "Thin")
         XCTAssertEqual(typefaces[0].fullName, "Roboto Thin")
         XCTAssertEqual(typefaces[0].weight, .thin)
-        XCTAssertEqual(typefaces[0].variationCoordinates, [100.0, 100.0])
+        XCTAssertEqual(Array(typefaces[0].variationCoordinates), [100.0, 100.0])
 
         XCTAssertEqual(typefaces[3].styleName, "Regular")
         XCTAssertEqual(typefaces[3].fullName, "Roboto Regular")
@@ -90,10 +90,10 @@ final class FontFileTests: XCTestCase {
         let custom = try XCTUnwrap(base.variationInstance(forCoordinates: [123.0, 100.0]))
         XCTAssertEqual(custom.styleName, "")
         XCTAssertEqual(custom.fullName, "")
-        XCTAssertEqual(custom.variationCoordinates, [123.0, 100.0])
+        XCTAssertEqual(Array(custom.variationCoordinates), [123.0, 100.0])
 
         // The base is not changed.
-        XCTAssertEqual(base.variationCoordinates, [400.0, 100.0])
+        XCTAssertEqual(Array(base.variationCoordinates), [400.0, 100.0])
 
         let fixed = try XCTUnwrap(FontFile(path: fontPath("Roboto-Regular.abc.ttf"))).typefaces[0]
         XCTAssertNil(fixed.variationInstance(forCoordinates: [1.0]))
@@ -127,7 +127,10 @@ final class FontFileTests: XCTestCase {
         XCTAssertEqual(associated.count, 4)
         XCTAssertEqual(associated[0], UIColor.red)
         XCTAssertEqual(associated[2], UIColor.blue)
-        XCTAssertEqual(typeface.associatedColors, typeface.predefinedPalettes[0].colors)
+        XCTAssertEqual(
+            Array(typeface.associatedColors),
+            Array(typeface.predefinedPalettes[0].colors)
+        )
     }
 
     func testNamesInMacRoman() throws {

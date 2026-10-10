@@ -31,9 +31,9 @@ final class TextLayoutContext {
     var lineHeightMultiplier: CGFloat = 1.0
     var isJustificationEnabled: Bool = false
     var justificationLevel: CGFloat = 1.0
-    var renderingStyle: Renderer.RenderingStyle = .fill
+    var drawStyle: Renderer.DrawStyle = .fill
     var strokeColor: UIColor = .black
-    var strokeWidth: CGFloat = 1.0
+    var strokeRadius: CGFloat = 0.5
     var strokeCap: Renderer.StrokeCap = .butt
     var strokeJoin: Renderer.StrokeJoin = .round
     var strokeMiter: CGFloat = 1.0
@@ -47,9 +47,9 @@ final class TextLayoutContext {
         }
         renderer.typeSize = textSize
         renderer.fillColor = textColor
-        renderer.renderingStyle = renderingStyle
+        renderer.drawStyle = drawStyle
         renderer.strokeColor = strokeColor
-        renderer.strokeWidth = strokeWidth
+        renderer.strokeRadius = strokeRadius
         renderer.strokeCap = strokeCap
         renderer.strokeJoin = strokeJoin
         renderer.strokeMiter = strokeMiter
@@ -198,7 +198,7 @@ final class LineBoxesOperation: Operation, @unchecked Sendable {
                 height: textLine.height
             )
 
-            var inkBox = textLine.computeBoundingBox(with: renderer)
+            var inkBox = textLine.computeInkBox(with: renderer)
             if !inkBox.isNull {
                 inkBox = inkBox.offsetBy(dx: textLine.origin.x, dy: textLine.origin.y)
                 boundingBox = boundingBox.union(inkBox)

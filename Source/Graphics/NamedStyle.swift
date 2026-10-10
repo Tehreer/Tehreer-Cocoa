@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021-2026 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,23 +14,38 @@
 // limitations under the License.
 //
 
+internal import Tehreer
+
 import CoreGraphics
 import Foundation
 
-/// Represents font named style.
-public struct NamedStyle: Sendable {
+/// Represents font named style. It reads what it tells from Core when it is asked for.
+public struct NamedStyle: @unchecked Sendable {
+    // The typeface owns the memory that the style of Core points to.
+    private let owner: Typeface
+    private let style: TRNamedStyle
+
+    init(owner: Typeface, style: TRNamedStyle) {
+        self.owner = owner
+        self.style = style
+    }
+
     /// The style name.
-    public let styleName: String
+    public var styleName: String {
+        return String(style.subfamilyName)
+    }
 
     /// The coordinates.
-    public let coordinates: [CGFloat]
+    public var coordinates: PrimitiveCollection<CGFloat> {
+        return PrimitiveCollection(
+            CoreCollection(
+                owner: owner, pointer: style.coordinatesPtr, count: Int(style.coordinateCount)
+            ) { CGFloat($0) }
+        )
+    }
 
     /// The post script name.
-    public let postScriptName: String?
-
-    init(styleName: String, coordinates: [CGFloat], postScriptName: String?) {
-        self.styleName = styleName
-        self.coordinates = coordinates
-        self.postScriptName = postScriptName
+    public var postScriptName: String? {
+        return style.postScriptName.map { String($0) }
     }
 }

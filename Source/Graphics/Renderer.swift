@@ -20,10 +20,10 @@ import Foundation
 import UIKit
 
 /// The `Renderer` class represents a generic glyph renderer. It can be used to generate glyph
-/// paths, measure their bounding boxes and draw them in a `CGContext` object.
+/// paths, measure their ink boxes and draw them in a `CGContext` object.
 public final class Renderer {
     /// Specifies if the glyph being drawn is filled, stroked, or both.
-    public enum RenderingStyle: Sendable {
+    public enum DrawStyle: Sendable {
         /// Glyphs drawn with this style will be filled, ignoring all stroke-related settings in the
         /// renderer.
         case fill
@@ -57,35 +57,73 @@ public final class Renderer {
 
     let core: TRRendererRef
 
+    /// The context and the objects of the text while a run, a line or a frame is being drawn, which
+    /// the draw callbacks of Core use.
+    private var drawingContext: CGContext?
+    private var drawingObjects = CoreTextObjects()
+    private var drawingColor: (core: TRColor, color: CGColor)?
+
     /// Creates a renderer.
     public init() {
         core = TRRendererCreate()
+
+        var callbacks = TRDrawCallbacks()
+        callbacks.drawGlyphImage = { (user, image, origin, scaleX, scaleY, color, clip) in
+            Unmanaged<Renderer>.fromOpaque(user!).takeUnretainedValue()
+                .drawGlyphImage(
+                    image,
+                    origin: origin,
+                    scaleX: scaleX,
+                    scaleY: scaleY,
+                    color: color,
+                    clip: clip
+                )
+        }
+        callbacks.fillRect = { (user, rect, color) in
+            Unmanaged<Renderer>.fromOpaque(user!).takeUnretainedValue()
+                .fillRect(rect, color: color)
+        }
+        callbacks.drawReplacement = { (user, run, origin) in
+            Unmanaged<Renderer>.fromOpaque(user!).takeUnretainedValue()
+                .drawReplacement(of: run, origin: origin)
+        }
+
+        TRRendererSetDrawCallbacks(core, &callbacks, Unmanaged.passUnretained(self).toOpaque())
     }
 
     deinit {
+        TRRendererSetDrawCallbacks(core, nil, nil)
         TRRendererRelease(core)
+    }
+
+    /// The cache that this renderer takes the images and outlines of glyphs from. Its default value
+    /// is `GlyphCache.default`.
+    public var glyphCache: GlyphCache = .default {
+        didSet {
+            TRRendererSetGlyphCache(core, glyphCache.core)
+        }
     }
 
     /// The fill color for glyphs. Its default value is `.black`.
     public var fillColor: UIColor = .black {
         didSet {
-            TRRendererSetForegroundColor(core, fillColor.coreColor)
+            TRRendererSetForegroundColor(core, fillColor.coreValue)
         }
     }
 
     /// The style, used for controlling how glyphs should appear while drawing. Its default value is
     /// `.fill`.
-    public var renderingStyle: RenderingStyle = .fill
+    public var drawStyle: DrawStyle = .fill {
+        didSet {
+            TRRendererSetDrawStyle(core, drawStyle.coreValue)
+        }
+    }
 
     /// The direction in which the pen will advance after drawing a glyph. Its default value is
     /// `.leftToRight`.
     public var writingDirection: WritingDirection = .leftToRight {
         didSet {
-            let direction = (writingDirection == .rightToLeft
-                             ? TRWritingDirectionRightToLeft
-                             : TRWritingDirectionLeftToRight)
-
-            TRRendererSetWritingDirection(core, TRWritingDirection(direction))
+            TRRendererSetWritingDirection(core, writingDirection.coreValue)
         }
     }
 
@@ -136,12 +174,17 @@ public final class Renderer {
     }
 
     /// The stroke color for glyphs. Its default value is `.black`.
-    public var strokeColor: UIColor = .black
-
-    /// The width, in pixels, for stroking glyphs.
-    public var strokeWidth: CGFloat = 1.0 {
+    public var strokeColor: UIColor = .black {
         didSet {
-            TRRendererSetStrokeWidth(core, TRFloat(strokeWidth))
+            TRRendererSetStrokeColor(core, strokeColor.coreValue)
+        }
+    }
+
+    /// The radius, in pixels, for stroking glyphs: how far the stroke reaches from the outline of a
+    /// glyph, so a stroked line is twice as wide. Its default value is 0.5.
+    public var strokeRadius: CGFloat = 0.5 {
+        didSet {
+            TRRendererSetStrokeRadius(core, TRFloat(strokeRadius))
         }
     }
 
@@ -149,14 +192,14 @@ public final class Renderer {
     /// treated. Its default value is `.butt`.
     public var strokeCap: StrokeCap = .butt {
         didSet {
-            TRRendererSetStrokeCap(core, TRStrokeCap(strokeCap.rawValue))
+            TRRendererSetStrokeCap(core, strokeCap.coreValue)
         }
     }
 
     /// The stroke join type. Its default value is `.round`.
     public var strokeJoin: StrokeJoin = .round {
         didSet {
-            TRRendererSetStrokeJoin(core, TRStrokeJoin(strokeJoin.rawValue))
+            TRRendererSetStrokeJoin(core, strokeJoin.coreValue)
         }
     }
 
@@ -181,49 +224,42 @@ public final class Renderer {
     /// The shadow color.
     public var shadowColor: UIColor = .clear
 
-    /// Sets the properties of the renderer of Core again. Core changes the typeface, size, scales
-    /// and direction of a renderer when it measures a run with it.
-    func syncCore() {
-        TRRendererSetTypeface(core, typeface?.core)
-        TRRendererSetTypeSize(core, TRFloat(typeSize))
-        TRRendererSetScaleX(core, TRFloat(scaleX))
-        TRRendererSetScaleY(core, TRFloat(scaleY))
-        TRRendererSetSkewX(core, TRFloat(slantAngle))
-        TRRendererSetRenderScale(core, TRFloat(renderScale))
-        TRRendererSetWritingDirection(core, TRWritingDirection(writingDirection == .rightToLeft
-                                                                ? TRWritingDirectionRightToLeft
-                                                                : TRWritingDirectionLeftToRight))
+    /// A Boolean value that indicates whether the glyphs are big enough to be rendered, which takes
+    /// at least one pixel in each direction.
+    public var isRenderable: Bool {
+        return TRRendererIsRenderable(core) != 0
     }
 
     /// Generates the path of specified glyph.
     ///
     /// - Parameter glyphID: The ID of glyph whose path is generated.
-    /// - Returns: The path of the glyph specified by `glyphID`.
+    /// - Returns: The path of the glyph specified by `glyphID`, or `nil` if the glyph has no
+    ///            outline, as in a bitmap font.
     public func makePath(glyphID: GlyphID) -> CGPath? {
-        guard let corePath = TRRendererGetGlyphPath(core, glyphID) else {
+        guard let corePath = TRRendererCopyGlyphPath(core, glyphID) else {
             return nil
         }
         defer { TRPathRelease(corePath) }
 
-        return Renderer.makeCGPath(from: corePath, transform: nil)
+        return CGPath.make(from: corePath, transform: nil)
     }
 
     /// Generates a cumulative path of specified glyphs.
     ///
     /// - Parameters:
-    ///   - glyphIds: A sequence of glyph IDs.
-    ///   - offsets: A sequence of glyph offsets.
-    ///   - advances: A sequence of glyph advances.
+    ///   - glyphIDs: The glyph IDs, such as those of a glyph run.
+    ///   - offsets: The glyph offsets.
+    ///   - advances: The glyph advances.
     /// - Returns: The cumulative path of specified glyphs.
-    public func makePath<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS) -> CGPath?
-        where GS : Sequence, GS.Element == GlyphID,
-              OS : Sequence, OS.Element == CGPoint,
-              AS : Sequence, AS.Element == CGFloat {
-        let run = GlyphRunData(glyphIDs: glyphIDs, offsets: offsets, advances: advances)
+    public func makePath(
+        glyphIDs: PrimitiveCollection<GlyphID>,
+        offsets: PrimitiveCollection<CGPoint>,
+        advances: PrimitiveCollection<CGFloat>
+    ) -> CGPath? {
         let path = CGMutablePath()
 
-        run.withPointers { (glyphIDs, offsets, advances, count) in
-            var callbacks = Renderer.makePathCallbacks()
+        withGlyphRun(glyphIDs, offsets, advances) { (glyphIDs, offsets, advances, count) in
+            var callbacks = CGPath.coreCallbacks
 
             let user = Unmanaged.passUnretained(path).toOpaque()
             TRRendererEnumerateGlyphPaths(core, glyphIDs, offsets, advances, count, &callbacks, user)
@@ -232,108 +268,286 @@ public final class Renderer {
         return path
     }
 
-    private static func makePathCallbacks() -> TRPathCallbacks {
-        var callbacks = TRPathCallbacks()
-        callbacks.moveTo = { (user, x, y) in
-            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
-                .move(to: CGPoint(x: CGFloat(x), y: CGFloat(y)))
-        }
-        callbacks.lineTo = { (user, x, y) in
-            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
-                .addLine(to: CGPoint(x: CGFloat(x), y: CGFloat(y)))
-        }
-        callbacks.quadTo = { (user, controlX, controlY, x, y) in
-            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
-                .addQuadCurve(to: CGPoint(x: CGFloat(x), y: CGFloat(y)),
-                              control: CGPoint(x: CGFloat(controlX), y: CGFloat(controlY)))
-        }
-        callbacks.cubicTo = { (user, control1X, control1Y, control2X, control2Y, x, y) in
-            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
-                .addCurve(to: CGPoint(x: CGFloat(x), y: CGFloat(y)),
-                          control1: CGPoint(x: CGFloat(control1X), y: CGFloat(control1Y)),
-                          control2: CGPoint(x: CGFloat(control2X), y: CGFloat(control2Y)))
-        }
-        callbacks.close = { (user) in
-            Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue().closeSubpath()
-        }
-
-        return callbacks
-    }
-
-    private static func makeCGPath(from corePath: TRPathRef, transform: UnsafePointer<TRAffineTransform>?) -> CGPath {
-        let path = CGMutablePath()
-        let user = Unmanaged.passUnretained(path).toOpaque()
-
-        var callbacks = makePathCallbacks()
-        TRPathEnumerate(corePath, transform, &callbacks, user)
-
-        return path
-    }
-
-    /// Calculates the bounding box of specified glyph.
+    /// Generates a cumulative path of specified glyphs.
     ///
-    /// - Parameter glyphID: The ID of glyph whose bounding box is calculated.
-    /// - Returns: A rectangle that tightly encloses the path of the specified glyph.
-    public func computeBoundingBox(forGlyph glyphID: GlyphID) -> CGRect {
-        let box = TRRendererGetGlyphBoundingBox(core, glyphID)
-
-        return CGRect(x: CGFloat(box.origin.x), y: CGFloat(box.origin.y),
-                      width: CGFloat(box.size.width), height: CGFloat(box.size.height))
+    /// The collections of a glyph run or a shaping result are read without being copied. Any other
+    /// collection is converted into temporary buffers.
+    public func makePath<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS) -> CGPath?
+        where GS: RandomAccessCollection, GS.Index == Int, GS.Element == GlyphID,
+              OS: RandomAccessCollection, OS.Index == Int, OS.Element == CGPoint,
+              AS: RandomAccessCollection, AS.Index == Int, AS.Element == CGFloat {
+        return makePath(
+            glyphIDs: PrimitiveCollection(glyphIDs),
+            offsets: PrimitiveCollection(offsets),
+            advances: PrimitiveCollection(advances)
+        )
     }
 
-    /// Calculates the bounding box of specified glyphs.
+    /// Creates the layer that fills the specified glyph. The image of a glyph of a bitmap font is
+    /// the one of its nearest strike, which is not scaled to the type size.
+    ///
+    /// - Parameter glyphID: The ID of glyph whose layer is created.
+    /// - Returns: The layer of the glyph, or `nil` if there is no typeface or the glyph has no
+    ///            image, such as a space.
+    public func makeGlyphLayer(glyphID: GlyphID) -> CGLayer? {
+        guard let image = TRRendererCopyGlyphImage(core, glyphID) else {
+            return nil
+        }
+        defer { TRGlyphImageRelease(image) }
+
+        return GlyphLayers.layer(of: image)
+    }
+
+    /// Creates the layer that is made of the outline of the specified glyph, as stroked with the
+    /// stroke settings of this renderer.
+    ///
+    /// - Parameter glyphID: The ID of glyph whose stroke layer is created.
+    /// - Returns: The layer of the stroke, or `nil` if there is no typeface or the glyph has no
+    ///            outline.
+    public func makeStrokeLayer(glyphID: GlyphID) -> CGLayer? {
+        guard let image = TRRendererCopyStrokeImage(core, glyphID) else {
+            return nil
+        }
+        defer { TRGlyphImageRelease(image) }
+
+        return GlyphLayers.layer(of: image)
+    }
+
+    /// Calculates the ink box of specified glyph.
+    ///
+    /// - Parameter glyphID: The ID of glyph whose ink box is calculated.
+    /// - Returns: A rectangle that tightly encloses the image of the specified glyph when it is
+    ///            placed at its pen position.
+    public func computeInkBox(forGlyph glyphID: GlyphID) -> CGRect {
+        return CGRect(TRRendererGetGlyphInkBox(core, glyphID))
+    }
+
+    /// Calculates the ink box of specified glyphs.
     ///
     /// - Parameters:
-    ///   - glyphIDs: A sequence of glyph IDs.
-    ///   - offsets: A sequence of glyph offsets.
-    ///   - advances: A sequence of glyph advances.
-    /// - Returns: A rectangle that tightly encloses the paths of specified glyphs.
-    public func computeBoundingBox<GS, OS, AS>(forGlyphs glyphIDs: GS, offsets: OS, advances: AS) -> CGRect
-        where GS: Sequence, GS.Element == GlyphID,
-              OS: Sequence, OS.Element == CGPoint,
-              AS: Sequence, AS.Element == CGFloat {
-        let run = GlyphRunData(glyphIDs: glyphIDs, offsets: offsets, advances: advances)
-
-        let box = run.withPointers { (glyphIDs, offsets, advances, count) in
-            TRRendererGetRunBoundingBox(core, glyphIDs, offsets, advances, count)
+    ///   - glyphIDs: The glyph IDs, such as those of a glyph run.
+    ///   - offsets: The glyph offsets.
+    ///   - advances: The glyph advances.
+    /// - Returns: A rectangle that tightly encloses the images of specified glyphs.
+    public func computeInkBox(
+        forGlyphs glyphIDs: PrimitiveCollection<GlyphID>,
+        offsets: PrimitiveCollection<CGPoint>,
+        advances: PrimitiveCollection<CGFloat>
+    ) -> CGRect {
+        let box = withGlyphRun(
+            glyphIDs,
+            offsets,
+            advances
+        ) { (glyphIDs, offsets, advances, count) in
+            TRRendererGetRunInkBox(core, glyphIDs, offsets, advances, count)
         }
 
-        // An empty box is a null rectangle, as it has no place in the space of the glyphs.
-        if box.size.width == 0 && box.size.height == 0 {
-            return .null
-        }
-
-        return CGRect(x: CGFloat(box.origin.x), y: CGFloat(box.origin.y),
-                      width: CGFloat(box.size.width), height: CGFloat(box.size.height))
+        return CGRect(inkBox: box)
     }
 
-    private func drawGlyphs(in context: CGContext, run: GlyphRunData, kind: Int) {
-        run.withPointers { (glyphIDs, offsets, advances, count) in
+    /// Calculates the ink box of specified glyphs, as the variant for the collections of a glyph run
+    /// does.
+    public func computeInkBox<GS, OS, AS>(forGlyphs glyphIDs: GS, offsets: OS, advances: AS) -> CGRect
+        where GS: RandomAccessCollection, GS.Index == Int, GS.Element == GlyphID,
+              OS: RandomAccessCollection, OS.Index == Int, OS.Element == CGPoint,
+              AS: RandomAccessCollection, AS.Index == Int, AS.Element == CGFloat {
+        return computeInkBox(
+            forGlyphs: PrimitiveCollection(glyphIDs),
+            offsets: PrimitiveCollection(offsets),
+            advances: PrimitiveCollection(advances)
+        )
+    }
+
+    /// Calls the body with the memory that Core reads for a run of glyphs. The collections of a
+    /// glyph run or a shaping result are not copied.
+    private func withGlyphRun<Result>(
+        _ glyphIDs: PrimitiveCollection<GlyphID>,
+        _ offsets: PrimitiveCollection<CGPoint>,
+        _ advances: PrimitiveCollection<CGFloat>,
+        _ body: (UnsafePointer<GlyphID>?, UnsafePointer<TRPoint>?, UnsafePointer<TRFloat>?, TRUInteger) -> Result
+    ) -> Result {
+        precondition(offsets.count >= glyphIDs.count && advances.count >= glyphIDs.count)
+
+        return glyphIDs.withCoreBuffer(of: GlyphID.self, convert: { $0 }) { (ids) in
+            offsets.withCoreBuffer(of: TRPoint.self, convert: { $0.coreValue }) { (points) in
+                advances.withCoreBuffer(of: TRFloat.self, convert: { TRFloat($0) }) { (widths) in
+                    body(
+                        ids.baseAddress,
+                        points.baseAddress,
+                        widths.baseAddress,
+                        TRUInteger(ids.count)
+                    )
+                }
+            }
+        }
+    }
+
+    // MARK: Drawing
+
+    /// Draws the layer of a glyph with the current fill color of the context. The layer of a bitmap
+    /// font is scaled to match the size that was asked for.
+    private static func drawLayer(_ layer: CGLayer, at origin: CGPoint, scaleX: CGFloat,
+                                  scaleY: CGFloat, in context: CGContext) {
+        let rect = CGRect(
+            x: origin.x,
+            y: origin.y,
+            width: layer.size.width * scaleX,
+            height: layer.size.height * scaleY
+        )
+
+        context.draw(layer, in: rect)
+    }
+
+    private var isShadowVisible: Bool {
+        return shadowColor.cgColor.alpha > 0.0
+    }
+
+    private func setShadow(in context: CGContext) {
+        context.setShadow(
+            offset: CGSize(width: shadowDx, height: shadowDy),
+            blur: shadowRadius,
+            color: shadowColor.cgColor
+        )
+    }
+
+    private func cgColor(of color: TRColor) -> CGColor {
+        if let cached = drawingColor, cached.core == color {
+            return cached.color
+        }
+
+        let cgColor = UIColor(coreValue: color).cgColor
+        drawingColor = (color, cgColor)
+
+        return cgColor
+    }
+
+    private func drawGlyphImage(_ image: TRGlyphImageRef?, origin: TRPoint, scaleX: TRFloat,
+                                scaleY: TRFloat, color: TRColor, clip: UnsafePointer<TRRect>?) {
+        guard let context = drawingContext,
+              let image = image,
+              let layer = GlyphLayers.layer(of: image) else {
+            return
+        }
+
+        let needsState = (clip != nil || isShadowVisible)
+        if needsState {
+            context.saveGState()
+        }
+
+        if let clip = clip {
+            context.clip(to: CGRect(clip.pointee))
+        }
+        if isShadowVisible {
+            setShadow(in: context)
+        }
+
+        context.setFillColor(cgColor(of: color))
+        Renderer.drawLayer(
+            layer,
+            at: CGPoint(x: CGFloat(origin.x), y: CGFloat(origin.y)),
+            scaleX: CGFloat(scaleX),
+            scaleY: CGFloat(scaleY),
+            in: context
+        )
+
+        if needsState {
+            context.restoreGState()
+        }
+    }
+
+    private func fillRect(_ rect: TRRect, color: TRColor) {
+        guard let context = drawingContext else {
+            return
+        }
+
+        context.setFillColor(cgColor(of: color))
+        context.fill(CGRect(rect))
+    }
+
+    private func drawReplacement(of run: TRGlyphRunRef?, origin: TRPoint) {
+        guard let context = drawingContext,
+              let run = run,
+              let core = TRGlyphRunGetReplacement(run),
+              let replacement = drawingObjects.replacements[UnsafeRawPointer(core)] else {
+            return
+        }
+
+        // The origin is in pixels, but the replacement draws in the user space.
+        context.saveGState()
+        context.translateBy(x: CGFloat(origin.x), y: CGFloat(origin.y))
+        context.scaleBy(x: renderScale, y: renderScale)
+
+        replacement.draw(in: context)
+
+        context.restoreGState()
+    }
+
+    /// Works at the level of pixels in the context while the body runs, so that the draw functions
+    /// of Core, which pass the positions in pixels, draw at the pixels of the device.
+    func withDrawing(in context: CGContext, objects: CoreTextObjects = CoreTextObjects(),
+                     _ body: () -> Void) {
+        // Extract the pixel level translation.
+        let transform = context.userSpaceToDeviceSpaceTransform
+        let pixelPosition = CGPoint(x: round(transform.tx), y: round(transform.ty))
+        let difference = CGSize(width: pixelPosition.x - transform.tx, height: pixelPosition.y - transform.ty)
+        let translation = context.convertToUserSpace(difference)
+
+        context.saveGState()
+
+        // Work on pixel level.
+        context.translateBy(x: translation.width, y: translation.height)
+        context.scaleBy(x: 1.0 / renderScale, y: 1.0 / renderScale)
+
+        drawingContext = context
+        drawingObjects = objects
+
+        body()
+
+        drawingContext = nil
+        drawingObjects = CoreTextObjects()
+
+        context.restoreGState()
+    }
+
+    private func drawGlyphs(
+        in context: CGContext,
+        glyphIDs: PrimitiveCollection<GlyphID>,
+        offsets: PrimitiveCollection<CGPoint>,
+        advances: PrimitiveCollection<CGFloat>,
+        kind: Int
+    ) {
+        withGlyphRun(glyphIDs, offsets, advances) { (glyphIDs, offsets, advances, count) in
             guard count > 0 else {
                 return
             }
 
-            let placements = UnsafeMutablePointer<TRGlyphPlacement>.allocate(capacity: Int(count))
-            defer { placements.deallocate() }
+            let userData = Unmanaged.passUnretained(context).toOpaque()
 
-            TRRendererGetGlyphPlacements(core, TRGlyphImageKind(kind), glyphIDs, offsets, advances,
-                                         count, placements)
+            TRRendererEnumerateGlyphPlacements(
+                core,
+                TRGlyphImageKind(kind),
+                glyphIDs,
+                offsets,
+                advances,
+                count,
+                { (userData, _, image, origin, scaleX, scaleY, _) in
+                    guard let image = image,
+                          let layer = GlyphLayers.layer(of: image) else {
+                        return
+                    }
 
-            for index in 0 ..< Int(count) {
-                guard let image = placements[index].image,
-                      let layer = GlyphLayers.layer(of: image) else {
-                    continue
-                }
+                    let context = Unmanaged<CGContext>.fromOpaque(userData!).takeUnretainedValue()
 
-                let rect = CGRect(x: CGFloat(placements[index].origin.x),
-                                  y: CGFloat(placements[index].origin.y),
-                                  width: layer.size.width,
-                                  height: layer.size.height)
-
-                context.draw(layer, in: rect)
-            }
-
-            TRRendererReleaseGlyphPlacements(placements, count)
+                    Renderer.drawLayer(
+                        layer,
+                        at: CGPoint(origin),
+                        scaleX: CGFloat(scaleX),
+                        scaleY: CGFloat(scaleY),
+                        in: context
+                    )
+                },
+                userData
+            )
         }
     }
 
@@ -341,74 +555,55 @@ public final class Renderer {
     ///
     /// - Parameters:
     ///   - context: The context onto which to draw the glyphs.
-    ///   - glyphIDs: A sequence of glyph IDs.
-    ///   - offsets: A sequence of glyph offsets.
-    ///   - advances: A sequence of glyph advances.
-    public func drawGlyphs<GS, OS, AS>(in context: CGContext, glyphIDs: GS, offsets: OS, advances: AS)
-        where GS: Sequence, GS.Element == GlyphID,
-              OS: Sequence, OS.Element == CGPoint,
-              AS: Sequence, AS.Element == CGFloat {
-        let run = GlyphRunData(glyphIDs: glyphIDs, offsets: offsets, advances: advances)
+    ///   - glyphIDs: The glyph IDs, such as those of a glyph run.
+    ///   - offsets: The glyph offsets.
+    ///   - advances: The glyph advances.
+    public func drawGlyphs(
+        in context: CGContext,
+        glyphIDs: PrimitiveCollection<GlyphID>,
+        offsets: PrimitiveCollection<CGPoint>,
+        advances: PrimitiveCollection<CGFloat>
+    ) {
+        withDrawing(in: context) {
+            if TRRendererIsRenderable(core) != 0 {
+                setShadow(in: context)
+            }
 
-        if TRRendererIsRenderable(core) != 0 {
-            context.setShadow(offset: CGSize(width: shadowDx, height: shadowDy),
-                              blur: shadowRadius,
-                              color: shadowColor.cgColor)
-        }
+            if drawStyle == .fill || drawStyle == .fillStroke {
+                context.setFillColor(fillColor.cgColor)
+                drawGlyphs(
+                    in: context,
+                    glyphIDs: glyphIDs,
+                    offsets: offsets,
+                    advances: advances,
+                    kind: Int(TRGlyphImageKindFill)
+                )
+            }
 
-        // Extract the pixel level translation.
-        let transform = context.userSpaceToDeviceSpaceTransform
-        let pixelPosition = CGPoint(x: round(transform.tx), y: round(transform.ty))
-        let difference = CGSize(width: pixelPosition.x - transform.tx, height: pixelPosition.y - transform.ty)
-        let translation = context.convertToUserSpace(difference)
-
-        // Work on pixel level.
-        context.translateBy(x: translation.width, y: translation.height)
-        context.scaleBy(x: 1.0 / renderScale, y: 1.0 / renderScale)
-
-        if renderingStyle == .fill || renderingStyle == .fillStroke {
-            context.setFillColor(fillColor.cgColor)
-            drawGlyphs(in: context, run: run, kind: Int(TRGlyphImageKindFill))
-        }
-
-        if renderingStyle == .stroke || renderingStyle == .fillStroke {
-            context.setFillColor(strokeColor.cgColor)
-            drawGlyphs(in: context, run: run, kind: Int(TRGlyphImageKindStroke))
-        }
-
-        // Reset the scale and the translation.
-        context.scaleBy(x: renderScale, y: renderScale)
-        context.translateBy(x: -translation.width, y: -translation.height)
-    }
-}
-
-/// The glyphs of a run, which are copied into arrays that Core can read.
-private struct GlyphRunData {
-    private var glyphIDs: [GlyphID]
-    private var offsets: [TRPoint]
-    private var advances: [TRFloat]
-
-    init<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS)
-        where GS: Sequence, GS.Element == GlyphID,
-              OS: Sequence, OS.Element == CGPoint,
-              AS: Sequence, AS.Element == CGFloat {
-        self.glyphIDs = Array(glyphIDs)
-        self.offsets = offsets.map { TRPoint(x: TRFloat($0.x), y: TRFloat($0.y)) }
-        self.advances = advances.map { TRFloat($0) }
-
-        precondition(self.offsets.count >= self.glyphIDs.count
-                     && self.advances.count >= self.glyphIDs.count)
-    }
-
-    func withPointers<Result>(_ body: (UnsafePointer<GlyphID>?, UnsafePointer<TRPoint>?,
-                                       UnsafePointer<TRFloat>?, TRUInteger) -> Result) -> Result {
-        return glyphIDs.withUnsafeBufferPointer { (glyphIDs) in
-            offsets.withUnsafeBufferPointer { (offsets) in
-                advances.withUnsafeBufferPointer { (advances) in
-                    body(glyphIDs.baseAddress, offsets.baseAddress, advances.baseAddress,
-                         TRUInteger(glyphIDs.count))
-                }
+            if drawStyle == .stroke || drawStyle == .fillStroke {
+                context.setFillColor(strokeColor.cgColor)
+                drawGlyphs(
+                    in: context,
+                    glyphIDs: glyphIDs,
+                    offsets: offsets,
+                    advances: advances,
+                    kind: Int(TRGlyphImageKindStroke)
+                )
             }
         }
+    }
+
+    /// Draws the glyphs in the specified context, as the variant for the collections of a glyph run
+    /// does.
+    public func drawGlyphs<GS, OS, AS>(in context: CGContext, glyphIDs: GS, offsets: OS, advances: AS)
+        where GS: RandomAccessCollection, GS.Index == Int, GS.Element == GlyphID,
+              OS: RandomAccessCollection, OS.Index == Int, OS.Element == CGPoint,
+              AS: RandomAccessCollection, AS.Index == Int, AS.Element == CGFloat {
+        drawGlyphs(
+            in: context,
+            glyphIDs: PrimitiveCollection(glyphIDs),
+            offsets: PrimitiveCollection(offsets),
+            advances: PrimitiveCollection(advances)
+        )
     }
 }

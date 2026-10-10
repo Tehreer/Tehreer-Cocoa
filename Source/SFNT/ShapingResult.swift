@@ -31,7 +31,6 @@ public final class ShapingResult {
         self.core = core
         self.string = string
         self.codeUnitRange = codeUnitRange
-        self.isBackward = TRShapingResultIsBackward(core) != 0
     }
 
     deinit {
@@ -42,7 +41,14 @@ public final class ShapingResult {
     public let codeUnitRange: Range<Int>
 
     /// A boolean value that indicates whether the shaped text segment flows backward.
-    public let isBackward: Bool
+    public var isBackward: Bool {
+        return TRShapingResultIsBackward(core) != 0
+    }
+
+    /// A boolean value that indicates whether the shaped text segment is right-to-left.
+    public var isRTL: Bool {
+        return TRShapingResultIsRTL(core) != 0
+    }
 
     /// The index to the first character in source string.
     public var startIndex: String.Index {
@@ -59,18 +65,36 @@ public final class ShapingResult {
     }
 
     /// The collection of glyph IDs.
-    public var glyphIDs: GlyphIDs {
-        return GlyphIDs(self)
+    public var glyphIDs: PrimitiveCollection<GlyphID> {
+        return PrimitiveCollection(
+            CoreCollection(
+                owner: self,
+                pointer: TRShapingResultGetGlyphIDsPtr(core),
+                count: glyphCount
+            ) { $0 }
+        )
     }
 
     /// The collection of glyph offsets.
-    public var glyphOffsets: GlyphOffsets {
-        return GlyphOffsets(self)
+    public var glyphOffsets: PrimitiveCollection<CGPoint> {
+        return PrimitiveCollection(
+            CoreCollection(
+                owner: self,
+                pointer: TRShapingResultGetGlyphOffsetsPtr(core),
+                count: glyphCount
+            ) { CGPoint($0) }
+        )
     }
 
     /// The collection of glyph advances.
-    public var glyphAdvances: GlyphAdvances {
-        return GlyphAdvances(self)
+    public var glyphAdvances: PrimitiveCollection<CGFloat> {
+        return PrimitiveCollection(
+            CoreCollection(
+                owner: self,
+                pointer: TRShapingResultGetGlyphAdvancesPtr(core),
+                count: glyphCount
+            ) { CGFloat($0) }
+        )
     }
 
     /// A collection of indexes, mapping each shaped UTF-16 code unit in source string to
@@ -84,8 +108,14 @@ public final class ShapingResult {
     ///    multiple glyphs, then each character maps to the first glyph in the sequence.
     /// 3. If nonconsecutive code units translate to a single glyph or ligature, then each
     ///    participating code unit, and all in-between characters, map to this glyph or ligature.
-    public var clusterMap: ClusterMap {
-        return ClusterMap(self)
+    public var clusterMap: PrimitiveCollection<Int> {
+        return PrimitiveCollection(
+            CoreCollection(
+                owner: self,
+                pointer: TRShapingResultGetClusterMapPtr(core),
+                count: codeUnitRange.count
+            ) { Int($0) }
+        )
     }
 
     /// Creates an array of caret edges.
@@ -110,152 +140,5 @@ public final class ShapingResult {
         }
 
         return edges.map { CGFloat($0) }
-    }
-}
-
-// MARK: - Collections
-
-extension ShapingResult {
-    /// A collection of the glyph ids in a shaping result.
-    public struct GlyphIDs: RandomAccessCollection {
-        private let owner: ShapingResult
-        private let pointer: UnsafePointer<GlyphID>?
-
-        init(_ owner: ShapingResult) {
-            self.owner = owner
-            self.pointer = TRShapingResultGetGlyphIDsPtr(owner.core)
-            self.count = owner.glyphCount
-        }
-
-        /// The number of elements in the collection.
-        public let count: Int
-
-        /// The index to the first element.
-        public var startIndex: Int {
-            return 0
-        }
-
-        /// The index after the last element.
-        public var endIndex: Int {
-            return count
-        }
-
-        /// Accesses the glyph id at the specified position.
-        ///
-        /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
-        ///                    `startIndex` and less than `endIndex`.
-        public subscript(index: Int) -> GlyphID {
-            precondition(index >= 0 && index < count, String.indexOutOfRange)
-
-            return pointer![index]
-        }
-    }
-
-    /// A collection of the glyph offsets in a shaping result.
-    public struct GlyphOffsets: RandomAccessCollection {
-        private let owner: ShapingResult
-        private let pointer: UnsafePointer<TRPoint>?
-
-        init(_ owner: ShapingResult) {
-            self.owner = owner
-            self.pointer = TRShapingResultGetGlyphOffsetsPtr(owner.core)
-            self.count = owner.glyphCount
-        }
-
-        /// The number of elements in the collection.
-        public let count: Int
-
-        /// The index to the first element.
-        public var startIndex: Int {
-            return 0
-        }
-
-        /// The index after the last element.
-        public var endIndex: Int {
-            return count
-        }
-
-        /// Accesses the glyph offset at the specified position.
-        ///
-        /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
-        ///                    `startIndex` and less than `endIndex`.
-        public subscript(index: Int) -> CGPoint {
-            precondition(index >= 0 && index < count, String.indexOutOfRange)
-
-            let element = pointer![index]
-
-            return CGPoint(x: CGFloat(element.x), y: CGFloat(element.y))
-        }
-    }
-
-    /// A collection of the glyph advances in a shaping result.
-    public struct GlyphAdvances: RandomAccessCollection {
-        private let owner: ShapingResult
-        private let pointer: UnsafePointer<TRFloat>?
-
-        init(_ owner: ShapingResult) {
-            self.owner = owner
-            self.pointer = TRShapingResultGetGlyphAdvancesPtr(owner.core)
-            self.count = owner.glyphCount
-        }
-
-        /// The number of elements in the collection.
-        public let count: Int
-
-        /// The index to the first element.
-        public var startIndex: Int {
-            return 0
-        }
-
-        /// The index after the last element.
-        public var endIndex: Int {
-            return count
-        }
-
-        /// Accesses the glyph advance at the specified position.
-        ///
-        /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
-        ///                    `startIndex` and less than `endIndex`.
-        public subscript(index: Int) -> CGFloat {
-            precondition(index >= 0 && index < count, String.indexOutOfRange)
-
-            return CGFloat(pointer![index])
-        }
-    }
-
-    /// A collection of the cluster map in a shaping result, represented by UTF-16 code unit indices.
-    public struct ClusterMap: RandomAccessCollection {
-        private let owner: ShapingResult
-        private let pointer: UnsafePointer<TRUInteger>?
-
-        init(_ owner: ShapingResult) {
-            self.owner = owner
-            self.pointer = TRShapingResultGetClusterMapPtr(owner.core)
-        }
-
-        /// The number of elements in the collection.
-        public var count: Int {
-            return owner.codeUnitRange.count
-        }
-
-        /// The index to the first element.
-        public var startIndex: Int {
-            return 0
-        }
-
-        /// The index after the last element.
-        public var endIndex: Int {
-            return count
-        }
-
-        /// Accesses the glyph index at the specified position.
-        ///
-        /// - Parameter index: The position of the element to access. `index` must be greater than or equal to
-        ///                    `startIndex` and less than `endIndex`.
-        public subscript(index: Int) -> Int {
-            precondition(index >= 0 && index < count, String.indexOutOfRange)
-
-            return Int(pointer![index])
-        }
     }
 }

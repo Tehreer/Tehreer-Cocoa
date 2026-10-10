@@ -32,4 +32,13 @@ extension NSAttributedString.Key {
     /// The value of this attribute is a `TextReplacement` object. Use this attribute to display a
     /// custom drawing in place of the specified string range.
     public static let replacement = NSAttributedString.Key("TReplacement")
+    /// The value of this attribute is a `String` containing the name of a language in the form of
+    /// BCP 47, e.g. `ur-PK`. Use this attribute to make the font pick the forms of that language,
+    /// as for the Han characters of Japanese or Chinese, or the dotted and dotless i of Turkish.
+    public static let language = NSAttributedString.Key("TLanguage")
+    /// The value of this attribute is a `[SFNTTag: Int]` dictionary of OpenType feature settings.
+    /// Use this attribute to apply features such as `smcp` for small capitals or `tnum` for tabular
+    /// figures on top of the defaults of the font. A value of zero turns a feature off, and a value
+    /// of two or more picks an alternate of the features that have some.
+    public static let fontFeatures = NSAttributedString.Key("TFontFeatures")
 }

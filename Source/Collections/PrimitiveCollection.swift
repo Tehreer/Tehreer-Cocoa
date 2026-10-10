@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -73,6 +73,19 @@ public struct PrimitiveCollection<Element>: RandomAccessCollection {
 
     init(_ base: IntrinsicCollection<Element>) {
         self.init(base, range: 0 ..< base.count)
+    }
+
+    /// Calls the body with the memory of Core that holds the elements, if this collection reads
+    /// it and the elements are of the raw type. Otherwise the elements are converted into a
+    /// temporary buffer, which is the only case that copies them.
+    func withCoreBuffer<Raw, Result>(
+        of type: Raw.Type, convert: (Element) -> Raw, _ body: (UnsafeBufferPointer<Raw>) -> Result
+    ) -> Result {
+        if let buffer = base.coreBuffer(of: Raw.self, in: offset ..< offset + count) {
+            return withExtendedLifetime(base) { body(buffer) }
+        }
+
+        return ContiguousArray(self.map(convert)).withUnsafeBufferPointer(body)
     }
 
     public var startIndex: Int {

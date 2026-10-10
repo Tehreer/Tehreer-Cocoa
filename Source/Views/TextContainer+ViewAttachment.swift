@@ -131,7 +131,7 @@ extension TextContainer {
     /// view of an attachment is the one that is attached, or one that is made for the purpose and
     /// waits for its turn.
     func measureViewAttachments() {
-        let source = isTypesetterUserDefined ? typesetter?.text : attributedText
+        let source = isTypesetterUserDefined ? typesetter?.text.attributedString : attributedText
         guard let text = source else { return }
 
         text.enumerateAttribute(.replacement, in: NSRange(location: 0, length: text.length), options: []) { (value, _, _) in

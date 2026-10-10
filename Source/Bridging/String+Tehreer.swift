@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2026 Muhammad Tayyab Akram
+// Copyright (C) 2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,12 +14,9 @@
 // limitations under the License.
 //
 
-
 internal import Tehreer
 
-import CoreGraphics
 import Foundation
-import UIKit
 
 extension String {
     /// Creates a string from a string view of Core, or an empty one for a missing view.
@@ -48,29 +45,22 @@ extension String {
             self = ""
         }
     }
-}
 
-extension UIColor {
-    /// Creates a color from the value of Core, which is in ARGB order with 8 bits for each part.
-    convenience init(coreColor: TRColor) {
-        self.init(red: CGFloat((coreColor >> 16) & 0xFF) / 255.0,
-                  green: CGFloat((coreColor >> 8) & 0xFF) / 255.0,
-                  blue: CGFloat(coreColor & 0xFF) / 255.0,
-                  alpha: CGFloat((coreColor >> 24) & 0xFF) / 255.0)
+    /// Creates a string from the characters that Core copied into a buffer, which are not
+    /// terminated.
+    init(coreCharacters buffer: [CChar], length: Int) {
+        self = String(decoding: buffer.prefix(length).map { UInt8(bitPattern: $0) }, as: UTF8.self)
     }
 
-    /// The value of this color for Core, which is in ARGB order with 8 bits for each part.
-    var coreColor: TRColor {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
+    /// Calls the body with the string as a view of Core that has UTF-8 encoding, which is valid
+    /// only during the call.
+    func withCoreView<Result>(_ body: (UnsafePointer<TRStringView>) -> Result) -> Result {
+        return Array(utf8).withUnsafeBufferPointer { (buffer) in
+            var view = TRStringView(buffer: buffer.baseAddress,
+                                    length: TRUInteger(buffer.count),
+                                    encoding: TRStringEncoding(TRStringEncodingUTF8))
 
-        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-
-        return (TRColor(alpha * 255) << 24)
-             | (TRColor(red * 255) << 16)
-             | (TRColor(green * 255) << 8)
-             | TRColor(blue * 255)
+            return withUnsafePointer(to: &view, body)
+        }
     }
 }

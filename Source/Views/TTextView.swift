@@ -318,11 +318,11 @@ open class TTextView: UIScrollView {
         set { container.justificationLevel = newValue }
     }
 
-    /// The rendering style, used for controlling how text should appear while drawing. Its default value is
+    /// The draw style, used for controlling how text should appear while drawing. Its default value is
     /// `.fill`.
-    open var renderingStyle: Renderer.RenderingStyle {
-        get { return container.renderingStyle }
-        set { container.renderingStyle = newValue }
+    open var drawStyle: Renderer.DrawStyle {
+        get { return container.drawStyle }
+        set { container.drawStyle = newValue }
     }
 
     /// The stroke color for text. Its default value is `black`.
@@ -331,10 +331,10 @@ open class TTextView: UIScrollView {
         set { container.strokeColor = newValue }
     }
 
-    /// The stroke width for text.
-    open var strokeWidth: CGFloat {
-        get { return container.strokeWidth }
-        set { container.strokeWidth = newValue }
+    /// The stroke radius for text.
+    open var strokeRadius: CGFloat {
+        get { return container.strokeRadius }
+        set { container.strokeRadius = newValue }
     }
 
     /// The stroke cap style which controls how the start and end of stroked lines and paths are

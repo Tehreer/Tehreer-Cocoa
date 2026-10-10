@@ -38,12 +38,16 @@ public final class ShapingEngine {
     /// - Parameter scriptTag: The tag of the script whose default direction is returned.
     /// - Returns: The default writing direction of the script identified by `scriptTag`.
     public static func defaultDirectionForScript(_ scriptTag: SFNTTag) -> WritingDirection {
-        switch TRShapingEngineGetScriptDefaultDirection(scriptTag.rawValue) {
-        case TRWritingDirection(TRWritingDirectionRightToLeft):
-            return .rightToLeft
-        default:
-            return .leftToRight
-        }
+        return WritingDirection(coreValue: TRShapingEngineGetScriptDefaultDirection(scriptTag.rawValue))
+    }
+
+    /// Returns the OpenType tag of a language that is given by its name.
+    ///
+    /// - Parameter languageName: The name of the language in the form of BCP 47, e.g. `ur-PK`.
+    /// - Returns: The tag of the language, e.g. `URD `, or `dflt`, which is the default language, if
+    ///            the name has no tag.
+    public static func languageTag(forName languageName: String) -> SFNTTag {
+        return SFNTTag(rawValue: TRShapingEngineGetLanguageTag(languageName))!
     }
 
     /// The typeface which this shaping engine will use for shaping text.
@@ -85,7 +89,7 @@ public final class ShapingEngine {
     public var openTypeFeatures: [SFNTTag: Int] = [:] {
         didSet {
             let features = openTypeFeatures.map { (key, value) in
-                TROpenTypeFeature(tag: key.rawValue, value: UInt32(value))
+                TROpenTypeFeature(tag: key.rawValue, value: UInt32(max(value, 0)))
             }
 
             _ = TRShapingEngineSetOpenTypeFeatures(core, features, TRUInteger(features.count))
@@ -101,11 +105,7 @@ public final class ShapingEngine {
     /// overridden explicitly.
     public var writingDirection = WritingDirection.leftToRight {
         didSet {
-            let direction = (writingDirection == .rightToLeft
-                             ? TRWritingDirectionRightToLeft
-                             : TRWritingDirectionLeftToRight)
-
-            TRShapingEngineSetWritingDirection(core, TRWritingDirection(direction))
+            TRShapingEngineSetWritingDirection(core, writingDirection.coreValue)
         }
     }
 
@@ -118,11 +118,7 @@ public final class ShapingEngine {
     /// original text.
     public var shapingOrder = ShapingOrder.forward {
         didSet {
-            let order = (shapingOrder == .backward
-                         ? TRShapingOrderBackward
-                         : TRShapingOrderForward)
-
-            TRShapingEngineSetShapingOrder(core, TRShapingOrder(order))
+            TRShapingEngineSetShapingOrder(core, shapingOrder.coreValue)
         }
     }
 
@@ -146,8 +142,12 @@ public final class ShapingEngine {
         let codeUnits = Array(string[characterRange].utf16)
 
         let result = codeUnits.withUnsafeBufferPointer { (pointer) in
-            TRShapingEngineShape(core, pointer.baseAddress, TRUInteger(pointer.count),
-                                 TRStringEncoding(TRStringEncodingUTF16))
+            TRShapingEngineCreateShapingResult(
+                core,
+                pointer.baseAddress,
+                TRUInteger(pointer.count),
+                TRStringEncoding(TRStringEncodingUTF16)
+            )
         }
 
         guard let result = result else {

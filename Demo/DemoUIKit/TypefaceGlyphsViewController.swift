@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ class GlyphShapeView: UIView {
         let fontDscent = CGFloat(typeface.descent) * sizeByEm
         let fontHeight = fontAscent + fontDscent
 
-        let glyphBounds = renderer.computeBoundingBox(forGlyph: glyphID)
+        let glyphBounds = renderer.computeInkBox(forGlyph: glyphID)
         let glyphX = round((bounds.width - glyphBounds.width) / 2.0 - glyphBounds.minX)
         let glyphY = round((bounds.height - fontHeight) / 2.0 + fontAscent)
 

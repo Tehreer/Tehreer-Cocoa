@@ -91,7 +91,7 @@ class TTextViewTestCase: XCTestCase {
     }
 
     var lines: [ComposedLine] {
-        return textView.textFrame?.lines ?? []
+        return textView.textFrame.map { Array($0.lines) } ?? []
     }
 
     func center(of line: ComposedLine) -> CGPoint {

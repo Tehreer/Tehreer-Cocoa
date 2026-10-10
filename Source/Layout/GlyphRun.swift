@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-
 internal import Tehreer
 
 import CoreGraphics
@@ -27,22 +26,12 @@ public final class GlyphRun: @unchecked Sendable {
     private let core: TRGlyphRunRef
     private let string: String
 
-    /// The typeface of Core, which is the one of the object that the text gave to Core.
-    private let runTypeface: Typeface
-    private let runReplacement: TextReplacement?
+    private let objects: CoreTextObjects
 
     init(core: TRGlyphRunRef, string: String, objects: CoreTextObjects) {
         self.core = TRGlyphRunRetain(core)
         self.string = string
-
-        // The typeface was given by the text, or by its default attributes, and is kept by the
-        // typesetter that made the line.
-        guard let typeface = objects.typefaces[TRGlyphRunGetTypeface(core)] else {
-            fatalError("Typeface of the run is unknown")
-        }
-
-        self.runTypeface = typeface
-        self.runReplacement = TRGlyphRunGetReplacement(core).flatMap { objects.replacements[UnsafeRawPointer($0)] }
+        self.objects = objects
     }
 
     deinit {
@@ -51,13 +40,12 @@ public final class GlyphRun: @unchecked Sendable {
 
     /// The replacement that this run is for, if its glyphs do not come from the text.
     var replacement: TextReplacement? {
-        return runReplacement
+        return TRGlyphRunGetReplacement(core).flatMap { objects.replacements[UnsafeRawPointer($0)] }
     }
 
     /// The UTF-16 range of this run in source string.
     public var codeUnitRange: Range<Int> {
-        let range = TRGlyphRunGetCodeUnitRange(core)
-        return Int(range.index) ..< Int(range.index + range.length)
+        return Int(TRGlyphRunGetCodeUnitStart(core)) ..< Int(TRGlyphRunGetCodeUnitEnd(core))
     }
 
     /// The index to the first character of this run in source string.
@@ -105,14 +93,18 @@ public final class GlyphRun: @unchecked Sendable {
 
     /// The writing direction of this run.
     public var writingDirection: WritingDirection {
-        return TRGlyphRunGetWritingDirection(core) == TRWritingDirection(TRWritingDirectionRightToLeft)
-            ? .rightToLeft
-            : .leftToRight
+        return WritingDirection(coreValue: TRGlyphRunGetWritingDirection(core))
     }
 
     /// The typeface of this run.
     public var typeface: Typeface {
-        return runTypeface
+        // The typeface was given by the text, or by its default attributes, and is kept by the
+        // typesetter that made the line.
+        guard let typeface = objects.typefaces[TRGlyphRunGetTypeface(core)] else {
+            fatalError("Typeface of the run is unknown")
+        }
+
+        return typeface
     }
 
     /// The type size of this run.
@@ -139,8 +131,7 @@ public final class GlyphRun: @unchecked Sendable {
 
     /// The origin of this run in parent line.
     public var origin: CGPoint {
-        let origin = TRGlyphRunGetOrigin(core)
-        return CGPoint(x: CGFloat(origin.x), y: CGFloat(origin.y))
+        return CGPoint(TRGlyphRunGetOrigin(core))
     }
 
     /// The typographic width of this run.
@@ -151,6 +142,39 @@ public final class GlyphRun: @unchecked Sendable {
     /// The typographic height of this run.
     public var height: CGFloat {
         return CGFloat(TRGlyphRunGetHeight(core))
+    }
+
+    /// The foreground color of this run, or `nil` if the text does not set one, in which case the
+    /// run is drawn with the fill color of the renderer.
+    public var foregroundColor: UIColor? {
+        var color: TRColor = 0
+
+        return TRGlyphRunGetForegroundColor(core, &color) != 0 ? UIColor(coreValue: color) : nil
+    }
+
+    /// The background color of this run, or `nil` if the text does not set one.
+    public var backgroundColor: UIColor? {
+        var color: TRColor = 0
+
+        return TRGlyphRunGetBackgroundColor(core, &color) != 0 ? UIColor(coreValue: color) : nil
+    }
+
+    /// A Boolean value that indicates whether the text underlines this run.
+    public var hasUnderline: Bool {
+        return TRGlyphRunHasUnderline(core) != 0
+    }
+
+    /// A Boolean value that indicates whether the text strikes this run through.
+    public var hasStrikethrough: Bool {
+        return TRGlyphRunHasStrikethrough(core) != 0
+    }
+
+    /// The color of the underline and the strikethrough of this run, or `nil` if the text does not
+    /// set one, in which case they are drawn with the foreground color.
+    public var decorationColor: UIColor? {
+        var color: TRColor = 0
+
+        return TRGlyphRunGetDecorationColor(core, &color) != 0 ? UIColor(coreValue: color) : nil
     }
 
     private var glyphCount: Int {
@@ -183,14 +207,6 @@ public final class GlyphRun: @unchecked Sendable {
         return PrimitiveCollection(CoreCollection(owner: self,
                                                   pointer: TRGlyphRunGetClusterMapPtr(core),
                                                   count: Int(TRGlyphRunGetClusterMapCount(core))) { Int($0) })
-    }
-
-    private var isBackward: Bool {
-        return TRGlyphRunIsBackward(core) != 0
-    }
-
-    private var isRTL: Bool {
-        return (bidiLevel & 1) == 1
     }
 
     /// Returns the index to the first UTF-16 code unit of specified cluster in source string. In
@@ -247,50 +263,6 @@ public final class GlyphRun: @unchecked Sendable {
         return string.characterIndex(forUTF16Index: end)
     }
 
-    /// Returns the index of leading glyph related to the specified cluster. It will come after the
-    /// trailing glyph, if the characters of this run logically flow backward.
-    ///
-    /// - Parameter index: The index of a UTF-16 code unit in source string.
-    /// - Returns: The index of leading glyph related to the specified cluster.
-    public func leadingGlyphIndex(forCodeUnitAt index: Int) -> Int {
-        precondition(codeUnitRange.contains(index), .indexOutOfRange)
-
-        return Int(TRGlyphRunGetLeadingGlyphIndex(core, TRUInteger(index)))
-    }
-
-    /// Returns the index of leading glyph related to the specified cluster. It will come after the
-    /// trailing glyph, if the characters of this run logically flow backward.
-    ///
-    /// - Parameter index: The index of a character in source string.
-    /// - Returns: The index of leading glyph related to the specified cluster.
-    public func leadingGlyphIndex(forCharacterAt index: String.Index) -> Int {
-        precondition(index >= startIndex && index < endIndex, .indexOutOfRange)
-
-        return leadingGlyphIndex(forCodeUnitAt: string.utf16Index(forCharacterAt: index))
-    }
-
-    /// Returns the index of trailing glyph related to the specified cluster. It will come before
-    /// the leading glyph, if the characters of this run logically flow backward.
-    ///
-    /// - Parameter index: The index of a UTF-16 code unit in source string.
-    /// - Returns: The index of trailing glyph related to the specified cluster.
-    public func trailingGlyphIndex(forCodeUnitAt index: Int) -> Int {
-        precondition(codeUnitRange.contains(index), .indexOutOfRange)
-
-        return Int(TRGlyphRunGetTrailingGlyphIndex(core, TRUInteger(index)))
-    }
-
-    /// Returns the index of trailing glyph related to the specified cluster. It will come before
-    /// the leading glyph, if the characters of this run logically flow backward.
-    ///
-    /// - Parameter index: The index of a character in source string.
-    /// - Returns: The index of trailing glyph related to the specified cluster.
-    public func trailingGlyphIndex(forCharacterAt index: String.Index) -> Int {
-        precondition(index >= startIndex && index < endIndex, .indexOutOfRange)
-
-        return trailingGlyphIndex(forCodeUnitAt: string.utf16Index(forCharacterAt: index))
-    }
-
     /// Returns the distance of specified character from the start of the run assumed at zero.
     ///
     /// - Parameter index: The index of a UTF-16 code unit in source string.
@@ -298,7 +270,10 @@ public final class GlyphRun: @unchecked Sendable {
     public func distance(forCodeUnitAt index: Int) -> CGFloat {
         precondition(index >= codeUnitRange.lowerBound && index <= codeUnitRange.upperBound, .indexOutOfRange)
 
-        return CGFloat(TRGlyphRunGetDistance(core, TRUInteger(index)))
+        var distance: TRFloat = 0
+        _ = TRGlyphRunGetCodeUnitDistance(core, TRUInteger(index), &distance)
+
+        return CGFloat(distance)
     }
 
     /// Returns the distance of specified character from the start of the run assumed at zero.
@@ -328,7 +303,7 @@ public final class GlyphRun: @unchecked Sendable {
     ///               from zero origin.
     /// - Returns: The index of UTF-16 code unit in source string, nearest to the specified distance.
     public func indexOfCodeUnit(at distance: CGFloat) -> Int {
-        return Int(TRGlyphRunGetIndexOfCodeUnit(core, TRFloat(distance)))
+        return Int(TRGlyphRunGetCodeUnitIndex(core, TRFloat(distance)))
     }
 
     /// Determines the index of a character nearest to the specified distance.
@@ -351,200 +326,33 @@ public final class GlyphRun: @unchecked Sendable {
         return string.characterIndex(forUTF16Index: indexOfCodeUnit(at: distance))
     }
 
-    func computeBoundingBox(with renderer: Renderer) -> CGRect {
-        return computeBoundingBox(forGlyphRange: 0 ..< glyphCount, with: renderer)
-    }
-
-    /// Calculates the bounding box for the specified glyph range in this run. The bounding box is a
-    /// rectangle that encloses the paths of glyphs, as tightly as possible.
+    /// Calculates the ink box of this run. The ink box is a rectangle that encloses what is drawn
+    /// for the glyphs of this run, as tightly as possible, which is not the box of their advances.
+    /// It is in the coordinates of the run with the pen at the origin and the y axis pointing down.
     ///
-    /// - Parameters:
-    ///   - glyphRange: The range of glyphs to be measured.
-    /// - Returns: A rectangle that tightly encloses the paths of glyphs in the specified range.
-    public func computeBoundingBox(forGlyphRange glyphRange: Range<Int>, with renderer: Renderer) -> CGRect {
-        let range = TRRange(index: TRUInteger(glyphRange.lowerBound), length: TRUInteger(glyphRange.count))
-        let box = TRGlyphRunGetBoundingBox(core, range, renderer.core)
-        renderer.syncCore()
-
-        return CGRect(x: CGFloat(box.origin.x), y: CGFloat(box.origin.y),
-                      width: CGFloat(box.size.width), height: CGFloat(box.size.height))
+    /// The renderer is set up for the run while it is measured, and gets back what it had.
+    ///
+    /// - Parameter renderer: The renderer with the glyph cache to use, and with the settings that
+    ///                       are not the run's.
+    /// - Returns: A rectangle that tightly encloses the glyphs of this run.
+    public func computeInkBox(with renderer: Renderer) -> CGRect {
+        return CGRect(TRGlyphRunGetInkBox(core, renderer.core))
     }
 
     // MARK: Drawing
 
-    private struct ClusterRange {
-        var actualStart: Int
-        var actualEnd: Int
-        var glyphStart: Int
-        var glyphEnd: Int
-    }
-
-    /// Returns the distance of a code unit that may belong to a cluster split by the start or the
-    /// end of this run, so it can lie outside of the run.
-    private func clusterDistance(forCodeUnitAt index: Int) -> CGFloat {
-        precondition(index >= codeUnitRange.lowerBound - startExtraLength
-                     && index <= codeUnitRange.upperBound + endExtraLength, .indexOutOfRange)
-
-        return CGFloat(TRGlyphRunGetClusterDistance(core, TRUInteger(index)))
-    }
-
-    private func leadingEdge(from start: Int, to end: Int) -> CGFloat {
-        return clusterDistance(forCodeUnitAt: !isBackward ? start : end)
-    }
-
-    private func clusterRange(forCodeUnitAt index: Int, exclusion: ClusterRange?) -> ClusterRange? {
-        let actualStart = clusterStart(forCodeUnitAt: index)
-        let actualEnd = clusterEnd(forCodeUnitAt: index)
-
-        let leadingIndex = leadingGlyphIndex(forCodeUnitAt: index)
-        let trailingIndex = trailingGlyphIndex(forCodeUnitAt: index)
-
-        var cluster = ClusterRange(
-            actualStart: actualStart,
-            actualEnd: actualEnd,
-            glyphStart: min(leadingIndex, trailingIndex),
-            glyphEnd: max(leadingIndex, trailingIndex) + 1
-        )
-
-        if let exclusion = exclusion {
-            let minStart = min(exclusion.glyphStart, cluster.glyphEnd)
-            let maxEnd = max(cluster.glyphStart, exclusion.glyphEnd)
-
-            cluster.glyphStart = (!isBackward ? maxEnd : cluster.glyphStart)
-            cluster.glyphEnd = (isBackward ? minStart : cluster.glyphEnd)
-        }
-
-        if cluster.glyphStart < cluster.glyphEnd {
-            return cluster
-        }
-
-        return nil
-    }
-
-    private func drawEdgeCluster(_ cluster: ClusterRange, with renderer: Renderer, in context: CGContext) {
-        let codeUnitRange = self.codeUnitRange
-        let runStart = codeUnitRange.lowerBound
-        let runEnd = codeUnitRange.upperBound
-
-        let startClipped = (cluster.actualStart < runStart)
-        let endClipped = (cluster.actualEnd > runEnd)
-
-        let bbox = context.boundingBoxOfClipPath
-        let clipLeft: CGFloat
-        let clipRight: CGFloat
-
-        if !isRTL {
-            clipLeft = (startClipped ? distance(forCodeUnitAt: runStart) : bbox.minX)
-            clipRight = (endClipped ? distance(forCodeUnitAt: runEnd) : bbox.maxX)
-        } else {
-            clipRight = (startClipped ? distance(forCodeUnitAt: runStart) : bbox.maxX)
-            clipLeft = (endClipped ? distance(forCodeUnitAt: runEnd) : bbox.minX)
-        }
-
-        context.saveGState()
-
-        context.clip(
-            to: CGRect(
-                x: clipLeft,
-                y: bbox.minY,
-                width: clipRight - clipLeft,
-                height: bbox.height
-            )
-        )
-        context.translateBy(
-            x: leadingEdge(from: cluster.actualStart, to: cluster.actualEnd),
-            y: 0.0
-        )
-
-        renderer.drawGlyphs(
-            in: context,
-            glyphIDs: glyphIDs[cluster.glyphStart ..< cluster.glyphEnd],
-            offsets: glyphOffsets[cluster.glyphStart ..< cluster.glyphEnd],
-            advances: glyphAdvances[cluster.glyphStart ..< cluster.glyphEnd]
-        )
-
-        context.restoreGState()
-    }
-
-    /// Draws this run in the `context` with the specified `renderer`.
+    /// Draws this run in the `context` with the specified `renderer`. The background of the run is
+    /// drawn first, then its glyphs or its replacement, and then its underline and strikethrough.
+    ///
+    /// The run is drawn with its foreground color, or with the fill color of the renderer if it has
+    /// none. The renderer is set up for the run while it is drawn, and gets back what it had.
     ///
     /// - Parameters:
     ///   - renderer: The renderer with which to draw this run.
     ///   - context: The context in which to draw this run.
     public func draw(with renderer: Renderer, in context: CGContext) {
-        if let replacement = replacement {
-            replacement.draw(in: context)
-            return
+        renderer.withDrawing(in: context, objects: objects) {
+            TRGlyphRunDraw(core, renderer.core, TRPoint(x: 0.0, y: 0.0))
         }
-
-        renderer.typeface = typeface
-        renderer.typeSize = typeSize
-        renderer.scaleX = CGFloat(TRGlyphRunGetScaleX(core))
-        renderer.scaleY = CGFloat(TRGlyphRunGetScaleY(core))
-        renderer.writingDirection = writingDirection
-
-        let defaultFillColor = renderer.fillColor
-
-        var foregroundColor: TRColor = 0
-        if TRGlyphRunGetForegroundColor(core, &foregroundColor) != 0 {
-            renderer.fillColor = UIColor(coreColor: foregroundColor)
-        }
-
-        let codeUnitRange = self.codeUnitRange
-        let firstIndex = codeUnitRange.lowerBound
-        let lastIndex = codeUnitRange.upperBound - 1
-
-        var firstCluster: ClusterRange? = nil
-        var lastCluster: ClusterRange? = nil
-
-        if startExtraLength > 0 {
-            firstCluster = clusterRange(forCodeUnitAt: firstIndex, exclusion: nil)
-        }
-        if endExtraLength > 0 {
-            lastCluster = clusterRange(forCodeUnitAt: lastIndex, exclusion: firstCluster)
-        }
-
-        let isBackward = self.isBackward
-
-        var glyphStart: Int = 0
-        var glyphEnd = glyphCount
-
-        var chunkStart = codeUnitRange.lowerBound
-        var chunkEnd = codeUnitRange.upperBound
-
-        if let firstCluster = firstCluster {
-            drawEdgeCluster(firstCluster, with: renderer, in: context)
-
-            // Exclude first cluster characters.
-            chunkStart = firstCluster.actualEnd
-            // Exclude first cluster glyphs.
-            glyphStart = (!isBackward ? firstCluster.glyphEnd : glyphStart)
-            glyphEnd = (isBackward ? firstCluster.glyphStart : glyphEnd)
-        }
-        if let lastCluster = lastCluster {
-            // Exclude last cluster characters.
-            chunkEnd = lastCluster.actualStart
-            // Exclude last cluster glyphs.
-            glyphEnd = (!isBackward ? lastCluster.glyphStart : glyphEnd)
-            glyphStart = (isBackward ? lastCluster.glyphEnd : glyphStart)
-        }
-
-        context.saveGState()
-        context.translateBy(x: leadingEdge(from: chunkStart, to: chunkEnd), y: 0.0)
-
-        renderer.drawGlyphs(
-            in: context,
-            glyphIDs: glyphIDs[glyphStart ..< glyphEnd],
-            offsets: glyphOffsets[glyphStart ..< glyphEnd],
-            advances: glyphAdvances[glyphStart ..< glyphEnd]
-        )
-
-        context.restoreGState()
-
-        if let lastCluster = lastCluster {
-            drawEdgeCluster(lastCluster, with: renderer, in: context)
-        }
-
-        renderer.fillColor = defaultFillColor
     }
 }

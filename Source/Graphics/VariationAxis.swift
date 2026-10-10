@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2021-2026 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,11 +14,13 @@
 // limitations under the License.
 //
 
+internal import Tehreer
+
 import CoreGraphics
 import Foundation
 
-/// Represents font variation axis.
-public struct VariationAxis: Sendable {
+/// Represents font variation axis. It reads what it tells from Core when it is asked for.
+public struct VariationAxis: @unchecked Sendable {
     /// Flags for variation axis.
     public struct Flags: OptionSet, Sendable {
         /// The axis should not be exposed directly in user interfaces.
@@ -35,31 +37,42 @@ public struct VariationAxis: Sendable {
         }
     }
 
+    // The typeface owns the memory that the axis of Core points to.
+    private let owner: Typeface
+    private let axis: TRVariationAxis
+
+    init(owner: Typeface, axis: TRVariationAxis) {
+        self.owner = owner
+        self.axis = axis
+    }
+
     /// The tag identifying the design variation.
-    public let tag: SFNTTag
+    public var tag: SFNTTag {
+        return SFNTTag(rawValue: axis.tag)!
+    }
 
     /// The display name.
-    public let name: String
+    public var name: String {
+        return String(axis.name)
+    }
 
     /// The axis qualifiers.
-    public let flags: Flags
+    public var flags: Flags {
+        return Flags(rawValue: Int(axis.flags))
+    }
 
     /// The default coordinate value.
-    public let defaultValue: CGFloat
+    public var defaultValue: CGFloat {
+        return CGFloat(axis.defaultValue)
+    }
 
     /// The minimum coordinate value.
-    public let minValue: CGFloat
+    public var minValue: CGFloat {
+        return CGFloat(axis.minValue)
+    }
 
     /// The maximum coordinate value.
-    public let maxValue: CGFloat
-
-    init(tag: SFNTTag, name: String, flags: VariationAxis.Flags,
-         defaultValue: CGFloat, minValue: CGFloat, maxValue: CGFloat) {
-        self.tag = tag
-        self.name = name
-        self.flags = flags
-        self.defaultValue = defaultValue
-        self.minValue = minValue
-        self.maxValue = maxValue
+    public var maxValue: CGFloat {
+        return CGFloat(axis.maxValue)
     }
 }

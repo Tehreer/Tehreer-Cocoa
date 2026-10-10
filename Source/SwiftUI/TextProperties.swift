@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2025 Muhammad Tayyab Akram
+// Copyright (C) 2025-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,16 +36,17 @@ struct TextProperties: Equatable {
     var textAlignment: TextAlignment = .leading
     var textColor: Color = .black
     var truncationMode: BreakMode = .line
-    var truncationPlace: TruncationPlace? = nil
+    var truncationPlace: TruncationPlace = .end
+    var isTruncationEnabled: Bool = false
     var isJustificationEnabled: Bool = false
     var justificationLevel: CGFloat = 1.0
     var maxLines: Int? = nil
     var extraLineSpacing: CGFloat = 0.0
     var lineHeightMultiplier: CGFloat = 1.0
     var separatorColor: Color?
-    var renderingStyle: Renderer.RenderingStyle = .fill
+    var drawStyle: Renderer.DrawStyle = .fill
     var strokeColor: Color = .black
-    var strokeWidth: CGFloat = 1.0
+    var strokeRadius: CGFloat = 0.5
     var strokeCap: Renderer.StrokeCap = .butt
     var strokeJoin: Renderer.StrokeJoin = .round
     var strokeMiter: CGFloat = 1.0
@@ -86,6 +87,7 @@ struct TextProperties: Equatable {
         resolver.textAlignment = textAlignment
         resolver.truncationMode = truncationMode
         resolver.truncationPlace = truncationPlace
+        resolver.isTruncationEnabled = isTruncationEnabled
         resolver.isJustificationEnabled = isJustificationEnabled
         resolver.justificationLevel = justificationLevel
         resolver.maxLines = maxLines
@@ -94,10 +96,10 @@ struct TextProperties: Equatable {
     }
 
     func updateRenderer(_ renderer: Renderer) {
-        renderer.renderingStyle = renderingStyle
+        renderer.drawStyle = drawStyle
         renderer.fillColor = UIColor(textColor)
         renderer.strokeColor = UIColor(strokeColor)
-        renderer.strokeWidth = strokeWidth
+        renderer.strokeRadius = strokeRadius
         renderer.strokeCap = strokeCap
         renderer.strokeJoin = strokeJoin
         renderer.strokeMiter = strokeMiter
@@ -113,15 +115,16 @@ struct TextProperties: Equatable {
         lhs.textColor == rhs.textColor &&
         lhs.truncationMode == rhs.truncationMode &&
         lhs.truncationPlace == rhs.truncationPlace &&
+        lhs.isTruncationEnabled == rhs.isTruncationEnabled &&
         lhs.isJustificationEnabled == rhs.isJustificationEnabled &&
         lhs.justificationLevel == rhs.justificationLevel &&
         lhs.maxLines == rhs.maxLines &&
         lhs.extraLineSpacing == rhs.extraLineSpacing &&
         lhs.lineHeightMultiplier == rhs.lineHeightMultiplier &&
         lhs.separatorColor == rhs.separatorColor &&
-        lhs.renderingStyle == rhs.renderingStyle &&
+        lhs.drawStyle == rhs.drawStyle &&
         lhs.strokeColor == rhs.strokeColor &&
-        lhs.strokeWidth == rhs.strokeWidth &&
+        lhs.strokeRadius == rhs.strokeRadius &&
         lhs.strokeCap == rhs.strokeCap &&
         lhs.strokeJoin == rhs.strokeJoin &&
         lhs.strokeMiter == rhs.strokeMiter

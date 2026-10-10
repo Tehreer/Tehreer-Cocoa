@@ -471,17 +471,11 @@ public enum Script: Int, Sendable {
 }
 
 extension Script {
-    /// Returns the OpenType tag of the specified script.
-    ///
-    /// The association between Unicode Script property and OpenType script tags is taken from the
-    /// specification: [https://docs.microsoft.com/en-us/typography/opentype/spec/scripttags](https://docs.microsoft.com/en-us/typography/opentype/spec/scripttags).
-    ///
-    /// If more than one tag is associated with a script, then the latest one is returned. For
-    /// example, Devanagari script has two tags, `deva` and `dev2`. So in this case, `dev2` will be
-    /// returned.
-    ///
-    /// If no tag is associated with a script, then `DFLT` is returned.
-    public var openTypeTag: SFNTTag {
-        return SFNTTag(rawValue: SBScriptGetOpenTypeTag(SBScript(rawValue)))!
+    /// The four-letter Unicode script tag of this script, as defined by ISO 15924, e.g. `Arab`.
+    /// It is `nil` if the script has no tag.
+    public var unicodeTag: SFNTTag? {
+        let tag = SBScriptGetUnicodeTag(SBScript(rawValue))
+
+        return tag != 0 ? SFNTTag(rawValue: tag) : nil
     }
 }

@@ -17,7 +17,7 @@
 import Foundation
 
 private func isValidByte(_ byte: UInt8) -> Bool {
-    return byte >= 0x32 && byte <= 0x7E
+    return byte >= 0x20 && byte <= 0x7E
 }
 
 /// An SFNT tag value type.

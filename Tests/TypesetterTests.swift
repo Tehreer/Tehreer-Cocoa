@@ -141,6 +141,7 @@ final class TypesetterTests: XCTestCase {
         let resolver = makeResolver(typesetter, width: 6000.0, height: 2400.0)
         resolver.truncationMode = .character
         resolver.truncationPlace = .end
+        resolver.isTruncationEnabled = true
 
         let frame = try XCTUnwrap(resolver.makeFrame(codeUnitRange: 0 ..< 7))
         XCTAssertEqual(frame.lines.count, 1)

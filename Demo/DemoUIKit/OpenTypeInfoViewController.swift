@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019-2021 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,17 +19,17 @@ import UIKit
 
 private struct ClusterDetail {
     let codePoints: [UnicodeScalar]
-    let glyphIDs: Slice<ShapingResult.GlyphIDs>
-    let glyphOffsets: Slice<ShapingResult.GlyphOffsets>
-    let glyphAdvances: Slice<ShapingResult.GlyphAdvances>
+    let glyphIDs: PrimitiveCollection<GlyphID>
+    let glyphOffsets: PrimitiveCollection<CGPoint>
+    let glyphAdvances: PrimitiveCollection<CGFloat>
 }
 
 private struct TextDetail {
     let string: String
-    let glyphIDs: ShapingResult.GlyphIDs
-    let glyphOffsets: ShapingResult.GlyphOffsets
-    let glyphAdvances: ShapingResult.GlyphAdvances
-    let clusterMap: ShapingResult.ClusterMap
+    let glyphIDs: PrimitiveCollection<GlyphID>
+    let glyphOffsets: PrimitiveCollection<CGPoint>
+    let glyphAdvances: PrimitiveCollection<CGFloat>
+    let clusterMap: PrimitiveCollection<Int>
     let clusterInitials: [Int]
 
     var clusterCount: Int {

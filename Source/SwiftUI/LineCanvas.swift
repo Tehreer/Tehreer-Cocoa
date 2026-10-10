@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2025 Muhammad Tayyab Akram
+// Copyright (C) 2025-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -97,10 +97,10 @@ struct LineCanvas: View {
     private func makeRenderer() -> Renderer {
         let renderer = Renderer()
         renderer.renderScale = defaultRenderer.renderScale
-        renderer.renderingStyle = defaultRenderer.renderingStyle
+        renderer.drawStyle = defaultRenderer.drawStyle
         renderer.fillColor = defaultRenderer.fillColor
         renderer.strokeColor = defaultRenderer.strokeColor
-        renderer.strokeWidth = defaultRenderer.strokeWidth
+        renderer.strokeRadius = defaultRenderer.strokeRadius
         renderer.strokeCap = defaultRenderer.strokeCap
         renderer.strokeJoin = defaultRenderer.strokeJoin
         renderer.strokeMiter = defaultRenderer.strokeMiter

@@ -388,14 +388,28 @@ open class TLabel: UIView {
         }
     }
 
-    /// The truncation place for the last line of the text. The truncation is disabled if its value
-    /// is `.nil`
-    open var truncationPlace: TruncationPlace? {
+    /// The truncation place for the last line of the text. It takes effect only when the truncation
+    /// is enabled. Its default value is `.end`.
+    open var truncationPlace: TruncationPlace {
         get {
             return resolver.truncationPlace
         }
         set {
             resolver.truncationPlace = newValue
+
+            _sizeLabel.invalidateIntrinsicContentSize()
+            deferNeedsTextLayout()
+        }
+    }
+
+    /// A boolean value that indicates whether or not to truncate the last line of the text in case
+    /// of overflow. Its default value is `false`.
+    open var isTruncationEnabled: Bool {
+        get {
+            return resolver.isTruncationEnabled
+        }
+        set {
+            resolver.isTruncationEnabled = newValue
 
             _sizeLabel.invalidateIntrinsicContentSize()
             deferNeedsTextLayout()
@@ -446,14 +460,14 @@ open class TLabel: UIView {
         }
     }
 
-    /// The rendering style, used for controlling how text should appear while drawing. Its default value is
+    /// The draw style, used for controlling how text should appear while drawing. Its default value is
     /// `.fill`.
-    open var renderingStyle: Renderer.RenderingStyle {
+    open var drawStyle: Renderer.DrawStyle {
         get {
-            return renderer.renderingStyle
+            return renderer.drawStyle
         }
         set {
-            renderer.renderingStyle = newValue
+            renderer.drawStyle = newValue
             setNeedsDisplay()
         }
     }
@@ -469,13 +483,13 @@ open class TLabel: UIView {
         }
     }
 
-    /// The stroke width for text.
-    open var strokeWidth: CGFloat {
+    /// The stroke radius for text.
+    open var strokeRadius: CGFloat {
         get {
-            return renderer.strokeWidth
+            return renderer.strokeRadius
         }
         set {
-            renderer.strokeWidth = newValue
+            renderer.strokeRadius = newValue
             setNeedsDisplay()
         }
     }

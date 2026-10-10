@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2025 Muhammad Tayyab Akram
+// Copyright (C) 2025-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -126,10 +126,10 @@ public struct ScrollableText: View {
         return scrollableText
     }
 
-    /// Sets the rendering style, used for controlling how text should appear while drawing.
-    public func renderingStyle(_ style: Renderer.RenderingStyle) -> Self {
+    /// Sets the draw style, used for controlling how text should appear while drawing.
+    public func drawStyle(_ style: Renderer.DrawStyle) -> Self {
         var scrollableText = self
-        scrollableText.properties.renderingStyle = style
+        scrollableText.properties.drawStyle = style
         return scrollableText
     }
 
@@ -140,10 +140,10 @@ public struct ScrollableText: View {
         return scrollableText
     }
 
-    /// Sets the stroke width for text.
-    public func strokeWidth(_ width: CGFloat) -> Self {
+    /// Sets the stroke radius for text.
+    public func strokeRadius(_ radius: CGFloat) -> Self {
         var scrollableText = self
-        scrollableText.properties.strokeWidth = width
+        scrollableText.properties.strokeRadius = radius
         return scrollableText
     }
 

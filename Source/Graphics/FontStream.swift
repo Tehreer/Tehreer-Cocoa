@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-
 internal import Tehreer
 
 import Foundation
@@ -24,9 +23,14 @@ final class FontStream {
     /// The font file of Core.
     let coreFile: TRFontFileRef
 
-    /// The number of faces in the font file.
-    var faceCount: Int {
-        return Int(TRFontFileGetFaceCount(coreFile))
+    /// The number of default typefaces in the font file.
+    var typefaceCount: Int {
+        return Int(TRFontFileGetTypefaceCount(coreFile))
+    }
+
+    /// Returns a default typeface of the font file, which stays valid as long as the font file does.
+    func coreTypeface(at index: Int) -> TRTypefaceRef? {
+        return TRFontFileGetTypeface(coreFile, TRUInteger(index))
     }
 
     init?(path: String) {

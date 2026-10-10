@@ -220,7 +220,7 @@ extension TextContainer {
             return nil
         }
 
-        return typesetter?.text ?? attributedText
+        return typesetter?.text.attributedString ?? attributedText
     }
 
     /// Finds what a touch at the position would press: a replacement, or, unless link interaction

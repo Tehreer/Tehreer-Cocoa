@@ -41,4 +41,12 @@ final class CoreCollection<Owner: AnyObject, Raw, Element>: IntrinsicCollection<
 
         return convert(pointer![index])
     }
+
+    override func coreBuffer<Other>(of type: Other.Type, in range: Range<Int>) -> UnsafeBufferPointer<Other>? {
+        guard let pointer = pointer as Any as? UnsafePointer<Other> else {
+            return nil
+        }
+
+        return UnsafeBufferPointer(start: pointer + range.lowerBound, count: range.count)
+    }
 }

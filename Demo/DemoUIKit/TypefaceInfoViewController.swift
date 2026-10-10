@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 Muhammad Tayyab Akram
+// Copyright (C) 2019-2026 Muhammad Tayyab Akram
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -77,65 +77,65 @@ class TypefaceInfoViewController: UITableViewController {
         selectTypeface(TypefaceManager.default.availableTypefaces.first)
     }
 
-    private func appendName(_ title: String, id: Int, table: NameTable, list: inout [NameInfo]) {
-        var strings: [String] = []
-
-        for i in 0 ..< table.recordCount {
-            let record = table.record(at: i)
-
-            if record.nameID == id && record.platformID == PlatformID.windows {
-                if let string = record.string {
-                    strings.append(string)
-                }
-            }
-        }
-
-        if !strings.isEmpty {
-            var names = ""
-
-            for string in strings {
-                names.append(string + "\n")
-            }
-            names.remove(at: names.index(before: names.endIndex))
-
-            list.append(NameInfo(title: title, names: names))
-        }
-    }
+//    private func appendName(_ title: String, id: Int, table: NameTable, list: inout [NameInfo]) {
+//        var strings: [String] = []
+//
+//        for i in 0 ..< table.recordCount {
+//            let record = table.record(at: i)
+//
+//            if record.nameID == id && record.platformID == PlatformID.windows {
+//                if let string = record.string {
+//                    strings.append(string)
+//                }
+//            }
+//        }
+//
+//        if !strings.isEmpty {
+//            var names = ""
+//
+//            for string in strings {
+//                names.append(string + "\n")
+//            }
+//            names.remove(at: names.index(before: names.endIndex))
+//
+//            list.append(NameInfo(title: title, names: names))
+//        }
+//    }
 
     private func selectTypeface(_ typeface: Typeface!) {
         selectedTypeface = typeface
         typefaceLabel.text = typeface.familyName
         nameList.removeAll()
 
-        guard let nameTable = NameTable(typeface: typeface) else {
-            return
-        }
+//        guard let nameTable = NameTable(typeface: typeface) else {
+//            return
+//        }
 
-        appendName("Copyright Notice:", id: NameID.copyright, table: nameTable, list: &nameList)
-        appendName("Font Family Name:", id: NameID.fontFamily, table: nameTable, list: &nameList)
-        appendName("Font Subfamily Name:", id: NameID.fontSubfamily, table: nameTable, list: &nameList)
-        appendName("Unique Font Identifier:", id: NameID.uniqueID, table: nameTable, list: &nameList)
-        appendName("Full Font Name:", id: NameID.fullName, table: nameTable, list: &nameList)
-        appendName("Version String:", id: NameID.version, table: nameTable, list: &nameList)
-        appendName("PostScript Name:", id: NameID.postScriptName, table: nameTable, list: &nameList)
-        appendName("Trademark:", id: NameID.trademark, table: nameTable, list: &nameList)
-        appendName("Manufacturer Name:", id: NameID.manufacturer, table: nameTable, list: &nameList)
-        appendName("Designer Name:", id: NameID.designer, table: nameTable, list: &nameList)
-        appendName("Typeface Description:", id: NameID.description, table: nameTable, list: &nameList)
-        appendName("Vendor URL:", id: NameID.vendorURL, table: nameTable, list: &nameList)
-        appendName("Designer URL:", id: NameID.designerURL, table: nameTable, list: &nameList)
-        appendName("License Description:", id: NameID.license, table: nameTable, list: &nameList)
-        appendName("License Info URL:", id: NameID.licenseURL, table: nameTable, list: &nameList)
-        appendName("Typographic Family Name:", id: NameID.typographicFamily, table: nameTable, list: &nameList)
-        appendName("Typographic Subfamily Name:", id: NameID.typographicSubfamily, table: nameTable, list: &nameList)
-        appendName("Compatible Full (Macintosh Only):", id: NameID.macFullName, table: nameTable, list: &nameList)
-        appendName("Sample Text:", id: NameID.sampleText, table: nameTable, list: &nameList)
-        appendName("PostScript CID “findfont” Name:", id: NameID.postScriptCIDFindFontName, table: nameTable, list: &nameList)
-        appendName("WWS Family Name:", id: NameID.wwsFamily, table: nameTable, list: &nameList)
-        appendName("WWS Subfamily Name:", id: NameID.wwsSubfamily, table: nameTable, list: &nameList)
-        appendName("Light Background Palette:", id: NameID.lightBackgroundPalette, table: nameTable, list: &nameList)
-        appendName("Dark Background Palette:", id: NameID.darkBackgroundPalette, table: nameTable, list: &nameList)
-        appendName("Variations PostScript Name Prefix:", id: NameID.variationsPostScriptNamePrefix, table: nameTable, list: &nameList)
+//        appendName("Copyright Notice:", id: NameID.copyright, table: nameTable, list: &nameList)
+//        appendName("Font Family Name:", id: NameID.fontFamily, table: nameTable, list: &nameList)
+//        appendName("Font Subfamily Name:", id: NameID.fontSubfamily, table: nameTable, list: &nameList)
+//        appendName("Unique Font Identifier:", id: NameID.uniqueID, table: nameTable, list: &nameList)
+//        appendName("Full Font Name:", id: NameID.fullName, table: nameTable, list: &nameList)
+//        appendName("Version String:", id: NameID.version, table: nameTable, list: &nameList)
+//        appendName("PostScript Name:", id: NameID.postScriptName, table: nameTable, list: &nameList)
+//        appendName("Trademark:", id: NameID.trademark, table: nameTable, list: &nameList)
+//        appendName("Manufacturer Name:", id: NameID.manufacturer, table: nameTable, list: &nameList)
+//        appendName("Designer Name:", id: NameID.designer, table: nameTable, list: &nameList)
+//        appendName("Typeface Description:", id: NameID.description, table: nameTable, list: &nameList)
+//        appendName("Vendor URL:", id: NameID.vendorURL, table: nameTable, list: &nameList)
+//        appendName("Designer URL:", id: NameID.designerURL, table: nameTable, list: &nameList)
+//        appendName("License Description:", id: NameID.license, table: nameTable, list: &nameList)
+//        appendName("License Info URL:", id: NameID.licenseURL, table: nameTable, list: &nameList)
+//        appendName("Typographic Family Name:", id: NameID.typographicFamily, table: nameTable, list: &nameList)
+//        appendName("Typographic Subfamily Name:", id: NameID.typographicSubfamily, table: nameTable, list: &nameList)
+//        appendName("Compatible Full (Macintosh Only):", id: NameID.macFullName, table: nameTable, list: &nameList)
+//        appendName("Sample Text:", id: NameID.sampleText, table: nameTable, list: &nameList)
+//        appendName("PostScript CID “findfont” Name:", id: NameID.postScriptCIDFindFontName, table: nameTable, list: &nameList)
+//        appendName("WWS Family Name:", id: NameID.wwsFamily, table: nameTable, list: &nameList)
+//        appendName("WWS Subfamily Name:", id: NameID.wwsSubfamily, table: nameTable, list: &nameList)
+//        appendName("Light Background Palette:", id: NameID.lightBackgroundPalette, table: nameTable, list: &nameList)
+//        appendName("Dark Background Palette:", id: NameID.darkBackgroundPalette, table: nameTable, list: &nameList)
+//        appendName("Variations PostScript Name Prefix:", id: NameID.variationsPostScriptNamePrefix, table: nameTable, list: &nameList)
 
         tableView.reloadData()
         tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
