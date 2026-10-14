@@ -173,7 +173,8 @@ open class TLabel: UIView {
     private func makeTextFrame(paddingLeft: CGFloat, paddingTop: CGFloat, layoutWidth: CGFloat, layoutHeight: CGFloat) -> ComposedFrame? {
         if let typesetter = typesetter {
             resolver.typesetter = typesetter
-            resolver.frameBounds = CGRect(x: paddingLeft, y: paddingTop, width: layoutWidth, height: layoutHeight)
+            resolver.frameWidth = layoutWidth
+            resolver.frameHeight = layoutHeight
 
             let string = typesetter.text.string
             let frame = resolver.makeFrame(characterRange: string.startIndex ..< string.endIndex)

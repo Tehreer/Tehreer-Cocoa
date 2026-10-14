@@ -37,7 +37,8 @@ final class TypesetterTests: XCTestCase {
     private func makeResolver(_ typesetter: Typesetter, width: CGFloat, height: CGFloat = 100000.0) -> FrameResolver {
         let resolver = FrameResolver()
         resolver.typesetter = typesetter
-        resolver.frameBounds = CGRect(x: 0.0, y: 0.0, width: width, height: height)
+        resolver.frameWidth = width
+        resolver.frameHeight = height
 
         return resolver
     }
@@ -95,7 +96,8 @@ final class TypesetterTests: XCTestCase {
                                                   breakMode: .character, truncationPlace: .end,
                                                   tokenString: "c")
         XCTAssertEqual(custom.width, 1114.0 + 1149.0 + 1072.0)
-        XCTAssertEqual(custom.codeUnitRange, 0 ..< 2)
+        // A truncated line covers the whole range, as the cut out text belongs to it.
+        XCTAssertEqual(custom.codeUnitRange, 0 ..< 6)
     }
 
     func testJustifiedLine() {
@@ -104,6 +106,56 @@ final class TypesetterTests: XCTestCase {
                                                 justificationExtent: 4000.0)
 
         XCTAssertEqual(line.width, 4000.0, accuracy: 0.01)
+    }
+
+    func testResolverPropertiesAreReadFromCore() {
+        let resolver = FrameResolver()
+
+        XCTAssertFalse(resolver.fitsHorizontally)
+        XCTAssertFalse(resolver.fitsVertically)
+        XCTAssertEqual(resolver.textAlignment, .leading)
+        XCTAssertEqual(resolver.verticalAlignment, .top)
+        XCTAssertEqual(resolver.truncationMode, .line)
+        XCTAssertEqual(resolver.truncationPlace, .end)
+        XCTAssertFalse(resolver.isTruncationEnabled)
+        XCTAssertFalse(resolver.isJustificationEnabled)
+        XCTAssertEqual(resolver.justificationLevel, 1.0)
+        XCTAssertNil(resolver.maxLines)
+        XCTAssertEqual(resolver.extraLineSpacing, 0.0)
+        XCTAssertEqual(resolver.lineHeightMultiplier, 1.0)
+
+        resolver.frameWidth = 100.0
+        resolver.frameHeight = 50.0
+        resolver.fitsHorizontally = true
+        resolver.fitsVertically = true
+        resolver.textAlignment = .trailing
+        resolver.verticalAlignment = .bottom
+        resolver.truncationMode = .character
+        resolver.truncationPlace = .middle
+        resolver.isTruncationEnabled = true
+        resolver.isJustificationEnabled = true
+        resolver.justificationLevel = 0.5
+        resolver.maxLines = 3
+        resolver.extraLineSpacing = 2.0
+        resolver.lineHeightMultiplier = 1.5
+
+        XCTAssertEqual(resolver.frameWidth, 100.0)
+        XCTAssertEqual(resolver.frameHeight, 50.0)
+        XCTAssertTrue(resolver.fitsHorizontally)
+        XCTAssertTrue(resolver.fitsVertically)
+        XCTAssertEqual(resolver.textAlignment, .trailing)
+        XCTAssertEqual(resolver.verticalAlignment, .bottom)
+        XCTAssertEqual(resolver.truncationMode, .character)
+        XCTAssertEqual(resolver.truncationPlace, .middle)
+        XCTAssertTrue(resolver.isTruncationEnabled)
+        XCTAssertTrue(resolver.isJustificationEnabled)
+        XCTAssertEqual(resolver.justificationLevel, 0.5)
+        XCTAssertEqual(resolver.maxLines, 3)
+        XCTAssertEqual(resolver.extraLineSpacing, 2.0)
+        XCTAssertEqual(resolver.lineHeightMultiplier, 1.5)
+
+        resolver.maxLines = nil
+        XCTAssertNil(resolver.maxLines)
     }
 
     func testFrameWrapsLines() throws {

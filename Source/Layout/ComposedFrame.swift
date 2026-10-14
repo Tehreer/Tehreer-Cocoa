@@ -113,6 +113,16 @@ public final class ComposedFrame: @unchecked Sendable {
                                                                          y: TRFloat(position.y))))
     }
 
+    /// Creates a locator that finds the lines of this frame that are visible in a rectangle.
+    ///
+    /// - Parameter renderer: The renderer that measures the ink boxes of the lines, which is the one
+    ///                       that draws the frame.
+    /// - Returns: A new line locator, or `nil` if it could not be created, as when the lines are
+    ///            placed billions of units apart.
+    public func makeLineLocator(renderer: Renderer) -> LineLocator? {
+        return LineLocator(frame: core, renderer: renderer)
+    }
+
     /// Creates a path that contains a set of rectangles covering the specified UTF-16 code unit range.
     ///
     /// - Parameter codeUnitRange: The selection range in source string.

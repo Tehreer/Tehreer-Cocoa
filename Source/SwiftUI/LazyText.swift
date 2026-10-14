@@ -57,7 +57,7 @@ struct LazyText: View {
                         width: manager.scrollWidth,
                         height: currentLine.height.rounded(.up)
                     )
-                    let lineBox = manager.lineBoxes[index]
+                    let lineBox = manager.lineBox(at: index)
                     let separatorColor = properties.separatorColor
 
                     LineCanvas(

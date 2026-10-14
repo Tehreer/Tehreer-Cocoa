@@ -44,7 +44,7 @@ final class TextContainer: UIView {
     private var _typesetter: Typesetter?
 
     private(set) var displayedFrame: ComposedFrame?
-    private var lineBoxes = LineBoxes()
+    private var lineLocator: LineLocator?
 
     private var pendingFrame: ComposedFrame?
     private var isSwapPending = false
@@ -197,13 +197,13 @@ final class TextContainer: UIView {
 
         operations.append(frameResolvingOperation)
 
-        let lineBoxesOperation = LineBoxesOperation(context) { (lineBoxes) in
-            self.updateLineBoxes(lineBoxes, identifying: context.layoutID)
+        let lineLocatorOperation = LineLocatorOperation(context) { (lineLocator) in
+            self.updateLineLocator(lineLocator, identifying: context.layoutID)
         }
-        lineBoxesOperation.qualityOfService = .userInteractive
-        lineBoxesOperation.addDependency(frameResolvingOperation)
+        lineLocatorOperation.qualityOfService = .userInteractive
+        lineLocatorOperation.addDependency(frameResolvingOperation)
 
-        operations.append(lineBoxesOperation)
+        operations.append(lineLocatorOperation)
 
         operationQueue.addOperations(operations, waitUntilFinished: false)
         needsTextLayout = false
@@ -216,7 +216,7 @@ final class TextContainer: UIView {
         _typesetter = typesetter
     }
 
-    /// The frame resolves well before its line boxes, and is only displayed once they are ready,
+    /// The frame resolves well before its line locator, and is only displayed once it is ready,
     /// so a line view never appears before its own text.
     private func updateTextFrame(_ textFrame: ComposedFrame?, identifying layoutID: NSObject) {
         guard layoutID === self.layoutID else { return }
@@ -242,10 +242,10 @@ final class TextContainer: UIView {
         }
     }
 
-    private func updateLineBoxes(_ lineBoxes: LineBoxes, identifying layoutID: NSObject) {
+    private func updateLineLocator(_ lineLocator: LineLocator?, identifying layoutID: NSObject) {
         guard layoutID === self.layoutID, textView != nil else { return }
 
-        self.lineBoxes = lineBoxes
+        self.lineLocator = lineLocator
 
         guard isSwapPending else {
             textView.setNeedsLayout()
@@ -314,11 +314,10 @@ final class TextContainer: UIView {
     // MARK: - Line Views
 
     private func layoutLines() {
-        guard let textFrame = displayedFrame else {
+        guard let textFrame = displayedFrame, let lineLocator = lineLocator else {
             return
         }
 
-        let lineBoxes = self.lineBoxes
         let visibleRect = self.visibleRect
 
         var attachedIndex = attachedLineViews.count - 1
@@ -326,7 +325,7 @@ final class TextContainer: UIView {
         while attachedIndex >= 0 {
             let lineView = attachedLineViews[attachedIndex]
 
-            if !lineBoxes.boxes[lineView.lineIndex].intersects(visibleRect) {
+            if !lineLocator.box(ofLineAt: lineView.lineIndex).intersects(visibleRect) {
                 lineViewsByIndex[lineView.lineIndex] = nil
                 attachedLineViews.swapAt(attachedIndex, attachedLineViews.count - 1)
                 attachedLineViews.removeLast()
@@ -336,7 +335,7 @@ final class TextContainer: UIView {
             attachedIndex -= 1
         }
 
-        lineBoxes.enumerateLineIndexes(intersecting: visibleRect) { lineIndex in
+        lineLocator.enumerateLines(in: visibleRect) { (lineIndex, _) in
             guard lineViewsByIndex[lineIndex] == nil else {
                 return
             }
@@ -344,7 +343,7 @@ final class TextContainer: UIView {
             let lineView = dequeueReusableLineView()
             lineView.lineIndex = lineIndex
             lineView.line = textFrame.lines[lineIndex]
-            lineView.frame = lineBoxes.boxes[lineIndex]
+            lineView.frame = lineLocator.box(ofLineAt: lineIndex)
             configure(lineView)
 
             insertSubview(lineView, aboveSubview: highlightView)
@@ -412,13 +411,11 @@ final class TextContainer: UIView {
     private func firstVisibleLineIndex(in frame: ComposedFrame, below top: CGFloat) -> Int {
         let lines = frame.lines
 
-        if let lineIndex = lineBoxes.firstLineIndex(below: top, where: { lines[$0].bottom > top }) {
-            return lineIndex
-        }
+        // The lines before the first box that reaches below `top` end above it too. The box of a line
+        // can reach lower than the line, so the lines are checked from there.
+        let firstIndex = lineLocator?.indexOfFirstLine(below: top) ?? 0
 
-        let unboxedIndexes = lineBoxes.boxes.count ..< lines.count
-
-        return unboxedIndexes.first { lines[$0].bottom > top } ?? lines.count - 1
+        return (firstIndex ..< lines.count).first { lines[$0].bottom > top } ?? lines.count - 1
     }
 
     private func captureAnchor() -> Anchor? {

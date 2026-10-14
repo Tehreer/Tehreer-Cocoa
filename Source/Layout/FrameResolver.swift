@@ -22,7 +22,7 @@ import Foundation
 import UIKit
 
 /// This class resolves text frames by using a typesetter object. It is backed by the frame resolver
-/// of Core, which gets every setting as it is set. It is a configuration object, so it must not be
+/// of Core, which holds every setting. It is a configuration object, so it must not be
 /// used from several threads at a time.
 public final class FrameResolver {
     private let core: TRFrameResolverRef
@@ -34,126 +34,117 @@ public final class FrameResolver {
         }
     }
 
-    /// A rectangle that specifies the frame bounds. Its default value is an infinite rectangle at
-    /// zero origin.
-    public var frameBounds: CGRect = .infinite {
-        didSet {
-            TRFrameResolverSetFrameSize(
-                core,
-                TRFloat(frameBounds.width),
-                TRFloat(frameBounds.height)
-            )
+    /// The width of the frame. Its default value is unbounded.
+    public var frameWidth: CGFloat {
+        get { CGFloat(TRFrameResolverGetFrameSize(core).width) }
+        set {
+            var size = TRFrameResolverGetFrameSize(core)
+            size.width = TRFloat(newValue)
+            TRFrameResolverSetFrameSize(core, size)
+        }
+    }
+
+    /// The height of the frame. Its default value is unbounded.
+    public var frameHeight: CGFloat {
+        get { CGFloat(TRFrameResolverGetFrameSize(core).height) }
+        set {
+            var size = TRFrameResolverGetFrameSize(core)
+            size.height = TRFloat(newValue)
+            TRFrameResolverSetFrameSize(core, size)
         }
     }
 
     /// A boolean value that indicates whether or not to tightly fit the lines horizontally in a
     /// frame. If enabled, the resulting frame will have a minimum width that tightly encloses all
     /// the lines of specified text. Its default value is `false`.
-    public var fitsHorizontally: Bool = false {
-        didSet {
-            TRFrameResolverSetFitsHorizontally(core, fitsHorizontally ? 1 : 0)
-        }
+    public var fitsHorizontally: Bool {
+        get { TRFrameResolverGetFitsHorizontally(core) != 0 }
+        set { TRFrameResolverSetFitsHorizontally(core, newValue ? 1 : 0) }
     }
 
     /// A boolean value that indicates whether or not to tightly fit the lines vertically in a
     /// frame. If enabled, the resulting frame will have a minimum height that tightly encloses all
     /// the lines of specified text. Its default value is `false`.
-    public var fitsVertically: Bool = false {
-        didSet {
-            TRFrameResolverSetFitsVertically(core, fitsVertically ? 1 : 0)
-        }
+    public var fitsVertically: Bool {
+        get { TRFrameResolverGetFitsVertically(core) != 0 }
+        set { TRFrameResolverSetFitsVertically(core, newValue ? 1 : 0) }
     }
 
     /// The text alignment to apply on each line of a frame. Its default value is `.leading`.
-    public var textAlignment: TextAlignment = .leading {
-        didSet {
-            TRFrameResolverSetTextAlignment(core, textAlignment.coreValue)
-        }
+    public var textAlignment: TextAlignment {
+        get { TextAlignment(coreValue: TRFrameResolverGetTextAlignment(core)) }
+        set { TRFrameResolverSetTextAlignment(core, newValue.coreValue) }
     }
 
     /// The vertical alignment to apply on the contents of a frame. Its default value is `.top`.
-    public var verticalAlignment: VerticalAlignment = .top {
-        didSet {
-            TRFrameResolverSetVerticalAlignment(core, verticalAlignment.coreValue)
-        }
+    public var verticalAlignment: VerticalAlignment {
+        get { VerticalAlignment(coreValue: TRFrameResolverGetVerticalAlignment(core)) }
+        set { TRFrameResolverSetVerticalAlignment(core, newValue.coreValue) }
     }
 
     /// The truncation mode to apply on the last line of a frame in case of overflow. Its default
     /// value is `.line`.
-    public var truncationMode: BreakMode = .line {
-        didSet {
-            TRFrameResolverSetTruncationMode(core, truncationMode.coreValue)
-        }
+    public var truncationMode: BreakMode {
+        get { BreakMode(coreValue: TRFrameResolverGetTruncationMode(core)) }
+        set { TRFrameResolverSetTruncationMode(core, newValue.coreValue) }
     }
 
     /// The truncation place for the last line of a frame. It takes effect only when the truncation
     /// is enabled. Its default value is `.end`.
-    public var truncationPlace: TruncationPlace = .end {
-        didSet {
-            TRFrameResolverSetTruncationPlace(core, truncationPlace.coreValue)
-        }
+    public var truncationPlace: TruncationPlace {
+        get { TruncationPlace(coreValue: TRFrameResolverGetTruncationPlace(core)) }
+        set { TRFrameResolverSetTruncationPlace(core, newValue.coreValue) }
     }
 
     /// A boolean value that indicates whether or not to truncate the last line of a frame in case
     /// of overflow. Its default value is `false`.
-    public var isTruncationEnabled: Bool = false {
-        didSet {
-            TRFrameResolverSetTruncationEnabled(core, isTruncationEnabled ? 1 : 0)
-        }
+    public var isTruncationEnabled: Bool {
+        get { TRFrameResolverIsTruncationEnabled(core) != 0 }
+        set { TRFrameResolverSetTruncationEnabled(core, newValue ? 1 : 0) }
     }
 
     /// A boolean value that indicates whether or not to justify the lines in a frame. Its default
     /// value is `false`.
-    public var isJustificationEnabled: Bool = false {
-        didSet {
-            TRFrameResolverSetJustificationEnabled(core, isJustificationEnabled ? 1 : 0)
-        }
+    public var isJustificationEnabled: Bool {
+        get { TRFrameResolverIsJustificationEnabled(core) != 0 }
+        set { TRFrameResolverSetJustificationEnabled(core, newValue ? 1 : 0) }
     }
 
     /// The justification level which can range from `0.0` to `1.0`. A lower value increases the
     /// tightness between words while a higher value decreases it. Its default value is `1.0`.
-    public var justificationLevel: CGFloat = 1.0 {
-        didSet {
-            TRFrameResolverSetJustificationLevel(core, TRFloat(justificationLevel))
-        }
+    public var justificationLevel: CGFloat {
+        get { CGFloat(TRFrameResolverGetJustificationLevel(core)) }
+        set { TRFrameResolverSetJustificationLevel(core, TRFloat(newValue)) }
     }
 
-    /// The maximum number of lines that a frame should consist of.
-    public var maxLines: Int? = nil {
-        didSet {
-            TRFrameResolverSetMaxLines(core, TRUInteger(max(maxLines ?? 0, 0)))
+    /// The maximum number of lines that a frame should consist of. Its default value is `nil`,
+    /// which means that the number of lines is not limited.
+    public var maxLines: Int? {
+        get {
+            let count = TRFrameResolverGetMaxLines(core)
+
+            return (count == 0 ? nil : Int(count))
         }
+        set { TRFrameResolverSetMaxLines(core, TRUInteger(max(newValue ?? 0, 0))) }
     }
 
-    /// The extra spacing to add after each line of a frame. It is resolved before line height
+    /// The extra spacing to add after each line of a frame. It is resolved after line height
     /// multiplier. Its default value is zero.
-    public var extraLineSpacing: CGFloat = .zero {
-        didSet {
-            TRFrameResolverSetExtraLineSpacing(core, TRFloat(extraLineSpacing))
-        }
+    public var extraLineSpacing: CGFloat {
+        get { CGFloat(TRFrameResolverGetExtraLineSpacing(core)) }
+        set { TRFrameResolverSetExtraLineSpacing(core, TRFloat(newValue)) }
     }
 
-    /// The height multiplier to apply on each line of a frame. It is resolved after extra line
-    /// spacing. Its default value is one.
-    public var lineHeightMultiplier: CGFloat = 1.0 {
-        didSet {
-            TRFrameResolverSetLineHeightMultiplier(core, TRFloat(lineHeightMultiplier))
-        }
+    /// The height multiplier to apply on each line of a frame. It is resolved before extra line
+    /// spacing, and it is ignored if it is not positive. Its default value is one.
+    public var lineHeightMultiplier: CGFloat {
+        get { CGFloat(TRFrameResolverGetLineHeightMultiplier(core)) }
+        set { TRFrameResolverSetLineHeightMultiplier(core, TRFloat(newValue)) }
     }
 
     /// Creates a frame resolver.
     public init() {
         core = TRFrameResolverCreate()!
-
-        // Core has no getters, so it is told the defaults of the properties above.
-        TRFrameResolverSetFrameSize(core, TRFloat(frameBounds.width), TRFloat(frameBounds.height))
-        TRFrameResolverSetTextAlignment(core, textAlignment.coreValue)
-        TRFrameResolverSetVerticalAlignment(core, verticalAlignment.coreValue)
-        TRFrameResolverSetTruncationMode(core, truncationMode.coreValue)
-        TRFrameResolverSetTruncationEnabled(core, 0)
-        TRFrameResolverSetJustificationLevel(core, TRFloat(justificationLevel))
-        TRFrameResolverSetExtraLineSpacing(core, TRFloat(extraLineSpacing))
-        TRFrameResolverSetLineHeightMultiplier(core, TRFloat(lineHeightMultiplier))
     }
 
     deinit {

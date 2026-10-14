@@ -61,9 +61,8 @@ final class StyledTextManager: ObservableObject {
         guard let typesetter else { return nil }
         guard containerSize.width > .zero && containerSize.height > .zero else { return .zero }
 
-        resolver.frameBounds = CGRect(
-            x: 0.0, y: 0.0, width: containerSize.width, height: containerSize.height
-        )
+        resolver.frameWidth = containerSize.width
+        resolver.frameHeight = containerSize.height
 
         let string = typesetter.text.string
         let resolvedFrame = resolver.makeFrame(
@@ -107,9 +106,8 @@ final class StyledTextManager: ObservableObject {
             return
         }
 
-        resolver.frameBounds = CGRect(
-            x: 0.0, y: 0.0, width: containerSize.width, height: containerSize.height
-        )
+        resolver.frameWidth = containerSize.width
+        resolver.frameHeight = containerSize.height
 
         let string = typesetter.text.string
         textFrame = resolver.makeFrame(

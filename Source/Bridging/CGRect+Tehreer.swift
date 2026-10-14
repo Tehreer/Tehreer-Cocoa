@@ -38,4 +38,12 @@ extension CGRect {
             self.init(rect)
         }
     }
+
+    /// The rectangle for Core.
+    var coreValue: TRRect {
+        return TRRect(
+            origin: TRPoint(x: TRFloat(origin.x), y: TRFloat(origin.y)),
+            size: TRSize(width: TRFloat(width), height: TRFloat(height))
+        )
+    }
 }

@@ -19,23 +19,11 @@ import SwiftUI
 import UIKit
 
 private typealias LayoutID = UUID
-private typealias TextSection = Int
-private typealias LineIndex = Int
-private typealias SectionDictionary = [TextSection: [LineIndex]]
-
-@MainActor
-private var sectionHeight: CGFloat {
-    let screenBounds = UIScreen.main.bounds
-    return max(screenBounds.width, screenBounds.height)
-}
 
 @available(iOS 13.0, *)
 private struct TextContext: Sendable {
-    typealias LineUpdatesBlock = @MainActor (SectionDictionary, [CGRect]) -> Void
-
     let layoutID: LayoutID
     let renderScale: CGFloat
-    let sectionHeight: CGFloat
     let layoutWidth: CGFloat
     let string: String?
     // The string is immutable, since it is copied when the context is made, and is only read.
@@ -54,7 +42,6 @@ private struct TextContext: Sendable {
     init(
         layoutID: UUID,
         renderScale: CGFloat,
-        sectionHeight: CGFloat,
         layoutWidth: CGFloat,
         string: String?,
         attributedString: NSAttributedString?,
@@ -70,7 +57,6 @@ private struct TextContext: Sendable {
     ) {
         self.layoutID = layoutID
         self.renderScale = renderScale
-        self.sectionHeight = sectionHeight
         self.layoutWidth = layoutWidth
         self.string = string
         self.attributedString = attributedString?.copy() as? NSAttributedString
@@ -123,12 +109,8 @@ private struct TextContext: Sendable {
     private func makeFrameResolver(typesetter: Typesetter) -> FrameResolver {
         let resolver = FrameResolver()
         resolver.typesetter = typesetter
-        resolver.frameBounds = CGRect(
-            x: .zero,
-            y: .zero,
-            width: layoutWidth,
-            height: .greatestFiniteMagnitude
-        )
+        resolver.frameWidth = layoutWidth
+        resolver.frameHeight = .greatestFiniteMagnitude
         resolver.fitsHorizontally = false
         resolver.fitsVertically = true
         resolver.textAlignment = textAlignment
@@ -156,43 +138,8 @@ private struct TextContext: Sendable {
         return renderer
     }
 
-    func measureLines(of textFrame: ComposedFrame?, updatesBlock: @escaping LineUpdatesBlock) async {
-        guard let lines = textFrame?.lines else { return }
-
-        let renderer = makeBoxRenderer()
-        var sections: SectionDictionary = [:]
-        var lineBoxes: [CGRect] = []
-        var lineCount = 0
-
-        for (lineIndex, textLine) in lines.enumerated() {
-            defer { lineCount += 1 }
-
-            var boundingBox = textLine.computeInkBox(with: renderer)
-            boundingBox = boundingBox.offsetBy(dx: textLine.origin.x, dy: textLine.origin.y)
-            boundingBox.origin.x.round(.down)
-            boundingBox.origin.y.round(.down)
-            boundingBox.size.width.round(.up)
-            boundingBox.size.height.round(.up)
-
-            lineBoxes.append(boundingBox)
-
-            let startSection = Int(boundingBox.minY / sectionHeight)
-            let endSection = Int(boundingBox.maxY / sectionHeight)
-            for section in startSection...endSection {
-                sections[section, default: []].append(lineIndex)
-            }
-
-            if lineCount == 64 {
-                if Task.isCancelled { return }
-
-                await updatesBlock(sections, lineBoxes)
-                lineCount = 0
-            }
-        }
-
-        if lineCount > 0 {
-            await updatesBlock(sections, lineBoxes)
-        }
+    func makeLineLocator(of textFrame: ComposedFrame?) async -> LineLocator? {
+        return textFrame?.makeLineLocator(renderer: makeBoxRenderer())
     }
 }
 
@@ -209,8 +156,8 @@ final class LazyTextManager: ObservableObject {
     @Published private(set) var textFrame: ComposedFrame?
     @Published private(set) var visibleIndices: [Int] = []
 
-    private var textSections: SectionDictionary = [:]
-    private(set) var lineBoxes: [CGRect] = []
+    private var lineLocator: LineLocator?
+    private var foundLines: [Int] = []
 
     private var layoutTask: Task<Void, Never>?
     private var layoutID = LayoutID()
@@ -265,9 +212,22 @@ final class LazyTextManager: ObservableObject {
         renderer.strokeMiter = properties.strokeMiter
     }
 
+    /// The box of a line in the coordinates of the text frame, which is empty until the locator of
+    /// the lines is ready.
+    func lineBox(at lineIndex: Int) -> CGRect {
+        guard let lineLocator, lineIndex < lineLocator.lineCount else {
+            return .zero
+        }
+
+        return lineLocator.box(ofLineAt: lineIndex)
+    }
+
     @MainActor
     private func updateVisibleIndices() {
-        var indicesSet: Set<LineIndex> = []
+        guard let lineLocator else {
+            visibleIndices = []
+            return
+        }
 
         let visibleRect = CGRect(
             x: -scrollOffset.x,
@@ -275,20 +235,13 @@ final class LazyTextManager: ObservableObject {
             width: scrollWidth,
             height: scrollHeight
         )
-        let startSection = Int(visibleRect.minY / sectionHeight)
-        let endSection = Int(visibleRect.maxY / sectionHeight)
 
-        for section in startSection...endSection {
-            if let indices = textSections[section] {
-                for index in indices {
-                    if visibleRect.intersects(lineBoxes[index]) {
-                        indicesSet.insert(index)
-                    }
-                }
-            }
+        lineLocator.findLines(in: visibleRect, into: &foundLines)
+        foundLines.sort()
+
+        if visibleIndices != foundLines {
+            visibleIndices = foundLines
         }
-
-        visibleIndices = indicesSet.sorted()
     }
 
     @MainActor
@@ -298,7 +251,6 @@ final class LazyTextManager: ObservableObject {
         let context = TextContext(
             layoutID: layoutID,
             renderScale: UIScreen.main.scale,
-            sectionHeight: sectionHeight,
             layoutWidth: scrollWidth,
             string: properties.string,
             attributedString: properties.attributedString,
@@ -326,9 +278,8 @@ final class LazyTextManager: ObservableObject {
             updateTextFrame(textFrame, forLayout: context.layoutID)
             if Task.isCancelled { return }
 
-            await context.measureLines(of: textFrame) { [weak self] sections, boxes in
-                self?.updateLines((sections, boxes), forLayout: context.layoutID)
-            }
+            let lineLocator = await context.makeLineLocator(of: textFrame)
+            updateLineLocator(lineLocator, forLayout: context.layoutID)
         }
     }
 
@@ -343,20 +294,15 @@ final class LazyTextManager: ObservableObject {
         guard layoutID == self.layoutID else { return }
 
         textFrame = newFrame
-        textSections = [:]
-        lineBoxes = []
+        lineLocator = nil
         updateVisibleIndices()
     }
 
     @MainActor
-    private func updateLines(
-        _ lines: (sections: SectionDictionary, boxes: [CGRect]),
-        forLayout layoutID: LayoutID
-    ) {
+    private func updateLineLocator(_ newLocator: LineLocator?, forLayout layoutID: LayoutID) {
         guard layoutID == self.layoutID else { return }
 
-        textSections = lines.sections
-        lineBoxes = lines.boxes
+        lineLocator = newLocator
         updateVisibleIndices()
     }
 }

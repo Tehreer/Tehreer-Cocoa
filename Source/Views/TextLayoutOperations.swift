@@ -135,10 +135,8 @@ final class FrameResolvingOperation: Operation, @unchecked Sendable {
 
         let resolver = FrameResolver()
         resolver.typesetter = typesetter
-        resolver.frameBounds = CGRect(
-            x: .zero, y: .zero,
-            width: context.layoutWidth, height: .greatestFiniteMagnitude
-        )
+        resolver.frameWidth = context.layoutWidth
+        resolver.frameHeight = .greatestFiniteMagnitude
         resolver.fitsHorizontally = false
         resolver.fitsVertically = true
         resolver.textAlignment = context.textAlignment
@@ -155,65 +153,29 @@ final class FrameResolvingOperation: Operation, @unchecked Sendable {
 }
 
 // Unchecked as `Operation` itself is; the context is shared as `TextLayoutContext` describes.
-final class LineBoxesOperation: Operation, @unchecked Sendable {
+final class LineLocatorOperation: Operation, @unchecked Sendable {
     private let context: TextLayoutContext
-    private let updateBlock: ((LineBoxes) -> Void)
+    private let updateBlock: ((LineLocator?) -> Void)
 
-    private var lineBoxes = LineBoxes()
-
-    init(_ context: TextLayoutContext, updateBlock: @escaping ((LineBoxes) -> Void)) {
+    init(_ context: TextLayoutContext, updateBlock: @escaping ((LineLocator?) -> Void)) {
         self.context = context
         self.updateBlock = updateBlock
     }
 
-    private func notifyUpdateIfNeeded() {
+    override func main() {
+        var lineLocator: LineLocator?
+
+        if let textFrame = context.textFrame {
+            let renderer = Renderer()
+            context.updateRenderer(renderer)
+
+            lineLocator = textFrame.makeLineLocator(renderer: renderer)
+        }
+
         guard !isCancelled else { return }
 
-        let lineBoxes = self.lineBoxes
-
         DispatchQueue.main.async {
-            self.updateBlock(lineBoxes)
-        }
-    }
-
-    override func main() {
-        defer { notifyUpdateIfNeeded() }
-
-        guard let lines = context.textFrame?.lines else {
-            return
-        }
-
-        let renderer = Renderer()
-        context.updateRenderer(renderer)
-
-        var lineCount = 0
-
-        for textLine in lines {
-            defer { lineCount += 1 }
-
-            var boundingBox = CGRect(
-                x: 0.0,
-                y: textLine.origin.y - textLine.ascent,
-                width: context.layoutWidth,
-                height: textLine.height
-            )
-
-            var inkBox = textLine.computeInkBox(with: renderer)
-            if !inkBox.isNull {
-                inkBox = inkBox.offsetBy(dx: textLine.origin.x, dy: textLine.origin.y)
-                boundingBox = boundingBox.union(inkBox)
-            }
-
-            lineBoxes.append(boundingBox.integral)
-
-            if isCancelled {
-                return
-            }
-
-            if lineCount == 64 {
-                notifyUpdateIfNeeded()
-                lineCount = 0
-            }
+            self.updateBlock(lineLocator)
         }
     }
 }

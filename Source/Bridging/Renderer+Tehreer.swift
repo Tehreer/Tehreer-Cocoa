@@ -17,6 +17,17 @@
 internal import Tehreer
 
 extension Renderer.DrawStyle {
+    init(coreValue: TRDrawStyle) {
+        switch coreValue {
+        case TRDrawStyle(TRDrawStyleStroke):
+            self = .stroke
+        case TRDrawStyle(TRDrawStyleFillStroke):
+            self = .fillStroke
+        default:
+            self = .fill
+        }
+    }
+
     var coreValue: TRDrawStyle {
         switch self {
         case .fill:
@@ -30,12 +41,20 @@ extension Renderer.DrawStyle {
 }
 
 extension Renderer.StrokeCap {
+    init(coreValue: TRStrokeCap) {
+        self = Renderer.StrokeCap(rawValue: Int(coreValue)) ?? .butt
+    }
+
     var coreValue: TRStrokeCap {
         return TRStrokeCap(rawValue)
     }
 }
 
 extension Renderer.StrokeJoin {
+    init(coreValue: TRStrokeJoin) {
+        self = Renderer.StrokeJoin(rawValue: Int(coreValue)) ?? .round
+    }
+
     var coreValue: TRStrokeJoin {
         return TRStrokeJoin(rawValue)
     }

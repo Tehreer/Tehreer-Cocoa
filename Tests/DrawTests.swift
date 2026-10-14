@@ -148,7 +148,8 @@ final class DrawTests: XCTestCase {
     func testFrameDraw() throws {
         let resolver = FrameResolver()
         resolver.typesetter = makeTypesetter()
-        resolver.frameBounds = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 1000.0)
+        resolver.frameWidth = 100.0
+        resolver.frameHeight = 1000.0
 
         let frame = try XCTUnwrap(resolver.makeFrame(codeUnitRange: 0 ..< 3))
         XCTAssertGreaterThan(frame.lines.count, 1)
@@ -159,6 +160,47 @@ final class DrawTests: XCTestCase {
         }
 
         XCTAssertGreaterThan(inkCount(pixels), 0)
+    }
+
+    func testShadowIsDrawnByCore() throws {
+        let line = makeTypesetter().makeSimpleLine(codeUnitRange: 0 ..< 3)
+        let renderer = makeRenderer()
+        renderer.fillColor = .red
+
+        let plain = try draw { (context) in
+            context.translateBy(x: 10.0, y: line.ascent + 10.0)
+            line.draw(with: renderer, in: context)
+        }
+
+        renderer.shadowRadius = 2.0
+        renderer.shadowDx = 6.0
+        renderer.shadowDy = 6.0
+        renderer.shadowColor = .blue
+
+        let shadowed = try draw { (context) in
+            context.translateBy(x: 10.0, y: line.ascent + 10.0)
+            line.draw(with: renderer, in: context)
+        }
+
+        // The shadow is blended with the background, so it is found by its blue tint.
+        func bluish(_ pixels: [UInt8]) -> Int {
+            return stride(
+                from: 0,
+                to: pixels.count,
+                by: 4
+            ).filter { pixels[$0 + 2] > pixels[$0] &+ 30 && pixels[$0] < 0xFF }.count
+        }
+
+        XCTAssertEqual(bluish(plain), 0)
+        XCTAssertGreaterThan(bluish(shadowed), 0)
+
+        // The scope of the shadow ends with the draw call.
+        renderer.shadowRadius = 0.0
+        let after = try draw { (context) in
+            context.translateBy(x: 10.0, y: line.ascent + 10.0)
+            line.draw(with: renderer, in: context)
+        }
+        XCTAssertEqual(bluish(after), 0)
     }
 
     func testStrokeStyle() throws {

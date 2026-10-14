@@ -88,6 +88,14 @@ public final class Renderer {
                 .drawReplacement(of: run, origin: origin)
         }
 
+        callbacks.beginShadow = { (user, radius, dx, dy, color) in
+            Unmanaged<Renderer>.fromOpaque(user!).takeUnretainedValue()
+                .beginShadow(radius: radius, dx: dx, dy: dy, color: color)
+        }
+        callbacks.endShadow = { (user) in
+            Unmanaged<Renderer>.fromOpaque(user!).takeUnretainedValue().endShadow()
+        }
+
         TRRendererSetDrawCallbacks(core, &callbacks, Unmanaged.passUnretained(self).toOpaque())
     }
 
@@ -104,29 +112,6 @@ public final class Renderer {
         }
     }
 
-    /// The fill color for glyphs. Its default value is `.black`.
-    public var fillColor: UIColor = .black {
-        didSet {
-            TRRendererSetForegroundColor(core, fillColor.coreValue)
-        }
-    }
-
-    /// The style, used for controlling how glyphs should appear while drawing. Its default value is
-    /// `.fill`.
-    public var drawStyle: DrawStyle = .fill {
-        didSet {
-            TRRendererSetDrawStyle(core, drawStyle.coreValue)
-        }
-    }
-
-    /// The direction in which the pen will advance after drawing a glyph. Its default value is
-    /// `.leftToRight`.
-    public var writingDirection: WritingDirection = .leftToRight {
-        didSet {
-            TRRendererSetWritingDirection(core, writingDirection.coreValue)
-        }
-    }
-
     /// The typeface, used for drawing glyphs.
     public var typeface: Typeface! = nil {
         didSet {
@@ -135,152 +120,121 @@ public final class Renderer {
     }
 
     /// The type size applied on the glyphs while drawing.
-    public var typeSize: CGFloat = 16.0 {
-        didSet {
-            TRRendererSetTypeSize(core, TRFloat(typeSize))
-        }
-    }
-
-    /// The slant angle for glyphs. Its default value is zero.
-    public var slantAngle: CGFloat = 0.0 {
-        didSet {
-            TRRendererSetSkewX(core, TRFloat(slantAngle))
-        }
-    }
-
-    /// The scale factor applied to the glyphs and their metrics such as offsets and advances.
-    public var renderScale: CGFloat = 1.0 {
-        didSet {
-            TRRendererSetRenderScale(core, TRFloat(renderScale))
-        }
+    public var typeSize: CGFloat {
+        get { CGFloat(TRRendererGetTypeSize(core)) }
+        set { TRRendererSetTypeSize(core, TRFloat(newValue)) }
     }
 
     /// The horizontal scale factor applied on the glyphs while drawing. Its default value is 1.0.
     /// Values greater than 1.0 will stretch the glyphs wider. Values less than 1.0 will stretch the
     /// glyphs narrower.
-    public var scaleX: CGFloat = 1.0 {
-        didSet {
-            TRRendererSetScaleX(core, TRFloat(scaleX))
-        }
+    public var scaleX: CGFloat {
+        get { CGFloat(TRRendererGetScaleX(core)) }
+        set { TRRendererSetScaleX(core, TRFloat(newValue)) }
     }
 
     /// The vertical scale factor applied on the glyphs while drawing. Its default value is 1.0.
     /// Values greater than 1.0 will stretch the glyphs wider. Values less than 1.0 will stretch the
     /// glyphs narrower.
-    public var scaleY: CGFloat = 1.0 {
-        didSet {
-            TRRendererSetScaleY(core, TRFloat(scaleY))
-        }
+    public var scaleY: CGFloat {
+        get { CGFloat(TRRendererGetScaleY(core)) }
+        set { TRRendererSetScaleY(core, TRFloat(newValue)) }
     }
 
-    /// The stroke color for glyphs. Its default value is `.black`.
-    public var strokeColor: UIColor = .black {
-        didSet {
-            TRRendererSetStrokeColor(core, strokeColor.coreValue)
-        }
+    /// The slant angle for glyphs. Its default value is zero.
+    public var slantAngle: CGFloat {
+        get { CGFloat(TRRendererGetSkewX(core)) }
+        set { TRRendererSetSkewX(core, TRFloat(newValue)) }
+    }
+
+    /// The scale factor applied to the glyphs and their metrics such as offsets and advances.
+    public var renderScale: CGFloat {
+        get { CGFloat(TRRendererGetRenderScale(core)) }
+        set { TRRendererSetRenderScale(core, TRFloat(newValue)) }
+    }
+
+    /// The direction in which the pen will advance after drawing a glyph. Its default value is
+    /// `.leftToRight`.
+    public var writingDirection: WritingDirection {
+        get { WritingDirection(coreValue: TRRendererGetWritingDirection(core)) }
+        set { TRRendererSetWritingDirection(core, newValue.coreValue) }
+    }
+
+    /// The fill color for glyphs. Its default value is `.black`.
+    public var fillColor: UIColor {
+        get { UIColor(coreValue: TRRendererGetForegroundColor(core)) }
+        set { TRRendererSetForegroundColor(core, newValue.coreValue) }
     }
 
     /// The radius, in pixels, for stroking glyphs: how far the stroke reaches from the outline of a
     /// glyph, so a stroked line is twice as wide. Its default value is 0.5.
-    public var strokeRadius: CGFloat = 0.5 {
-        didSet {
-            TRRendererSetStrokeRadius(core, TRFloat(strokeRadius))
-        }
+    public var strokeRadius: CGFloat {
+        get { CGFloat(TRRendererGetStrokeRadius(core)) }
+        set { TRRendererSetStrokeRadius(core, TRFloat(newValue)) }
     }
 
     /// The stroke cap style which controls how the start and end of stroked lines and paths are
     /// treated. Its default value is `.butt`.
-    public var strokeCap: StrokeCap = .butt {
-        didSet {
-            TRRendererSetStrokeCap(core, strokeCap.coreValue)
-        }
+    public var strokeCap: StrokeCap {
+        get { StrokeCap(coreValue: TRRendererGetStrokeCap(core)) }
+        set { TRRendererSetStrokeCap(core, newValue.coreValue) }
     }
 
     /// The stroke join type. Its default value is `.round`.
-    public var strokeJoin: StrokeJoin = .round {
-        didSet {
-            TRRendererSetStrokeJoin(core, strokeJoin.coreValue)
-        }
+    public var strokeJoin: StrokeJoin {
+        get { StrokeJoin(coreValue: TRRendererGetStrokeJoin(core)) }
+        set { TRRendererSetStrokeJoin(core, newValue.coreValue) }
     }
 
     /// The stroke miter limit in pixels. This is used to control the behavior of miter joins when
     /// the joins angle is sharp.
-    public var strokeMiter: CGFloat = 1.0 {
-        didSet {
-            TRRendererSetStrokeMiter(core, TRFloat(strokeMiter))
-        }
+    public var strokeMiter: CGFloat {
+        get { CGFloat(TRRendererGetStrokeMiter(core)) }
+        set { TRRendererSetStrokeMiter(core, TRFloat(newValue)) }
+    }
+
+    /// The stroke color for glyphs. Its default value is `.black`.
+    public var strokeColor: UIColor {
+        get { UIColor(coreValue: TRRendererGetStrokeColor(core)) }
+        set { TRRendererSetStrokeColor(core, newValue.coreValue) }
     }
 
     /// The shadow radius, in pixels, used when drawing glyphs. Its default value is
     /// zero. The shadow would be disabled if the value is set to zero.
-    public var shadowRadius: CGFloat = 0.0
+    public var shadowRadius: CGFloat {
+        get { CGFloat(TRRendererGetShadowRadius(core)) }
+        set { TRRendererSetShadowRadius(core, TRFloat(newValue)) }
+    }
 
     /// The horizontal shadow offset, in pixels.
-    public var shadowDx: CGFloat = 0.0
+    public var shadowDx: CGFloat {
+        get { CGFloat(TRRendererGetShadowDx(core)) }
+        set { TRRendererSetShadowDx(core, TRFloat(newValue)) }
+    }
 
     /// The vertical shadow offset in pixels.
-    public var shadowDy: CGFloat = 0.0
+    public var shadowDy: CGFloat {
+        get { CGFloat(TRRendererGetShadowDy(core)) }
+        set { TRRendererSetShadowDy(core, TRFloat(newValue)) }
+    }
 
     /// The shadow color.
-    public var shadowColor: UIColor = .clear
+    public var shadowColor: UIColor {
+        get { UIColor(coreValue: TRRendererGetShadowColor(core)) }
+        set { TRRendererSetShadowColor(core, newValue.coreValue) }
+    }
+
+    /// The style, used for controlling how glyphs should appear while drawing. Its default value is
+    /// `.fill`.
+    public var drawStyle: DrawStyle {
+        get { DrawStyle(coreValue: TRRendererGetDrawStyle(core)) }
+        set { TRRendererSetDrawStyle(core, newValue.coreValue) }
+    }
 
     /// A Boolean value that indicates whether the glyphs are big enough to be rendered, which takes
     /// at least one pixel in each direction.
     public var isRenderable: Bool {
         return TRRendererIsRenderable(core) != 0
-    }
-
-    /// Generates the path of specified glyph.
-    ///
-    /// - Parameter glyphID: The ID of glyph whose path is generated.
-    /// - Returns: The path of the glyph specified by `glyphID`, or `nil` if the glyph has no
-    ///            outline, as in a bitmap font.
-    public func makePath(glyphID: GlyphID) -> CGPath? {
-        guard let corePath = TRRendererCopyGlyphPath(core, glyphID) else {
-            return nil
-        }
-        defer { TRPathRelease(corePath) }
-
-        return CGPath.make(from: corePath, transform: nil)
-    }
-
-    /// Generates a cumulative path of specified glyphs.
-    ///
-    /// - Parameters:
-    ///   - glyphIDs: The glyph IDs, such as those of a glyph run.
-    ///   - offsets: The glyph offsets.
-    ///   - advances: The glyph advances.
-    /// - Returns: The cumulative path of specified glyphs.
-    public func makePath(
-        glyphIDs: PrimitiveCollection<GlyphID>,
-        offsets: PrimitiveCollection<CGPoint>,
-        advances: PrimitiveCollection<CGFloat>
-    ) -> CGPath? {
-        let path = CGMutablePath()
-
-        withGlyphRun(glyphIDs, offsets, advances) { (glyphIDs, offsets, advances, count) in
-            var callbacks = CGPath.coreCallbacks
-
-            let user = Unmanaged.passUnretained(path).toOpaque()
-            TRRendererEnumerateGlyphPaths(core, glyphIDs, offsets, advances, count, &callbacks, user)
-        }
-
-        return path
-    }
-
-    /// Generates a cumulative path of specified glyphs.
-    ///
-    /// The collections of a glyph run or a shaping result are read without being copied. Any other
-    /// collection is converted into temporary buffers.
-    public func makePath<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS) -> CGPath?
-        where GS: RandomAccessCollection, GS.Index == Int, GS.Element == GlyphID,
-              OS: RandomAccessCollection, OS.Index == Int, OS.Element == CGPoint,
-              AS: RandomAccessCollection, AS.Index == Int, AS.Element == CGFloat {
-        return makePath(
-            glyphIDs: PrimitiveCollection(glyphIDs),
-            offsets: PrimitiveCollection(offsets),
-            advances: PrimitiveCollection(advances)
-        )
     }
 
     /// Creates the layer that fills the specified glyph. The image of a glyph of a bitmap font is
@@ -311,6 +265,20 @@ public final class Renderer {
         defer { TRGlyphImageRelease(image) }
 
         return GlyphLayers.layer(of: image)
+    }
+
+    /// Generates the path of specified glyph.
+    ///
+    /// - Parameter glyphID: The ID of glyph whose path is generated.
+    /// - Returns: The path of the glyph specified by `glyphID`, or `nil` if the glyph has no
+    ///            outline, as in a bitmap font.
+    public func makePath(glyphID: GlyphID) -> CGPath? {
+        guard let corePath = TRRendererCopyGlyphPath(core, glyphID) else {
+            return nil
+        }
+        defer { TRPathRelease(corePath) }
+
+        return CGPath.make(from: corePath, transform: nil)
     }
 
     /// Calculates the ink box of specified glyph.
@@ -398,16 +366,29 @@ public final class Renderer {
         context.draw(layer, in: rect)
     }
 
-    private var isShadowVisible: Bool {
-        return shadowColor.cgColor.alpha > 0.0
+    /// Draws everything up to `endShadow` into a transparency layer with the shadow, so that a
+    /// glyph that is filled and stroked casts one shadow.
+    private func beginShadow(radius: TRFloat, dx: TRFloat, dy: TRFloat, color: TRColor) {
+        guard let context = drawingContext else {
+            return
+        }
+
+        context.saveGState()
+        context.setShadow(
+            offset: CGSize(width: CGFloat(dx), height: CGFloat(dy)),
+            blur: CGFloat(radius),
+            color: cgColor(of: color)
+        )
+        context.beginTransparencyLayer(auxiliaryInfo: nil)
     }
 
-    private func setShadow(in context: CGContext) {
-        context.setShadow(
-            offset: CGSize(width: shadowDx, height: shadowDy),
-            blur: shadowRadius,
-            color: shadowColor.cgColor
-        )
+    private func endShadow() {
+        guard let context = drawingContext else {
+            return
+        }
+
+        context.endTransparencyLayer()
+        context.restoreGState()
     }
 
     private func cgColor(of color: TRColor) -> CGColor {
@@ -429,16 +410,9 @@ public final class Renderer {
             return
         }
 
-        let needsState = (clip != nil || isShadowVisible)
-        if needsState {
-            context.saveGState()
-        }
-
         if let clip = clip {
+            context.saveGState()
             context.clip(to: CGRect(clip.pointee))
-        }
-        if isShadowVisible {
-            setShadow(in: context)
         }
 
         context.setFillColor(cgColor(of: color))
@@ -450,7 +424,7 @@ public final class Renderer {
             in: context
         )
 
-        if needsState {
+        if clip != nil {
             context.restoreGState()
         }
     }
@@ -565,8 +539,15 @@ public final class Renderer {
         advances: PrimitiveCollection<CGFloat>
     ) {
         withDrawing(in: context) {
-            if TRRendererIsRenderable(core) != 0 {
-                setShadow(in: context)
+            let isShadowed = (TRRendererIsRenderable(core) != 0 && shadowRadius > 0.0
+                              && shadowRadius.isFinite && shadowDx.isFinite && shadowDy.isFinite)
+            if isShadowed {
+                beginShadow(
+                    radius: TRRendererGetShadowRadius(core),
+                    dx: TRRendererGetShadowDx(core),
+                    dy: TRRendererGetShadowDy(core),
+                    color: TRRendererGetShadowColor(core)
+                )
             }
 
             if drawStyle == .fill || drawStyle == .fillStroke {
@@ -590,6 +571,10 @@ public final class Renderer {
                     kind: Int(TRGlyphImageKindStroke)
                 )
             }
+
+            if isShadowed {
+                endShadow()
+            }
         }
     }
 
@@ -601,6 +586,45 @@ public final class Renderer {
               AS: RandomAccessCollection, AS.Index == Int, AS.Element == CGFloat {
         drawGlyphs(
             in: context,
+            glyphIDs: PrimitiveCollection(glyphIDs),
+            offsets: PrimitiveCollection(offsets),
+            advances: PrimitiveCollection(advances)
+        )
+    }
+
+    /// Generates a cumulative path of specified glyphs.
+    ///
+    /// - Parameters:
+    ///   - glyphIDs: The glyph IDs, such as those of a glyph run.
+    ///   - offsets: The glyph offsets.
+    ///   - advances: The glyph advances.
+    /// - Returns: The cumulative path of specified glyphs.
+    public func makePath(
+        glyphIDs: PrimitiveCollection<GlyphID>,
+        offsets: PrimitiveCollection<CGPoint>,
+        advances: PrimitiveCollection<CGFloat>
+    ) -> CGPath? {
+        let path = CGMutablePath()
+
+        withGlyphRun(glyphIDs, offsets, advances) { (glyphIDs, offsets, advances, count) in
+            var callbacks = CGPath.coreCallbacks
+
+            let user = Unmanaged.passUnretained(path).toOpaque()
+            TRRendererEnumerateGlyphPaths(core, glyphIDs, offsets, advances, count, &callbacks, user)
+        }
+
+        return path
+    }
+
+    /// Generates a cumulative path of specified glyphs.
+    ///
+    /// The collections of a glyph run or a shaping result are read without being copied. Any other
+    /// collection is converted into temporary buffers.
+    public func makePath<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS) -> CGPath?
+        where GS: RandomAccessCollection, GS.Index == Int, GS.Element == GlyphID,
+              OS: RandomAccessCollection, OS.Index == Int, OS.Element == CGPoint,
+              AS: RandomAccessCollection, AS.Index == Int, AS.Element == CGFloat {
+        return makePath(
             glyphIDs: PrimitiveCollection(glyphIDs),
             offsets: PrimitiveCollection(offsets),
             advances: PrimitiveCollection(advances)

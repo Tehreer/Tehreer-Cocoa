@@ -17,6 +17,17 @@
 internal import Tehreer
 
 extension VerticalAlignment {
+    init(coreValue: TRVerticalAlignment) {
+        switch coreValue {
+        case TRVerticalAlignment(TRVerticalAlignmentCenter):
+            self = .middle
+        case TRVerticalAlignment(TRVerticalAlignmentBottom):
+            self = .bottom
+        default:
+            self = .top
+        }
+    }
+
     var coreValue: TRVerticalAlignment {
         switch self {
         case .top:

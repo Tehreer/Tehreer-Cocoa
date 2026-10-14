@@ -17,6 +17,10 @@
 internal import Tehreer
 
 extension BreakMode {
+    init(coreValue: TRBreakMode) {
+        self = (coreValue == TRBreakMode(TRBreakModeCharacter) ? .character : .line)
+    }
+
     var coreValue: TRBreakMode {
         switch self {
         case .character:

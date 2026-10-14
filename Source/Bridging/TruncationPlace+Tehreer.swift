@@ -17,6 +17,17 @@
 internal import Tehreer
 
 extension TruncationPlace {
+    init(coreValue: TRTruncationPlace) {
+        switch coreValue {
+        case TRTruncationPlace(TRTruncationPlaceStart):
+            self = .start
+        case TRTruncationPlace(TRTruncationPlaceMiddle):
+            self = .middle
+        default:
+            self = .end
+        }
+    }
+
     var coreValue: TRTruncationPlace {
         switch self {
         case .start:

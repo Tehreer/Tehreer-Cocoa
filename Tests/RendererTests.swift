@@ -276,4 +276,46 @@ final class RendererTests: XCTestCase {
         group.wait()
         XCTAssertEqual(failures, 0)
     }
+
+    func testPropertiesAreReadFromCore() {
+        let renderer = Renderer()
+
+        XCTAssertEqual(renderer.typeSize, 16.0)
+        XCTAssertEqual(renderer.scaleX, 1.0)
+        XCTAssertEqual(renderer.strokeRadius, 0.5)
+        XCTAssertEqual(renderer.strokeMiter, 1.0)
+        XCTAssertEqual(renderer.shadowRadius, 0.0)
+        XCTAssertEqual(renderer.drawStyle, .fill)
+        XCTAssertEqual(renderer.strokeCap, .butt)
+        XCTAssertEqual(renderer.strokeJoin, .round)
+        XCTAssertEqual(renderer.writingDirection, .leftToRight)
+
+        renderer.typeSize = 30.0
+        renderer.slantAngle = 0.25
+        renderer.renderScale = 2.0
+        renderer.scaleY = 1.5
+        renderer.drawStyle = .stroke
+        renderer.strokeCap = .square
+        renderer.strokeJoin = .miter
+        renderer.writingDirection = .rightToLeft
+        renderer.shadowRadius = 3.0
+        renderer.shadowDx = 2.0
+        renderer.shadowDy = -1.0
+        renderer.shadowColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
+        renderer.fillColor = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
+
+        XCTAssertEqual(renderer.typeSize, 30.0)
+        XCTAssertEqual(renderer.slantAngle, 0.25)
+        XCTAssertEqual(renderer.renderScale, 2.0)
+        XCTAssertEqual(renderer.scaleY, 1.5)
+        XCTAssertEqual(renderer.drawStyle, .stroke)
+        XCTAssertEqual(renderer.strokeCap, .square)
+        XCTAssertEqual(renderer.strokeJoin, .miter)
+        XCTAssertEqual(renderer.writingDirection, .rightToLeft)
+        XCTAssertEqual(renderer.shadowRadius, 3.0)
+        XCTAssertEqual(renderer.shadowDx, 2.0)
+        XCTAssertEqual(renderer.shadowDy, -1.0)
+        XCTAssertEqual(renderer.shadowColor.coreValue, 0xFFFF0000)
+        XCTAssertEqual(renderer.fillColor.coreValue, 0xFF0000FF)
+    }
 }
