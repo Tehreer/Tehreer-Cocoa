@@ -32,6 +32,38 @@ final class ShapingEngineTests: XCTestCase {
         return engine
     }
 
+    func testDefaultsAndRoundTrips() throws {
+        let engine = ShapingEngine()
+        XCTAssertNil(engine.typeface)
+        XCTAssertEqual(engine.typeSize, 16.0)
+        XCTAssertEqual(engine.scriptTag, "DFLT")
+        XCTAssertEqual(engine.languageTag, "dflt")
+        XCTAssertEqual(engine.writingDirection, .leftToRight)
+        XCTAssertEqual(engine.shapingOrder, .forward)
+        XCTAssertTrue(engine.openTypeFeatures.isEmpty)
+
+        let fontFile = try XCTUnwrap(FontFile(path: TestFonts.path("Roboto-Regular.abc.ttf")))
+        let typeface = fontFile.typefaces[0]
+
+        engine.typeface = typeface
+        engine.typeSize = 24.5
+        engine.scriptTag = "arab"
+        engine.languageTag = "URD "
+        engine.writingDirection = .rightToLeft
+        engine.shapingOrder = .backward
+        engine.openTypeFeatures = ["liga": 0, "kern": 1]
+
+        XCTAssertTrue(engine.typeface === typeface)
+        XCTAssertEqual(engine.typeSize, 24.5)
+        XCTAssertEqual(engine.scriptTag, "arab")
+        XCTAssertEqual(engine.languageTag, "URD ")
+        XCTAssertEqual(engine.writingDirection, .rightToLeft)
+        XCTAssertEqual(engine.shapingOrder, .backward)
+        XCTAssertEqual(engine.openTypeFeatures, ["liga": 0, "kern": 1])
+
+        XCTAssertEqual(ShapingEngine.languageTag(forName: "ur-PK"), "URD ")
+    }
+
     func testDefaultDirections() {
         XCTAssertEqual(ShapingEngine.defaultDirectionForScript("latn"), .leftToRight)
         XCTAssertEqual(ShapingEngine.defaultDirectionForScript("arab"), .rightToLeft)

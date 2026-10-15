@@ -17,6 +17,10 @@
 internal import Tehreer
 
 extension ShapingOrder {
+    init(coreValue: TRShapingOrder) {
+        self = (coreValue == TRShapingOrder(TRShapingOrderBackward) ? .backward : .forward)
+    }
+
     var coreValue: TRShapingOrder {
         switch self {
         case .forward:

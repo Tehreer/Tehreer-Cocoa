@@ -79,7 +79,7 @@ extension TRAttribute {
 
     static func language(_ name: String) -> TRAttribute {
         return TRAttribute(type: Int(TRAttributeLanguage)) {
-            $0.language = TRShapingEngineGetLanguageTag(name)
+            $0.language = TRShapingEngineGetLanguageTagForName(name)
         }
     }
 
