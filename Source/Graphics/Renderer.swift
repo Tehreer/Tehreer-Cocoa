@@ -141,8 +141,9 @@ public final class Renderer {
         set { TRRendererSetScaleY(core, TRFloat(newValue)) }
     }
 
-    /// The slant angle for glyphs. Its default value is zero.
-    public var slantAngle: CGFloat {
+    /// The horizontal skew of glyphs, as the ratio of the shift of a glyph to its height. Its default
+    /// value is zero.
+    public var skewX: CGFloat {
         get { CGFloat(TRRendererGetSkewX(core)) }
         set { TRRendererSetSkewX(core, TRFloat(newValue)) }
     }
@@ -160,8 +161,8 @@ public final class Renderer {
         set { TRRendererSetWritingDirection(core, newValue.coreValue) }
     }
 
-    /// The fill color for glyphs. Its default value is `.black`.
-    public var fillColor: UIColor {
+    /// The foreground color for glyphs. Its default value is `.black`.
+    public var foregroundColor: UIColor {
         get { UIColor(coreValue: TRRendererGetForegroundColor(core)) }
         set { TRRendererSetForegroundColor(core, newValue.coreValue) }
     }
@@ -237,34 +238,24 @@ public final class Renderer {
         return TRRendererIsRenderable(core) != 0
     }
 
-    /// Creates the layer that fills the specified glyph. The image of a glyph of a bitmap font is
-    /// the one of its nearest strike, which is not scaled to the type size.
+    /// Gets the image that fills the specified glyph. The image of a glyph of a bitmap font is the
+    /// one of its nearest strike, which is not scaled to the type size.
     ///
-    /// - Parameter glyphID: The ID of glyph whose layer is created.
-    /// - Returns: The layer of the glyph, or `nil` if there is no typeface or the glyph has no
+    /// - Parameter glyphID: The ID of glyph whose image is returned.
+    /// - Returns: The image of the glyph, or `nil` if there is no typeface or the glyph has no
     ///            image, such as a space.
-    public func makeGlyphLayer(glyphID: GlyphID) -> CGLayer? {
-        guard let image = TRRendererCopyGlyphImage(core, glyphID) else {
-            return nil
-        }
-        defer { TRGlyphImageRelease(image) }
-
-        return GlyphLayers.layer(of: image)
+    public func glyphImage(forGlyph glyphID: GlyphID) -> GlyphImage? {
+        return TRRendererCreateGlyphImage(core, glyphID).map { GlyphImage(owning: $0) }
     }
 
-    /// Creates the layer that is made of the outline of the specified glyph, as stroked with the
+    /// Gets the image that is made of the outline of the specified glyph, as stroked with the
     /// stroke settings of this renderer.
     ///
-    /// - Parameter glyphID: The ID of glyph whose stroke layer is created.
-    /// - Returns: The layer of the stroke, or `nil` if there is no typeface or the glyph has no
+    /// - Parameter glyphID: The ID of glyph whose stroke image is returned.
+    /// - Returns: The image of the stroke, or `nil` if there is no typeface or the glyph has no
     ///            outline.
-    public func makeStrokeLayer(glyphID: GlyphID) -> CGLayer? {
-        guard let image = TRRendererCopyStrokeImage(core, glyphID) else {
-            return nil
-        }
-        defer { TRGlyphImageRelease(image) }
-
-        return GlyphLayers.layer(of: image)
+    public func strokeImage(forGlyph glyphID: GlyphID) -> GlyphImage? {
+        return TRRendererCreateStrokeImage(core, glyphID).map { GlyphImage(owning: $0) }
     }
 
     /// Generates the path of specified glyph.
@@ -272,8 +263,8 @@ public final class Renderer {
     /// - Parameter glyphID: The ID of glyph whose path is generated.
     /// - Returns: The path of the glyph specified by `glyphID`, or `nil` if the glyph has no
     ///            outline, as in a bitmap font.
-    public func makePath(glyphID: GlyphID) -> CGPath? {
-        guard let corePath = TRRendererCopyGlyphPath(core, glyphID) else {
+    public func glyphPath(for glyphID: GlyphID) -> CGPath? {
+        guard let corePath = TRRendererCreateGlyphPath(core, glyphID) else {
             return nil
         }
         defer { TRPathRelease(corePath) }
@@ -287,7 +278,7 @@ public final class Renderer {
     /// - Returns: A rectangle that tightly encloses the image of the specified glyph when it is
     ///            placed at its pen position.
     public func computeInkBox(forGlyph glyphID: GlyphID) -> CGRect {
-        return CGRect(TRRendererGetGlyphInkBox(core, glyphID))
+        return CGRect(TRRendererComputeGlyphInkBox(core, glyphID))
     }
 
     /// Calculates the ink box of specified glyphs.
@@ -551,7 +542,7 @@ public final class Renderer {
             }
 
             if drawStyle == .fill || drawStyle == .fillStroke {
-                context.setFillColor(fillColor.cgColor)
+                context.setFillColor(foregroundColor.cgColor)
                 drawGlyphs(
                     in: context,
                     glyphIDs: glyphIDs,
@@ -599,7 +590,7 @@ public final class Renderer {
     ///   - offsets: The glyph offsets.
     ///   - advances: The glyph advances.
     /// - Returns: The cumulative path of specified glyphs.
-    public func makePath(
+    public func generatePath(
         glyphIDs: PrimitiveCollection<GlyphID>,
         offsets: PrimitiveCollection<CGPoint>,
         advances: PrimitiveCollection<CGFloat>
@@ -620,11 +611,11 @@ public final class Renderer {
     ///
     /// The collections of a glyph run or a shaping result are read without being copied. Any other
     /// collection is converted into temporary buffers.
-    public func makePath<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS) -> CGPath?
+    public func generatePath<GS, OS, AS>(glyphIDs: GS, offsets: OS, advances: AS) -> CGPath?
         where GS: RandomAccessCollection, GS.Index == Int, GS.Element == GlyphID,
               OS: RandomAccessCollection, OS.Index == Int, OS.Element == CGPoint,
               AS: RandomAccessCollection, AS.Index == Int, AS.Element == CGFloat {
-        return makePath(
+        return generatePath(
             glyphIDs: PrimitiveCollection(glyphIDs),
             offsets: PrimitiveCollection(offsets),
             advances: PrimitiveCollection(advances)

@@ -98,7 +98,7 @@ struct LineCanvas: View {
         let renderer = Renderer()
         renderer.renderScale = defaultRenderer.renderScale
         renderer.drawStyle = defaultRenderer.drawStyle
-        renderer.fillColor = defaultRenderer.fillColor
+        renderer.foregroundColor = defaultRenderer.foregroundColor
         renderer.strokeColor = defaultRenderer.strokeColor
         renderer.strokeRadius = defaultRenderer.strokeRadius
         renderer.strokeCap = defaultRenderer.strokeCap

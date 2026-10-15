@@ -103,11 +103,11 @@ public final class ComposedLine: @unchecked Sendable {
         return CGFloat(TRComposedLineGetTrailingWhitespaceExtent(core))
     }
 
-    private let runs = Lazy<[GlyphRun]>()
+    private let runCache = Lazy<[GlyphRun]>()
 
     /// The glyph runs of this line in visual order. They are made the first time they are asked for.
-    public var visualRuns: PrimitiveCollection<GlyphRun> {
-        return PrimitiveCollection(runs.get {
+    public var runs: PrimitiveCollection<GlyphRun> {
+        return PrimitiveCollection(runCache.get {
             (0 ..< TRComposedLineGetGlyphRunCount(core)).map {
                 GlyphRun(
                     core: TRComposedLineGetGlyphRun(core, $0)!,
@@ -165,7 +165,7 @@ public final class ComposedLine: @unchecked Sendable {
         var edges: [CGFloat] = []
 
         withUnsafeMutablePointer(to: &edges) { (pointer) in
-            _ = TRComposedLineEnumerateEdges(
+            _ = TRComposedLineEnumerateVisualEdges(
                 core,
                 TRUInteger(clampedRange.lowerBound),
                 TRUInteger(clampedRange.count),

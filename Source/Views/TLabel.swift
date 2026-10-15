@@ -368,10 +368,10 @@ open class TLabel: UIView {
     /// The default color of the text.
     open var textColor: UIColor {
         get {
-            return renderer.fillColor
+            return renderer.foregroundColor
         }
         set {
-            renderer.fillColor = newValue
+            renderer.foregroundColor = newValue
             setNeedsDisplay()
         }
     }

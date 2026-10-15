@@ -51,7 +51,7 @@ final class LineLocatorTests: XCTestCase {
 
     func testBoxesCoverTheLines() throws {
         let frame = try makeFrame()
-        let locator = try XCTUnwrap(frame.makeLineLocator(renderer: makeRenderer()))
+        let locator = try XCTUnwrap(LineLocator(frame: frame, renderer: makeRenderer()))
 
         XCTAssertEqual(locator.lineCount, frame.lines.count)
         XCTAssertGreaterThan(locator.lineCount, 5)
@@ -67,7 +67,7 @@ final class LineLocatorTests: XCTestCase {
 
     func testLinesMatchAScanOfAllBoxes() throws {
         let frame = try makeFrame()
-        let locator = try XCTUnwrap(frame.makeLineLocator(renderer: makeRenderer()))
+        let locator = try XCTUnwrap(LineLocator(frame: frame, renderer: makeRenderer()))
         let boxes = (0 ..< locator.lineCount).map { locator.box(ofLineAt: $0) }
 
         for top in stride(from: -50.0, to: frame.height, by: 37.0) {
@@ -82,7 +82,7 @@ final class LineLocatorTests: XCTestCase {
 
     func testFoundLinesReuseTheArray() throws {
         let frame = try makeFrame()
-        let locator = try XCTUnwrap(frame.makeLineLocator(renderer: makeRenderer()))
+        let locator = try XCTUnwrap(LineLocator(frame: frame, renderer: makeRenderer()))
 
         var indexes: [Int] = []
         locator.findLines(in: CGRect(x: 0.0, y: 0.0, width: 150.0, height: frame.height), into: &indexes)
@@ -96,7 +96,7 @@ final class LineLocatorTests: XCTestCase {
 
     func testEnumerationCanBeStopped() throws {
         let frame = try makeFrame()
-        let locator = try XCTUnwrap(frame.makeLineLocator(renderer: makeRenderer()))
+        let locator = try XCTUnwrap(LineLocator(frame: frame, renderer: makeRenderer()))
 
         var count = 0
         locator.enumerateLines(in: CGRect(
@@ -114,7 +114,7 @@ final class LineLocatorTests: XCTestCase {
 
     func testFirstLineBelow() throws {
         let frame = try makeFrame()
-        let locator = try XCTUnwrap(frame.makeLineLocator(renderer: makeRenderer()))
+        let locator = try XCTUnwrap(LineLocator(frame: frame, renderer: makeRenderer()))
         let line = frame.lines[3]
 
         XCTAssertEqual(locator.indexOfFirstLine(below: -10.0), 0)

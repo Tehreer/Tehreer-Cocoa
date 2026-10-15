@@ -30,7 +30,7 @@ public typealias TypefaceTag = Int
 public typealias TypeFamilyID = Int
 
 /// The `Typeface` class specifies the typeface and intrinsic style of a font. This is used in the
-/// renderer, along with optionally `Renderer` settings like `typeSize`, `slantAngle`, `scaleX`, to
+/// renderer, along with optionally `Renderer` settings like `typeSize`, `skewX`, `scaleX`, to
 /// specify how text appears when drawn (and measured).
 ///
 /// Everything a typeface tells is read from Core when it is asked for, or the first time it is, in
@@ -47,50 +47,6 @@ public final class Typeface: @unchecked Sendable {
     }
 
     private let names = Lazy<Names>()
-
-    /// Creates a typeface from the first typeface of the specified file. The data for the font is
-    /// directly read from the file when needed.
-    ///
-    /// - Parameter path: The path of the font file.
-    public convenience init?(path: String) {
-        guard let fontStream = FontStream(path: path) else {
-            return nil
-        }
-
-        self.init(fontStream: fontStream)
-    }
-
-    /// Creates a new typeface from the data of the font.
-    ///
-    /// - Parameter data: The data of the font.
-    public convenience init?(data: Data) {
-        guard let fontStream = FontStream(data: data) else {
-            return nil
-        }
-
-        self.init(fontStream: fontStream)
-    }
-
-    /// Creates a new typeface from the input stream by copying its data into a memory buffer. It
-    /// may take some time to create the typeface if the stream holds larger data.
-    ///
-    /// - Parameter stream: The input stream that contains the data of the font.
-    public convenience init?(stream: InputStream) {
-        guard let fontStream = FontStream(stream: stream) else {
-            return nil
-        }
-
-        self.init(fontStream: fontStream)
-    }
-
-    /// Creates a typeface from the first default typeface of the font file of Core.
-    convenience init?(fontStream: FontStream) {
-        guard let core = fontStream.coreTypeface(at: 0) else {
-            return nil
-        }
-
-        self.init(retaining: core)
-    }
 
     /// Creates a typeface that retains the typeface of Core, so it can outlive its font file.
     init(retaining core: TRTypefaceRef) {
@@ -110,7 +66,7 @@ public final class Typeface: @unchecked Sendable {
 
     /// A Boolean value that indicates whether the typeface supports OpenType font variations.
     public var isVariable: Bool {
-        return TRTypefaceGetVariationAxisCount(core) > 0
+        return TRTypefaceIsVariable(core) != 0
     }
 
     /// The variation axes of this typeface, which is empty if it is not variable.
@@ -224,7 +180,7 @@ public final class Typeface: @unchecked Sendable {
         return names.get {
             Names(
                 family: String(TRTypefaceGetFamilyName(core)),
-                style: String(TRTypefaceGetSubfamilyName(core)),
+                style: String(TRTypefaceGetStyleName(core)),
                 full: String(TRTypefaceGetFullName(core))
             )
         }

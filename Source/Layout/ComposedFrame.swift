@@ -24,7 +24,7 @@ import Foundation
 /// text-framing process performed by a typesetter.
 // Unchecked because the frame of Core is immutable, and the rest is set once in the initializer.
 public final class ComposedFrame: @unchecked Sendable {
-    private let core: TRComposedFrameRef
+    let core: TRComposedFrameRef
     let string: String
     private let objects: CoreTextObjects
 
@@ -109,18 +109,11 @@ public final class ComposedFrame: @unchecked Sendable {
             return -1
         }
 
-        return Int(TRComposedFrameGetLineIndexAtPosition(core, TRPoint(x: TRFloat(position.x),
-                                                                         y: TRFloat(position.y))))
-    }
-
-    /// Creates a locator that finds the lines of this frame that are visible in a rectangle.
-    ///
-    /// - Parameter renderer: The renderer that measures the ink boxes of the lines, which is the one
-    ///                       that draws the frame.
-    /// - Returns: A new line locator, or `nil` if it could not be created, as when the lines are
-    ///            placed billions of units apart.
-    public func makeLineLocator(renderer: Renderer) -> LineLocator? {
-        return LineLocator(frame: core, renderer: renderer)
+        return Int(
+            TRComposedFrameGetLineIndexAtPosition(
+                core, TRPoint(x: TRFloat(position.x), y: TRFloat(position.y))
+            )
+        )
     }
 
     /// Creates a path that contains a set of rectangles covering the specified UTF-16 code unit range.
@@ -141,9 +134,9 @@ public final class ComposedFrame: @unchecked Sendable {
             TRUInteger(codeUnitRange.lowerBound),
             TRUInteger(codeUnitRange.count),
             { (user, rect, _) in
-                                                                                                                                                                                                                    let path = Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
-                                                                                                                                                                                                                    path.addRect(CGRect(rect))
-                                                                                                                                                                                                                },
+                let path = Unmanaged<CGMutablePath>.fromOpaque(user!).takeUnretainedValue()
+                path.addRect(CGRect(rect))
+            },
             user
         )
 

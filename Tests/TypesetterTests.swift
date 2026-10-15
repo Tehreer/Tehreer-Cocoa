@@ -51,13 +51,16 @@ final class TypesetterTests: XCTestCase {
         XCTAssertEqual(line.width, 3335.0)
         XCTAssertEqual(line.ascent, 1900.0)
         XCTAssertEqual(line.descent, 500.0)
-        XCTAssertEqual(line.visualRuns.count, 1)
+        XCTAssertEqual(line.runs.count, 1)
 
-        let run = line.visualRuns[0]
+        let run = line.runs[0]
         XCTAssertTrue(run.typeface === typeface)
         XCTAssertEqual(Array(run.glyphIDs), [1, 2, 3])
         XCTAssertEqual(Array(run.glyphAdvances), [1114.0, 1149.0, 1072.0])
         XCTAssertEqual(Array(run.clusterMap), [0, 1, 2])
+        XCTAssertFalse(run.isBackward)
+        XCTAssertEqual(run.scaleX, 1.0)
+        XCTAssertEqual(run.scaleY, 1.0)
         XCTAssertEqual(run.distance(forCodeUnitAt: 2), 2263.0)
         XCTAssertEqual(run.indexOfCodeUnit(at: 1200.0), 1)
     }
@@ -172,6 +175,8 @@ final class TypesetterTests: XCTestCase {
 
         XCTAssertEqual(frame.indexOfLine(forCodeUnitAt: 2), 0)
         XCTAssertEqual(frame.indexOfLine(forCodeUnitAt: 5), 1)
+        // The end of the frame belongs to the last line.
+        XCTAssertEqual(frame.indexOfLine(forCodeUnitAt: 7), 1)
         XCTAssertEqual(frame.indexOfLine(at: CGPoint(x: 10.0, y: 3000.0)), 1)
     }
 
@@ -236,9 +241,9 @@ final class TypesetterTests: XCTestCase {
 
         XCTAssertEqual(line.width, 1114.0 + 700.0 + 1149.0)
         XCTAssertEqual(line.ascent, 3000.0)
-        XCTAssertEqual(line.visualRuns.count, 3)
-        XCTAssertTrue(line.visualRuns[1].replacement === box)
-        XCTAssertNil(line.visualRuns[0].replacement)
+        XCTAssertEqual(line.runs.count, 3)
+        XCTAssertTrue(line.runs[1].replacement === box)
+        XCTAssertNil(line.runs[0].replacement)
     }
 
     func testForegroundColorSplitsRuns() throws {
@@ -248,7 +253,7 @@ final class TypesetterTests: XCTestCase {
         let typesetter = Typesetter(text: text, defaultAttributes: [.typeface: typeface, .typeSize: CGFloat(2048.0)])
         let line = typesetter.makeSimpleLine(codeUnitRange: 0 ..< 3)
 
-        XCTAssertEqual(line.visualRuns.map { $0.codeUnitRange }, [0 ..< 1, 1 ..< 2, 2 ..< 3])
+        XCTAssertEqual(line.runs.map { $0.codeUnitRange }, [0 ..< 1, 1 ..< 2, 2 ..< 3])
     }
 
     func testLinesOutliveTheTypesetter() throws {
@@ -257,7 +262,7 @@ final class TypesetterTests: XCTestCase {
         typesetter = nil
 
         XCTAssertEqual(line.width, 3335.0)
-        XCTAssertTrue(line.visualRuns[0].typeface === typeface)
+        XCTAssertTrue(line.runs[0].typeface === typeface)
     }
 
     /// Draws the two lines that a cluster is split between, which makes each run hold only a part
@@ -268,7 +273,7 @@ final class TypesetterTests: XCTestCase {
         let lines = [typesetter.makeSimpleLine(codeUnitRange: 0 ..< split),
                      typesetter.makeSimpleLine(codeUnitRange: split ..< length)]
 
-        let run = try XCTUnwrap(lines[0].visualRuns.first)
+        let run = try XCTUnwrap(lines[0].runs.first)
         XCTAssertTrue(run.startExtraLength > 0 || run.endExtraLength > 0)
 
         let renderer = Renderer()

@@ -96,6 +96,12 @@ public final class GlyphRun: @unchecked Sendable {
         return WritingDirection(coreValue: TRGlyphRunGetWritingDirection(core))
     }
 
+    /// A Boolean value that indicates whether the glyphs of this run go against the direction of
+    /// the line, so that the first glyph is at the end of the run.
+    public var isBackward: Bool {
+        return TRGlyphRunIsBackward(core) != 0
+    }
+
     /// The typeface of this run.
     public var typeface: Typeface {
         // The typeface was given by the text, or by its default attributes, and is kept by the
@@ -110,6 +116,16 @@ public final class GlyphRun: @unchecked Sendable {
     /// The type size of this run.
     public var typeSize: CGFloat {
         return CGFloat(TRGlyphRunGetTypeSize(core))
+    }
+
+    /// The horizontal scale factor of the glyphs of this run.
+    public var scaleX: CGFloat {
+        return CGFloat(TRGlyphRunGetScaleX(core))
+    }
+
+    /// The vertical scale factor of the glyphs of this run.
+    public var scaleY: CGFloat {
+        return CGFloat(TRGlyphRunGetScaleY(core))
     }
 
     /// The ascent of this run, which is the distance from the top of the run to the baseline. It is
@@ -303,7 +319,7 @@ public final class GlyphRun: @unchecked Sendable {
     ///               from zero origin.
     /// - Returns: The index of UTF-16 code unit in source string, nearest to the specified distance.
     public func indexOfCodeUnit(at distance: CGFloat) -> Int {
-        return Int(TRGlyphRunGetCodeUnitIndex(core, TRFloat(distance)))
+        return Int(TRGlyphRunGetCodeUnitIndexAtDistance(core, TRFloat(distance)))
     }
 
     /// Determines the index of a character nearest to the specified distance.

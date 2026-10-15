@@ -14,8 +14,6 @@
 // limitations under the License.
 //
 
-internal import FreeType
-
 import CoreGraphics
 import Foundation
 
@@ -28,21 +26,5 @@ extension Typeface {
         case italic = 1
         /// The oblique slope indicating artificially slanted characters.
         case oblique = 2
-
-        init(ital: FT_Fixed) {
-            self = ital >= 0x10000 ? .italic : .plain
-        }
-
-        init(ital: CGFloat) {
-            self = ital >= 1.0 ? .italic : .plain
-        }
-
-        init(slnt: FT_Fixed) {
-            self = slnt != 0 ? .oblique : .plain
-        }
-
-        init(slnt: CGFloat) {
-            self = slnt != 0.0 ? .oblique : .plain
-        }
     }
 }

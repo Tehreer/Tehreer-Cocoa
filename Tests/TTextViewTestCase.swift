@@ -29,7 +29,7 @@ class TTextViewTestCase: XCTestCase {
             .appendingPathComponent("Demo/Fonts/NafeesWeb.ttf")
             .path
 
-        return Typeface(path: path)!
+        return FontFile(path: path)!.typefaces[0]
     }()
 
     var window: UIWindow!

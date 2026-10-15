@@ -46,7 +46,7 @@ final class TextLayoutContext {
             renderer.typeface = typeface
         }
         renderer.typeSize = textSize
-        renderer.fillColor = textColor
+        renderer.foregroundColor = textColor
         renderer.drawStyle = drawStyle
         renderer.strokeColor = strokeColor
         renderer.strokeRadius = strokeRadius
@@ -169,7 +169,7 @@ final class LineLocatorOperation: Operation, @unchecked Sendable {
             let renderer = Renderer()
             context.updateRenderer(renderer)
 
-            lineLocator = textFrame.makeLineLocator(renderer: renderer)
+            lineLocator = LineLocator(frame: textFrame, renderer: renderer)
         }
 
         guard !isCancelled else { return }

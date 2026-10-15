@@ -97,7 +97,7 @@ struct TextProperties: Equatable {
 
     func updateRenderer(_ renderer: Renderer) {
         renderer.drawStyle = drawStyle
-        renderer.fillColor = UIColor(textColor)
+        renderer.foregroundColor = UIColor(textColor)
         renderer.strokeColor = UIColor(strokeColor)
         renderer.strokeRadius = strokeRadius
         renderer.strokeCap = strokeCap

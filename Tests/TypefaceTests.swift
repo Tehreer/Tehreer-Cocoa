@@ -36,6 +36,11 @@ final class TypefaceTests: XCTestCase {
         XCTAssertNil(typeface.dataOfTable("ZZZZ"))
     }
 
+    func testIsVariable() throws {
+        XCTAssertFalse(try makeTypeface("Roboto-Regular.abc.ttf").isVariable)
+        XCTAssertTrue(try makeTypeface("Roboto-Variable.abc.ttf").isVariable)
+    }
+
     func testScalableAndStrikes() throws {
         let outline = try makeTypeface("Roboto-Regular.abc.ttf")
         XCTAssertTrue(outline.isScalable)

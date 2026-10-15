@@ -31,8 +31,16 @@ import Foundation
 public final class LineLocator: @unchecked Sendable {
     private let core: TRLineLocatorRef
 
-    init?(frame: TRComposedFrameRef, renderer: Renderer) {
-        guard let core = TRLineLocatorCreate(frame, renderer.core) else {
+    /// Creates a locator that finds the lines of a frame that are visible in a rectangle.
+    ///
+    /// - Parameters:
+    ///   - frame: The frame whose lines are located.
+    ///   - renderer: The renderer that measures the ink boxes of the lines, which is the one that
+    ///               draws the frame.
+    /// - Returns: A new line locator, or `nil` if it could not be created, as when the lines are
+    ///            placed billions of units apart.
+    public init?(frame: ComposedFrame, renderer: Renderer) {
+        guard let core = TRLineLocatorCreate(frame.core, renderer.core) else {
             return nil
         }
 

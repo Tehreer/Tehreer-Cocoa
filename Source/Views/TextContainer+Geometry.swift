@@ -108,7 +108,7 @@ extension TextContainer {
         var rects: [CGRect] = []
 
         for textLine in textFrame.lines {
-            for glyphRun in textLine.visualRuns {
+            for glyphRun in textLine.runs {
                 guard glyphRun.replacement === replacement else {
                     continue
                 }

@@ -31,7 +31,7 @@ typealias ActionCallback = () -> Void
 
     func register(file: (name: String, type: String), forTag tag: Int) {
         if let fullPath = Bundle.main.path(forResource: file.name, ofType: file.type),
-           let typeface = Typeface(path: fullPath) {
+           let typeface = FontFile(path: fullPath)?.typefaces.first {
             TypefaceManager.default.register(typeface, forTag: tag)
         }
     }

@@ -30,32 +30,5 @@ extension Typeface {
         case expanded = 7
         case extraExpanded = 8
         case ultraExpanded = 9
-
-        static let allValues: [Typeface.Width] = [
-            .ultraCondensed, .extraCondensed, .condensed,
-            .semiCondensed, .normal, .semiExpanded,
-            .expanded, .extraExpanded, .ultraExpanded
-        ]
-
-        init(value: UInt16) {
-            let index = Int(value - 1)
-            self = Self.allValues[max(0, min(8, index))]
-        }
-
-        init(wdth: CGFloat) {
-            let value: UInt16
-
-            if (wdth < 50) {
-                value = 1
-            } else if (wdth < 125) {
-                value = UInt16(((wdth - 50) / 12.5) + 1)
-            } else if (wdth < 200) {
-                value = UInt16(((wdth - 125) / 25) + 7)
-            } else {
-                value = 9
-            }
-
-            self.init(value: value)
-        }
     }
 }

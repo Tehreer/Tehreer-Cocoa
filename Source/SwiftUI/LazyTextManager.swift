@@ -134,12 +134,12 @@ private struct TextContext: Sendable {
     private func makeBoxRenderer() -> Renderer {
         let renderer = Renderer()
         renderer.renderScale = renderScale
-        renderer.fillColor = textColor
+        renderer.foregroundColor = textColor
         return renderer
     }
 
     func makeLineLocator(of textFrame: ComposedFrame?) async -> LineLocator? {
-        return textFrame?.makeLineLocator(renderer: makeBoxRenderer())
+        return textFrame.flatMap { LineLocator(frame: $0, renderer: makeBoxRenderer()) }
     }
 }
 
@@ -204,7 +204,7 @@ final class LazyTextManager: ObservableObject {
     private func updateRenderer() {
         renderer.renderScale = UIScreen.main.scale
         renderer.drawStyle = properties.drawStyle
-        renderer.fillColor = UIColor(properties.textColor)
+        renderer.foregroundColor = UIColor(properties.textColor)
         renderer.strokeColor = UIColor(properties.strokeColor)
         renderer.strokeRadius = properties.strokeRadius
         renderer.strokeCap = properties.strokeCap

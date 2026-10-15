@@ -82,7 +82,7 @@ final class DrawTests: XCTestCase {
                                          .strikethroughStyle: 1,
                                          .underlineColor: UIColor.blue,
                                          .foregroundColor: UIColor.green])
-        let run = typesetter.makeSimpleLine(codeUnitRange: 0 ..< 3).visualRuns[0]
+        let run = typesetter.makeSimpleLine(codeUnitRange: 0 ..< 3).runs[0]
 
         XCTAssertEqual(run.backgroundColor, UIColor.red)
         XCTAssertTrue(run.hasUnderline)
@@ -90,7 +90,7 @@ final class DrawTests: XCTestCase {
         XCTAssertEqual(run.decorationColor, UIColor.blue)
         XCTAssertEqual(run.foregroundColor, UIColor.green)
 
-        let plain = makeTypesetter().makeSimpleLine(codeUnitRange: 0 ..< 3).visualRuns[0]
+        let plain = makeTypesetter().makeSimpleLine(codeUnitRange: 0 ..< 3).runs[0]
         XCTAssertNil(plain.backgroundColor)
         XCTAssertFalse(plain.hasUnderline)
         XCTAssertFalse(plain.hasStrikethrough)
@@ -139,7 +139,7 @@ final class DrawTests: XCTestCase {
         XCTAssertFalse(box.isNull)
         XCTAssertGreaterThan(box.width, 0.0)
         XCTAssertEqual(
-            plain.visualRuns[0].computeInkBox(with: renderer).width,
+            plain.runs[0].computeInkBox(with: renderer).width,
             box.width,
             accuracy: 1.0
         )
@@ -165,7 +165,7 @@ final class DrawTests: XCTestCase {
     func testShadowIsDrawnByCore() throws {
         let line = makeTypesetter().makeSimpleLine(codeUnitRange: 0 ..< 3)
         let renderer = makeRenderer()
-        renderer.fillColor = .red
+        renderer.foregroundColor = .red
 
         let plain = try draw { (context) in
             context.translateBy(x: 10.0, y: line.ascent + 10.0)
@@ -232,17 +232,16 @@ final class DrawTests: XCTestCase {
             defaultAttributes: [.typeface: typeface, .typeSize: CGFloat(100.0)]
         )
 
-        XCTAssertEqual(typesetter.makeSimpleLine(codeUnitRange: 0 ..< 3).visualRuns.count, 1)
+        XCTAssertEqual(typesetter.makeSimpleLine(codeUnitRange: 0 ..< 3).runs.count, 1)
         XCTAssertEqual(ShapingEngine.languageTag(forName: "ur-PK"), "URD ")
         XCTAssertEqual(ShapingEngine.languageTag(forName: ""), "dflt")
     }
 
-    func testFrameLine() {
+    func testSimpleLineWithLayoutWidth() {
         let typesetter = makeTypesetter()
-        let line = typesetter.makeFrameLine(codeUnitRange: 0 ..< 3, layoutWidth: 500.0)
+        let line = typesetter.makeSimpleLine(codeUnitRange: 0 ..< 3, layoutWidth: 500.0)
 
         XCTAssertEqual(line.codeUnitRange, 0 ..< 3)
-        XCTAssertEqual(typesetter.codeUnitCount, 3)
         XCTAssertFalse(line.isTruncated)
     }
 
@@ -252,7 +251,7 @@ final class DrawTests: XCTestCase {
 
         let renderer = makeRenderer()
         renderer.glyphCache = cache!
-        _ = renderer.makeGlyphLayer(glyphID: 1)
+        _ = renderer.glyphImage(forGlyph: 1)?.layer
         XCTAssertGreaterThan(cache!.size, 0)
 
         cache!.clear()

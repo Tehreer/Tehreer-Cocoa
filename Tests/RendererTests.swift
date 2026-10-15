@@ -75,7 +75,7 @@ final class RendererTests: XCTestCase {
 
     func testGlyphPath() throws {
         let renderer = try makeRenderer()
-        let path = try XCTUnwrap(renderer.makePath(glyphID: 1))
+        let path = try XCTUnwrap(renderer.glyphPath(for: 1))
         let box = path.boundingBox
 
         // The path is in pixels, and points downward from the baseline.
@@ -85,7 +85,32 @@ final class RendererTests: XCTestCase {
         XCTAssertLessThan(box.width, 100.0)
 
         // A glyph without a typeface has no path.
-        XCTAssertNil(Renderer().makePath(glyphID: 1))
+        XCTAssertNil(Renderer().glyphPath(for: 1))
+    }
+
+    func testGlyphImages() throws {
+        let renderer = try makeRenderer()
+        let image = try XCTUnwrap(renderer.glyphImage(forGlyph: 1))
+
+        XCTAssertEqual(image.format, .alpha)
+        XCTAssertGreaterThan(image.width, 0)
+        XCTAssertGreaterThan(image.height, 0)
+        // The top is the distance above the baseline.
+        XCTAssertGreaterThan(image.top, 0)
+
+        let layer = try XCTUnwrap(image.layer)
+        XCTAssertEqual(layer.size, CGSize(width: image.width, height: image.height))
+        // The layer is made once, and kept with the image.
+        XCTAssertTrue(image.layer === layer)
+
+        let stroke = try XCTUnwrap(renderer.strokeImage(forGlyph: 1))
+        XCTAssertEqual(stroke.format, .alpha)
+        XCTAssertGreaterThan(stroke.width, image.width)
+        XCTAssertNotNil(stroke.layer)
+
+        // A glyph without an image, and a renderer without a typeface, give no image.
+        XCTAssertNil(Renderer().glyphImage(forGlyph: 1))
+        XCTAssertNil(Renderer().strokeImage(forGlyph: 1))
     }
 
     func testRunPath() throws {
@@ -94,8 +119,12 @@ final class RendererTests: XCTestCase {
         let offsets = [CGPoint.zero, CGPoint.zero]
         let advances: [CGFloat] = [50.0, 50.0]
 
-        let path = try XCTUnwrap(renderer.makePath(glyphIDs: ids, offsets: offsets, advances: advances))
-        let single = try XCTUnwrap(renderer.makePath(glyphID: 2))
+        let path = try XCTUnwrap(renderer.generatePath(
+            glyphIDs: ids,
+            offsets: offsets,
+            advances: advances
+        ))
+        let single = try XCTUnwrap(renderer.glyphPath(for: 2))
 
         // The second glyph is moved by the advance of the first one.
         XCTAssertEqual(path.boundingBox.maxX, single.boundingBox.maxX + 50.0, accuracy: 1.0)
@@ -140,7 +169,7 @@ final class RendererTests: XCTestCase {
 
     func testFillColor() throws {
         let renderer = try makeRenderer()
-        renderer.fillColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
+        renderer.foregroundColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
 
         let pixels = try draw(width: 200, height: 200) { (context) in
             context.translateBy(x: 50.0, y: 150.0)
@@ -291,7 +320,7 @@ final class RendererTests: XCTestCase {
         XCTAssertEqual(renderer.writingDirection, .leftToRight)
 
         renderer.typeSize = 30.0
-        renderer.slantAngle = 0.25
+        renderer.skewX = 0.25
         renderer.renderScale = 2.0
         renderer.scaleY = 1.5
         renderer.drawStyle = .stroke
@@ -302,10 +331,10 @@ final class RendererTests: XCTestCase {
         renderer.shadowDx = 2.0
         renderer.shadowDy = -1.0
         renderer.shadowColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
-        renderer.fillColor = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
+        renderer.foregroundColor = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
 
         XCTAssertEqual(renderer.typeSize, 30.0)
-        XCTAssertEqual(renderer.slantAngle, 0.25)
+        XCTAssertEqual(renderer.skewX, 0.25)
         XCTAssertEqual(renderer.renderScale, 2.0)
         XCTAssertEqual(renderer.scaleY, 1.5)
         XCTAssertEqual(renderer.drawStyle, .stroke)
@@ -316,6 +345,6 @@ final class RendererTests: XCTestCase {
         XCTAssertEqual(renderer.shadowDx, 2.0)
         XCTAssertEqual(renderer.shadowDy, -1.0)
         XCTAssertEqual(renderer.shadowColor.coreValue, 0xFFFF0000)
-        XCTAssertEqual(renderer.fillColor.coreValue, 0xFF0000FF)
+        XCTAssertEqual(renderer.foregroundColor.coreValue, 0xFF0000FF)
     }
 }

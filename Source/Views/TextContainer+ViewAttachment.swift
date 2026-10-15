@@ -41,7 +41,7 @@ extension TextContainer {
             guard lineIndex >= 0 else { return }
 
             let textLine = textFrame.lines[lineIndex]
-            guard let glyphRun = textLine.visualRuns.first(where: { $0.codeUnitRange.contains(start) }) else { return }
+            guard let glyphRun = textLine.runs.first(where: { $0.codeUnitRange.contains(start) }) else { return }
 
             let runRect = CGRect(
                 x: textLine.origin.x + glyphRun.origin.x,

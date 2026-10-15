@@ -384,7 +384,7 @@ final class TextContainer: UIView {
     }
 
     private func updateRenderer(_ renderer: Renderer) {
-        renderer.fillColor = textColor
+        renderer.foregroundColor = textColor
         renderer.drawStyle = drawStyle
         if let typeface = typeface {
             renderer.typeface = typeface

@@ -91,7 +91,6 @@ final class TTextTests: XCTestCase {
         let typesetter = Typesetter(text: text, defaultAttributes: [.typeSize: CGFloat(10.0)])
         text.setString("a")
         XCTAssertEqual(typesetter.text.string, "xbc")
-        XCTAssertEqual(typesetter.codeUnitCount, 3)
         XCTAssertFalse(typesetter.text.isMutable)
         XCTAssertEqual(typesetter.makeSimpleLine(codeUnitRange: 0 ..< 3).codeUnitRange, 0 ..< 3)
 

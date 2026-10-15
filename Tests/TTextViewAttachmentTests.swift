@@ -88,7 +88,7 @@ final class TTextViewAttachmentTests: TTextViewTestCase {
 
     private func line(of attachment: ViewAttachment) -> ComposedLine? {
         return lines.first { line in
-            line.visualRuns.contains { $0.replacement === attachment }
+            line.runs.contains { $0.replacement === attachment }
         }
     }
 

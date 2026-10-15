@@ -77,11 +77,6 @@ public final class Typesetter: @unchecked Sendable {
         TRTypesetterRelease(core)
     }
 
-    /// The number of UTF-16 code units in the source string.
-    public var codeUnitCount: Int {
-        return Int(TRTypesetterGetCodeUnitCount(core))
-    }
-
     private func makeLine(_ line: TRComposedLineRef?) -> ComposedLine {
         guard let line = line else {
             fatalError("Could not make the line")
@@ -164,40 +159,19 @@ public final class Typesetter: @unchecked Sendable {
         return string.characterIndex(forUTF16Index: breakIndex)
     }
 
-    /// Creates a simple line having the specified UTF-16 range.
-    ///
-    /// - Parameter codeUnitRange: The UTF-16 range of the line in source string.
-    /// - Returns: The new line.
-    public func makeSimpleLine(codeUnitRange: Range<Int>) -> ComposedLine {
-        precondition(!codeUnitRange.isEmpty, "The range of a line is empty")
-
-        return makeLine(TRTypesetterCreateSimpleLine(
-            core,
-            TRUInteger(codeUnitRange.lowerBound),
-            TRUInteger(codeUnitRange.count)
-        ))
-    }
-
-    /// Creates a simple line having the specified character range.
-    ///
-    /// - Parameter characterRange: The character range of the line in source string.
-    /// - Returns: The new line.
-    public func makeSimpleLine(characterRange: Range<String.Index>) -> ComposedLine {
-        let codeUnitRange: Range<Int> = text.string.utf16Range(forCharacterRange: characterRange)
-        return makeSimpleLine(codeUnitRange: codeUnitRange)
-    }
-
-    /// Creates a line having the specified UTF-16 range for a frame that is some width wide. The
-    /// replacements that decide their room by the width of the frame get it from the layout width.
+    /// Creates a simple line having the specified UTF-16 range, with all of its text in the order
+    /// that it is shown.
     ///
     /// - Parameters:
     ///   - codeUnitRange: The UTF-16 range of the line in source string.
-    ///   - layoutWidth: The width of the frame.
+    ///   - layoutWidth: The width of the frame that the line is made for, or zero if there is none.
+    ///                  The replacements that decide their room by the width of the frame get it
+    ///                  from here.
     /// - Returns: The new line.
-    public func makeFrameLine(codeUnitRange: Range<Int>, layoutWidth: CGFloat) -> ComposedLine {
+    public func makeSimpleLine(codeUnitRange: Range<Int>, layoutWidth: CGFloat = 0.0) -> ComposedLine {
         precondition(!codeUnitRange.isEmpty, "The range of a line is empty")
 
-        return makeLine(TRTypesetterCreateFrameLine(
+        return makeLine(TRTypesetterCreateSimpleLine(
             core,
             TRUInteger(codeUnitRange.lowerBound),
             TRUInteger(codeUnitRange.count),
@@ -205,16 +179,16 @@ public final class Typesetter: @unchecked Sendable {
         ))
     }
 
-    /// Creates a line having the specified character range for a frame that is some width wide.
+    /// Creates a simple line having the specified character range.
     ///
     /// - Parameters:
     ///   - characterRange: The character range of the line in source string.
-    ///   - layoutWidth: The width of the frame.
+    ///   - layoutWidth: The width of the frame that the line is made for, or zero if there is none.
     /// - Returns: The new line.
-    public func makeFrameLine(characterRange: Range<String.Index>, layoutWidth: CGFloat) -> ComposedLine {
+    public func makeSimpleLine(characterRange: Range<String.Index>, layoutWidth: CGFloat = 0.0) -> ComposedLine {
         let codeUnitRange: Range<Int> = text.string.utf16Range(forCharacterRange: characterRange)
 
-        return makeFrameLine(codeUnitRange: codeUnitRange, layoutWidth: layoutWidth)
+        return makeSimpleLine(codeUnitRange: codeUnitRange, layoutWidth: layoutWidth)
     }
 
     /// Creates a line of specified UTF-16 range, truncating it if it overflows the specified extent.
