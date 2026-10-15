@@ -45,7 +45,7 @@ public final class GlyphRun: @unchecked Sendable {
 
     /// The UTF-16 range of this run in source string.
     public var codeUnitRange: Range<Int> {
-        return Int(TRGlyphRunGetCodeUnitStart(core)) ..< Int(TRGlyphRunGetCodeUnitEnd(core))
+        return Int(TRGlyphRunGetStartIndex(core)) ..< Int(TRGlyphRunGetEndIndex(core))
     }
 
     /// The index to the first character of this run in source string.
@@ -336,7 +336,7 @@ public final class GlyphRun: @unchecked Sendable {
     ///                       are not the run's.
     /// - Returns: A rectangle that tightly encloses the glyphs of this run.
     public func computeInkBox(with renderer: Renderer) -> CGRect {
-        return CGRect(TRGlyphRunGetInkBox(core, renderer.core))
+        return CGRect(TRGlyphRunComputeInkBox(core, renderer.core))
     }
 
     // MARK: Drawing

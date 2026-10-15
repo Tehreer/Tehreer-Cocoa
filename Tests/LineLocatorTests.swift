@@ -59,8 +59,8 @@ final class LineLocatorTests: XCTestCase {
         for (index, line) in frame.lines.enumerated() {
             let box = locator.box(ofLineAt: index)
 
-            XCTAssertLessThanOrEqual(box.minY, line.top)
-            XCTAssertGreaterThanOrEqual(box.maxY, line.bottom)
+            XCTAssertLessThanOrEqual(box.minY, (line.origin.y - line.ascent))
+            XCTAssertGreaterThanOrEqual(box.maxY, (line.origin.y + line.descent + line.leading))
             XCTAssertEqual(box, box.integral)
         }
     }
@@ -119,7 +119,7 @@ final class LineLocatorTests: XCTestCase {
 
         XCTAssertEqual(locator.indexOfFirstLine(below: -10.0), 0)
 
-        let index = try XCTUnwrap(locator.indexOfFirstLine(below: line.top + 1.0))
+        let index = try XCTUnwrap(locator.indexOfFirstLine(below: (line.origin.y - line.ascent) + 1.0))
         XCTAssertTrue(index == 2 || index == 3)
 
         XCTAssertNil(locator.indexOfFirstLine(below: 1.0e7))

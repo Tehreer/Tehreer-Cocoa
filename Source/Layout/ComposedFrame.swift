@@ -40,7 +40,7 @@ public final class ComposedFrame: @unchecked Sendable {
 
     /// The UTF-16 range of this frame in source string.
     public var codeUnitRange: Range<Int> {
-        return Int(TRComposedFrameGetCodeUnitStart(core)) ..< Int(TRComposedFrameGetCodeUnitEnd(core))
+        return Int(TRComposedFrameGetStartIndex(core)) ..< Int(TRComposedFrameGetEndIndex(core))
     }
 
     /// The index to the first character of this frame in source string.
@@ -85,7 +85,7 @@ public final class ComposedFrame: @unchecked Sendable {
     public func indexOfLine(forCodeUnitAt index: Int) -> Int {
         precondition(index >= codeUnitRange.lowerBound && index <= codeUnitRange.upperBound, .indexOutOfRange)
 
-        let lineIndex = TRComposedFrameGetIndexOfLineForCodeUnit(core, TRUInteger(index))
+        let lineIndex = TRComposedFrameGetLineIndexForCodeUnit(core, TRUInteger(index))
 
         return lineIndex == TRUInteger.max ? -1 : Int(lineIndex)
     }
@@ -109,7 +109,7 @@ public final class ComposedFrame: @unchecked Sendable {
             return -1
         }
 
-        return Int(TRComposedFrameGetIndexOfLineAtPosition(core, TRPoint(x: TRFloat(position.x),
+        return Int(TRComposedFrameGetLineIndexAtPosition(core, TRPoint(x: TRFloat(position.x),
                                                                          y: TRFloat(position.y))))
     }
 

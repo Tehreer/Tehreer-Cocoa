@@ -123,7 +123,7 @@ final class TTextViewAttachmentTests: TTextViewTestCase {
 
         XCTAssertEqual(view!.frame.width, textView.textFrame!.width, accuracy: 0.5)
         XCTAssertEqual(view!.frame.height, 120.0, accuracy: 0.5)
-        XCTAssertEqual(view!.frame.minY, blockLine.top + 4.0, accuracy: 0.5)
+        XCTAssertEqual(view!.frame.minY, (blockLine.origin.y - blockLine.ascent) + 4.0, accuracy: 0.5)
         XCTAssertTrue(view!.superview === textView.container)
     }
 
@@ -284,7 +284,7 @@ final class TTextViewAttachmentTests: TTextViewTestCase {
         let blockLine = line(of: block)!
         XCTAssertNil(block.view)
 
-        textView.setContentOffset(CGPoint(x: 0.0, y: blockLine.top - 480.0 - 100.0), animated: false)
+        textView.setContentOffset(CGPoint(x: 0.0, y: (blockLine.origin.y - blockLine.ascent) - 480.0 - 100.0), animated: false)
         textView.layoutIfNeeded()
         XCTAssertNil(block.view)
 

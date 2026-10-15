@@ -415,7 +415,7 @@ final class TextContainer: UIView {
         // can reach lower than the line, so the lines are checked from there.
         let firstIndex = lineLocator?.indexOfFirstLine(below: top) ?? 0
 
-        return (firstIndex ..< lines.count).first { lines[$0].bottom > top } ?? lines.count - 1
+        return (firstIndex ..< lines.count).first { (lines[$0].origin.y + lines[$0].descent + lines[$0].leading) > top } ?? lines.count - 1
     }
 
     private func captureAnchor() -> Anchor? {
@@ -426,7 +426,7 @@ final class TextContainer: UIView {
         let top = visibleRect.minY
         let line = frame.lines[firstVisibleLineIndex(in: frame, below: top)]
 
-        return Anchor(codeUnitIndex: line.codeUnitRange.lowerBound, offset: top - line.top)
+        return Anchor(codeUnitIndex: line.codeUnitRange.lowerBound, offset: top - (line.origin.y - line.ascent))
     }
 
     private func scrollToAnchor(in frame: ComposedFrame, _ anchor: Anchor, animated: Bool) {
@@ -445,7 +445,7 @@ final class TextContainer: UIView {
 
         let minimumY = -inset.top
         let maximumY = max(minimumY, textView.contentSize.height + inset.bottom - textView.bounds.height)
-        let targetY = min(max(line.top + offset, minimumY), maximumY)
+        let targetY = min(max((line.origin.y - line.ascent) + offset, minimumY), maximumY)
 
         textView.setContentOffset(CGPoint(x: textView.contentOffset.x, y: targetY), animated: animated)
     }
@@ -479,7 +479,7 @@ final class TextContainer: UIView {
             return nil
         }
 
-        let textLine = textFrame.lines.first { position.y <= $0.bottom } ?? textFrame.lines[textFrame.lines.count - 1]
+        let textLine = textFrame.lines.first { position.y <= ($0.origin.y + $0.descent + $0.leading) } ?? textFrame.lines[textFrame.lines.count - 1]
 
         return indexOfCharacter(in: textLine, at: position.x, in: textFrame)
     }
@@ -488,7 +488,7 @@ final class TextContainer: UIView {
     /// touch is matched with.
     func indexOfCodeUnitUnderPosition(_ position: CGPoint) -> Int? {
         guard let textFrame = textFrame,
-              let textLine = textFrame.lines.first(where: { position.y >= $0.top && position.y <= $0.bottom }),
+              let textLine = textFrame.lines.first(where: { position.y >= ($0.origin.y - $0.ascent) && position.y <= ($0.origin.y + $0.descent + $0.leading) }),
               let characterIndex = indexOfCharacter(in: textLine, at: position.x, in: textFrame) else {
             return nil
         }

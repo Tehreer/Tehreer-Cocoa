@@ -307,7 +307,7 @@ public final class Renderer {
             offsets,
             advances
         ) { (glyphIDs, offsets, advances, count) in
-            TRRendererGetRunInkBox(core, glyphIDs, offsets, advances, count)
+            TRRendererComputeRunInkBox(core, glyphIDs, offsets, advances, count)
         }
 
         return CGRect(inkBox: box)

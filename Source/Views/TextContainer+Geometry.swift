@@ -58,7 +58,7 @@ extension TextContainer {
                 let edges = textLine.visualEdges(forCodeUnitRange: segmentStart ..< segmentEnd)
 
                 for i in stride(from: 0, to: edges.count, by: 2) {
-                    include(edges[i] + textLine.left, edges[i + 1] + textLine.left)
+                    include(edges[i] + textLine.origin.x, edges[i + 1] + textLine.origin.x)
                 }
             }
 
@@ -67,16 +67,16 @@ extension TextContainer {
                 case firstIndex:
                     // The padding that follows the text of the first line...
                     if isRTL {
-                        include(0.0, textLine.left)
+                        include(0.0, textLine.origin.x)
                     } else {
-                        include(textLine.right, frameWidth)
+                        include((textLine.origin.x + textLine.width), frameWidth)
                     }
                 case lastIndex:
                     // ...and the padding that leads to the text of the last one.
                     if isRTL {
-                        include(textLine.right, frameWidth)
+                        include((textLine.origin.x + textLine.width), frameWidth)
                     } else {
-                        include(0.0, textLine.left)
+                        include(0.0, textLine.origin.x)
                     }
                 default:
                     // Every line in between is covered entirely.
@@ -85,7 +85,7 @@ extension TextContainer {
             }
 
             if left < right {
-                rects.append(CGRect(x: left, y: textLine.top, width: right - left, height: textLine.height))
+                rects.append(CGRect(x: left, y: (textLine.origin.y - textLine.ascent), width: right - left, height: textLine.height))
             }
         }
 

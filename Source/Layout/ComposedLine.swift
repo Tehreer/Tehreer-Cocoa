@@ -39,7 +39,7 @@ public final class ComposedLine: @unchecked Sendable {
 
     /// The UTF-16 range of this line in source string.
     public var codeUnitRange: Range<Int> {
-        return Int(TRComposedLineGetCodeUnitStart(core)) ..< Int(TRComposedLineGetCodeUnitEnd(core))
+        return Int(TRComposedLineGetStartIndex(core)) ..< Int(TRComposedLineGetEndIndex(core))
     }
 
     /// The index to the first character of this line in source string.
@@ -96,22 +96,6 @@ public final class ComposedLine: @unchecked Sendable {
     /// Whether this line is the line of a view that has a line of its own.
     var isBlock: Bool {
         return TRComposedLineIsBlock(core) != 0
-    }
-
-    var top: CGFloat {
-        return CGFloat(TRComposedLineGetTop(core))
-    }
-
-    var bottom: CGFloat {
-        return CGFloat(TRComposedLineGetBottom(core))
-    }
-
-    var left: CGFloat {
-        return CGFloat(TRComposedLineGetLeft(core))
-    }
-
-    var right: CGFloat {
-        return CGFloat(TRComposedLineGetRight(core))
     }
 
     /// The typographic extent corresponding to the trailing whitespace characters in this line.
@@ -218,7 +202,7 @@ public final class ComposedLine: @unchecked Sendable {
     /// - Returns: The index of UTF-16 code unit in source string, nearest to the specified
     ///            distance.
     public func indexOfCodeUnit(at distance: CGFloat) -> Int {
-        return Int(TRComposedLineGetCodeUnitIndex(core, TRFloat(distance)))
+        return Int(TRComposedLineGetCodeUnitIndexAtDistance(core, TRFloat(distance)))
     }
 
     /// Returns the index of character nearest to the specified distance.
@@ -255,7 +239,7 @@ public final class ComposedLine: @unchecked Sendable {
     ///                       are not the runs'.
     /// - Returns: A rectangle that tightly encloses the glyphs of this line.
     public func computeInkBox(with renderer: Renderer) -> CGRect {
-        return CGRect(inkBox: TRComposedLineGetInkBox(core, renderer.core))
+        return CGRect(inkBox: TRComposedLineComputeInkBox(core, renderer.core))
     }
 
     /// Draws this line in the `context` with the specified renderer. The runs are drawn one after

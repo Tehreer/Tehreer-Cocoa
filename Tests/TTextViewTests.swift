@@ -46,11 +46,11 @@ final class TTextViewTests: TTextViewTestCase {
         let first = lines.first!
         let last = lines.last!
 
-        let above = textView.indexOfCodeUnit(at: CGPoint(x: center(of: first).x, y: first.top - 50.0))
+        let above = textView.indexOfCodeUnit(at: CGPoint(x: center(of: first).x, y: (first.origin.y - first.ascent) - 50.0))
         XCTAssertNotNil(above)
         XCTAssertTrue(first.codeUnitRange.contains(above!))
 
-        let below = textView.indexOfCodeUnit(at: CGPoint(x: center(of: last).x, y: last.bottom + 50.0))
+        let below = textView.indexOfCodeUnit(at: CGPoint(x: center(of: last).x, y: (last.origin.y + last.descent + last.leading) + 50.0))
         XCTAssertNotNil(below)
         XCTAssertTrue(last.codeUnitRange.contains(below!))
     }
@@ -62,7 +62,7 @@ final class TTextViewTests: TTextViewTestCase {
         XCTAssertTrue(last.width < textView.bounds.width - 40.0)
 
         let y = center(of: last).y
-        let leftGap = CGPoint(x: last.left > 20.0 ? 2.0 : last.right + 5.0, y: y)
+        let leftGap = CGPoint(x: last.origin.x > 20.0 ? 2.0 : (last.origin.x + last.width) + 5.0, y: y)
 
         XCTAssertNil(textView.indexOfCodeUnit(at: leftGap))
         XCTAssertNotNil(textView.indexOfCodeUnit(at: center(of: last)))
@@ -76,7 +76,7 @@ final class TTextViewTests: TTextViewTestCase {
         let middle = center(of: first)
 
         XCTAssertNotNil(textView.container.indexOfCodeUnitUnderPosition(middle))
-        XCTAssertNil(textView.container.indexOfCodeUnitUnderPosition(CGPoint(x: middle.x, y: first.top - 20.0)))
+        XCTAssertNil(textView.container.indexOfCodeUnitUnderPosition(CGPoint(x: middle.x, y: (first.origin.y - first.ascent) - 20.0)))
     }
 
     func testIndexOfCodeUnitWithoutTextIsNil() {
@@ -94,9 +94,9 @@ final class TTextViewTests: TTextViewTestCase {
         let rects = textView.selectionRects(forCodeUnitRange: range)
 
         XCTAssertEqual(rects.count, 1)
-        XCTAssertEqual(rects[0].minY, line.top, accuracy: 0.5)
+        XCTAssertEqual(rects[0].minY, (line.origin.y - line.ascent), accuracy: 0.5)
         XCTAssertEqual(rects[0].height, line.height, accuracy: 0.5)
-        XCTAssertTrue(rects[0].minX >= line.left - 0.5 && rects[0].maxX <= line.right + 0.5)
+        XCTAssertTrue(rects[0].minX >= line.origin.x - 0.5 && rects[0].maxX <= (line.origin.x + line.width) + 0.5)
     }
 
     func testSelectionRectsOfARangeOverLinesHasOneRectForEachLine() {
@@ -156,7 +156,7 @@ final class TTextViewTests: TTextViewTestCase {
         textView.scrollToCodeUnit(at: target.codeUnitRange.lowerBound + 3, animated: false)
         textView.layoutIfNeeded()
 
-        XCTAssertEqual(textView.contentOffset.y, target.top, accuracy: 0.5)
+        XCTAssertEqual(textView.contentOffset.y, (target.origin.y - target.ascent), accuracy: 0.5)
         XCTAssertEqual(textView.firstVisibleCodeUnitIndex, target.codeUnitRange.lowerBound)
     }
 
@@ -239,7 +239,7 @@ final class TTextViewTests: TTextViewTestCase {
             textView.layoutIfNeeded()
 
             let visible = textView.container.subviews.compactMap { $0 as? LineView }.filter { $0.frame.intersects(textView.container.visibleRect) }
-            let expected = lines.filter { $0.bottom > offset && $0.top < offset + 480.0 }
+            let expected = lines.filter { ($0.origin.y + $0.descent + $0.leading) > offset && ($0.origin.y - $0.ascent) < offset + 480.0 }
 
             XCTAssertGreaterThanOrEqual(visible.count, expected.count - 1, "at \(offset)")
             XCTAssertLessThan(textView.container.subviews.count, 60)
