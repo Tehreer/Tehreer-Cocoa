@@ -118,14 +118,20 @@ public final class FrameResolver {
     }
 
     /// The maximum number of lines that a frame should consist of. Its default value is `nil`,
-    /// which means that the number of lines is not limited.
+    /// which means that the number of lines is not limited. A value must be at least one.
     public var maxLines: Int? {
         get {
             let count = TRFrameResolverGetMaxLines(core)
 
             return (count == 0 ? nil : Int(count))
         }
-        set { TRFrameResolverSetMaxLines(core, TRUInteger(max(newValue ?? 0, 0))) }
+        set {
+            if let lineCount = newValue {
+                precondition(lineCount >= 1, "The maximum number of lines is less than one")
+            }
+
+            TRFrameResolverSetMaxLines(core, TRUInteger(newValue ?? 0))
+        }
     }
 
     /// The extra spacing to add after each line of a frame. It is resolved after line height

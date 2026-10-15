@@ -232,12 +232,6 @@ public final class Renderer {
         set { TRRendererSetDrawStyle(core, newValue.coreValue) }
     }
 
-    /// A Boolean value that indicates whether the glyphs are big enough to be rendered, which takes
-    /// at least one pixel in each direction.
-    public var isRenderable: Bool {
-        return TRRendererIsRenderable(core) != 0
-    }
-
     /// Gets the image that fills the specified glyph. The image of a glyph of a bitmap font is the
     /// one of its nearest strike, which is not scaled to the type size.
     ///
