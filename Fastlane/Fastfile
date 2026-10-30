@@ -1,0 +1,51 @@
+default_platform(:ios)
+
+DEMO_SCHEMES = ["DemoSwiftUI", "DemoUIKit"]
+
+platform :ios do
+  desc "Run the unit tests on an iOS simulator"
+  lane :test do
+    # Set TEHREER_SIMULATOR to a simulator name to override the default one.
+    iphones = FastlaneCore::Simulator.all.select do |device|
+      device.os_type == "iOS" && device.name.start_with?("iPhone")
+    end
+    iphones = iphones.select { |device| device.name == ENV["TEHREER_SIMULATOR"] } if ENV["TEHREER_SIMULATOR"]
+    UI.user_error!("No matching iPhone simulator is available") if iphones.empty?
+
+    simulator = iphones.max_by { |device| Gem::Version.new(device.os_version) }
+    UI.message("Testing on #{simulator.name} (#{simulator.os_version})")
+
+    scan(
+      package_path: ".",
+      scheme: "TehreerCocoa",
+      destination: "platform=iOS Simulator,id=#{simulator.udid}",
+      derived_data_path: "build",
+      result_bundle: true,
+      output_directory: "Fastlane/test_output",
+      output_types: "junit",
+      clean: false
+    )
+  end
+
+  desc "Build the demo apps for the iOS simulator"
+  lane :demo do
+    DEMO_SCHEMES.each do |scheme|
+      xcodebuild(
+        project: "Demo/Demo.xcodeproj",
+        scheme: scheme,
+        configuration: "Debug",
+        sdk: "iphonesimulator",
+        destination: "generic/platform=iOS Simulator",
+        derivedDataPath: "build",
+        build: true,
+        xcargs: "CODE_SIGNING_ALLOWED=NO"
+      )
+    end
+  end
+
+  desc "Run the tests and build the demos"
+  lane :ci do
+    test
+    demo
+  end
+end

@@ -19,3 +19,8 @@ xcuserdata/
 *.moved-aside
 *.xccheckout
 *.xcscmblueprint
+
+## fastlane
+Fastlane/report.xml
+Fastlane/test_output/
+Fastlane/README.md
