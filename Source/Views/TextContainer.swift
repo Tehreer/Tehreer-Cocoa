@@ -487,25 +487,7 @@ final class TextContainer: UIView {
     /// The UTF-16 index of the character that is exactly under the position, which is what a
     /// touch is matched with.
     func indexOfCodeUnitUnderPosition(_ position: CGPoint) -> Int? {
-        guard let textFrame = textFrame,
-              let textLine = textFrame.lines.first(where: { position.y >= ($0.origin.y - $0.ascent) && position.y <= ($0.origin.y + $0.descent + $0.leading) }),
-              let characterIndex = indexOfCharacter(in: textLine, at: position.x, in: textFrame) else {
-            return nil
-        }
-
-        // The nearest index is the one after the character when the position is on its trailing
-        // half, so the character is the one whose box has the position.
-        let nearestIndex = textFrame.string.utf16Index(forCharacterAt: characterIndex)
-
-        for codeUnitIndex in [nearestIndex, nearestIndex - 1] where textLine.codeUnitRange.contains(codeUnitIndex) {
-            let rects = selectionRects(forCodeUnitRange: codeUnitIndex ..< codeUnitIndex + 1)
-
-            if rects.contains(where: { $0.contains(position) }) {
-                return codeUnitIndex
-            }
-        }
-
-        return nil
+        return textFrame?.clusterStart(forCodeUnitAt: position)
     }
 
     private func indexOfCharacter(in textLine: ComposedLine, at x: CGFloat, in textFrame: ComposedFrame) -> String.Index? {

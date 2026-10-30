@@ -215,6 +215,34 @@ public final class ComposedLine: @unchecked Sendable {
         return string.characterIndex(forUTF16Index: indexOfCodeUnit(at: distance))
     }
 
+    /// Returns the index of the first UTF-16 code unit of the cluster that covers the specified
+    /// distance. A cluster is never split, so unlike `indexOfCodeUnit(at:)`, which gives the
+    /// nearest boundary, this gives the cluster that is hit, for either direction of text.
+    ///
+    /// - Parameter distance: The distance from the left edge of this line.
+    /// - Returns: The index of the first UTF-16 code unit of the cluster in source string, or
+    ///            `nil` if nothing is hit: the distance is before the left edge or at or after
+    ///            the right edge of the runs, it is NaN, it is on a truncation token, or the line
+    ///            has no runs.
+    public func clusterStart(forCodeUnitAt distance: CGFloat) -> Int? {
+        let index = TRComposedLineGetClusterStartAtDistance(core, TRFloat(distance))
+
+        return index == TRUInteger.max ? nil : Int(index)
+    }
+
+    /// Returns the index of the first character of the cluster that covers the specified distance.
+    ///
+    /// - Parameter distance: The distance from the left edge of this line.
+    /// - Returns: The index of the first character of the cluster in source string, or `nil` if
+    ///            nothing is hit (see `clusterStart(forCodeUnitAt:)`).
+    public func clusterStart(forCharacterAt distance: CGFloat) -> String.Index? {
+        guard let index = clusterStart(forCodeUnitAt: distance) else {
+            return nil
+        }
+
+        return string.characterIndex(forUTF16Index: index)
+    }
+
     /// Returns the pen offset required to draw flush text.
     ///
     /// - Parameters:

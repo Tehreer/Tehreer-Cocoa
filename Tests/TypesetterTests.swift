@@ -76,6 +76,21 @@ final class TypesetterTests: XCTestCase {
         XCTAssertEqual(line.penOffset(forFlushFactor: 1.0, flushExtent: 5000.0), 5000.0 - 3335.0)
     }
 
+    func testClusterStartAtDistance() {
+        let typesetter = makeTypesetter("abc")
+        let line = typesetter.makeSimpleLine(codeUnitRange: 0 ..< 3)
+
+        XCTAssertEqual(line.clusterStart(forCodeUnitAt: 0.0), 0)
+        XCTAssertEqual(line.clusterStart(forCodeUnitAt: 1500.0), 1)
+        XCTAssertEqual(
+            line.clusterStart(forCharacterAt: 1500.0),
+            "abc".index(after: "abc".startIndex)
+        )
+        XCTAssertNil(line.clusterStart(forCodeUnitAt: -10.0))
+        XCTAssertNil(line.clusterStart(forCodeUnitAt: 5000.0))
+        XCTAssertNil(line.clusterStart(forCodeUnitAt: .nan))
+    }
+
     func testBreaks() {
         let typesetter = makeTypesetter("abc abc")
 
@@ -178,6 +193,11 @@ final class TypesetterTests: XCTestCase {
         // The end of the frame belongs to the last line.
         XCTAssertEqual(frame.indexOfLine(forCodeUnitAt: 7), 1)
         XCTAssertEqual(frame.indexOfLine(at: CGPoint(x: 10.0, y: 3000.0)), 1)
+
+        XCTAssertEqual(frame.clusterStart(forCodeUnitAt: CGPoint(x: 10.0, y: 3000.0)), 4)
+        XCTAssertEqual(frame.clusterStart(forCodeUnitAt: CGPoint(x: 1500.0, y: 3000.0)), 5)
+        XCTAssertNil(frame.clusterStart(forCodeUnitAt: CGPoint(x: -10.0, y: 3000.0)))
+        XCTAssertNil(frame.clusterStart(forCodeUnitAt: CGPoint(x: 10.0, y: -3000.0)))
     }
 
     func testFrameAlignmentAndStyle() throws {

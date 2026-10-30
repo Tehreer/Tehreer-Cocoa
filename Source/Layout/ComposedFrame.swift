@@ -116,6 +116,38 @@ public final class ComposedFrame: @unchecked Sendable {
         )
     }
 
+    /// Returns the index of the first UTF-16 code unit of the cluster that is under the specified
+    /// position, which is the character that a point hits. The line is the one whose top and
+    /// bottom have the y of the position, and the x is measured from the origin of that line. A
+    /// cluster is never split.
+    ///
+    /// - Parameter position: The position in the coordinates of this frame.
+    /// - Returns: The index of the first UTF-16 code unit of the cluster in source string, or
+    ///            `nil` if no character is there: the position is above or below the lines,
+    ///            outside the runs of the line, or the frame has no lines.
+    public func clusterStart(forCodeUnitAt position: CGPoint) -> Int? {
+        let index = TRComposedFrameGetClusterStartAtPosition(
+            core,
+            TRPoint(x: TRFloat(position.x), y: TRFloat(position.y))
+        )
+
+        return index == TRUInteger.max ? nil : Int(index)
+    }
+
+    /// Returns the index of the first character of the cluster that is under the specified
+    /// position.
+    ///
+    /// - Parameter position: The position in the coordinates of this frame.
+    /// - Returns: The index of the first character of the cluster in source string, or `nil` if
+    ///            no character is there (see `clusterStart(forCodeUnitAt:)`).
+    public func clusterStart(forCharacterAt position: CGPoint) -> String.Index? {
+        guard let index = clusterStart(forCodeUnitAt: position) else {
+            return nil
+        }
+
+        return string.characterIndex(forUTF16Index: index)
+    }
+
     /// Creates a path that contains a set of rectangles covering the specified UTF-16 code unit range.
     ///
     /// - Parameter codeUnitRange: The selection range in source string.
