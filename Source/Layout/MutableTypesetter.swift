@@ -269,7 +269,7 @@ public final class MutableTypesetter: Typesetter, @unchecked Sendable {
             if let dictionary = value as? [SFNTTag: Int] {
                 let items = dictionary.map { TROpenTypeFeature(
                     tag: $0.key.rawValue,
-                    value: UInt32(max($0.value, 0))
+                    value: UInt32(clamping: max($0.value, 0))
                 ) }
 
                 features = TRFontFeaturesCreate(items, TRUInteger(items.count))
@@ -290,6 +290,20 @@ public final class MutableTypesetter: Typesetter, @unchecked Sendable {
 
         guard !attributes.isEmpty else {
             return false
+        }
+
+        if key == .paragraphStyle && range.lowerBound >= 0 {
+            // The fields that the style leaves out are zero, so the old ones must not stay.
+            let kept = Set(attributes.map { Int($0.type) })
+
+            for type in TRAttribute.paragraphTypes where !kept.contains(type) {
+                TRTypesetterRemoveAttribute(
+                    mutableCore,
+                    TRUInteger(range.lowerBound),
+                    TRUInteger(range.count),
+                    TRAttributeType(type)
+                )
+            }
         }
 
         return edited(attributes.reduce(true) { set($1, in: range) && $0 })
