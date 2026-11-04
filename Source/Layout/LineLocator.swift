@@ -29,7 +29,7 @@ import Foundation
 /// rounded outward to integers, and the boxes of the lines can overlap.
 // Unchecked because the locator of Core is immutable.
 public final class LineLocator: @unchecked Sendable {
-    private let core: TRLineLocatorRef
+    let core: TRLineLocatorRef
 
     /// Creates a locator that finds the lines of a frame that are visible in a rectangle.
     ///

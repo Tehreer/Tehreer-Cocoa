@@ -145,7 +145,7 @@ final class FrameResolvingOperation: Operation, @unchecked Sendable {
         resolver.isJustificationEnabled = context.isJustificationEnabled
         resolver.justificationLevel = context.justificationLevel
 
-        let string = typesetter.text.string
+        let string = typesetter.string
         context.textFrame = resolver.makeFrame(
             characterRange: string.startIndex ..< string.endIndex
         )
