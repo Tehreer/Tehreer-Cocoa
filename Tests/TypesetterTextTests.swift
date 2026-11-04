@@ -136,6 +136,21 @@ final class TypesetterTextTests: XCTestCase {
         XCTAssertEqual(copy.makeSimpleLine(codeUnitRange: 0 ..< 4).codeUnitRange, 0 ..< 4)
     }
 
+    func testParagraphStyleReplacesTheOldOne() throws {
+        let text = MutableTypesetter(defaultAttributes: [:])
+        text.append("abc")
+
+        let indented = NSMutableParagraphStyle()
+        indented.headIndent = 20
+        text.setAttribute(.paragraphStyle, value: indented, in: 0 ..< 3)
+        text.setAttribute(.paragraphStyle, value: NSParagraphStyle(), in: 0 ..< 3)
+
+        let style = try XCTUnwrap(
+            text.attributes(at: 0)?.attributes[.paragraphStyle] as? NSParagraphStyle
+        )
+        XCTAssertEqual(style.headIndent, 0)
+    }
+
     func testBoundaries() {
         // No typeface is needed to find where the words and the paragraphs are.
         let text = Typesetter(string: "Hello, world\nbye", defaultAttributes: [:])

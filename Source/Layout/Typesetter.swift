@@ -109,7 +109,7 @@ public class Typesetter: @unchecked Sendable {
             core: core!,
             objects: mutable.objects,
             defaultAttributes: defaultAttributes,
-            source: attributedString
+            source: attributedString.copy() as? NSAttributedString
         )
     }
 
@@ -138,7 +138,7 @@ public class Typesetter: @unchecked Sendable {
     /// - Parameter range: The UTF-16 range in this text.
     /// - Returns: The string of the range, or `nil` if the range is not within the text.
     public func string(in range: Range<Int>) -> String? {
-        guard range.lowerBound >= 0 else {
+        guard range.lowerBound >= 0 && range.upperBound <= length else {
             return nil
         }
 
@@ -389,6 +389,9 @@ public class Typesetter: @unchecked Sendable {
     ///   - mode: The requested break mode.
     /// - Returns: The index (exclusive) that would cause the break.
     public func suggestForwardBreak(inCodeUnitRange codeUnitRange: Range<Int>, extent: CGFloat, breakMode: BreakMode) -> Int {
+        precondition(!codeUnitRange.isEmpty, "The range to break is empty")
+        precondition(codeUnitRange.lowerBound >= 0 && codeUnitRange.upperBound <= length, String.indexOutOfRange)
+
         return Int(TRTypesetterSuggestForwardBreak(
             core,
             TRUInteger(codeUnitRange.lowerBound),
@@ -426,6 +429,9 @@ public class Typesetter: @unchecked Sendable {
     ///   - mode: The requested break mode.
     /// - Returns: The index (inclusive) that would cause the break.
     public func suggestBackwardBreak(inCodeUnitRange codeUnitRange: Range<Int>, extent: CGFloat, breakMode: BreakMode) -> Int {
+        precondition(!codeUnitRange.isEmpty, "The range to break is empty")
+        precondition(codeUnitRange.lowerBound >= 0 && codeUnitRange.upperBound <= length, String.indexOutOfRange)
+
         return Int(TRTypesetterSuggestBackwardBreak(
             core,
             TRUInteger(codeUnitRange.lowerBound),
