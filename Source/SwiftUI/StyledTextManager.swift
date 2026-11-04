@@ -64,7 +64,7 @@ final class StyledTextManager: ObservableObject {
         resolver.frameWidth = containerSize.width
         resolver.frameHeight = containerSize.height
 
-        let string = typesetter.text.string
+        let string = typesetter.string
         let resolvedFrame = resolver.makeFrame(
             characterRange: string.startIndex ..< string.endIndex
         )
@@ -87,7 +87,7 @@ final class StyledTextManager: ObservableObject {
             if let typesetter = resolver.typesetter {
                 let existingAttributes = typesetter.defaultAttributes
 
-                if typesetter.text.attributedString == attributedString
+                if typesetter.attributedString == attributedString
                     && existingAttributes.count == defaultAttributes.count
                     && existingAttributes[.typeface] as? Typeface === defaultAttributes[.typeface] as? Typeface
                     && existingAttributes[.typeSize] as? CGFloat == defaultAttributes[.typeSize] as? CGFloat {
@@ -109,7 +109,7 @@ final class StyledTextManager: ObservableObject {
         resolver.frameWidth = containerSize.width
         resolver.frameHeight = containerSize.height
 
-        let string = typesetter.text.string
+        let string = typesetter.string
         textFrame = resolver.makeFrame(
             characterRange: string.startIndex ..< string.endIndex
         )

@@ -180,7 +180,7 @@ public final class FrameResolver {
             return nil
         }
 
-        return ComposedFrame(core: frame, string: typesetter.text.string, objects: typesetter.objects)
+        return ComposedFrame(core: frame, string: typesetter.string, objects: typesetter.objects)
     }
 
     /// Creates a frame representing the specified character range in source string.
@@ -192,7 +192,7 @@ public final class FrameResolver {
     /// - Parameter characterRange: The character range of the frame in source string.
     /// - Returns: A new composed frame.
     public func makeFrame(characterRange: Range<String.Index>) -> ComposedFrame? {
-        let string = typesetter.text.string
+        let string = typesetter.string
         let codeUnitRange: Range<Int> = string.utf16Range(forCharacterRange: characterRange)
 
         return makeFrame(codeUnitRange: codeUnitRange)

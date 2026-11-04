@@ -176,7 +176,7 @@ open class TLabel: UIView {
             resolver.frameWidth = layoutWidth
             resolver.frameHeight = layoutHeight
 
-            let string = typesetter.text.string
+            let string = typesetter.string
             let frame = resolver.makeFrame(characterRange: string.startIndex ..< string.endIndex)
 
             return frame

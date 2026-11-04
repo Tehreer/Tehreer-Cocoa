@@ -172,7 +172,7 @@ open class TTextView: UIScrollView {
     ///   - index: The index of a character.
     ///   - animated: Whether to scroll smoothly. It is ignored while the text is not displayed.
     open func scrollToCharacter(at index: String.Index, animated: Bool) {
-        let string = textFrame?.string ?? (typesetter?.text.string ?? text ?? attributedText?.string ?? "")
+        let string = textFrame?.string ?? (typesetter?.string ?? text ?? attributedText?.string ?? "")
 
         scrollToCodeUnit(at: string.utf16Index(forCharacterAt: index), animated: animated)
     }

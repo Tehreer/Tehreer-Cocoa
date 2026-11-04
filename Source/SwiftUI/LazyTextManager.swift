@@ -126,7 +126,7 @@ private struct TextContext: Sendable {
         guard layoutWidth > .zero else { return nil }
 
         let resolver = makeFrameResolver(typesetter: typesetter)
-        let string = typesetter.text.string
+        let string = typesetter.string
 
         return resolver.makeFrame(characterRange: string.startIndex ..< string.endIndex)
     }
