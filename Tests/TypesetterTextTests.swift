@@ -18,11 +18,11 @@ import XCTest
 @testable import TehreerCocoa
 
 /// Tests of the text of Core, which is made from attributed strings and can be edited.
-final class TTextTests: XCTestCase {
+final class TypesetterTextTests: XCTestCase {
     private let typeface = FontFile(path: TestFonts.path("Roboto-Regular.abc.ttf"))!.typefaces[0]
 
     func testPlainText() {
-        let text = TText(string: "abc")
+        let text = Typesetter(string: "abc", defaultAttributes: [:])
 
         XCTAssertEqual(text.length, 3)
         XCTAssertEqual(text.string, "abc")
@@ -43,7 +43,7 @@ final class TTextTests: XCTestCase {
             range: NSRange(location: 3, length: 3)
         )
 
-        let text = TText(attributedString: source)
+        let text = Typesetter(text: source, defaultAttributes: [:])
         XCTAssertEqual(text.attributedString, source)
 
         let first = try XCTUnwrap(text.attributes(at: 0))
@@ -61,8 +61,42 @@ final class TTextTests: XCTestCase {
         XCTAssertNil(text.attributes(at: 6))
     }
 
+    func testAttributedStringFollowsTheEdits() throws {
+        let defaults: [NSAttributedString.Key: Any] = [.typeface: typeface, .typeSize: CGFloat(10.0)]
+        let text = MutableTypesetter(attributedString: NSAttributedString(string: "abc"), defaultAttributes: defaults)
+
+        XCTAssertEqual(text.attributedString.string, "abc")
+
+        XCTAssertTrue(text.append("de"))
+        XCTAssertEqual(text.attributedString.string, "abcde")
+        XCTAssertEqual(text.attributedString.length, 5)
+    }
+
+    func testManyAttributesAreSetInOneShapingOfTheParagraph() throws {
+        let defaults: [NSAttributedString.Key: Any] = [.typeface: typeface, .typeSize: CGFloat(10.0)]
+        let text = NSMutableAttributedString(string: String(repeating: "abc ", count: 4000))
+
+        // A change of an attribute shapes its paragraph again unless it is made in a batch. This
+        // is one paragraph of 16,000 code units with 500 colors, which took half a minute.
+        for index in 0 ..< 500 {
+            text.addAttribute(
+                .foregroundColor,
+                value: UIColor(white: CGFloat(index % 10) / 10.0, alpha: 1.0),
+                range: NSRange(location: index * 20, length: 5)
+            )
+        }
+
+        let start = Date()
+        let typesetter = Typesetter(text: text, defaultAttributes: defaults)
+
+        XCTAssertLessThan(Date().timeIntervalSince(start), 5.0)
+        XCTAssertEqual(typesetter.length, 16000)
+        XCTAssertNotNil(typesetter.attributes(at: 20)?.attributes[.foregroundColor])
+    }
+
     func testEditing() throws {
-        let text = TMutableText()
+        let defaults: [NSAttributedString.Key: Any] = [.typeface: typeface, .typeSize: CGFloat(10.0)]
+        let text = MutableTypesetter(defaultAttributes: defaults)
         XCTAssertTrue(text.isMutable)
 
         text.beginEditing()
@@ -70,7 +104,8 @@ final class TTextTests: XCTestCase {
         XCTAssertTrue(text.insert("x", at: 1))
         XCTAssertFalse(text.insert("x", at: 9))
         XCTAssertTrue(text.replace(0 ..< 1, with: "yy"))
-        XCTAssertTrue(text.setAttribute(.typeface, value: typeface, in: 0 ..< 5))
+
+        // A batch takes attributes too, and no line can be made in it.
         XCTAssertTrue(text.setAttribute(.backgroundColor, value: UIColor.blue, in: 1 ..< 3))
         text.endEditing()
 
@@ -87,16 +122,40 @@ final class TTextTests: XCTestCase {
         XCTAssertTrue(text.delete(in: 0 ..< 2))
         XCTAssertEqual(text.string, "xbc")
 
-        // The typesetter works on a copy of the text.
-        let typesetter = Typesetter(text: text, defaultAttributes: [.typeSize: CGFloat(10.0)])
+        // A copy does not follow the edits of the text.
+        let typesetter = text.copy()
         text.setString("a")
-        XCTAssertEqual(typesetter.text.string, "xbc")
-        XCTAssertFalse(typesetter.text.isMutable)
+        XCTAssertEqual(typesetter.string, "xbc")
+        XCTAssertFalse(typesetter.isMutable)
         XCTAssertEqual(typesetter.makeSimpleLine(codeUnitRange: 0 ..< 3).codeUnitRange, 0 ..< 3)
 
-        let copy = typesetter.text.mutableCopy()
+        let copy = typesetter.mutableCopy()
         copy.append("d")
         XCTAssertEqual(copy.string, "xbcd")
-        XCTAssertEqual(typesetter.text.string, "xbc")
+        XCTAssertEqual(typesetter.string, "xbc")
+        XCTAssertEqual(copy.makeSimpleLine(codeUnitRange: 0 ..< 4).codeUnitRange, 0 ..< 4)
+    }
+
+    func testBoundaries() {
+        // No typeface is needed to find where the words and the paragraphs are.
+        let text = Typesetter(string: "Hello, world\nbye", defaultAttributes: [:])
+
+        XCTAssertEqual(text.findBoundary(from: 0, type: .word, direction: .forward), 5)
+        XCTAssertEqual(text.findBoundary(from: 12, type: .word, direction: .backward), 7)
+        XCTAssertEqual(text.findBoundary(from: 14, type: .paragraph, direction: .backward), 13)
+        XCTAssertNil(text.findBoundary(from: 16, type: .grapheme, direction: .forward))
+        XCTAssertEqual(text.boundaryRange(at: 1, type: .word), 0 ..< 5)
+        XCTAssertEqual(text.boundaryRange(at: 12, type: .paragraph), 0 ..< 13)
+        XCTAssertEqual(text.boundaryRange(at: 16, type: .word), 16 ..< 16)
+        XCTAssertNil(text.boundaryRange(at: 17, type: .word))
+    }
+
+    func testMissingTypeface() {
+        // A text without a typeface can be made, but its lines cannot.
+        let text = MutableTypesetter(defaultAttributes: [:])
+        text.append("abc")
+
+        XCTAssertEqual(text.string, "abc")
+        XCTAssertEqual(text.findBoundary(from: 0, type: .grapheme, direction: .forward), 1)
     }
 }
